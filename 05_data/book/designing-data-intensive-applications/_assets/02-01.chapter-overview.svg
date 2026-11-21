@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 496" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">사례 연구 — 소셜 네트워크 홈 타임라인 전체 지도</title><desc id="dd">관계형 스키마와 읽기 시점 조인(§1), fan-out 배달과 부하 이전(§2), 구체화 뷰 트레이드오프와 극단 케이스(§3)를 조망한다.</desc>
+<rect width="880" height="496" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">02-01 · CHAPTER OVERVIEW</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">사례 연구 — 소셜 네트워크 홈 타임라인 전체 지도</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">관계형 조인과 폴링 폭발 · 쓰기 시점 fan-out 배달 · 구체화 뷰 트레이드오프와 극단 케이스</text>
+<rect x="24" y="104" width="832" height="36" rx="4" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="440.0" y="127" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">소셜 네트워크 전제: 하루 5억 게시 · 평균 200 팔로우/팔로워 · 유명인 편차</text>
+<rect x="36" y="156" width="252" height="252" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="50.18" y="170" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="64" y="184" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">§1</text>
+<text x="176.0" y="184" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">사용자·게시·팔로우</text>
+<text x="162.0" y="204" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">관계형 스키마와 조인 질의</text>
+<line x1="48" y1="212" x2="276" y2="212" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="48" y="224" width="228" height="48" rx="6" fill="#6A95D818" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="162.0" y="244" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">관계형 3개 테이블</text>
+<text x="162.0" y="260" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#6A95D8">users · posts · follows 모델</text>
+<rect x="48" y="282" width="228" height="48" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="162.0" y="302" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">읽기 시점 SQL 조인</text>
+<text x="162.0" y="318" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">팔로우 최신 1,000건 질의</text>
+<rect x="48" y="340" width="228" height="48" rx="6" fill="#E3B34118" stroke="#E3B341" stroke-width="1.1"/>
+<text x="162.0" y="360" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">5초 주기 폴링 폭발</text>
+<text x="162.0" y="376" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#E3B341">초당 4억 건 발신자별 조회</text>
+<rect x="314" y="156" width="252" height="252" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.4"/>
+<rect x="328.18" y="170" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="342" y="184" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">§2</text>
+<text x="454.0" y="184" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">fan-out 타임라인</text>
+<text x="440.0" y="204" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">쓰기 시점 배달과 캐시 응답</text>
+<line x1="326" y1="212" x2="554" y2="212" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="326" y="224" width="228" height="48" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="440.0" y="244" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">쓰기 시점 능동 푸시</text>
+<text x="440.0" y="260" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">팔로워 홈 타임라인에 삽입</text>
+<rect x="326" y="282" width="228" height="48" rx="6" fill="#F08A5922" stroke="#F08A59" stroke-width="1.4"/>
+<text x="440.0" y="302" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">fan-out 배달 처리</text>
+<text x="440.0" y="318" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">계수 200 · 초당 100만+ 쓰기</text>
+<rect x="326" y="340" width="228" height="48" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="440.0" y="360" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">캐시 즉시 응답</text>
+<text x="440.0" y="376" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">큐 적재로 스파이크 지연 완충</text>
+<rect x="592" y="156" width="252" height="252" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="606.18" y="170" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="620" y="184" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#3FB98C">§3</text>
+<text x="732.0" y="184" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">구체화 뷰</text>
+<text x="718.0" y="204" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">파생 데이터와 극단 케이스</text>
+<line x1="604" y1="212" x2="832" y2="212" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="604" y="224" width="228" height="48" rx="6" fill="#3FB98C18" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="718.0" y="244" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">파생 구체화 뷰</text>
+<text x="718.0" y="260" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#3FB98C">읽기 가속 대 쓰기 부담 절충</text>
+<rect x="604" y="282" width="228" height="48" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="718.0" y="302" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">다수 팔로잉 샘플링</text>
+<text x="718.0" y="318" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">높은 쓰기율 시 일부 쓰기 생략</text>
+<rect x="604" y="340" width="228" height="48" rx="6" fill="#E3B34118" stroke="#E3B341" stroke-width="1.1"/>
+<text x="718.0" y="360" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">유명인 하이브리드 병합</text>
+<text x="718.0" y="376" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#E3B341">별도 저장 후 읽기 시점 병합</text>
+<path d="M 290 282.0 L 310 282.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<path d="M 568 282.0 L 588 282.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<line x1="12" y1="440" x2="832" y2="440" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="462" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="452" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="462" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">핵심 fan-out (focal)</text>
+<rect x="378" y="452" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="400" y="462" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">관계형 읽기 경로</text>
+<rect x="539" y="452" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="561" y="462" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">구체화 뷰와 최적화</text>
+<rect x="713" y="452" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="735" y="462" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">부하 폭발·극단 케이스</text>
+</svg>

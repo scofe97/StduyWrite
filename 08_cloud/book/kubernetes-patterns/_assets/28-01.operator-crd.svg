@@ -1,0 +1,71 @@
+<svg viewBox="0 0 900 400" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Operator = CRD + 컨트롤러 조정 루프</title>
+  <desc>사용자가 커스텀 리소스를 apply 하면 API 서버가 CRD 스키마로 검증한 뒤 etcd에 저장합니다. Operator는 그 리소스를 watch 하다가 변경 이벤트를 받고, 목표 상태와 실제 상태의 차이를 판단해 Deployment나 Pod 같은 실제 리소스를 조작합니다. 조작 결과로 파악한 실제 상태는 status 서브리소스를 통해 커스텀 리소스에 다시 기록되며, 이 되먹임이 27장의 Observe-Analyze-Act 루프를 완성합니다.</desc>
+
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#66bb6a"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="400" fill="#0d0d0d"/>
+  <text x="24" y="32" fill="#e8e4df" font-size="15">Operator 조정 루프</text>
+
+  <!-- user -->
+  <rect x="24" y="64" width="130" height="46" fill="#dceaf7"/>
+  <text x="89" y="84" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">사용자</text>
+  <text x="89" y="100" text-anchor="middle" fill="#10243a" font-size="9">kubectl apply</text>
+
+  <!-- api server -->
+  <rect x="234" y="56" width="180" height="62" fill="#f5edda"/>
+  <text x="324" y="79" text-anchor="middle" fill="#0d0d0d" font-size="11" font-weight="700">API 서버</text>
+  <text x="324" y="97" text-anchor="middle" fill="#0d0d0d" font-size="9">CRD 스키마로 검증</text>
+  <text x="324" y="111" text-anchor="middle" fill="#0d0d0d" font-size="9">1. apply</text>
+
+  <!-- etcd -->
+  <rect x="494" y="56" width="130" height="62" fill="#f5edda"/>
+  <text x="559" y="83" text-anchor="middle" fill="#0d0d0d" font-size="11" font-weight="700">etcd</text>
+  <text x="559" y="101" text-anchor="middle" fill="#0d0d0d" font-size="9">2. 저장</text>
+
+  <line x1="154" y1="87" x2="228" y2="87" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="414" y1="87" x2="488" y2="87" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- CRD registration note -->
+  <rect x="664" y="56" width="212" height="62" fill="#dceaf7"/>
+  <text x="770" y="79" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">CRD 등록 (사전 1회)</text>
+  <text x="770" y="97" text-anchor="middle" fill="#10243a" font-size="9">cluster-admin 필요</text>
+  <text x="770" y="111" text-anchor="middle" fill="#10243a" font-size="9">kind·group·scope 정의</text>
+
+  <!-- operator -->
+  <rect x="234" y="196" width="180" height="76" fill="#cdeccf"/>
+  <text x="324" y="220" text-anchor="middle" fill="#14521d" font-size="11" font-weight="700">Operator</text>
+  <text x="324" y="238" text-anchor="middle" fill="#14521d" font-size="9">4. 차이 판단</text>
+  <text x="324" y="254" text-anchor="middle" fill="#14521d" font-size="9">도메인 운영 지식</text>
+  <text x="324" y="267" text-anchor="middle" fill="#14521d" font-size="9">Analyze</text>
+
+  <!-- watch arrow: api server -> operator -->
+  <line x1="300" y1="118" x2="300" y2="190" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a)"/>
+  <text x="292" y="158" text-anchor="end" fill="rgb(212,168,83)" font-size="9">3. watch</text>
+  <text x="292" y="172" text-anchor="end" fill="#b8b3ad" font-size="9">Observe</text>
+
+  <!-- managed resources -->
+  <rect x="554" y="196" width="200" height="76" fill="#dceaf7"/>
+  <text x="654" y="220" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">실제 리소스</text>
+  <text x="654" y="238" text-anchor="middle" fill="#10243a" font-size="9">Deployment · Pod</text>
+  <text x="654" y="254" text-anchor="middle" fill="#10243a" font-size="9">Service · Secret</text>
+  <text x="654" y="267" text-anchor="middle" fill="#10243a" font-size="9">Act</text>
+
+  <line x1="414" y1="234" x2="548" y2="234" stroke="#66bb6a" stroke-width="2" marker-end="url(#g)"/>
+  <text x="481" y="226" text-anchor="middle" fill="#66bb6a" font-size="9">5. 조작</text>
+
+  <!-- status feedback loop -->
+  <path d="M654 272 L654 330 L160 330 L160 190 L228 190" fill="none" stroke="#66bb6a" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#g)"/>
+  <text x="420" y="345" text-anchor="middle" fill="#66bb6a" font-size="9">6. 실제 상태 관측</text>
+
+  <!-- status subresource write-back: Operator 상단에서 API 서버 하단으로 -->
+  <path d="M380 196 L380 160 L400 160 L400 118" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#g)"/>
+  <text x="410" y="150" fill="#66bb6a" font-size="9">7. status 기록</text>
+</svg>

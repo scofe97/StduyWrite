@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 488" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">스트림 전송과 메시지 브로커 전체 지도</title><desc id="dd">이벤트 스트림의 표현부터 AMQP/JMS 브로커와 로그 기반 브로커의 내부 구조, 내구성과 재처리 트레이드오프 비교.</desc>
+<rect width="880" height="488" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">12-01 · CHAPTER OVERVIEW</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">스트림 전송과 메시지 브로커 전체 지도</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">불변 이벤트 스트림 · 소비 후 삭제 대 로그 보존 · 파티션과 오프셋 · 재처리 가능성 트레이드오프</text>
+<rect x="24" y="96" width="832" height="44" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="440.0" y="114" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">스트림 전송 체계: 연속 도착 이벤트와 브로커 아키텍처</text>
+<text x="440.0" y="130" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">소비 후 삭제 방식(AMQP/JMS) 대 비파괴적 로그 보존 방식(Kafka/Kinesis)</text>
+<line x1="440.0" y1="140" x2="440.0" y2="150" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="122.0" y1="150" x2="758.0" y2="150" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="122.0" y1="150" x2="122.0" y2="160" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="334.0" y1="150" x2="334.0" y2="160" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="546.0" y1="150" x2="546.0" y2="160" stroke="#F08A59" stroke-width="1.2"/>
+<line x1="758.0" y1="150" x2="758.0" y2="160" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<rect x="24" y="160" width="196" height="248" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="41.56" y="172" width="24.88" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="54" y="186" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#6A95D8">§1</text>
+<text x="138.0" y="186" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">이벤트 스트림</text>
+<line x1="34" y1="202" x2="210" y2="202" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="32" y="209" width="180" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="122.0" y="228" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">불변 사건 객체·타임스탬프</text>
+<rect x="32" y="253" width="180" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="122.0" y="272" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">프로듀서와 컨슈머 분리</text>
+<rect x="32" y="297" width="180" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="122.0" y="316" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">토픽 기반 이벤트 논리 묶음</text>
+<rect x="32" y="341" width="180" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="122.0" y="360" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">능동 알림 시스템</text>
+<rect x="236" y="160" width="196" height="248" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="253.56" y="172" width="24.88" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="266" y="186" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#E3B341">§2</text>
+<text x="350.0" y="186" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">AMQP/JMS 브로커</text>
+<line x1="246" y1="202" x2="422" y2="202" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="244" y="209" width="180" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="334.0" y="228" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">소비 확인(ACK) 후 즉시 삭제</text>
+<rect x="244" y="253" width="180" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="334.0" y="272" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">로드 밸런싱과 팬아웃</text>
+<rect x="244" y="297" width="180" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="334.0" y="316" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">장애 재전달 시 순서 역전</text>
+<rect x="244" y="341" width="180" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="334.0" y="360" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">반복 실패 메시지 DLQ 격리</text>
+<rect x="448" y="160" width="196" height="248" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.4"/>
+<rect x="465.56" y="172" width="24.88" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="478" y="186" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F08A59">§3</text>
+<text x="562.0" y="186" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">로그 기반 브로커</text>
+<line x1="458" y1="202" x2="634" y2="202" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="456" y="209" width="180" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="546.0" y="228" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">추가 전용 파티션 샤드 분할</text>
+<rect x="456" y="253" width="180" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="546.0" y="272" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">단조 증가 오프셋 순서 보장</text>
+<rect x="456" y="297" width="180" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="546.0" y="316" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">컨슈머 그룹 독립 오프셋 추적</text>
+<rect x="456" y="341" width="180" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="546.0" y="360" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">비파괴 소비와 계층 스토리지</text>
+<rect x="660" y="160" width="196" height="248" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="677.56" y="172" width="24.88" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="690" y="186" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#3FB98C">§4</text>
+<text x="774.0" y="186" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">브로커 특성 비교</text>
+<line x1="670" y1="202" x2="846" y2="202" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="668" y="209" width="180" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="758.0" y="228" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">메시지 단위 vs 파티션 병렬화</text>
+<rect x="668" y="253" width="180" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="758.0" y="272" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">오프셋 되감기 과거 재처리</text>
+<rect x="668" y="297" width="180" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="758.0" y="316" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">낙오 컨슈머 격리와 불변 입력</text>
+<rect x="668" y="341" width="180" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="758.0" y="360" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">작업 큐 대 고처리량 로그</text>
+<line x1="12" y1="432" x2="832" y2="432" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="454" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="444" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="454" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">이벤트 스트림</text>
+<rect x="235" y="444" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="257" y="454" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">소비 후 삭제</text>
+<rect x="370" y="444" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="392" y="454" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">로그 기반 (focal)</text>
+<rect x="583" y="444" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="605" y="454" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">특성 비교</text>
+</svg>

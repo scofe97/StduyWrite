@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 432" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">싱글턴을 만드는 두 층위</title><desc id="dd">왼쪽 앱 밖 락은 컨트롤러가 replicas 를 1 로 유지해 Pod 가 하나만 뜨고 그 하나가 활성입니다. 오른쪽 앱 안 락은 Pod 셋이 다 떠 있고 분산 락 Lease 를 먼저 잡은 하나만 활성이 됩니다. 아래는 방식마다 주는 보장으로 ReplicaSet 은 가끔 둘, StatefulSet 은 가끔 0, 앱 안 락은 Pod 수와 무관하게 하나입니다.</desc>
+<rect width="900" height="432" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">KUBERNETES PATTERNS · 10-01</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">싱글턴을 만드는 두 층위</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">앱 밖 락은 앱이 모르게 하나로 묶고, 앱 안 락은 앱이 직접 하나를 뽑습니다</text>
+<rect x="24" y="104" width="410" height="220" rx="6" fill="#0D1117" stroke="#E3B341" stroke-width="1.1"/>
+<text x="44" y="130" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#E3B341">out-of-application 락</text>
+<text x="44" y="150" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">앱 모르게 싱글턴</text>
+<rect x="44" y="164" width="370" height="36" rx="5" fill="#E3B34130" stroke="#E3B341" stroke-width="1.1"/>
+<text x="229" y="187" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">컨트롤러 · replicas: 1</text>
+<path d="M 229 204 L 229 222" fill="none" stroke="#E3B341" stroke-width="1.5" marker-end="url(#warn)"/>
+<rect x="150" y="226" width="158" height="44" rx="5" fill="#3FB98C1c" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="229" y="246" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">Pod</text>
+<text x="229" y="263" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#3FB98C">활성</text>
+<text x="44" y="294" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">Pod 가 하나뿐이라 그것이 활성</text>
+<text x="44" y="312" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">replica 증가는 못 막음</text>
+<rect x="466" y="104" width="410" height="220" rx="6" fill="#0D1117" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="486" y="130" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#3FB98C">in-application 락</text>
+<text x="486" y="150" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">앱이 리더 선출</text>
+<rect x="486" y="164" width="370" height="36" rx="5" fill="#3FB98C30" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="671" y="187" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">분산 락 · Lease</text>
+<path d="M 545 204 L 545 222" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<rect x="486" y="226" width="118" height="44" rx="5" fill="#3FB98C1c" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="545" y="246" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">Pod 1</text>
+<text x="545" y="263" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#3FB98C">활성 · 락 보유</text>
+<path d="M 671 204 L 671 222" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)" stroke-dasharray="3 3"/>
+<rect x="612" y="226" width="118" height="44" rx="5" fill="#0D1117" stroke="#8B98A9" stroke-width="1.0" stroke-dasharray="3 3"/>
+<text x="671" y="246" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">Pod 2</text>
+<text x="671" y="263" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">passive</text>
+<path d="M 797 204 L 797 222" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)" stroke-dasharray="3 3"/>
+<rect x="738" y="226" width="118" height="44" rx="5" fill="#0D1117" stroke="#8B98A9" stroke-width="1.0" stroke-dasharray="3 3"/>
+<text x="797" y="246" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">Pod 3</text>
+<text x="797" y="263" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">passive</text>
+<text x="486" y="294" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">셋 다 건강하지만 활성은 하나</text>
+<text x="486" y="312" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">일부 컴포넌트만 잠금 가능</text>
+<text x="24" y="352" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#5E6B7E">각 방식이 주는 보장</text>
+<rect x="24" y="366" width="264" height="52" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.1"/>
+<text x="44" y="388" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F0616D">at-least-one</text>
+<text x="44" y="408" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">ReplicaSet · 가끔 2개</text>
+<rect x="318" y="366" width="264" height="52" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="338" y="388" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">at-most-one</text>
+<text x="338" y="408" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">StatefulSet · 가끔 0개</text>
+<rect x="612" y="366" width="264" height="52" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="632" y="388" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">in-app 락 · 활성 하나</text>
+<text x="632" y="408" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">Pod 수와 무관</text>
+</svg>

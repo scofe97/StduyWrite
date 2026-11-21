@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 460" width="100%" role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Faro Web SDK 가 방문자 브라우저에서 Grafana Cloud 까지 잇는 경로</title>
+  <desc>방문자 브라우저에서 도는 프론트엔드 애플리케이션에 Faro Web SDK 를 심으면 기본 텔레메트리 여섯 가지를 수집합니다. 수집한 데이터는 Grafana Cloud 의 수집기 엔드포인트로 가고 거기서 로그는 Loki 로 트레이스는 Tempo 로 나뉩니다. 메트릭은 따로 저장되지 않고 Loki 의 LogQL 메트릭 쿼리로 로그에서 만들어집니다. 그 결과가 Frontend Observability 앱의 대시보드에 보입니다. 수집기는 클라우드 호스팅 대신 자체 인프라에 배포할 수도 있습니다.</desc>
+
+  <style>
+    .code { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 10px; }
+  </style>
+
+  <rect width="880" height="460" fill="#0d0d0d"/>
+
+  <text x="30" y="34" fill="#e8e4df" font-size="17" font-weight="700">브라우저에서 대시보드까지</text>
+  <text x="30" y="55" fill="#b8b3ad" font-size="12">메트릭만 저장되지 않고 만들어진다</text>
+
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <!-- browser side -->
+  <rect x="30" y="76" width="330" height="228" rx="8" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.8"/>
+  <rect x="30" y="76" width="330" height="30" rx="8" fill="#5b9bd5"/>
+  <rect x="30" y="98" width="330" height="8" fill="#5b9bd5"/>
+  <text x="48" y="97" fill="#e8e4df" font-size="13" font-weight="700">방문자 브라우저</text>
+
+  <rect x="48" y="120" width="294" height="30" rx="5" fill="#dceaf7"/>
+  <text x="60" y="140" fill="#10243a" font-size="12" font-weight="700">프론트엔드 앱 + Faro SDK</text>
+
+  <text x="48" y="172" fill="#b8b3ad" font-size="11">기본으로 모으는 여섯 가지</text>
+  <text x="48" y="194" fill="#e8e4df" font-size="11">Web Vitals 성능 지표</text>
+  <text x="48" y="214" fill="#e8e4df" font-size="11">처리되지 않은 예외</text>
+  <text x="48" y="234" fill="#e8e4df" font-size="11">브라우저 환경 정보</text>
+  <text x="48" y="254" fill="#e8e4df" font-size="11">페이지 URL 변경</text>
+  <text x="48" y="274" fill="#e8e4df" font-size="11">세션 식별 · 활동 트레이스</text>
+
+  <path d="M364 190 L410 190" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- cloud side -->
+  <rect x="414" y="76" width="436" height="228" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.8"/>
+  <rect x="414" y="76" width="436" height="30" rx="8" fill="rgb(212,168,83)"/>
+  <rect x="414" y="98" width="436" height="8" fill="rgb(212,168,83)"/>
+  <text x="432" y="97" fill="#0d0d0d" font-size="13" font-weight="700">Grafana Cloud</text>
+
+  <rect x="432" y="120" width="180" height="30" rx="5" fill="#fdf3df"/>
+  <text x="444" y="140" fill="#5c4410" font-size="11.5" font-weight="700">수집기 엔드포인트</text>
+
+  <rect x="628" y="120" width="204" height="30" rx="5" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1"/>
+  <text x="640" y="140" fill="rgb(212,168,83)" font-size="10.5" font-weight="700">자체 인프라 배포도 된다</text>
+
+  <path d="M470 154 L470 172 L510 172" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a)"/>
+  <path d="M470 154 L470 208 L510 208" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a)"/>
+
+  <rect x="514" y="158" width="150" height="28" rx="4" fill="#e6f7e7"/>
+  <text x="526" y="177" fill="#14521d" font-size="11" font-weight="700">로그 → Loki</text>
+  <rect x="514" y="194" width="150" height="28" rx="4" fill="#dceaf7"/>
+  <text x="526" y="213" fill="#10243a" font-size="11" font-weight="700">트레이스 → Tempo</text>
+
+  <rect x="678" y="158" width="154" height="28" rx="4" fill="#f2d4d4"/>
+  <text x="690" y="177" fill="#7a1f1f" font-size="10.5" font-weight="700">저장 신호는 둘뿐</text>
+  <path d="M700 190 L700 204" fill="none" stroke="#f44336" stroke-width="2" stroke-dasharray="4 3"/>
+  <rect x="678" y="204" width="154" height="46" rx="4" fill="#f2b8b5"/>
+  <text x="690" y="222" fill="#5c1414" font-size="10.5" font-weight="700">메트릭은 만들어진다</text>
+  <text class="code" x="690" y="240" fill="#5c1414" font-weight="700">LogQL metric</text>
+
+  <rect x="432" y="270" width="400" height="22" rx="4" fill="#fdf3df"/>
+  <text x="444" y="286" fill="#5c4410" font-size="10.5" font-weight="700">Frontend 앱 대시보드로</text>
+
+  <!-- app tabs -->
+  <text x="30" y="336" fill="#e8e4df" font-size="13" font-weight="700">주요 섹션은 셋 · 설정은 따로</text>
+
+  <rect x="30" y="348" width="196" height="90" rx="8" fill="#66bb6a"/>
+  <text x="48" y="374" fill="#0d0d0d" font-size="12.5" font-weight="700">Overview</text>
+  <text x="48" y="396" fill="#1a1a1a" font-size="10.5">첫 줄이 Web Vitals</text>
+  <text x="48" y="416" fill="#14521d" font-size="10.5" font-weight="700">핵심 지표를 본다</text>
+
+  <rect x="240" y="348" width="196" height="90" rx="8" fill="rgb(212,168,83)"/>
+  <text x="258" y="374" fill="#0d0d0d" font-size="12.5" font-weight="700">Errors</text>
+  <text x="258" y="396" fill="#1a1a1a" font-size="10.5">예외 · 발생 위치</text>
+  <text x="258" y="416" fill="#5c4410" font-size="10.5" font-weight="700">영향받은 브라우저</text>
+
+  <rect x="450" y="348" width="196" height="90" rx="8" fill="#5b9bd5"/>
+  <text x="468" y="374" fill="#e8e4df" font-size="12.5" font-weight="700">Sessions</text>
+  <text x="468" y="396" fill="#e8e4df" font-size="10.5">분석할 세션 목록</text>
+  <text x="468" y="416" fill="#e8e4df" font-size="10.5" font-weight="700">백엔드로 건너가는 문</text>
+
+  <rect x="660" y="348" width="190" height="90" rx="8" fill="#0d0d0d" stroke="#b8b3ad" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <text x="678" y="374" fill="#b8b3ad" font-size="12" font-weight="700">설정 탭은 별개</text>
+  <text x="678" y="396" fill="#b8b3ad" font-size="10.5">Settings</text>
+  <text x="678" y="416" fill="#b8b3ad" font-size="10.5">Web SDK Config</text>
+</svg>

@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">TOML 설정 어댑터의 JSON 변환 및 Caddy 로드 흐름</title><desc id="dd">사람 친화적인 TOML 문서를 Caddy 네이티브 JSON 으로 변환하여 엔진에 주입합니다</desc>
+<rect width="960" height="420" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">NPG CH.10 — CONFIG ADAPTER DATA FLOW</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">TOML 설정 어댑터의 JSON 변환 및 Caddy 로드 흐름</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">Adapt 메서드의 바이트 수신, 맵 구조 변환, JSON 직렬화와 런타임 소비 단계</text>
+<rect x="24" y="108" width="188" height="226" rx="8" fill="#161B22" stroke="#E3B341" stroke-width="1.2"/>
+<text x="40" y="130" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="600" fill="#E3B341">STAGE 1</text>
+<text x="118.0" y="152" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">caddy.toml 입력</text>
+<text x="118.0" y="170" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">사람 친화적 설정</text>
+<rect x="34" y="182" width="168" height="96" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="42" y="204" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#E3B341">[apps.http.servers.hello]</text>
+<text x="42" y="224" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#F5F5F3">listen = [":2020"]</text>
+<text x="42" y="246" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E"># 주석 지원</text>
+<text x="42" y="264" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E"># 여러 줄 문자열</text>
+<text x="118.0" y="300" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">--config caddy.toml</text>
+<text x="118.0" y="318" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">--adapter toml</text>
+<line x1="212" y1="228" x2="278" y2="228" stroke="#8B98A9" stroke-width="1.4"/>
+<path d="M 266 228 L 278 228" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="245.0" y="218" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">TOML 바이트</text>
+<rect x="278" y="108" width="188" height="226" rx="8" fill="#161B22" stroke="#F08A59" stroke-width="1.2"/>
+<text x="294" y="130" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="600" fill="#F08A59">STAGE 2</text>
+<text x="372.0" y="152" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">TOML 어댑터 변환</text>
+<text x="372.0" y="170" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">caddyconfig.Adapter</text>
+<rect x="288" y="182" width="168" height="96" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="296" y="204" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="600" fill="#F08A59">func Adapt()</text>
+<text x="296" y="224" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#F5F5F3">1. toml.LoadBytes()</text>
+<text x="296" y="246" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#F5F5F3">2. tree.ToMap()</text>
+<text x="296" y="264" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#3FB98C">3. json.Marshal()</text>
+<text x="372.0" y="300" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">RegisterAdapter</text>
+<text x="372.0" y="318" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">init() 에 "toml" 등록</text>
+<line x1="466" y1="228" x2="532" y2="228" stroke="#3FB98C" stroke-width="1.4"/>
+<path d="M 520 228 L 532 228" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<text x="499.0" y="218" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">JSON 바이트</text>
+<rect x="532" y="108" width="188" height="226" rx="8" fill="#161B22" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="548" y="130" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="600" fill="#3FB98C">STAGE 3</text>
+<text x="626.0" y="152" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">Caddy 표준 JSON</text>
+<text x="626.0" y="170" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정규화 규격</text>
+<rect x="542" y="182" width="168" height="96" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="550" y="204" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#8B98A9">{"apps": {</text>
+<text x="550" y="224" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#8B98A9">  "http": {"servers": {</text>
+<text x="550" y="246" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#F5F5F3">    "hello": {</text>
+<text x="550" y="264" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#3FB98C">      "listen": [":2020"]</text>
+<text x="626.0" y="300" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">엔진 직접 해석</text>
+<text x="626.0" y="318" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">REST API 와 동일 규격</text>
+<line x1="720" y1="228" x2="786" y2="228" stroke="#6A95D8" stroke-width="1.4"/>
+<path d="M 774 228 L 786 228" fill="none" stroke="#6A95D8" stroke-width="1.4" marker-end="url(#info)"/>
+<text x="753.0" y="218" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">엔진 주입</text>
+<rect x="786" y="108" width="150" height="226" rx="8" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="802" y="130" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="600" fill="#6A95D8">STAGE 4</text>
+<text x="861.0" y="152" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">런타임 로드</text>
+<text x="861.0" y="170" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">Caddy 인프라 엔진</text>
+<rect x="796" y="182" width="130" height="96" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="804" y="204" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="600" fill="#6A95D8">caddy.Load()</text>
+<text x="804" y="224" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">1. JSON 언마샬</text>
+<text x="804" y="246" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">2. 모듈 프로비저닝</text>
+<text x="804" y="264" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">3. 리스너 바인드</text>
+<text x="861.0" y="300" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#3FB98C">net.Listen :2020</text>
+<text x="861.0" y="318" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">무중단 서빙 개시</text>
+<line x1="12" y1="366" x2="912" y2="366" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="388" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="378" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="122" y="388" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">설정 파일 (TOML)</text>
+<rect x="300" y="378" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="322" y="388" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">어댑터 변환기</text>
+<rect x="435" y="378" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="457" y="388" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">Caddy 표준 (JSON)</text>
+<rect x="674" y="378" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="696" y="388" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">런타임 엔진 구동</text>
+</svg>

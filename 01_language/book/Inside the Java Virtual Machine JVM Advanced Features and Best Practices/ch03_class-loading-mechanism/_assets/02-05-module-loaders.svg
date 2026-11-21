@@ -1,0 +1,71 @@
+<svg viewBox="0 0 900 540" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>모듈화 전후 클래스 로더 계층 변화 — JDK 8 vs JDK 9+</title>
+  <desc>JDK 8까지는 부트스트랩·확장(Extension)·애플리케이션 3계층이었다. JDK 9 모듈 시스템 도입 후 확장 클래스 로더가 플랫폼 클래스 로더(PlatformClassLoader)로 대체되고, 부트스트랩이 로딩하던 클래스 일부가 플랫폼·애플리케이션 로더로 옮겨가며, BootClassLoader가 자바로 구현된 형태로 바뀌었다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11.5px; fill: rgb(138,133,128); }
+      .col   { font-size: 13px; font-weight: 800; fill: #e8e4df; }
+      .ldr   { font-size: 11.5px; font-weight: 800; fill: #0d0d0d; }
+      .ldrsub{ font-size: 9px; fill: rgba(13,13,13,0.7); }
+      .note  { font-size: 9.5px; fill: rgb(138,133,128); }
+    </style>
+    <marker id="ar5" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="540" fill="#0d0d0d"/>
+  <text x="28" y="38" class="title">모듈화 전후 클래스 로더 계층 — JDK 8 vs JDK 9+</text>
+  <text x="28" y="58" class="sub">확장 로더 → 플랫폼 로더로 교체 · 부트스트랩 역할 축소 · BootClassLoader 가 자바 구현으로</text>
+
+  <!-- 좌: JDK 8 -->
+  <rect x="40" y="86" width="370" height="410" rx="12" fill="rgba(91,155,213,0.07)" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="225" y="114" class="col" text-anchor="middle">JDK 8 이하 — 3계층</text>
+
+  <rect x="80" y="138" width="290" height="74" rx="9" fill="#f44336"/>
+  <text x="225" y="168" class="ldr" text-anchor="middle">부트스트랩 (Bootstrap)</text>
+  <text x="225" y="186" class="ldrsub" text-anchor="middle">C++ 구현 · rt.jar 등 lib 전체</text>
+  <text x="225" y="200" class="ldrsub" text-anchor="middle">java.* 모두 여기</text>
+
+  <rect x="80" y="262" width="290" height="74" rx="9" fill="rgb(212,168,83)"/>
+  <text x="225" y="292" class="ldr" text-anchor="middle">확장 (Extension)</text>
+  <text x="225" y="310" class="ldrsub" text-anchor="middle">lib/ext 디렉터리</text>
+  <text x="225" y="324" class="ldrsub" text-anchor="middle">자바 구현</text>
+
+  <rect x="80" y="386" width="290" height="74" rx="9" fill="#5b9bd5"/>
+  <text x="225" y="416" class="ldr" text-anchor="middle">애플리케이션 (Application)</text>
+  <text x="225" y="434" class="ldrsub" text-anchor="middle">classpath</text>
+  <text x="225" y="448" class="ldrsub" text-anchor="middle">우리 코드</text>
+
+  <line x1="225" y1="386" x2="225" y2="338" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar5)"/>
+  <line x1="225" y1="262" x2="225" y2="214" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar5)"/>
+
+  <!-- 우: JDK 9+ -->
+  <rect x="490" y="86" width="370" height="410" rx="12" fill="rgba(102,187,106,0.07)" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="675" y="114" class="col" text-anchor="middle">JDK 9+ — 모듈 시스템</text>
+
+  <rect x="530" y="138" width="290" height="74" rx="9" fill="#f44336"/>
+  <text x="675" y="164" class="ldr" text-anchor="middle">부트스트랩 (BootClassLoader)</text>
+  <text x="675" y="182" class="ldrsub" text-anchor="middle">역할 축소 · 자바 구현으로</text>
+  <text x="675" y="196" class="ldrsub" text-anchor="middle">핵심 모듈 일부만</text>
+
+  <rect x="530" y="262" width="290" height="74" rx="9" fill="#66bb6a"/>
+  <text x="675" y="288" class="ldr" text-anchor="middle">플랫폼 (Platform)</text>
+  <text x="675" y="306" class="ldrsub" text-anchor="middle">확장 로더 대체 · PlatformClassLoader</text>
+  <text x="675" y="320" class="ldrsub" text-anchor="middle">부트가 넘긴 클래스 일부 흡수</text>
+
+  <rect x="530" y="386" width="290" height="74" rx="9" fill="#5b9bd5"/>
+  <text x="675" y="416" class="ldr" text-anchor="middle">애플리케이션 (Application)</text>
+  <text x="675" y="434" class="ldrsub" text-anchor="middle">classpath + 모듈패스</text>
+  <text x="675" y="448" class="ldrsub" text-anchor="middle">URLClassLoader 아님</text>
+
+  <line x1="675" y1="386" x2="675" y2="338" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar5)"/>
+  <line x1="675" y1="262" x2="675" y2="214" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar5)"/>
+
+  <!-- 변화 화살표 -->
+  <line x1="410" y1="291" x2="488" y2="291" stroke="rgb(212,168,83)" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#ar5)"/>
+  <text x="449" y="282" class="note" text-anchor="middle" fill="rgb(212,168,83)">교체</text>
+
+  <text x="40" y="524" class="sub">위임 방향(요청 위로)은 그대로 — 바뀐 것은 누가 어떤 클래스를 책임지느냐와 BootClassLoader 의 구현 언어</text>
+</svg>

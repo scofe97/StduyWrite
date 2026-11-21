@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 788" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">같은 ping 을 setuid 는 root 전부로, capability 는 raw 소켓 하나로 동작시킵니다</title><desc id="dd">cp /bin/ping ./myping 으로 복사한 myping 은 Operation not permitted 로 막힌다. 여기서 갈라진다. setuid 길은 chown root 와 chmod +s 로 root 권한 전부를 얻고, capability 길은 setcap cap_net_raw+p 로 CAP_NET_RAW 하나만 얻고 getcap 으로 확인한다.</desc>
+<rect width="960" height="788" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">FLOWCHART · 02-01 §4</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">같은 ping 을 setuid 는 root 전부로, capability 는 raw 소켓 하나로 동작시킵니다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">두 길 모두 ./myping 10.0.0.1 이 동작하지만, 딸려 오는 권한의 크기가 다릅니다.</text>
+<rect x="336" y="100" width="288" height="56" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="480" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">복사하면 s 비트가 안 딸려 옴</text>
+<text x="480" y="144" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#6A95D8">cp /bin/ping ./myping</text>
+<path d="M 480 158 L 480 184" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<rect x="312" y="188" width="336" height="72" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.2"/>
+<text x="480" y="214" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#6A95D8">./myping 10.0.0.1</text>
+<text x="480" y="242" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">ping: socket: Operation not permitted</text>
+<path d="M 480 262 L 480 296" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<polygon points="480,296 630,348 480,400 330,348" fill="#F08A591F" stroke="#F08A59" stroke-width="1.6"/>
+<text x="480" y="346" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">raw 소켓 권한을</text>
+<text x="480" y="366" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">어떻게 줄까?</text>
+<path d="M 328 348 L 204 348 L 204 416" fill="none" stroke="#F0616D" stroke-width="1.5" marker-end="url(#bad)"/>
+<rect x="241.54" y="338" width="50.92" height="20" rx="4" fill="#0D1117" stroke="#F0616D" stroke-width="0.8"/>
+<text x="267.0" y="352" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F0616D">setuid</text>
+<path d="M 632 348 L 756 348 L 756 416" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<rect x="667.54" y="338" width="50.92" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="693.0" y="352" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#3FB98C">setcap</text>
+<rect x="60" y="420" width="288" height="72" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="76" y="444" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">1</text>
+<text x="204.0" y="448" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">소유자를 root 로</text>
+<text x="204.0" y="474" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#6A95D8">sudo chown root ./myping</text>
+<path d="M 204 494 L 204 520" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<rect x="60" y="524" width="288" height="72" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="76" y="548" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">2</text>
+<text x="204.0" y="552" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">s 비트 켜기</text>
+<text x="204.0" y="578" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#6A95D8">sudo chmod +s ./myping</text>
+<path d="M 204 598 L 204 624" fill="none" stroke="#F0616D" stroke-width="1.5" marker-end="url(#bad)"/>
+<rect x="60" y="628" width="288" height="80" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.2"/>
+<text x="204.0" y="656" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F0616D">root 권한 전부</text>
+<text x="204.0" y="676" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">ls -l 에 s 가 보임</text>
+<text x="204.0" y="694" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">이미지 스캐너가 신고</text>
+<rect x="612" y="420" width="288" height="72" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="628" y="444" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">1</text>
+<text x="756.0" y="448" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">capability 붙이기</text>
+<text x="756.0" y="474" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#6A95D8">sudo setcap 'cap_net_raw+p' ./myping</text>
+<path d="M 756 494 L 756 520" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<rect x="612" y="524" width="288" height="72" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="628" y="548" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">2</text>
+<text x="756.0" y="552" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">확인</text>
+<text x="756.0" y="578" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#6A95D8">getcap ./myping</text>
+<path d="M 756 598 L 756 624" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<rect x="612" y="628" width="288" height="80" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="756.0" y="656" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#3FB98C">CAP_NET_RAW 하나</text>
+<text x="756.0" y="676" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">ls -l 은 -rwxr-xr-x 그대로</text>
+<text x="756.0" y="694" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">확인은 getcap 으로만</text>
+<line x1="12" y1="740" x2="912" y2="740" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="762" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="752" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="762" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">갈림길</text>
+<rect x="183" y="752" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="205" y="762" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">막힘 · 과한 권한</text>
+<rect x="357" y="752" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="379" y="762" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">최소 권한</text>
+<rect x="466" y="752" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="488" y="762" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">명령</text>
+</svg>

@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 528" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">쓰기 충돌 해소 전체 지도</title><desc id="dd">다중 리더 환경에서 발생하는 동시 쓰기 충돌의 회피부터, LWW의 데이터 손실과 수동 해소의 형제 값 보존, CRDT와 OT를 통한 알고리즘적 자동 수렴까지의 해소 지형을 조망한다.</desc>
+<rect width="880" height="528" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">06-05 · CHAPTER OVERVIEW</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">쓰기 충돌 해소 전체 지도</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">충돌 회피 · LWW 폐기 · 형제 값 보존 · strong eventual consistency 자동 수렴</text>
+<rect x="24" y="104" width="832" height="36" rx="4" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="440.0" y="127" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">다중 리더 복제 현실: 비동기 복제 시 동시(concurrent) 쓰기 충돌 발생</text>
+<rect x="24" y="156" width="264" height="280" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="38.18" y="170" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="52" y="184" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">§1</text>
+<text x="170.0" y="184" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">충돌 회피와 LWW</text>
+<text x="156.0" y="204" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">단순 해소와 데이터 손실</text>
+<rect x="34" y="220" width="244" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="44" y="238" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">충돌 회피(avoidance)</text>
+<text x="44" y="254" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">특정 레코드 쓰기 동일 리더 고정</text>
+<rect x="34" y="270" width="244" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="44" y="288" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">회피의 한계</text>
+<text x="44" y="304" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">지정 리더를 바꾸는 순간 회피가 깨짐</text>
+<rect x="34" y="320" width="244" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="44" y="338" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">LWW(last write wins)</text>
+<text x="44" y="354" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">최대 타임스탬프 채택·나머지 폐기</text>
+<rect x="34" y="370" width="244" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="44" y="388" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">LWW의 대가</text>
+<text x="44" y="404" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">수렴하지만 데이터 손실</text>
+<rect x="308" y="156" width="264" height="280" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="322.18" y="170" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="336" y="184" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#E3B341">§2</text>
+<text x="454.0" y="184" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">수동 해소와 자동 해소</text>
+<text x="440.0" y="204" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">형제 값 보존과 수렴 보장</text>
+<rect x="318" y="220" width="244" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="328" y="238" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">수동 해소(siblings)</text>
+<text x="328" y="254" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">동시 값 모두 보존·조회 시 반환</text>
+<rect x="318" y="270" width="244" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="328" y="288" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">API 변경 부담</text>
+<text x="328" y="304" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">단일 값 필드가 형제 집합으로 변경</text>
+<rect x="318" y="320" width="244" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="328" y="338" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">삭제 부활 함정</text>
+<text x="328" y="354" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">합집합 병합 시 삭제 항목 부활</text>
+<rect x="318" y="370" width="244" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="328" y="388" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">자동 해소</text>
+<text x="328" y="404" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">도착 순서와 무관하게 같은 상태로 수렴</text>
+<rect x="592" y="156" width="264" height="280" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.4"/>
+<rect x="606.18" y="170" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="620" y="184" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">§3</text>
+<text x="738.0" y="184" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">CRDT와 OT</text>
+<text x="724.0" y="204" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">알고리즘으로 자동 수렴</text>
+<rect x="602" y="220" width="244" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="612" y="238" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">OT(operational trans.)</text>
+<text x="612" y="254" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">연산 인덱스 기록 후 동시 연산 변환</text>
+<rect x="602" y="270" width="244" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="612" y="288" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">CRDT(conflict-free)</text>
+<text x="612" y="304" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">문자별 불변 ID 부여·무변환 정렬</text>
+<rect x="602" y="320" width="244" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="612" y="338" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">적용 분야 대조</text>
+<text x="612" y="354" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">OT 협업 문서 · CRDT 분산 DB</text>
+<rect x="602" y="370" width="244" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="612" y="388" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">자동 병합의 한계</text>
+<text x="612" y="404" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">'리스트 5개 이하' 같은 제약은 깨짐</text>
+<path d="M 290 296.0 L 306 296.0" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<path d="M 574 296.0 L 590 296.0" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<line x1="12" y1="472" x2="832" y2="472" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="494" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="484" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="494" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">회피·단순 폐기 전략</text>
+<rect x="287" y="484" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="309" y="494" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">형제 보존·위험 요소</text>
+<rect x="474" y="484" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="496" y="494" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">자동 수렴 (focal)</text>
+</svg>

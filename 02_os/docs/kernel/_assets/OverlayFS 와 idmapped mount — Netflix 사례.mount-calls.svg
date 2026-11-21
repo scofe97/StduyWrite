@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 520" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">컨테이너 하나가 뜰 때 쌓이는 마운트 호출</title><desc id="dd">레이어 50개 이미지로 컨테이너 100개를 띄울 때, 기존 방식은 호출이 101회에서 202회, 20,200회로 불어난다. containerd PR 12092 는 부모 디렉터리를 한 번만 idmap 해서 레이어 수와 호출 수를 떼어 놓는다.</desc>
+<rect width="880" height="520" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">OVERLAYFS · IDMAPPED MOUNT</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">컨테이너 하나가 뜰 때 쌓이는 마운트 호출</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">호출 수는 레이어 수 곱하기 컨테이너 수로 자란다</text>
+<text x="40" y="112" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F0616D">기존 — 레이어마다 idmap</text>
+<rect x="40" y="128" width="216" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="56" y="154" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">idmapped bind mount</text>
+<text x="56" y="176" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">× 50  레이어마다 1번</text>
+<rect x="332" y="128" width="216" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="348" y="154" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">overlay mount</text>
+<text x="348" y="176" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">× 1  lowerdir 50개 병합</text>
+<rect x="624" y="128" width="216" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="640" y="154" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">umount</text>
+<text x="640" y="176" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">× 50  임시 마운트 정리</text>
+<path d="M 256 160 L 328 160" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<path d="M 548 160 L 620 160" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<rect x="40" y="236" width="216" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="56" y="262" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="16" font-weight="600" fill="#F5F5F3">101회</text>
+<text x="56" y="284" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">컨테이너 1개, 1번 실행</text>
+<rect x="332" y="236" width="216" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="348" y="262" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="16" font-weight="600" fill="#F5F5F3">202회</text>
+<text x="348" y="284" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">× 2  containerd 가 두 번 수행</text>
+<rect x="624" y="236" width="216" height="64" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.2"/>
+<text x="640" y="262" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="16" font-weight="600" fill="#F08A59">20,200회</text>
+<text x="640" y="284" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">× 100  컨테이너 동시 기동</text>
+<path d="M 256 268 L 328 268" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<path d="M 548 268 L 620 268" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<path d="M 148.0 192 L 148.0 232" fill="none" stroke="#5E6B7E" stroke-width="1.0" marker-end="url(#soft)" stroke-dasharray="3 3"/>
+<path d="M 440.0 192 L 440.0 232" fill="none" stroke="#5E6B7E" stroke-width="1.0" marker-end="url(#soft)" stroke-dasharray="3 3"/>
+<path d="M 732.0 192 L 732.0 232" fill="none" stroke="#5E6B7E" stroke-width="1.0" marker-end="url(#soft)" stroke-dasharray="3 3"/>
+<line x1="40" y1="332" x2="840" y2="332" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="40" y="364" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#3FB98C">변경 후 — 부모 디렉터리 한 번 idmap</text>
+<rect x="40" y="380" width="276" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="56" y="406" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">idmapped bind mount</text>
+<text x="56" y="428" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">× 1  레이어 50개의 부모 디렉터리</text>
+<rect x="364" y="380" width="216" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="380" y="406" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">overlay mount</text>
+<text x="380" y="428" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">× 1  이후 레이어 수와 무관</text>
+<rect x="628" y="380" width="212" height="64" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="644" y="406" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="16" font-weight="600" fill="#3FB98C">5,000 → 100</text>
+<text x="644" y="428" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">bind mount 호출, PR 작성자 계산</text>
+<path d="M 316 412 L 360 412" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<path d="M 580 412 L 624 412" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<line x1="12" y1="464" x2="832" y2="464" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="486" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="476" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="122" y="486" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">기존: 레이어 수에 비례</text>
+<rect x="313" y="476" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="335" y="486" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">변경 후: 상수</text>
+<rect x="461" y="476" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="483" y="486" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">논점: 동시 기동의 총합</text>
+</svg>

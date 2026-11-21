@@ -1,0 +1,43 @@
+<svg viewBox="0 0 760 470" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>cd / 를 막는 셸 밖 차단 층위</title>
+  <desc>셸 위생 옵션(set -e, set -u)은 cd / 같은 정상 명령을 막지 못한다. 한 층 위로 올라갈수록 차단력이 강해진다. 안쪽부터 셸(차단 불가), Jenkins dir 블록(cd 자체를 안 씀), 컨테이너 격리(파괴가 컨테이너에만), 비-root 유저(권한 거부), 코드 리뷰·린트 게이트(위험 패턴 차단) 순이다.</desc>
+
+  <rect x="0" y="0" width="760" height="470" fill="#0d0d0d"/>
+
+  <!-- 제목 -->
+  <text x="30" y="34" fill="#e8e4df" font-size="15">cd / 는 셸 밖 한 층 위에서 막는다</text>
+  <text x="30" y="54" fill="rgb(138,133,128)" font-size="12">바깥 층일수록 차단력이 강하다 — set 옵션은 가장 안쪽이라 막지 못한다</text>
+
+  <!-- 층위 5: 코드 리뷰·린트 (가장 바깥, 가장 강함) -->
+  <rect x="30" y="74" width="700" height="356" rx="6" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)"/>
+  <text x="48" y="98" fill="rgb(212,168,83)" font-size="13">⑤ 코드 리뷰 · 린트 게이트</text>
+  <text x="48" y="118" fill="rgb(138,133,128)" font-size="11"><tspan font-family="'JetBrains Mono',monospace">cd /</tspan> · <tspan font-family="'JetBrains Mono',monospace">rm -rf /</tspan> 위험 패턴을 shellcheck·grep 게이트로 차단 (의도 오류의 기계화)</text>
+
+  <!-- 층위 4: 비-root 유저 -->
+  <rect x="56" y="132" width="648" height="282" rx="6" fill="rgba(102,187,106,0.05)" stroke="#66bb6a"/>
+  <text x="74" y="156" fill="#66bb6a" font-size="13">④ 비-root 에이전트</text>
+  <text x="74" y="176" fill="rgb(138,133,128)" font-size="11">에이전트에 루트 권한이 없으면 <tspan font-family="'JetBrains Mono',monospace">rm -rf /</tspan> 가 권한 거부로 막힘 (최소 권한)</text>
+
+  <!-- 층위 3: 컨테이너 격리 -->
+  <rect x="82" y="190" width="596" height="208" rx="6" fill="rgba(102,187,106,0.05)" stroke="#66bb6a"/>
+  <text x="100" y="214" fill="#66bb6a" font-size="13">③ 컨테이너 격리</text>
+  <text x="100" y="234" fill="rgb(138,133,128)" font-size="11"><tspan font-family="'JetBrains Mono',monospace">agent { docker { } }</tspan> — 파괴가 컨테이너 FS 에만, 호스트는 멀쩡 (도커식 경계)</text>
+
+  <!-- 층위 2: Jenkins dir 블록 (1순위 예방) -->
+  <rect x="108" y="248" width="544" height="134" rx="6" fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)"/>
+  <text x="126" y="272" fill="rgb(212,168,83)" font-size="13">② Jenkins dir 블록 (1순위 — 예방)</text>
+  <text x="126" y="292" fill="rgb(138,133,128)" font-size="11"><tspan font-family="'JetBrains Mono',monospace">dir('build/output') { }</tspan> — cd 를 안 쓰니 cd / 가 등장할 일 자체가 사라짐</text>
+
+  <!-- 층위 1: 셸 (가장 안쪽, 차단 불가) -->
+  <rect x="134" y="306" width="492" height="60" rx="6" fill="rgba(244,67,54,0.10)" stroke="#f44336"/>
+  <text x="152" y="330" fill="#f44336" font-size="13">① 셸 위생 옵션 — 차단 불가 ✕</text>
+  <text x="152" y="350" fill="rgb(138,133,128)" font-size="11"><tspan font-family="'JetBrains Mono',monospace">set -e</tspan> · <tspan font-family="'JetBrains Mono',monospace">set -u</tspan> 는 실패·미설정만 잡음. cd / 는 정상 명령이라 발동 조건이 없음</text>
+
+  <!-- 범례 -->
+  <rect x="30" y="444" width="13" height="13" rx="2" fill="rgba(244,67,54,0.10)" stroke="#f44336"/>
+  <text x="50" y="454" fill="rgb(138,133,128)" font-size="11">차단 불가</text>
+  <rect x="160" y="444" width="13" height="13" rx="2" fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)"/>
+  <text x="180" y="454" fill="rgb(138,133,128)" font-size="11">권장 차단 (예방·게이트)</text>
+  <rect x="360" y="444" width="13" height="13" rx="2" fill="rgba(102,187,106,0.05)" stroke="#66bb6a"/>
+  <text x="380" y="454" fill="rgb(138,133,128)" font-size="11">OS·권한 격리</text>
+</svg>

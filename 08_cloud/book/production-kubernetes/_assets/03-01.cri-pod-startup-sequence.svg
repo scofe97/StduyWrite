@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 636" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">kubelet 과 containerd 간의 파드 기동 호출 순서</title><desc id="dd">RunPodSandbox 부터 StartContainer 까지 gRPC 메서드 호출 흐름</desc>
+<rect width="1000" height="636" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">CRI SEQUENCE · 03-01</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">kubelet 과 containerd 간의 파드 기동 호출 순서</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">샌드박스 준비 → 이미지 확인·풀 → 컨테이너 생성 → 시작</text>
+<rect x="24.0" y="104" width="180" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="114.0" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">kubelet</text>
+<text x="114.0" y="141" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">k8s 노드 에이전트</text>
+<rect x="398.0" y="104" width="180" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="488.0" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">containerd CRI</text>
+<text x="488.0" y="141" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">gRPC Unix 소켓 서버</text>
+<rect x="772.0" y="104" width="180" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="862.0" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">runc</text>
+<text x="862.0" y="141" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">OCI 저수준 런타임</text>
+<line x1="114.0" y1="154" x2="114.0" y2="560" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="488.0" y1="154" x2="488.0" y2="560" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="862.0" y1="154" x2="862.0" y2="560" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<path d="M 124.0 170 L 476.0 170" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="301.0" y="161" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#6A95D8">1. RunPodSandbox()</text>
+<text x="301.0" y="187" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">파드 이름·UID·네임스페이스·DNS 설정</text>
+<path d="M 498.0 205 L 850.0 205" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="675.0" y="196" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#8B98A9">pause 생성 · 기동</text>
+<text x="675.0" y="222" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">공유 netns 인프라 컨테이너</text>
+<path d="M 478.0 245 L 126.0 245" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="301.0" y="236" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">podSandboxID 반환</text>
+<text x="301.0" y="262" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">샌드박스 핸들 획득</text>
+<path d="M 124.0 295 L 476.0 295" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="301.0" y="286" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#6A95D8">2. ImageStatus() / PullImage()</text>
+<text x="301.0" y="312" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">노드 로컬 이미지 확인 및 풀</text>
+<path d="M 478.0 340 L 126.0 340" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="301.0" y="331" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">imageRef(sha256 digest) 반환</text>
+<text x="301.0" y="357" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">이미지 준비 완료</text>
+<path d="M 124.0 390 L 476.0 390" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="301.0" y="381" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#6A95D8">3. CreateContainer(podSandboxID, config)</text>
+<text x="301.0" y="407" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">환경변수·마운트·인자 전달</text>
+<path d="M 478.0 435 L 126.0 435" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="301.0" y="426" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">containerID 반환</text>
+<text x="301.0" y="452" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">상태 필드용 식별자 응답</text>
+<path d="M 124.0 485 L 476.0 485" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="301.0" y="476" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#6A95D8">4. StartContainer(containerID)</text>
+<text x="301.0" y="502" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">앱 컨테이너 실행 요청</text>
+<path d="M 498.0 525 L 850.0 525" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="675.0" y="516" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#8B98A9">컨테이너 프로세스 기동</text>
+<text x="675.0" y="542" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">앱 프로세스 생성</text>
+<line x1="12" y1="574" x2="952" y2="574" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="596" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="586" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="596" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">kubelet gRPC 요청</text>
+<rect x="339" y="586" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="361" y="596" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">런타임 응답 / 결과</text>
+<rect x="526" y="586" width="14" height="12" rx="2" fill="#8B98A922" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="548" y="596" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">저수준 OCI 실행</text>
+</svg>

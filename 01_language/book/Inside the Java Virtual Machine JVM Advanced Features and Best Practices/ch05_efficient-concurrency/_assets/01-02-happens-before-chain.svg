@@ -1,0 +1,75 @@
+<svg viewBox="0 0 900 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>happens-before 사슬 — 발행 패턴이 전이성으로 안전해지는 과정</title>
+  <rect x="0" y="0" width="900" height="560" fill="#0d0d0d"/>
+
+  <text x="450" y="36" text-anchor="middle" font-size="21" font-weight="700" fill="#e8e4df">happens-before 사슬 — 발행 패턴</text>
+  <text x="450" y="58" text-anchor="middle" font-size="13" fill="#8a857f">서로 다른 스레드의 A 와 D 가, 세 규칙을 전이성으로 이어 연결된다</text>
+
+  <!-- 두 스레드 칼럼 -->
+  <rect x="40" y="84" width="360" height="300" rx="12" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.8"/>
+  <text x="220" y="110" text-anchor="middle" font-size="15" font-weight="700" fill="#5b9bd5">초기화 스레드</text>
+
+  <rect x="500" y="84" width="360" height="300" rx="12" fill="#0d0d0d" stroke="#d4a853" stroke-width="1.8"/>
+  <text x="680" y="110" text-anchor="middle" font-size="15" font-weight="700" fill="#d4a853">사용 스레드</text>
+
+  <!-- A -->
+  <rect x="80" y="130" width="280" height="52" rx="8" fill="#dceaf7"/>
+  <text x="100" y="155" font-size="13.5" font-weight="700" fill="#10243a">A</text>
+  <text x="220" y="153" text-anchor="middle" font-size="13.5" fill="#10243a">config = 42</text>
+  <text x="220" y="172" text-anchor="middle" font-size="11" fill="#10243a">(일반 변수 쓰기)</text>
+
+  <!-- A→B 화살표 + 규칙1 -->
+  <line x1="220" y1="182" x2="220" y2="214" stroke="#5b9bd5" stroke-width="2.5"/>
+  <polygon points="220,220 214,209 226,209" fill="#5b9bd5"/>
+  <text x="234" y="203" font-size="11" fill="#8a857f">① 프로그램 순서</text>
+
+  <!-- B -->
+  <rect x="80" y="222" width="280" height="52" rx="8" fill="#e6f7e7"/>
+  <text x="100" y="247" font-size="13.5" font-weight="700" fill="#14521d">B</text>
+  <text x="220" y="245" text-anchor="middle" font-size="13.5" fill="#14521d">initialized = true</text>
+  <text x="220" y="264" text-anchor="middle" font-size="11" fill="#14521d">(volatile 쓰기)</text>
+
+  <!-- C -->
+  <rect x="540" y="222" width="280" height="52" rx="8" fill="#fdf3df"/>
+  <text x="560" y="247" font-size="13.5" font-weight="700" fill="#5a3d0a">C</text>
+  <text x="680" y="245" text-anchor="middle" font-size="13.5" fill="#5a3d0a">if (initialized)</text>
+  <text x="680" y="264" text-anchor="middle" font-size="11" fill="#5a3d0a">(volatile 읽기)</text>
+
+  <!-- B→C 스레드 경계 넘는 고리 (규칙2) -->
+  <line x1="360" y1="248" x2="532" y2="248" stroke="#66bb6a" stroke-width="3.5"/>
+  <polygon points="540,248 528,242 528,254" fill="#66bb6a"/>
+  <rect x="372" y="284" width="156" height="44" rx="7" fill="#66bb6a"/>
+  <text x="450" y="303" text-anchor="middle" font-size="12" font-weight="700" fill="#0d0d0d">② volatile 변수 규칙</text>
+  <text x="450" y="320" text-anchor="middle" font-size="11" fill="#0d0d0d">스레드 경계를 넘는 유일한 고리</text>
+  <line x1="450" y1="252" x2="450" y2="282" stroke="#66bb6a" stroke-width="1.5" stroke-dasharray="3 3"/>
+
+  <!-- C→D 화살표 + 규칙3 -->
+  <line x1="680" y1="274" x2="680" y2="306" stroke="#d4a853" stroke-width="2.5"/>
+  <polygon points="680,312 674,301 686,301" fill="#d4a853"/>
+  <text x="694" y="295" font-size="11" fill="#8a857f">③ 프로그램 순서</text>
+
+  <!-- D -->
+  <rect x="540" y="314" width="280" height="52" rx="8" fill="#dceaf7"/>
+  <text x="560" y="339" font-size="13.5" font-weight="700" fill="#10243a">D</text>
+  <text x="680" y="337" text-anchor="middle" font-size="13.5" fill="#10243a">use(config)</text>
+  <text x="680" y="356" text-anchor="middle" font-size="11" fill="#10243a">(config 를 읽음)</text>
+
+  <!-- 전이성 결론 -->
+  <rect x="40" y="410" width="820" height="116" rx="12" fill="#0d0d0d" stroke="#66bb6a" stroke-width="2"/>
+  <text x="60" y="438" font-size="15" font-weight="700" fill="#66bb6a">∴ 전이성 — A hb B, B hb C, C hb D  ⇒  A hb D</text>
+
+  <!-- 사슬 한 줄 시각화 -->
+  <g font-size="13" font-weight="700">
+    <rect x="62" y="454" width="58" height="34" rx="6" fill="#dceaf7"/><text x="91" y="476" text-anchor="middle" fill="#10243a">A</text>
+    <text x="132" y="476" text-anchor="middle" font-size="16" fill="#8a857f">→</text>
+    <rect x="150" y="454" width="58" height="34" rx="6" fill="#e6f7e7"/><text x="179" y="476" text-anchor="middle" fill="#14521d">B</text>
+    <text x="226" y="476" text-anchor="middle" font-size="16" fill="#66bb6a">⇒</text>
+    <rect x="244" y="454" width="58" height="34" rx="6" fill="#fdf3df"/><text x="273" y="476" text-anchor="middle" fill="#5a3d0a">C</text>
+    <text x="320" y="476" text-anchor="middle" font-size="16" fill="#8a857f">→</text>
+    <rect x="338" y="454" width="58" height="34" rx="6" fill="#dceaf7"/><text x="367" y="476" text-anchor="middle" fill="#10243a">D</text>
+    <text x="430" y="476" text-anchor="middle" font-size="14" fill="#e8e4df">결과:</text>
+    <rect x="470" y="452" width="370" height="38" rx="7" fill="#cdeccf"/>
+    <text x="655" y="476" text-anchor="middle" font-size="13" fill="#14521d">use(config) 는 반드시 42 를 본다</text>
+  </g>
+  <text x="60" y="514" font-size="12" fill="#8a857f">initialized 에서 volatile 을 빼면 ② 고리가 끊겨 사슬 전체가 무너진다 → §4 재정렬 버그</text>
+</svg>

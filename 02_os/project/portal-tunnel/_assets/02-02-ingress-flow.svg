@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 1120" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">공개 인그레스 수락 및 라우팅 흐름</title><desc id="dd">TCP 수락부터 ClientHello 검사, API handoff, 브리지 연결 분기</desc>
+<rect width="960" height="1120" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">PORTAL-TUNNEL · PUBLIC INGRESS FLOWCHART</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">공개 인그레스 수락 및 라우팅 흐름</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">128개 검사 슬롯과 1024개 테넌트 슬롯 안에서 소켓을 이관합니다</text>
+<rect x="240.0" y="88.0" width="200" height="36" rx="18.0" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="340" y="111" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">TCP accept (:958)</text>
+<path d="M 340 124 L 340 158" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<polygon points="340,160.0 450.0,192 340,224.0 230.0,192" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="340" y="187" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">검사 슬롯 여유? (:896)</text>
+<text x="340" y="203" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">ingressInspecting &lt; 128</text>
+<path d="M 450 192 L 575 192" fill="none" stroke="#F0616D" stroke-width="1.2" marker-end="url(#bad)"/>
+<rect x="478.5" y="172" width="68.0" height="20" rx="4" fill="#0D1117" stroke="#F0616D" stroke-width="0.8"/>
+<text x="512.5" y="186" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#F0616D">128 초과</text>
+<rect x="575.0" y="175.0" width="170" height="34" rx="4" fill="#161B22" stroke="#F0616D" stroke-width="1.0"/>
+<text x="660" y="196" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#F0616D">소켓 Close (:962)</text>
+<path d="M 340 224 L 340 258" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ok)"/>
+<rect x="324.0" y="231" width="32.0" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="340" y="245" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#3FB98C">여유</text>
+<rect x="220.0" y="259.0" width="240" height="42" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="340" y="274" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">admitIngress (:889)</text>
+<text x="340" y="292" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">inspecting++ · 고루틴</text>
+<path d="M 340 301 L 340 336" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="220.0" y="337.0" width="240" height="42" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="340" y="352" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">l4.InspectClientHello (:968)</text>
+<text x="340" y="370" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">버퍼 캡처 · 2초 제한</text>
+<path d="M 340 379 L 340 414" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<polygon points="340,416.0 450.0,448 340,480.0 230.0,448" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="340" y="443" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">2초 내 파싱 완료? (:968)</text>
+<text x="340" y="459" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">ClientHello 검증</text>
+<path d="M 450 448 L 575 448" fill="none" stroke="#F0616D" stroke-width="1.2" marker-end="url(#bad)"/>
+<rect x="465.0" y="428" width="95.0" height="20" rx="4" fill="#0D1117" stroke="#F0616D" stroke-width="0.8"/>
+<text x="512.5" y="442" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#F0616D">타임아웃·비TLS</text>
+<rect x="575.0" y="431.0" width="170" height="34" rx="4" fill="#161B22" stroke="#F0616D" stroke-width="1.0"/>
+<text x="660" y="452" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#F0616D">소켓 Close (:971)</text>
+<path d="M 340 480 L 340 514" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ok)"/>
+<rect x="324.0" y="487" width="32.0" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="340" y="501" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#3FB98C">성공</text>
+<rect x="220.0" y="515.0" width="240" height="42" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="340" y="530" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">ServerName 정규화 (:979)</text>
+<text x="340" y="548" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">helloSpan 추출</text>
+<path d="M 340 557 L 340 592" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<polygon points="340,594.0 455.0,626 340,658.0 225.0,626" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="340" y="621" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">Root / 캐시 / 공백? (:984)</text>
+<text x="340" y="637" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">serverName 검사</text>
+<path d="M 455 626 L 565 626" fill="none" stroke="#6A95D8" stroke-width="1.2" marker-end="url(#info)"/>
+<rect x="471.5" y="606" width="77.0" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="510.0" y="620" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#6A95D8">Root·캐시</text>
+<rect x="565.0" y="605.0" width="190" height="42" rx="4" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="660" y="620" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#6A95D8">API 서버 handoff (:986)</text>
+<text x="660" y="637" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">로컬 TCP 홉 없이 전달</text>
+<path d="M 340 658 L 340 692" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ok)"/>
+<rect x="301.5" y="665" width="77.0" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="340" y="679" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#3FB98C">테넌트 호스트</text>
+<polygon points="340,694.0 450.0,726 340,758.0 230.0,726" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="340" y="721" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">테넌트 슬롯 여유? (:920)</text>
+<text x="340" y="737" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">ingressTenants &lt; 1024</text>
+<path d="M 450 726 L 575 726" fill="none" stroke="#F0616D" stroke-width="1.2" marker-end="url(#bad)"/>
+<rect x="474.0" y="706" width="77.0" height="20" rx="4" fill="#0D1117" stroke="#F0616D" stroke-width="0.8"/>
+<text x="512.5" y="720" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#F0616D">1024 초과</text>
+<rect x="575.0" y="709.0" width="170" height="34" rx="4" fill="#161B22" stroke="#F0616D" stroke-width="1.0"/>
+<text x="660" y="730" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#F0616D">슬롯 초과 Close (:996)</text>
+<path d="M 340 758 L 340 792" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ok)"/>
+<rect x="324.0" y="765" width="32.0" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="340" y="779" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#3FB98C">여유</text>
+<rect x="220.0" y="793.0" width="240" height="42" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="340" y="808" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">promoteIngress (:917)</text>
+<text x="340" y="826" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">inspecting-- · tenants++</text>
+<path d="M 340 835 L 340 870" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<polygon points="340,872.0 450.0,904 340,936.0 230.0,904" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="340" y="899" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">registry.Lookup 성공? (:1000)</text>
+<text x="340" y="915" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">임대 레코드 검색</text>
+<path d="M 450 904 L 575 904" fill="none" stroke="#F0616D" stroke-width="1.2" marker-end="url(#bad)"/>
+<rect x="492.0" y="884" width="41.0" height="20" rx="4" fill="#0D1117" stroke="#F0616D" stroke-width="0.8"/>
+<text x="512.5" y="898" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#F0616D">미등록</text>
+<rect x="575.0" y="887.0" width="170" height="34" rx="4" fill="#161B22" stroke="#F0616D" stroke-width="1.0"/>
+<text x="660" y="908" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#F0616D">미등록 Close (:1006)</text>
+<path d="M 340 936 L 340 970" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<rect x="324.0" y="943" width="32.0" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="340" y="957" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#F08A59">일치</text>
+<rect x="150.0" y="976.0" width="380" height="52" rx="8" fill="#161B22" stroke="#F08A59" stroke-width="1.4"/>
+<text x="340" y="995" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">bridgeLeaseConn (:1009, :1026)</text>
+<text x="340" y="1015" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">Issue(:1034) → bridge(:1049)</text>
+<line x1="12" y1="1060" x2="912" y2="1060" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="1082" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="1072" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="1082" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 흐름</text>
+<rect x="209" y="1072" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="231" y="1082" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">종착 (브리지)</text>
+<rect x="357" y="1072" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="379" y="1082" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">제어 평면 이관</text>
+<rect x="505" y="1072" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="527" y="1082" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">거절 / 소켓 종료</text>
+</svg>

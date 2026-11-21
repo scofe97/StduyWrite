@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 480" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">데이터플로우 중심 애플리케이션 설계 전체 지도</title><desc id="dd">파생 함수(§1), 코드·상태 분리(§2), 쓰기·읽기 경로(§3), 클라이언트 푸시(§4), 읽기 이벤트화(§5)의 체계.</desc>
+<rect width="880" height="480" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">13-03 · CHAPTER OVERVIEW</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">데이터플로우 중심 애플리케이션 설계 전체 지도</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">표준·커스텀 파생 함수 · 수동적 공유 변수 · 쓰기·읽기 경로 경계 이동 · 클라이언트 푸시 · 스트림-테이블 조인</text>
+<rect x="24" y="104" width="832" height="36" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="440.0" y="127" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">데이터베이스 = 수동적 변수 아닌 상태 변경의 흐름 → 애플리케이션 코드와 UI까지 스트림의 일부</text>
+<rect x="24" y="156" width="156" height="244" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="38.18" y="166" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="52" y="180" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">§1</text>
+<text x="74" y="180" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">파생 함수</text>
+<text x="38" y="202" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">표준·커스텀 코드</text>
+<line x1="34" y1="214" x2="170" y2="214" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="32" y="222" width="140" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="38" y="238" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">CREATE INDEX</text>
+<text x="38" y="256" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">표준 함수 DB 내장</text>
+<rect x="32" y="274" width="140" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="38" y="290" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">도메인 특화</text>
+<text x="38" y="308" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">커스텀 파생 로직</text>
+<rect x="32" y="326" width="140" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="38" y="342" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">Unix 파이프</text>
+<text x="38" y="360" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">상태 스트림 합성</text>
+<rect x="193" y="156" width="156" height="244" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="207.18" y="166" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="221" y="180" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#E3B341">§2</text>
+<text x="243" y="180" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">코드·상태 분리</text>
+<text x="207" y="202" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">수동적 변수 넘어</text>
+<line x1="203" y1="214" x2="339" y2="214" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="201" y="222" width="140" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="207" y="238" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">스테이트리스</text>
+<text x="207" y="256" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">로직과 상태 분리</text>
+<rect x="201" y="274" width="140" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="207" y="290" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">공유 변수 한계</text>
+<text x="207" y="308" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">변경 알림 부재·폴링</text>
+<rect x="201" y="326" width="140" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="207" y="342" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">데이터플로우 관점</text>
+<text x="207" y="360" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">CDC·액터·트리거·증분 뷰</text>
+<rect x="362" y="156" width="156" height="244" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.4"/>
+<rect x="376.18" y="166" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="390" y="180" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">§3</text>
+<text x="412" y="180" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">쓰기·읽기 경로</text>
+<text x="376" y="202" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">경로 경계 이동</text>
+<line x1="372" y1="214" x2="508" y2="214" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="370" y="222" width="140" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="376" y="238" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">쓰기 경로</text>
+<text x="376" y="256" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">즉시 평가·사전 계산</text>
+<rect x="370" y="274" width="140" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="376" y="290" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">읽기 경로</text>
+<text x="376" y="308" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">지연 평가·요청 시 실행</text>
+<rect x="370" y="326" width="140" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="376" y="342" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">경계 이동 도구</text>
+<text x="376" y="360" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">캐시·인덱스·구체화 뷰</text>
+<rect x="531" y="156" width="156" height="244" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="545.18" y="166" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="559" y="180" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#3FB98C">§4</text>
+<text x="581" y="180" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">클라이언트 푸시</text>
+<text x="545" y="202" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">쓰기 경로 연장</text>
+<line x1="541" y1="214" x2="677" y2="214" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="539" y="222" width="140" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="545" y="238" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">로컬 상태 캐시</text>
+<text x="545" y="256" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">UI는 모델의 구체화 뷰</text>
+<rect x="539" y="274" width="140" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="545" y="290" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">능동적 푸시</text>
+<text x="545" y="308" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">SSE·WebSocket 연결</text>
+<rect x="539" y="326" width="140" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="545" y="342" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">재접속 따라잡기</text>
+<text x="545" y="360" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">놓친 메시지 수신</text>
+<rect x="700" y="156" width="156" height="244" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="714.18" y="166" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="728" y="180" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">§5</text>
+<text x="750" y="180" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">읽기 이벤트화</text>
+<text x="714" y="202" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">멀티 샤드 조인</text>
+<line x1="710" y1="214" x2="846" y2="214" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="708" y="222" width="140" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="714" y="238" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">스트림-테이블 조인</text>
+<text x="714" y="256" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">일회성 읽기·영구 구독</text>
+<rect x="708" y="274" width="140" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="714" y="290" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">인과 추적성</text>
+<text x="714" y="308" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">본 정보 → 결정 재구성</text>
+<rect x="708" y="326" width="140" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="714" y="342" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">멀티 샤드</text>
+<text x="714" y="360" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">라우팅·샤딩·조인 재사용</text>
+<line x1="12" y1="428" x2="832" y2="428" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="450" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="440" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">핵심 경로 (focal)</text>
+<rect x="313" y="440" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="335" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">클라이언트 연장</text>
+<rect x="461" y="440" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="483" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">아키텍처·인프라</text>
+<rect x="609" y="440" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="631" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">전통 모델 한계</text>
+</svg>

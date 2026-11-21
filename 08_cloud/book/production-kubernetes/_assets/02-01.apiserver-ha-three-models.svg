@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 420" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">API 서버 고가용성을 위한 세 가지 해결: 외부 LB · VIP · 노드 로컬 프록시</title><desc id="dd">kubeconfig server 필드의 단일 주소 제약을 푸는 세 가지 해결. 외부 전용 L4 LB, 컨트롤 플레인 VIP+keepalived, 워커 노드 로컬 프록시를 두는 위치와 운영 트레이드오프 비교.</desc>
+<rect width="1000" height="420" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">HA COMPARISON · 02-01</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">API 서버 고가용성을 위한 세 가지 해결: 외부 LB · VIP · 노드 로컬 프록시</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">단일 주소 제약 → 장치를 어디에 두느냐에 따른 세 가지 해결</text>
+<text x="165.33333333333334" y="118" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">해결 A</text>
+<rect x="16.0" y="132" width="298.6666666666667" height="224" rx="6" fill="#6A95D810" stroke="#6A95D8" stroke-width="1.4"/>
+<text x="165.33333333333334" y="166" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#6A95D8">노드 밖 외부 L4 LB</text>
+<line x1="34.0" y1="182" x2="296.6666666666667" y2="182" stroke="#6A95D844" stroke-width="0.9"/>
+<text x="165.33333333333334" y="206" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">단일 인프라 집중형</text>
+<text x="34.0" y="236" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">· 배치: 클러스터 외부 전용 LB 머신</text>
+<text x="34.0" y="260" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">· 분산: HAProxy L4 TCP 패스스루</text>
+<text x="34.0" y="284" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">· 강점: 단순한 구조와 명확한 관리 경계</text>
+<text x="34.0" y="308" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">· 약점: 외부 LB 자체가 단일 장애점(SPOF)</text>
+<text x="34.0" y="332" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">· 특징: 마스터 내부 kubectl 도 영향</text>
+<text x="492.0" y="118" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">해결 B</text>
+<rect x="342.6666666666667" y="132" width="298.6666666666667" height="224" rx="6" fill="#3FB98C10" stroke="#3FB98C" stroke-width="1.4"/>
+<text x="492.0" y="166" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#3FB98C">VIP + keepalived</text>
+<line x1="360.6666666666667" y1="182" x2="623.3333333333334" y2="182" stroke="#3FB98C44" stroke-width="0.9"/>
+<text x="492.0" y="206" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">가상 IP 페일오버형</text>
+<text x="360.6666666666667" y="236" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">· 배치: 컨트롤 플레인 노드 3대</text>
+<text x="360.6666666666667" y="260" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">· 분산: VRRP 선출 마스터의 HAProxy</text>
+<text x="360.6666666666667" y="284" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">· 강점: 전용 LB 없이 단일 장애점 제거</text>
+<text x="360.6666666666667" y="308" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">· 약점: keepalived·VRRP 운영 복잡성</text>
+<text x="360.6666666666667" y="332" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">· 채택: kubeadm HA 문서 예시 · OpenShift 온프레미스</text>
+<text x="818.6666666666667" y="118" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">해결 C</text>
+<rect x="669.3333333333334" y="132" width="298.6666666666667" height="224" rx="6" fill="#6A95D810" stroke="#6A95D8" stroke-width="1.4"/>
+<text x="818.6666666666667" y="166" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#6A95D8">노드 로컬 프록시</text>
+<line x1="687.3333333333334" y1="182" x2="950.0" y2="182" stroke="#6A95D844" stroke-width="0.9"/>
+<text x="818.6666666666667" y="206" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">워커 분산 프록시형</text>
+<text x="687.3333333333334" y="236" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">· 배치: 각 워커 노드 localhost:6443</text>
+<text x="687.3333333333334" y="260" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">· 분산: 워커마다 nginx 로컬 프록시</text>
+<text x="687.3333333333334" y="284" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">· 강점: 외부 LB 인프라 없이 노드별 분산</text>
+<text x="687.3333333333334" y="308" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">· 약점: 클러스터 외부 kubectl 직접 접근 불가</text>
+<text x="687.3333333333334" y="332" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">· 채택: Kubespray 기본값 (사람용 진입점 분리)</text>
+<line x1="12" y1="380" x2="952" y2="380" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="402" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="392" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="402" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">외부 / 로컬 프록시 모델</text>
+<rect x="326" y="392" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="348" y="402" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">VIP 페일오버 모델</text>
+</svg>

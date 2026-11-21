@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 400" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">user namespace 와 UID 매핑 데이터 흐름</title><desc id="dd">RUN 안 UID 0 은 빌더 사용자 자신의 UID 1000 으로, UID 1~65536 은 /etc/subuid 로 위임받은 100000~165535 로 바뀌는 구조</desc>
+<rect width="960" height="400" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">DEVOPS · CONTAINER · 01-02</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">user namespace 와 UID 매핑 데이터 흐름</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">RUN 안 UID → uid_map 한 줄 → 호스트에서 보이는 UID</text>
+<rect x="24" y="100" width="260" height="184" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="40" y="124" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">RUN 컨테이너 안</text>
+<rect x="40" y="140" width="228" height="60" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="154" y="164" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">UID 0 (root)</text>
+<text x="154" y="186" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">apk · apt 가 쓰는 root</text>
+<rect x="40" y="212" width="228" height="60" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="154" y="236" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">UID 1 ~ 65536</text>
+<text x="154" y="258" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">이미지 안 일반 계정</text>
+<rect x="344" y="100" width="280" height="184" rx="6" fill="#F08A5916" stroke="#F08A59" stroke-width="1.4"/>
+<text x="360" y="124" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">/proc/[pid]/uid_map</text>
+<rect x="360" y="140" width="248" height="60" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="372" y="164" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">0   1000   1</text>
+<text x="372" y="186" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">자기 UID 한 개</text>
+<rect x="360" y="212" width="248" height="60" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="372" y="236" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">1   100000   65536</text>
+<text x="372" y="258" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">newuidmap · user:100000:65536</text>
+<rect x="684" y="100" width="252" height="184" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="700" y="124" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">호스트에서 보이는 UID</text>
+<rect x="700" y="140" width="220" height="60" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="810" y="164" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">UID 1000</text>
+<text x="810" y="186" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">빌더 사용자 자신</text>
+<rect x="700" y="212" width="220" height="60" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="810" y="236" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">UID 100000 ~ 165535</text>
+<text x="810" y="258" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">위임받은 하위 범위</text>
+<path d="M 270 170 L 358 170" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<path d="M 610 170 L 698 170" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<path d="M 270 242 L 358 242" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<path d="M 610 242 L 698 242" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<text x="480" y="314" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">어느 행도 호스트 UID 0 이 아님 → RUN 의 root 로 호스트 root 파일을 고칠 수 없음</text>
+<line x1="12" y1="334" x2="912" y2="334" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="356" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="346" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="356" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">RUN 안 UID</text>
+<rect x="261" y="346" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="283" y="356" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">uid_map (focal)</text>
+<rect x="500" y="346" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="522" y="356" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">호스트 UID</text>
+<rect x="635" y="346" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="657" y="356" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">결론</text>
+</svg>

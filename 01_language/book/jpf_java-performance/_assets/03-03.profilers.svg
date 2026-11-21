@@ -1,0 +1,63 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>프로파일러 — sampling·instrumented·native</title>
+  <desc>프로파일러는 성능 분석가 도구함에서 가장 중요한 도구다. 프로파일링은 두 모드다. sampling 모드는 기본이고 오버헤드가 가장 적다. 타이머가 주기적으로 발화해 각 스레드가 어느 메서드를 실행 중인지 본다. 흔한 오차는 두 메서드를 번갈아 실행할 때 한쪽만 샘플링되는 것이다. 더 긴 시간 동안 더 짧은 간격으로 프로파일하면 줄지만 오버헤드와 트레이드오프다. Java 특유의 safepoint bias도 있다. 스레드는 safepoint에서만 스택을 샘플링할 수 있어, 어떤 메서드가 safepoint에 안 가면 모든 시간이 다른 메서드에 잘못 청구된다. Java 8의 AsyncGetCallTrace 인터페이스를 쓰는 async profiler는 safepoint를 기다리지 않아 이 편향이 적다. instrumented 모드는 클래스 로드 시 바이트코드를 바꿔 호출 횟수를 센다. 훨씬 침습적이라 인라인 같은 컴파일러 결정을 바꿔 프로파일을 왜곡할 수 있어 소수 클래스에만 쓴다. 대신 정확한 호출 횟수를 준다. 핵심 원칙은 프로파일의 top 메서드 자체를 최적화하는 게 아니라 그것이 가리키는 영역을 최적화하는 것이다. flame graph는 상향식, call tree는 하향식 시각화다. blocking 메서드는 CPU를 안 쓰므로 대개 보고되지 않는다. native profiler는 GC·컴파일러까지 보여준다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">프로파일러 — sampling·instrumented·native</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">성능 분석가의 가장 중요한 도구 — 다만 추정일 뿐, 가끔 틀립니다</text>
+
+  <!-- sampling vs instrumented -->
+  <rect x="20" y="74" width="320" height="160" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="96" fill="#66bb6a" font-size="13" font-weight="bold">sampling 모드 (기본)</text>
+  <text x="38" y="116" fill="#e8e4df" font-size="11">타이머가 주기 발화 → 실행 중 메서드 기록</text>
+  <text x="38" y="134" fill="#66bb6a" font-size="10">오버헤드 최소 → 측정 왜곡 적음</text>
+  <text x="38" y="152" fill="#f47f72" font-size="10">오차: 번갈아 실행 시 한쪽만 샘플</text>
+  <text x="38" y="170" fill="rgb(138,133,128)" font-size="10">→ 더 길게, 더 짧은 간격으로 완화</text>
+  <text x="38" y="190" fill="#f47f72" font-size="10">Java 특유: safepoint bias</text>
+  <text x="38" y="208" fill="rgb(138,133,128)" font-size="10">async profiler가 이 편향을 줄임</text>
+  <text x="38" y="226" fill="rgb(138,133,128)" font-size="9">(AsyncGetCallTrace, Java 8 공개)</text>
+
+  <rect x="350" y="74" width="312" height="160" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="368" y="96" fill="#9cc3df" font-size="13" font-weight="bold">instrumented 모드</text>
+  <text x="368" y="116" fill="#e8e4df" font-size="11">클래스 로드 시 바이트코드 변경(호출 카운트)</text>
+  <text x="368" y="134" fill="#f47f72" font-size="10">훨씬 침습적 → 인라인 등 결정 바뀜</text>
+  <text x="368" y="152" fill="rgb(138,133,128)" font-size="10">프로파일 왜곡 가능 → 소수 클래스만</text>
+  <text x="368" y="170" fill="#66bb6a" font-size="10">정확한 호출 횟수 제공</text>
+  <text x="368" y="190" fill="rgb(138,133,128)" font-size="10">예: 엔티티 매니저 3,300만 호출,</text>
+  <text x="368" y="208" fill="rgb(138,133,128)" font-size="10">난수 계산 1억 6,600만 호출 발견</text>
+  <text x="368" y="226" fill="rgb(212,168,83)" font-size="9">→ 구현 개선보다 호출 횟수 줄이기</text>
+
+  <!-- 2차 분석 흐름 -->
+  <rect x="20" y="244" width="642" height="40" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="268" fill="rgb(138,133,128)" font-size="11">권장 흐름: sampling으로 영역 지목 → 그 영역만 instrumented로 파고들기 (2차 분석)</text>
+
+  <!-- safepoint bias -->
+  <rect x="20" y="294" width="642" height="76" fill="rgba(244,67,54,0.08)" stroke="#f44336" stroke-width="2"/>
+  <text x="38" y="316" fill="#f44336" font-size="13" font-weight="bold">safepoint bias — Java sampling의 함정</text>
+  <text x="38" y="336" fill="#e8e4df" font-size="11">스레드는 safepoint에서만 스택 샘플링 가능 (블록·I/O·monitor·park·JNI 등)</text>
+  <text x="38" y="354" fill="#f47f72" font-size="11">→ safepoint에 안 가는 메서드의 시간이 다른 메서드에 잘못 청구됨. async profiler가 우회</text>
+
+  <!-- top 메서드 원칙 -->
+  <rect x="20" y="380" width="642" height="64" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="402" fill="rgb(212,168,83)" font-size="13" font-weight="bold">핵심 원칙 — top 메서드 ≠ 최적화 대상</text>
+  <text x="38" y="422" fill="#e8e4df" font-size="11">top 메서드(예: JDK의 writeObject0)는 고칠 수 없음 → 그것이 가리키는 영역(직렬화)을 개선</text>
+  <text x="38" y="440" fill="rgb(138,133,128)" font-size="10">프로파일의 leaf 메서드만 보지 말 것 — 영역을 찾는 지도로 쓸 것</text>
+
+  <!-- 시각화 -->
+  <rect x="20" y="454" width="320" height="76" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="476" fill="#e8e4df" font-size="12" font-weight="bold">시각화 2가지</text>
+  <text x="38" y="496" fill="#9cc3df" font-size="10">flame graph: 상향식, 가장 많이 쓴 메서드</text>
+  <text x="38" y="514" fill="rgb(212,168,83)" font-size="10">call tree: 하향식, 100%에서 자식으로 드릴다운</text>
+
+  <!-- blocking / native -->
+  <rect x="350" y="454" width="312" height="76" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="368" y="476" fill="#e8e4df" font-size="12" font-weight="bold">blocking 메서드 / native</text>
+  <text x="368" y="496" fill="rgb(138,133,128)" font-size="10">blocking(select·wait)은 CPU 안 씀 → 대개 미보고</text>
+  <text x="368" y="514" fill="rgb(138,133,128)" font-size="10">native profiler: GC·컴파일러 시간까지 가시화</text>
+
+  <!-- native 결론 -->
+  <rect x="20" y="540" width="642" height="44" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="562" fill="#66bb6a" font-size="11" font-weight="bold">native 판독:</text>
+  <text x="125" y="562" fill="rgb(138,133,128)" font-size="11">GC가 CPU 지배 → 컬렉터 튜닝이 옳음 · 컴파일 스레드 시간 큼 → 대개 성능 영향 없음</text>
+  <text x="38" y="578" fill="rgb(138,133,128)" font-size="10">서로 다른 프로파일러는 완전히 다른 영역을 가리킬 수 있음 — 여러 도구를 유연하게</text>
+</svg>

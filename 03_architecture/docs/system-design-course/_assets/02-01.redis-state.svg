@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">Redis 정상·장애·복구 중의 상태 전이</title><desc id="dd">마스터 크래시 감지 후 DB 폴백, 재가동 후 미전달 데이터 재동기화 완료 뒤 정상 복귀하는 상태 머신.</desc>
+<rect width="960" height="540" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">SYSTEM DESIGN COURSE · 02-01 §2</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">Redis 정상·장애·복구 중의 상태 전이</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">[정상] Redis 우선 읽기 → [장애] DB 폴백 → [복구 중] DB→Redis 미전달 N건 동기화 → [정상 복귀]</text>
+<circle cx="20" cy="230" r="6" fill="#F5F5F3"/>
+<path d="M 28 230 L 60 230" fill="none" stroke="#F5F5F3" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="64" y="148" width="216" height="164" rx="8" fill="#3FB98C08" stroke="#3FB98C" stroke-width="1.0"/>
+<rect x="143.54" y="162" width="56.92" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="172" y="176" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#3FB98C">NORMAL</text>
+<text x="172" y="202" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="15" font-weight="600" fill="#F5F5F3">정상 모드</text>
+<text x="172" y="222" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">Redis 캐시 우선 읽기</text>
+<line x1="80" y1="236" x2="264" y2="236" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="84" y="256" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">Redis 마스터 활성</text>
+<text x="84" y="276" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">캐시 적중</text>
+<text x="84" y="296" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">정본 DB 선영속 유지</text>
+<rect x="376" y="148" width="216" height="164" rx="8" fill="#F0616D08" stroke="#F0616D" stroke-width="1.0"/>
+<rect x="455.54" y="162" width="56.92" height="20" rx="4" fill="#0D1117" stroke="#F0616D" stroke-width="0.8"/>
+<text x="484" y="176" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F0616D">FAILED</text>
+<text x="484" y="202" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="15" font-weight="600" fill="#F5F5F3">장애 모드</text>
+<text x="484" y="222" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">DB 수신함 폴백 읽기</text>
+<line x1="392" y1="236" x2="576" y2="236" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="396" y="256" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">마스터 노드 크래시</text>
+<text x="396" y="276" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">Sentinel 페일오버 진행</text>
+<text x="396" y="296" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">DB 수신함 폴백</text>
+<rect x="688" y="148" width="216" height="164" rx="8" fill="#F08A5916" stroke="#F08A59" stroke-width="1.4"/>
+<rect x="757.31" y="162" width="77.38" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="796" y="176" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">RESYNCING</text>
+<text x="796" y="202" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="15" font-weight="600" fill="#F5F5F3">재동기화 모드</text>
+<text x="796" y="222" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">백그라운드 캐시 복원</text>
+<line x1="704" y1="236" x2="888" y2="236" stroke="#F08A59" stroke-width="0.8"/>
+<text x="708" y="256" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">신규 인스턴스 재가동</text>
+<text x="708" y="276" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">미전달 데이터 조회</text>
+<text x="708" y="296" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">미전달 N건 캐시 재동기화</text>
+<path d="M 280 230 L 372 230" fill="none" stroke="#F0616D" stroke-width="1.4" marker-end="url(#bad)"/>
+<text x="328" y="196" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F0616D">마스터 크래시</text>
+<text x="328" y="214" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">[연결 타임아웃]</text>
+<text x="328" y="252" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">/ DB 폴백 전환</text>
+<path d="M 592 230 L 684 230" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#warn)"/>
+<text x="640" y="194" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">Redis 재가동</text>
+<text x="640" y="210" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">[AOF 복원]</text>
+<text x="640" y="224" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">[최대 1초 누락]</text>
+<text x="640" y="246" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">/ 미전달 N건</text>
+<text x="640" y="260" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">동기화</text>
+<path d="M 796 312 L 796 404 L 172 404 L 172 316" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<text x="484" y="392" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">재동기화 완료 [delivered IS NULL 0건]</text>
+<text x="484" y="422" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">/ Redis 우선 읽기 경로로 복귀</text>
+<line x1="12" y1="496" x2="912" y2="496" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="518" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="508" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="518" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 상태</text>
+<rect x="209" y="508" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="231" y="518" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">장애 감지</text>
+<rect x="318" y="508" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="340" y="518" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">장애 복구</text>
+<rect x="427" y="508" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="449" y="518" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">재동기화 (초점)</text>
+</svg>

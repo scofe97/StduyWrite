@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 800" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">확인 응답 재전달과 메시지 순서 역전</title><desc id="dd">로드 밸런싱 환경에서 컨슈머 장애 시 미확인 메시지가 다른 컨슈머로 재전달되며 처리 순서가 역전되는 과정.</desc>
+<rect width="880" height="800" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">12-01 · §2 AMQP/JMS REDELIVERY &amp; REORDERING</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">확인 응답 재전달과 메시지 순서 역전</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">로드 밸런싱 · 확인 응답(ACK) · 컨슈머 2 크래시 · m3 재전달 · 수신 순서 역전(m4 → m3 → m5)</text>
+<rect x="24.0" y="96" width="144" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="96.0" y="115" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">프로듀서 1</text>
+<text x="96.0" y="131" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Producer 1</text>
+<rect x="196.0" y="96" width="144" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="268.0" y="115" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">프로듀서 2</text>
+<text x="268.0" y="131" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Producer 2</text>
+<rect x="368.0" y="96" width="144" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="440.0" y="115" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">브로커</text>
+<text x="440.0" y="131" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Message Broker</text>
+<rect x="540.0" y="96" width="144" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="612.0" y="115" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">컨슈머 1</text>
+<text x="612.0" y="131" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Consumer 1</text>
+<rect x="712.0" y="96" width="144" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="784.0" y="115" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">컨슈머 2</text>
+<text x="784.0" y="131" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Consumer 2</text>
+<line x1="96.0" y1="146" x2="96.0" y2="700" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="268.0" y1="146" x2="268.0" y2="700" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="440.0" y1="146" x2="440.0" y2="700" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="612.0" y1="146" x2="612.0" y2="700" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="784.0" y1="146" x2="784.0" y2="700" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<path d="M 106.0 166 L 428.0 166" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="268.0" y="159" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">발행 m1</text>
+<path d="M 450.0 190 L 772.0 190" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="612.0" y="183" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">전달 m1</text>
+<path d="M 278.0 220 L 428.0 220" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="354.0" y="213" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">발행 m2</text>
+<path d="M 450.0 250 L 600.0 250" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="526.0" y="243" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">전달 m2</text>
+<path d="M 774.0 280 L 452.0 280" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ar)" stroke-dasharray="3 3"/>
+<text x="612.0" y="273" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">확인 응답 ACK (m1)</text>
+<path d="M 106.0 310 L 428.0 310" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="268.0" y="303" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">발행 m3</text>
+<path d="M 450.0 340 L 772.0 340" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="612.0" y="333" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">전달 m3</text>
+<path d="M 602.0 370 L 452.0 370" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ar)" stroke-dasharray="3 3"/>
+<text x="526.0" y="363" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">확인 응답 ACK (m2)</text>
+<path d="M 106.0 400 L 428.0 400" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="268.0" y="393" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">발행 m4</text>
+<path d="M 450.0 430 L 600.0 430" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="526.0" y="423" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">전달 m4</text>
+<rect x="716.0" y="452" width="136" height="24" rx="4" fill="#F0616D22" stroke="#F0616D" stroke-width="1.2"/>
+<text x="784.0" y="469" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F0616D">크래시 (m3 미확인)</text>
+<path d="M 602.0 496 L 452.0 496" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ar)" stroke-dasharray="3 3"/>
+<text x="526.0" y="489" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">확인 응답 ACK (m4)</text>
+<path d="M 450.0 536 L 600.0 536" fill="none" stroke="#F08A59" stroke-width="1.5" marker-end="url(#acc)"/>
+<text x="526.0" y="529" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">m3 재전달 (ACK 없음)</text>
+<path d="M 602.0 572 L 452.0 572" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ar)" stroke-dasharray="3 3"/>
+<text x="526.0" y="565" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">확인 응답 ACK (m3)</text>
+<path d="M 278.0 608 L 428.0 608" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="354.0" y="601" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">발행 m5</text>
+<path d="M 450.0 638 L 600.0 638" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="526.0" y="631" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">전달 m5</text>
+<rect x="480" y="668" width="360" height="28" rx="4" fill="#F08A5918" stroke="#F08A59" stroke-width="1.2"/>
+<text x="660" y="686" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">컨슈머 1 최종 처리 순서: m4 → m3 → m5 (순서 역전 발생)</text>
+<line x1="12" y1="744" x2="832" y2="744" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="766" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="756" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="766" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 메시지 전달</text>
+<rect x="261" y="756" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="283" y="766" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">확인 응답 (ACK)</text>
+<rect x="448" y="756" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="470" y="766" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">컨슈머 크래시</text>
+<rect x="583" y="756" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="605" y="766" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">m3 재전달 (focal)</text>
+</svg>

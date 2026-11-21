@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 500" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">Go kit 인터페이스 추상화와 Prometheus 계측 계층</title><desc id="dd">비즈니스 코드는 Go kit 인터페이스만 바라보고 하위 어댑터가 Prometheus 형식으로 노출합니다</desc>
+<rect width="960" height="500" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LAYERS · METRICS ARCHITECTURE</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">Go kit 인터페이스 추상화와 Prometheus 계측 계층</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">수집 라이브러리가 바뀌어도 애플리케이션 계측 코드는 수정 없이 유지됩니다</text>
+<text x="36" y="130" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">호출 ↓</text>
+<path d="M 36 142 L 36 330" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<text x="60" y="350" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">스크랩 ↑</text>
+<path d="M 60 338 L 60 150" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<rect x="90" y="105" width="820" height="58" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.1"/>
+<text x="110" y="131" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#F08A59">L1</text>
+<text x="145" y="131" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">애플리케이션 계측 코드</text>
+<text x="370" y="131" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">[metrics.Counter · metrics.Histogram]</text>
+<text x="145" y="151" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">비즈니스 로직에서 인터페이스 메서드만 호출 (플랫폼 독립)</text>
+<rect x="90" y="177" width="820" height="58" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="110" y="203" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#6A95D8">L2</text>
+<text x="145" y="203" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">Go kit 어댑터 계층</text>
+<text x="370" y="203" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">[kit/metrics/prometheus]</text>
+<text x="145" y="223" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">NewCounterFrom · NewHistogramFrom 으로 프로메테우스 타입 매핑</text>
+<rect x="90" y="249" width="820" height="58" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="110" y="275" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#3FB98C">L3</text>
+<text x="145" y="275" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">Prometheus 클라이언트 엔진</text>
+<text x="370" y="275" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#3FB98C">[client_golang/prometheus]</text>
+<text x="145" y="295" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">DefaultRegisterer 등록 및 메모리 내 메트릭 상태 관리</text>
+<rect x="90" y="321" width="820" height="58" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="110" y="347" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#6A95D8">L4</text>
+<text x="145" y="347" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">HTTP 메트릭 노출 핸들러</text>
+<text x="370" y="347" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">[promhttp.Handler()]</text>
+<text x="145" y="367" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">:8081/metrics 경로로 텍스트 형식 메트릭 응답 서빙</text>
+<rect x="90" y="393" width="820" height="58" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.1"/>
+<text x="110" y="419" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#F08A59">L5</text>
+<text x="145" y="419" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">외부 모니터링 시스템</text>
+<text x="370" y="419" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">[Prometheus Server / Grafana]</text>
+<text x="145" y="439" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">주기적 HTTP GET Pull 스크랩 및 시계열 데이터베이스(TSDB) 영구 저장</text>
+<line x1="12" y1="460" x2="912" y2="460" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="482" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="472" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="482" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">애플리케이션·수집기 경계</text>
+<rect x="313" y="472" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="335" y="482" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">추상화 및 노출 어댑터</text>
+<rect x="513" y="472" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="535" y="482" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">로컬 레지스트리 및 저장소</text>
+</svg>

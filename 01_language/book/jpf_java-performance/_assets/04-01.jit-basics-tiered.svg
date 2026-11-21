@@ -1,0 +1,67 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>JIT 컴파일러 기초와 tiered compilation</title>
+  <desc>JIT 컴파일러는 JVM의 심장이고, 애플리케이션 성능을 이보다 더 좌우하는 것은 없다. 언어는 셋으로 나뉜다. C++·Fortran 같은 컴파일 언어는 특정 CPU용 바이너리로 배포되어 빠르지만 이식성이 없다. PHP·Perl 같은 인터프리트 언어는 인터프리터만 있으면 어느 CPU에서나 돌지만 느리다. 같은 줄을 반복 실행할 때마다 다시 번역하기 때문이다. Java는 중간을 찾는다. 소스를 특정 CPU 바이너리가 아니라 중간 언어인 바이트코드로 컴파일하고, java 바이너리가 실행 중에 그 코드를 플랫폼 바이너리로 컴파일한다. 이것이 just-in-time이다. HotSpot은 hot spot 접근에서 이름이 왔다. 전형적 프로그램은 작은 코드 일부만 자주 실행되고, JVM은 처음부터 컴파일하지 않는다. 한 번만 실행할 코드를 컴파일하면 낭비이고, 여러 번 실행하면서 정보를 모아 최적화하기 위해서다. equals처럼 동적 타입 조회를 인라인으로 건너뛰는 최적화는 코드를 한동안 돌려본 뒤에야 가능하다. 레지스터를 메인 메모리 대신 쓰는 최적화도 중요하다. 컴파일러는 C1(client, 빨리 시작)과 C2(server, 정보를 더 모아 더 좋은 코드)로 나뉘고, tiered compilation은 C1로 시작해 더 뜨거워지면 C2를 쓴다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">JIT 컴파일러 기초와 tiered compilation</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">JIT는 JVM의 심장 — 성능을 이보다 더 좌우하는 것은 없습니다</text>
+
+  <!-- 언어 3방식 -->
+  <rect x="20" y="74" width="206" height="104" fill="rgba(127,168,201,0.10)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="96" fill="#9cc3df" font-size="13" font-weight="bold">컴파일 (C++·Fortran)</text>
+  <text x="38" y="116" fill="#e8e4df" font-size="11">특정 CPU 바이너리로 배포</text>
+  <text x="38" y="134" fill="#66bb6a" font-size="10">빠름 (전체 정보로 최적화)</text>
+  <text x="38" y="152" fill="#f47f72" font-size="10">이식성 없음</text>
+  <text x="38" y="170" fill="rgb(138,133,128)" font-size="9">신 CPU 명령은 구 CPU서 못 돔</text>
+
+  <rect x="237" y="74" width="206" height="104" fill="rgba(244,127,114,0.08)" stroke="#f47f72" stroke-width="2"/>
+  <text x="255" y="96" fill="#f47f72" font-size="13" font-weight="bold">인터프리트 (PHP·Perl)</text>
+  <text x="255" y="116" fill="#e8e4df" font-size="11">인터프리터만 있으면 어디서나</text>
+  <text x="255" y="134" fill="#66bb6a" font-size="10">이식성 있음</text>
+  <text x="255" y="152" fill="#f47f72" font-size="10">느림 (줄마다 재번역)</text>
+  <text x="255" y="170" fill="rgb(138,133,128)" font-size="9">루프에서 매번 다시 번역</text>
+
+  <rect x="454" y="74" width="208" height="104" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="472" y="96" fill="rgb(212,168,83)" font-size="13" font-weight="bold">JIT (Java) — 중간</text>
+  <text x="472" y="116" fill="#e8e4df" font-size="11">소스 → 바이트코드(중간 언어)</text>
+  <text x="472" y="134" fill="rgb(138,133,128)" font-size="10">java가 실행 중 플랫폼 바이너리로</text>
+  <text x="472" y="152" fill="#66bb6a" font-size="10">이식성 + 네이티브 성능</text>
+  <text x="472" y="170" fill="rgb(138,133,128)" font-size="9">"just in time" 컴파일</text>
+
+  <!-- HotSpot -->
+  <rect x="20" y="188" width="642" height="98" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="210" fill="#e8e4df" font-size="13" font-weight="bold">HotSpot — 처음부터 컴파일하지 않는 이유</text>
+  <text x="38" y="230" fill="rgb(138,133,128)" font-size="11">전형적 프로그램은 작은 코드 일부(hot spot)만 자주 실행 → 자주 실행될수록 더 뜨거움</text>
+  <text x="38" y="250" fill="#f47f72" font-size="11">① 한 번만 실행할 코드는 컴파일이 낭비 → 인터프리트가 빠름</text>
+  <text x="38" y="268" fill="#66bb6a" font-size="11">② 여러 번 실행하며 정보를 모아 최적화 (예: equals 동적 조회를 인라인으로 건너뜀)</text>
+  <text x="38" y="284" fill="rgb(138,133,128)" font-size="9">레지스터 활용: sum을 메인 메모리 대신 레지스터에 두고 루프 → 스레드 동기화 의미가 중요해짐</text>
+
+  <!-- C1 vs C2 -->
+  <rect x="20" y="296" width="320" height="130" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="318" fill="#66bb6a" font-size="13" font-weight="bold">C1 (client 컴파일러)</text>
+  <text x="38" y="338" fill="#e8e4df" font-size="11">더 일찍 컴파일 시작</text>
+  <text x="38" y="356" fill="#66bb6a" font-size="10">실행 초반에 더 빠름</text>
+  <text x="38" y="374" fill="rgb(138,133,128)" font-size="10">시작 시간이 중요한 앱에 유리</text>
+  <text x="38" y="394" fill="rgb(138,133,128)" font-size="10">정보를 덜 모음</text>
+  <text x="38" y="414" fill="rgb(138,133,128)" font-size="9">옛 이름: compiler 1</text>
+
+  <rect x="350" y="296" width="312" height="130" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="368" y="318" fill="rgb(212,168,83)" font-size="13" font-weight="bold">C2 (server 컴파일러)</text>
+  <text x="368" y="338" fill="#e8e4df" font-size="11">기다리며 정보를 더 모음</text>
+  <text x="368" y="356" fill="#66bb6a" font-size="10">최종 코드가 더 빠름 (더 좋은 최적화)</text>
+  <text x="368" y="374" fill="rgb(138,133,128)" font-size="10">오래 도는 프로그램에 유리</text>
+  <text x="368" y="394" fill="rgb(138,133,128)" font-size="10">컴파일 더 늦게 시작</text>
+  <text x="368" y="414" fill="rgb(138,133,128)" font-size="9">옛 이름: compiler 2</text>
+
+  <!-- tiered -->
+  <rect x="20" y="438" width="642" height="146" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="460" fill="rgb(212,168,83)" font-size="14" font-weight="bold">tiered compilation — C1로 시작, 뜨거워지면 C2</text>
+  <text x="38" y="482" fill="#e8e4df" font-size="11">두 컴파일러를 함께 씀: C1의 빠른 시작 + C2의 좋은 최적화를 모두 취함</text>
+  <rect x="38" y="494" width="130" height="36" fill="rgba(244,127,114,0.13)" stroke="#f47f72"/><text x="103" y="510" fill="#f47f72" font-size="10" text-anchor="middle">인터프리트</text><text x="103" y="524" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">초반</text>
+  <text x="174" y="516" fill="rgb(138,133,128)" font-size="16">→</text>
+  <rect x="196" y="494" width="130" height="36" fill="rgba(102,187,106,0.13)" stroke="#66bb6a"/><text x="261" y="510" fill="#66bb6a" font-size="10" text-anchor="middle">C1 컴파일</text><text x="261" y="524" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">빨리 시작</text>
+  <text x="332" y="516" fill="rgb(138,133,128)" font-size="16">→</text>
+  <rect x="354" y="494" width="130" height="36" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/><text x="419" y="510" fill="rgb(212,168,83)" font-size="10" text-anchor="middle">C2 컴파일</text><text x="419" y="524" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">뜨거운 코드</text>
+  <text x="38" y="552" fill="rgb(138,133,128)" font-size="10">모든 현대 JVM이 기본 사용 (server JVM이라 불려도 두 컴파일러 모두 내장)</text>
+  <text x="38" y="572" fill="#f47f72" font-size="10">-XX:-TieredCompilation 으로 끌 수 있으나(기본 true), 메모리 제약 환경 외엔 권장 안 됨</text>
+</svg>

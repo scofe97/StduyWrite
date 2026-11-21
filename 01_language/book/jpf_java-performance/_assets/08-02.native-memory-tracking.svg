@@ -1,0 +1,52 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Native Memory Tracking — NMT와 shared library 한계</title>
+  <desc>NMT는 JVM이 native 메모리를 어떻게 할당하는지 들여다본다. NativeMemoryTracking 옵션을 off summary detail로 켜고 jcmd VM.native_memory로 본다. summary 출력은 영역별로 reserved와 committed를 나눠 보여 준다. heap, class metadata, thread stack, code cache, GC, compiler, internal, symbol 등이다. internal에 direct byte buffer가 들어간다. baseline을 잡고 summary.diff로 시간에 따른 변화를 본다. NMT 자신도 메모리를 써서 기본 off이고, 자원 압박 시 자동으로 꺼진다. AutoShutdownNMT를 끄면 유지된다. 중요한 한계는 NMT가 HotSpot 일부라 JDK 레벨 shared library 할당을 추적 못 한다는 것이다. 그래서 native 메모리 누수는 보통 NMT로 안 잡힌다. working set이 계속 자라는데 NMT committed가 그보다 작으면 차이가 native library 할당이다. JDK에서 Inflater Deflater의 end 미호출과 NIO direct buffer가 흔한 원인이다. Linux 대형 시스템은 MALLOC_ARENA_MAX로 단편화를 줄인다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">Native Memory Tracking과 한계</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">NMT는 JVM 내부 할당만 보고, shared library는 못 봐 native 누수를 놓칩니다</text>
+
+  <!-- NMT 사용 -->
+  <rect x="20" y="74" width="642" height="64" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="96" fill="#9cc3df" font-size="13" font-weight="bold">NMT 켜기와 조회</text>
+  <text x="38" y="116" fill="rgb(138,133,128)" font-size="11">-XX:NativeMemoryTracking=off|summary|detail (기본 off) → jcmd PID VM.native_memory summary</text>
+  <text x="38" y="132" fill="rgb(138,133,128)" font-size="10">baseline 후 summary.diff로 시간 변화 추적 · 자원 압박 시 자동 off(AutoShutdownNMT로 유지)</text>
+
+  <!-- summary 출력 영역 -->
+  <rect x="20" y="146" width="642" height="142" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="168" fill="#e8e4df" font-size="13" font-weight="bold">summary 출력 — 영역별 reserved / committed</text>
+  <text x="38" y="190" fill="rgb(138,133,128)" font-size="10">Total: reserved 5.9GB, committed 620MB (reserved≫committed가 전형적 → virtual 무시)</text>
+  <text x="38" y="212" fill="#66bb6a" font-size="10">Java Heap (최대) · Class metadata(MetaspaceSize→Max) · Thread stack(약 1MB×개수)</text>
+  <text x="38" y="232" fill="#66bb6a" font-size="10">Code(JIT) · GC(알고리즘별 — serial≪G1) · Compiler · Symbol(class file 상수)</text>
+  <text x="38" y="254" fill="rgb(212,168,83)" font-size="10">Internal — direct byte buffer가 여기 (크면 거의 항상 이 버퍼)</text>
+  <text x="38" y="274" fill="rgb(138,133,128)" font-size="10">두 핵심: total committed(≈물리 사용·RSS) + 영역별 committed(최대값 튜닝 근거)</text>
+
+  <!-- shared library 한계 -->
+  <rect x="20" y="296" width="642" height="92" fill="rgba(244,127,114,0.08)" stroke="#f47f72" stroke-width="2"/>
+  <text x="38" y="318" fill="#f47f72" font-size="13" font-weight="bold">한계 — shared library는 NMT 밖</text>
+  <text x="38" y="340" fill="rgb(138,133,128)" font-size="11">NMT는 HotSpot 일부 → JDK 레벨 shared library(System.loadLibrary) 할당 미추적</text>
+  <text x="38" y="360" fill="rgb(138,133,128)" font-size="11">native 누수(working set 무한 증가)는 보통 NMT로 안 잡힘 — NMT 풀은 상한이 있음</text>
+  <text x="38" y="380" fill="#f47f72" font-size="10">working set 10GB인데 NMT committed 6GB → 나머지 4GB는 native library. 진단은 native 프로파일러</text>
+
+  <!-- JDK 흔한 원인 -->
+  <rect x="20" y="396" width="320" height="120" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="418" fill="#66bb6a" font-size="12" font-weight="bold">Inflater / Deflater</text>
+  <text x="38" y="438" fill="rgb(138,133,128)" font-size="10">zip·gzip 압축 → native 라이브러리</text>
+  <text x="38" y="456" fill="rgb(138,133,128)" font-size="10">end() 호출 필수 (stream은 close)</text>
+  <text x="38" y="474" fill="rgb(138,133,128)" font-size="10">잊으면 finalize/Cleaner가 결국 해제</text>
+  <text x="38" y="492" fill="#f47f72" font-size="10">old 승급 시 수시간 — 누수처럼 보임</text>
+  <text x="38" y="510" fill="rgb(138,133,128)" font-size="9">heap 덤프로 이 객체 다수 확인</text>
+
+  <rect x="350" y="396" width="312" height="120" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="368" y="418" fill="rgb(212,168,83)" font-size="12" font-weight="bold">NIO direct buffer</text>
+  <text x="368" y="438" fill="rgb(138,133,128)" font-size="10">allocateDirect / FileChannel.map → off-heap</text>
+  <text x="368" y="456" fill="rgb(138,133,128)" font-size="10">복사 없이 native↔Java 공유 (성능)</text>
+  <text x="368" y="474" fill="rgb(138,133,128)" font-size="10">생성 비쌈 → 재사용(thread-local·pool·slice)</text>
+  <text x="368" y="492" fill="#9cc3df" font-size="10">-XX:MaxDirectMemorySize (Java11 = 최대 힙)</text>
+  <text x="368" y="510" fill="rgb(138,133,128)" font-size="9">mbean java.nio.BufferPool로 실측</text>
+
+  <!-- Linux 단편화 -->
+  <rect x="20" y="524" width="642" height="58" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9"/>
+  <text x="38" y="546" fill="#9cc3df" font-size="12" font-weight="bold">Linux 대형 시스템 단편화</text>
+  <text x="38" y="566" fill="rgb(138,133,128)" font-size="10">native 메모리는 compaction 안 됨 → 8코어+ 에서 단편화로 OOM. smaps에 64KB 다수면 MALLOC_ARENA_MAX=2~4</text>
+</svg>

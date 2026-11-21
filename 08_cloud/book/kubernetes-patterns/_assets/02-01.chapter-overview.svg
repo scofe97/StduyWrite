@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 432" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">Pod 선언 한 장이 걷는 길</title><desc id="dd">한 Pod 의 requests, limits, priorityClassName 이 입장, 배치, 기동, 압박, 계획 여섯 단계에서 서로 다른 주체에게 읽힙니다. 선언 값은 그대로이고 읽는 주체와 결과가 바뀝니다.</desc>
+<rect width="1000" height="432" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">KUBERNETES PATTERNS · 02-01</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">Pod 선언 한 장이 걷는 길</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">requests cpu 100m · memory 200Mi, limits memory 200Mi, priorityClassName high-priority 를 한 Pod 에 적은 경우</text>
+<rect x="24" y="104" width="136" height="220" rx="6" fill="#F08A5912" stroke="#F08A59" stroke-width="1.4"/>
+<text x="92" y="132" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F08A59">1 선언</text>
+<text x="92" y="156" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">개발자</text>
+<line x1="36" y1="172" x2="148" y2="172" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="92" y="200" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">requests</text>
+<text x="92" y="228" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">100m · 200Mi</text>
+<text x="92" y="256" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">limits 200Mi</text>
+<text x="92" y="284" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">high-priority</text>
+<rect x="52.0" y="342" width="80.0" height="20" rx="4" fill="#0D1117" stroke="#5E6B7E" stroke-width="0.8"/>
+<text x="92" y="356" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">1·2·3절</text>
+<path d="M 164 132 L 180 132" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="184" y="104" width="136" height="220" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="252" y="132" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#6A95D8">2 입장</text>
+<text x="252" y="156" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">API 서버</text>
+<line x1="196" y1="172" x2="308" y2="172" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="252" y="200" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">LimitRange</text>
+<text x="252" y="228" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">기본값 주입</text>
+<text x="252" y="256" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">Quota 합산</text>
+<text x="252" y="284" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">priority 1000</text>
+<rect x="223.0" y="342" width="58.0" height="20" rx="4" fill="#0D1117" stroke="#5E6B7E" stroke-width="0.8"/>
+<text x="252" y="356" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">5·6절</text>
+<path d="M 324 132 L 340 132" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="344" y="104" width="136" height="220" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="412" y="132" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#6A95D8">3 배치</text>
+<text x="412" y="156" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">kube-scheduler</text>
+<line x1="356" y1="172" x2="468" y2="172" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="412" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">requests 합 ≤</text>
+<text x="412" y="228" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">allocatable</text>
+<text x="412" y="256" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">PVC 바인딩</text>
+<text x="412" y="284" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">자리 없으면 선점</text>
+<rect x="372.0" y="342" width="80.0" height="20" rx="4" fill="#0D1117" stroke="#5E6B7E" stroke-width="0.8"/>
+<text x="412" y="356" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">2·3·5절</text>
+<path d="M 484 132 L 500 132" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="504" y="104" width="136" height="220" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="572" y="132" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#6A95D8">4 기동</text>
+<text x="572" y="156" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">kubelet</text>
+<line x1="516" y1="172" x2="628" y2="172" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="572" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">ConfigMap 확인</text>
+<text x="572" y="228" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">Secret 확인</text>
+<text x="572" y="256" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">memory.max</text>
+<text x="572" y="284" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">= 200Mi</text>
+<rect x="543.0" y="342" width="58.0" height="20" rx="4" fill="#0D1117" stroke="#5E6B7E" stroke-width="0.8"/>
+<text x="572" y="356" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">2·3절</text>
+<path d="M 644 132 L 660 132" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="664" y="104" width="136" height="220" rx="6" fill="#161B22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="732" y="132" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F0616D">5 압박</text>
+<text x="732" y="156" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">커널 · kubelet</text>
+<line x1="676" y1="172" x2="788" y2="172" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="732" y="200" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">CPU throttle</text>
+<text x="732" y="228" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">OOMKill</text>
+<text x="732" y="256" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">노드 압박 축출</text>
+<rect x="703.0" y="342" width="58.0" height="20" rx="4" fill="#0D1117" stroke="#5E6B7E" stroke-width="0.8"/>
+<text x="732" y="356" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">3·4절</text>
+<path d="M 804 132 L 820 132" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="824" y="104" width="136" height="220" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="892" y="132" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#3FB98C">6 계획</text>
+<text x="892" y="156" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">운영자</text>
+<line x1="836" y1="172" x2="948" y2="172" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="892" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">프로파일 합산</text>
+<text x="892" y="228" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">노드 크기 선택</text>
+<rect x="874.0" y="342" width="36.0" height="20" rx="4" fill="#0D1117" stroke="#5E6B7E" stroke-width="0.8"/>
+<text x="892" y="356" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">7절</text>
+<line x1="12" y1="388" x2="952" y2="388" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="410" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="400" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="410" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">선언</text>
+<rect x="170" y="400" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="192" y="410" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">읽는 단계</text>
+<rect x="279" y="400" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="301" y="410" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">압박</text>
+<rect x="349" y="400" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="371" y="410" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">계획</text>
+</svg>

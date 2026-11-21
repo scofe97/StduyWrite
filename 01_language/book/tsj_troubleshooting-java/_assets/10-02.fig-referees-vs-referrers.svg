@@ -1,0 +1,46 @@
+<svg viewBox="0 0 680 360" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>referees vs referrers — GC는 referrer 없는 객체만 회수, static 리스트가 referrer라 못 치움 (원문 Figure 10.8 개념도)</title>
+  <desc>원문 Figure 10.8 의 개념을 도식으로 옮긴 것입니다. 한 Product 인스턴스의 세부를 펼치면 그 인스턴스가 무엇을 참조하는지와 무엇이 그것을 참조하는지를 볼 수 있습니다. Product 인스턴스는 제품 이름인 String 을 참조합니다. 이것이 referee 입니다. 한편 Product 의 참조는 ArrayList 인스턴스에 속한 Object 배열에 보관됩니다. 이것이 referrer 입니다. 그 ArrayList 는 백만 개 넘는 참조를 쥐고 있고 Main 클래스의 static 변수로 선언돼 있습니다. GC 는 referrer 가 없어야 인스턴스를 회수하는데 static 리스트가 모든 Product 를 붙들고 있으므로 회수할 수 없습니다. 이것이 메모리 누수입니다.</desc>
+  <rect x="0" y="0" width="680" height="360" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">referee vs referrer — 누수의 참조 사슬</text>
+  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">원문 Figure 10.8 개념도 — GC 는 referrer 없는 객체만 회수</text>
+
+  <!-- static 변수 (referrer 최상단) -->
+  <rect x="20" y="84" width="200" height="60" fill="rgba(244,127,114,0.1)" stroke="#f47f72" stroke-width="2"/>
+  <text x="120" y="108" fill="#f47f72" font-size="12" font-weight="bold" text-anchor="middle">Main.products</text>
+  <text x="120" y="128" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">static ArrayList (백만+ 참조)</text>
+
+  <!-- Object[] -->
+  <line x1="120" y1="144" x2="120" y2="168" stroke="#f47f72" stroke-width="1.5"/>
+  <polygon points="120,168 116,160 124,160" fill="#f47f72"/>
+  <text x="135" y="162" fill="rgb(138,133,128)" font-size="9">담음</text>
+  <rect x="20" y="170" width="200" height="44" fill="rgba(244,127,114,0.06)" stroke="#f47f72"/>
+  <text x="120" y="196" fill="#e8e4df" font-size="11" text-anchor="middle">Object 배열 (ArrayList 내부)</text>
+
+  <!-- Product (가운데) -->
+  <line x1="220" y1="192" x2="288" y2="192" stroke="#f47f72" stroke-width="1.5"/>
+  <polygon points="288,192 280,188 280,196" fill="#f47f72"/>
+  <text x="254" y="184" fill="#f47f72" font-size="9" text-anchor="middle">referrer</text>
+  <rect x="290" y="166" width="160" height="52" fill="rgba(212,168,83,0.1)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="370" y="190" fill="rgb(212,168,83)" font-size="13" font-weight="bold" text-anchor="middle">Product</text>
+  <text x="370" y="208" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">인스턴스 (조사 대상)</text>
+
+  <!-- String (referee) -->
+  <line x1="450" y1="192" x2="518" y2="192" stroke="#7fa8c9" stroke-width="1.5"/>
+  <polygon points="518,192 510,188 510,196" fill="#7fa8c9"/>
+  <text x="484" y="184" fill="#9cc3df" font-size="9" text-anchor="middle">referee</text>
+  <rect x="520" y="166" width="140" height="52" fill="rgba(127,168,201,0.1)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="590" y="190" fill="#9cc3df" font-size="12" font-weight="bold" text-anchor="middle">String</text>
+  <text x="590" y="208" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">제품 이름</text>
+
+  <!-- 방향 라벨 -->
+  <text x="120" y="244" fill="#f47f72" font-size="10" text-anchor="middle">◀ 무엇이 Product 를 참조하나 (referrer)</text>
+  <text x="590" y="244" fill="#9cc3df" font-size="10" text-anchor="middle">Product 가 무엇을 참조하나 (referee) ▶</text>
+
+  <!-- 결론 -->
+  <rect x="20" y="262" width="640" height="82" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="284" fill="#e8e4df" font-size="12" font-weight="bold">GC 규칙과 누수 판정</text>
+  <text x="34" y="306" fill="#e8e4df" font-size="10.5">GC 는 referrer 가 없어야 회수 → static 리스트가 모든 Product 를 붙들어 영원히 못 치움</text>
+  <text x="34" y="328" fill="#f47f72" font-size="11" font-weight="bold">소수의 referrer가 다수 인스턴스를 붙들면 = 누수 신호</text>
+</svg>

@@ -1,0 +1,36 @@
+<svg viewBox="0 0 680 340" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>생성 지점 추적 — 프로파일한 타입의 인스턴스가 만들어진 코드의 스택 트레이스 (원문 Figure 9.6 개념도)</title>
+  <desc>원문 Figure 9.6 의 개념을 도식으로 옮긴 것입니다. 프로파일러는 프로파일한 타입마다 인스턴스가 생성된 위치를 보여 줍니다. 표에서 줄 왼쪽의 더하기 버튼을 누르면 그 인스턴스를 만든 코드의 스택 트레이스가 펼쳐져 문제의 근본 원인으로 빠르게 데려갑니다. 프로파일링은 또한 메모리에 살아 있는 인스턴스 수와 생성된 총 인스턴스 수, 그리고 인스턴스가 GC 를 몇 번 살아남았는지 세대 수를 함께 줍니다. 이렇게 앱의 어느 부분이 말썽인 인스턴스를 만들었는지 손쉽게 짚습니다.</desc>
+  <rect x="0" y="0" width="680" height="340" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">스택 트레이스로 생성 지점을 짚는다</text>
+  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">원문 Figure 9.6 개념도 — + 버튼이 근본 원인으로 데려감</text>
+
+  <!-- 프로파일한 타입 행 -->
+  <rect x="20" y="78" width="640" height="44" fill="rgba(244,127,114,0.08)" stroke="#f47f72" stroke-width="2"/>
+  <text x="36" y="105" fill="#f47f72" font-size="14" font-weight="bold">[+]</text>
+  <text x="70" y="105" fill="#e8e4df" font-size="12" font-weight="bold">Product</text>
+  <text x="200" y="98" fill="rgb(138,133,128)" font-size="9">live</text>
+  <text x="200" y="112" fill="#e8e4df" font-size="11">1,000,000</text>
+  <text x="320" y="98" fill="rgb(138,133,128)" font-size="9">total(누적)</text>
+  <text x="320" y="112" fill="#e8e4df" font-size="11">프로파일링만 줌</text>
+  <text x="480" y="98" fill="rgb(138,133,128)" font-size="9">GC 세대(generations)</text>
+  <text x="480" y="112" fill="#e8e4df" font-size="11">몇 번 살아남았나</text>
+
+  <!-- 화살표 (+ 펼침) -->
+  <line x1="40" y1="122" x2="40" y2="146" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <polygon points="40,146 36,138 44,138" fill="rgb(212,168,83)"/>
+  <text x="56" y="142" fill="rgb(212,168,83)" font-size="10">+ 버튼 클릭 → 스택 트레이스 펼침</text>
+
+  <!-- 스택 트레이스 -->
+  <rect x="40" y="152" width="600" height="110" fill="rgb(18,18,18)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="54" y="174" fill="#66bb6a" font-size="11" font-family="monospace">↑ ProductService.createProducts()  ← 생성 지점(근본 원인)</text>
+  <text x="54" y="196" fill="#e8e4df" font-size="11" font-family="monospace">  ProductController.products()</text>
+  <text x="54" y="218" fill="rgb(138,133,128)" font-size="11" font-family="monospace">  ...(스프링 디스패치)</text>
+  <text x="54" y="244" fill="rgb(138,133,128)" font-size="10">위로 펼쳐 내 코드의 생성 호출을 찾으면 → 어디서 Product 백만 개를 만드는지 안다</text>
+
+  <!-- 하단 -->
+  <rect x="20" y="276" width="640" height="50" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="298" fill="#e8e4df" font-size="11" font-weight="bold">프로파일링이 주는 핵심</text>
+  <text x="34" y="318" fill="rgb(138,133,128)" font-size="10.5">"어느 타입이 채우나"(샘플링) → "누가 그걸 만드나"(프로파일링: 생성 지점 스택 트레이스)</text>
+</svg>

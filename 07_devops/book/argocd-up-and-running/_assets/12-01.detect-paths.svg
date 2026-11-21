@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 488" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">Git 변경이 Argo CD 에 닿는 두 길</title><desc id="dd">왼쪽의 Git 저장소에서 변경을 알리는 길이 둘로 갈라진다. 위쪽 길은 조정 주기마다 Argo CD 가 저장소를 끌어와 조회하는 폴링이고 기본 간격은 120초에 최대 60초의 jitter 를 더한 값이다. 아래쪽 길은 Git 서버가 push 때 argocd-server 의 /api/webhook 으로 요청을 보내 새로 고침을 재촉하는 Webhook 이다. 두 길은 가운데 새로 고침 단계에서 합쳐져 repo-server 가 최신 리비전을 읽고 앱을 비교한다. 그 뒤는 앱의 자동 동기화 설정이 갈라서, 켜져 있으면 동기화하고 꺼져 있으면 OutOfSync 로 남겨 둔다.</desc>
+<rect width="880" height="488" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">ARGO CD UP AND RUNNING · 12-01 §2</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">Git 변경이 Argo CD 에 닿는 두 길</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">두 길 모두 새로 고침까지만 일으킵니다</text>
+<rect x="24" y="228" width="124" height="100" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="86.0" y="266" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="600" fill="#F5F5F3">Git 저장소</text>
+<text x="86.0" y="292" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">push 로</text>
+<text x="86.0" y="312" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">새 커밋 생김</text>
+<rect x="186" y="140" width="190" height="92" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="281.0" y="170" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="600" fill="#F5F5F3">폴링 (끌어옴)</text>
+<text x="281.0" y="194" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">120초 + jitter 최대 60초</text>
+<text x="281.0" y="216" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="400" fill="#8B98A9">timeout.reconciliation</text>
+<rect x="186" y="316" width="190" height="92" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="281.0" y="346" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="600" fill="#F5F5F3">Webhook (재촉)</text>
+<text x="281.0" y="370" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">push 때 POST</text>
+<text x="281.0" y="392" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="400" fill="#8B98A9">/api/webhook</text>
+<rect x="414" y="228" width="188" height="100" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.4"/>
+<text x="508.0" y="262" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="600" fill="#F5F5F3">새로 고침</text>
+<text x="508.0" y="286" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">repo-server 가 리비전 조회</text>
+<text x="508.0" y="308" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">앱 비교</text>
+<rect x="640" y="160" width="216" height="84" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="748.0" y="194" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="600" fill="#F5F5F3">자동 동기화 켬</text>
+<text x="748.0" y="220" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">이어서 동기화</text>
+<rect x="640" y="312" width="216" height="84" rx="6" fill="#E3B34114" stroke="#E3B341" stroke-width="1.2"/>
+<text x="748.0" y="346" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="600" fill="#F5F5F3">자동 동기화 끔</text>
+<text x="748.0" y="372" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">OutOfSync 로 두고 멈춤</text>
+<path d="M 150 278.0 L 167 278.0 L 167 186.0 L 184 186.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 167 278.0 L 167 362.0 L 184 362.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 378 186.0 L 395 186.0 L 395 258.0 L 412 258.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 378 362.0 L 395 362.0 L 395 298.0 L 412 298.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 604 278.0 L 621 278.0 L 621 202.0 L 638 202.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 621 278.0 L 621 354.0 L 638 354.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<line x1="12" y1="448" x2="832" y2="448" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="470" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="460" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="470" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">저장소</text>
+<rect x="183" y="460" width="14" height="12" rx="2" fill="#161B2222" stroke="#161B22" stroke-width="1.1"/>
+<text x="205" y="470" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">감지 경로</text>
+<rect x="292" y="460" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="314" y="470" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">새로 고침</text>
+<rect x="401" y="460" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="423" y="470" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">동기화</text>
+<rect x="484" y="460" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="506" y="470" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">멈춤</text>
+</svg>

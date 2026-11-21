@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 560" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">다중 쓰기 장애 시 원자성 보장과 롤백 흐름</title><desc id="dd">다중 쓰기 실행 중 오류 발생 시 선행 쓰기를 전면 폐기하는 원자성(abortability)과 부분 완료 오염의 비교.</desc>
+<rect width="880" height="560" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">08-01 · §2 ATOMICITY &amp; ABORT</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">다중 쓰기 장애 시 원자성 보장과 롤백 흐름</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">1차 쓰기 성공 · 2차 쓰기 오류 · 선행 쓰기 전면 롤백 · 깨끗한 초기 상태 보존</text>
+<rect x="24" y="104" width="832" height="180" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="40.0" y="114" width="157.0" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="118.5" y="128" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">원자성 보장 (트랜잭션)</text>
+<text x="209" y="128" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">오류 발생 시 선행 쓰기 전면 폐기 및 초기 상태 보존</text>
+<rect x="36" y="146" width="188" height="124" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="46.18" y="154" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="60" y="168" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">01</text>
+<text x="80" y="166" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">1. 메일 삽입 성공</text>
+<text x="48" y="184" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">emails 테이블</text>
+<line x1="46" y1="194" x2="214" y2="194" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<rect x="44" y="202" width="172" height="28" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="130.0" y="220" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">INSERT into emails</text>
+<text x="130.0" y="252" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 반영 완료</text>
+<path d="M 228 208.0 L 238 208.0" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="244" y="146" width="188" height="124" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="254.18" y="154" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="268" y="168" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#E3B341">02</text>
+<text x="288" y="166" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">2. 카운터 갱신 실패</text>
+<text x="256" y="184" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">mailboxes 테이블</text>
+<line x1="254" y1="194" x2="422" y2="194" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<rect x="252" y="202" width="172" height="28" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="338.0" y="220" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">UPDATE mailboxes</text>
+<text x="338.0" y="252" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">오류 · 타임아웃</text>
+<path d="M 436 208.0 L 446 208.0" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="452" y="146" width="188" height="124" rx="6" fill="#0D1117" stroke="#F08A59" stroke-width="1.4"/>
+<rect x="462.18" y="154" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="476" y="168" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">03</text>
+<text x="496" y="166" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">3. 트랜잭션 Abort</text>
+<text x="464" y="184" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">선행 쓰기 폐기</text>
+<line x1="462" y1="194" x2="630" y2="194" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<rect x="460" y="202" width="172" height="28" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="546.0" y="220" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F08A59">ROLLBACK / UNDO</text>
+<text x="546.0" y="252" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">1차 emails 삽입 취소</text>
+<path d="M 644 208.0 L 654 208.0" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="660" y="146" width="188" height="124" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="670.18" y="154" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="684" y="168" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#3FB98C">04</text>
+<text x="704" y="166" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">4. 초기 상태 보존</text>
+<text x="672" y="184" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">재시도 안전성 확보</text>
+<line x1="670" y1="194" x2="838" y2="194" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<rect x="668" y="202" width="172" height="28" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="754.0" y="220" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">초기 상태 무결성 복원</text>
+<text x="754.0" y="252" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">오염 없는 안전한 재시도</text>
+<rect x="24" y="304" width="832" height="180" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="40.0" y="314" width="168.0" height="20" rx="4" fill="#0D1117" stroke="#F0616D" stroke-width="0.8"/>
+<text x="124.0" y="328" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">원자성 부재 (비트랜잭션)</text>
+<text x="220" y="328" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">부분 완료 상태 방치로 인한 데이터 불일치 및 재시도 위험</text>
+<rect x="36" y="346" width="188" height="124" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="46.18" y="354" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="60" y="368" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">01</text>
+<text x="80" y="366" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">1. 메일 삽입 성공</text>
+<text x="48" y="384" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">emails 테이블</text>
+<line x1="46" y1="394" x2="214" y2="394" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<rect x="44" y="402" width="172" height="28" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="130.0" y="420" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">INSERT into emails</text>
+<text x="130.0" y="452" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 반영 완료</text>
+<path d="M 228 408.0 L 238 408.0" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="244" y="346" width="188" height="124" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="254.18" y="354" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="268" y="368" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#E3B341">02</text>
+<text x="288" y="366" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">2. 카운터 갱신 실패</text>
+<text x="256" y="384" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">mailboxes 테이블</text>
+<line x1="254" y1="394" x2="422" y2="394" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<rect x="252" y="402" width="172" height="28" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="338.0" y="420" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">UPDATE mailboxes</text>
+<text x="338.0" y="452" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">오류 · 타임아웃</text>
+<path d="M 436 408.0 L 446 408.0" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="452" y="346" width="188" height="124" rx="6" fill="#0D1117" stroke="#F0616D" stroke-width="1.2"/>
+<rect x="462.18" y="354" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#F0616D" stroke-width="0.8"/>
+<text x="476" y="368" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F0616D">03</text>
+<text x="496" y="366" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">3. 롤백 메커니즘 부재</text>
+<text x="464" y="384" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">중단 기능 없음</text>
+<line x1="462" y1="394" x2="630" y2="394" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<rect x="460" y="402" width="172" height="28" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="546.0" y="420" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F0616D">선행 쓰기 잔존</text>
+<text x="546.0" y="452" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">1차 쓰기 그대로 방치</text>
+<path d="M 644 408.0 L 654 408.0" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="660" y="346" width="188" height="124" rx="6" fill="#0D1117" stroke="#F0616D" stroke-width="1.2"/>
+<rect x="670.18" y="354" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#F0616D" stroke-width="0.8"/>
+<text x="684" y="368" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F0616D">04</text>
+<text x="704" y="366" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">4. 부분 완료 오염</text>
+<text x="672" y="384" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">불일치 상태 잔존</text>
+<line x1="670" y1="394" x2="838" y2="394" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<rect x="668" y="402" width="172" height="28" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="754.0" y="420" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F0616D">메일 있음 · 카운터 0</text>
+<text x="754.0" y="452" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">재시도 시 중복 삽입 위험</text>
+<line x1="12" y1="504" x2="832" y2="504" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="526" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="516" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="526" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">롤백 (focal)</text>
+<rect x="274" y="516" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="296" y="526" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 쓰기</text>
+<rect x="383" y="516" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="405" y="526" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">진행 단계</text>
+<rect x="492" y="516" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="514" y="526" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">장애 경고</text>
+<rect x="601" y="516" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="623" y="526" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">오염 위험</text>
+</svg>

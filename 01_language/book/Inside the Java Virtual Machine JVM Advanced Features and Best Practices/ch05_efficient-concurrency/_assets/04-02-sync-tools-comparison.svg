@@ -1,0 +1,78 @@
+<svg viewBox="0 0 920 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>동기화 4종 시점·메커니즘 대비 — CountDownLatch·CyclicBarrier·Semaphore·Phaser</title>
+  <desc>CountDownLatch는 카운트를 N에서 0으로 한 번 줄이고 끝나는 일회성 신호다. CyclicBarrier는 정해진 수의 스레드가 모두 도달하면 동시에 출발시키고 reset으로 재사용한다. Semaphore는 허가 풀에서 acquire/release로 동시 실행 수의 상한을 건다. Phaser는 참여자를 동적으로 등록·해제하며 단계가 자동 증가해 다단계를 반복 동기화한다.</desc>
+  <rect x="0" y="0" width="920" height="560" fill="#0d0d0d"/>
+
+  <text x="460" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#e8e4df">동기화 4종 — 언제·어떻게 스레드를 모으고 풀어 주는가</text>
+  <text x="460" y="54" text-anchor="middle" font-size="12.5" fill="#c9c4be">완료 신호(일회성) · 동시 출발(재사용) · 동시 수 제한(허가 풀) · 다단계 반복</text>
+
+  <!-- ① CountDownLatch -->
+  <rect x="36" y="74" width="412" height="220" rx="12" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.8"/>
+  <text x="56" y="100" font-size="14" font-weight="700" fill="#66bb6a">① CountDownLatch — 일회성 완료 신호</text>
+  <text x="56" y="120" font-size="11" fill="#c9c4be">카운트를 N→0으로 한 번 줄이면 끝 (재사용 X)</text>
+  <!-- 카운트 막대 -->
+  <rect x="56" y="136" width="60" height="34" rx="6" fill="#cdeccf"/><text x="86" y="158" text-anchor="middle" font-size="12" font-weight="700" fill="#14521d">3</text>
+  <text x="124" y="158" text-anchor="middle" font-size="13" fill="#66bb6a">→</text>
+  <rect x="134" y="136" width="60" height="34" rx="6" fill="#cdeccf"/><text x="164" y="158" text-anchor="middle" font-size="12" font-weight="700" fill="#14521d">2</text>
+  <text x="202" y="158" text-anchor="middle" font-size="13" fill="#66bb6a">→</text>
+  <rect x="212" y="136" width="60" height="34" rx="6" fill="#cdeccf"/><text x="242" y="158" text-anchor="middle" font-size="12" font-weight="700" fill="#14521d">1</text>
+  <text x="280" y="158" text-anchor="middle" font-size="13" fill="#66bb6a">→</text>
+  <rect x="290" y="136" width="60" height="34" rx="6" fill="#e6f7e7"/><text x="320" y="158" text-anchor="middle" font-size="12" font-weight="700" fill="#14521d">0</text>
+  <text x="56" y="190" font-size="10.5" fill="#c9c4be">각 작업이 countDown(), 0이 되면 await()가 깨어남</text>
+  <rect x="56" y="200" width="370" height="72" rx="8" fill="#0d0d0d" stroke="#8a857f" stroke-width="1"/>
+  <text x="68" y="222" font-size="10.5" fill="#c9c4be">대기: 1개+ 스레드가 await()로 0을 기다림</text>
+  <text x="68" y="242" font-size="10.5" fill="#c9c4be">방향: 여러 작업 → 한 기다리는 쪽 (N:1)</text>
+  <text x="68" y="262" font-size="10.5" fill="#e8e4df">쓰임: 서버 초기화, 응답 취합, 준비 완료 신호</text>
+
+  <!-- ② CyclicBarrier -->
+  <rect x="472" y="74" width="412" height="220" rx="12" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.8"/>
+  <text x="492" y="100" font-size="14" font-weight="700" fill="#5b9bd5">② CyclicBarrier — 동시 출발 (재사용)</text>
+  <text x="492" y="120" font-size="11" fill="#c9c4be">전원 도달 시 함께 출발, reset()으로 라운드 반복</text>
+  <!-- 도달 -->
+  <circle cx="512" cy="152" r="12" fill="#dceaf7"/><text x="512" y="156" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">T</text>
+  <circle cx="546" cy="152" r="12" fill="#dceaf7"/><text x="546" y="156" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">T</text>
+  <circle cx="580" cy="152" r="12" fill="#dceaf7"/><text x="580" y="156" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">T</text>
+  <text x="612" y="156" text-anchor="middle" font-size="13" fill="#5b9bd5">→</text>
+  <rect x="628" y="138" width="80" height="28" rx="6" fill="#5b9bd5"/><text x="668" y="157" text-anchor="middle" font-size="11" font-weight="700" fill="#e8e4df">barrier</text>
+  <text x="724" y="156" text-anchor="middle" font-size="13" fill="#5b9bd5">→</text>
+  <rect x="740" y="138" width="120" height="28" rx="6" fill="#eaf3fb"/><text x="800" y="157" text-anchor="middle" font-size="10.5" font-weight="700" fill="#10243a">전원 동시 출발</text>
+  <text x="492" y="190" font-size="10.5" fill="#c9c4be">모두 await() 도달 → 동시 해제 (barrierAction 1회)</text>
+  <rect x="492" y="200" width="370" height="72" rx="8" fill="#0d0d0d" stroke="#8a857f" stroke-width="1"/>
+  <text x="504" y="222" font-size="10.5" fill="#c9c4be">대기: 도달한 스레드끼리 서로 기다림 (상호)</text>
+  <text x="504" y="242" font-size="10.5" fill="#c9c4be">방향: N개 스레드 ↔ 서로 (N:N), reset 재사용</text>
+  <text x="504" y="262" font-size="10.5" fill="#e8e4df">쓰임: 라운드별 동기화, 단계별 병렬 시뮬레이션</text>
+
+  <!-- ③ Semaphore -->
+  <rect x="36" y="312" width="412" height="220" rx="12" fill="#0d0d0d" stroke="#d4a853" stroke-width="1.8"/>
+  <text x="56" y="338" font-size="14" font-weight="700" fill="#d4a853">③ Semaphore — 동시 수 제한 (허가 풀)</text>
+  <text x="56" y="358" font-size="11" fill="#c9c4be">허가 3개 풀 — acquire로 얻고 release로 반납</text>
+  <!-- 허가 풀 -->
+  <rect x="56" y="372" width="160" height="60" rx="8" fill="#f5edda"/>
+  <text x="136" y="390" text-anchor="middle" font-size="10.5" font-weight="700" fill="#5a4a1a">permit 풀 (3)</text>
+  <circle cx="92" cy="412" r="9" fill="#fdf3df"/><circle cx="120" cy="412" r="9" fill="#fdf3df"/><circle cx="148" cy="412" r="9" fill="#fdf3df"/>
+  <text x="232" y="396" text-anchor="middle" font-size="11" fill="#d4a853">acquire →</text>
+  <text x="232" y="424" text-anchor="middle" font-size="11" fill="#d4a853">← release</text>
+  <rect x="290" y="372" width="136" height="60" rx="8" fill="#0d0d0d" stroke="#d4a853" stroke-width="1.2"/>
+  <text x="358" y="396" text-anchor="middle" font-size="10.5" fill="#e8e4df">최대 3개만 동시 실행</text>
+  <text x="358" y="416" text-anchor="middle" font-size="10" fill="#c9c4be">4번째는 반납까지 대기</text>
+  <rect x="56" y="442" width="370" height="76" rx="8" fill="#0d0d0d" stroke="#8a857f" stroke-width="1"/>
+  <text x="68" y="464" font-size="10.5" fill="#c9c4be">대기: 허가 0이면 release까지 acquire가 블록</text>
+  <text x="68" y="484" font-size="10.5" fill="#c9c4be">방향: 진입 게이트 — "한 번에 몇 개?"의 상한</text>
+  <text x="68" y="504" font-size="10.5" fill="#e8e4df">쓰임: 커넥션 풀, rate limiting, 동시 접근 제어</text>
+
+  <!-- ④ Phaser -->
+  <rect x="472" y="312" width="412" height="220" rx="12" fill="#0d0d0d" stroke="#c98bdb" stroke-width="1.8"/>
+  <text x="492" y="338" font-size="14" font-weight="700" fill="#c98bdb">④ Phaser — 다단계 반복 (동적 참여)</text>
+  <text x="492" y="358" font-size="11" fill="#c9c4be">register/deregister로 참여자 증감, phase 자동 증가</text>
+  <!-- 단계 진행 -->
+  <rect x="492" y="372" width="92" height="34" rx="6" fill="#ddd4f0"/><text x="538" y="394" text-anchor="middle" font-size="10.5" font-weight="700" fill="#3a1a52">phase 0</text>
+  <text x="596" y="394" text-anchor="middle" font-size="13" fill="#c98bdb">→</text>
+  <rect x="612" y="372" width="92" height="34" rx="6" fill="#ddd4f0"/><text x="658" y="394" text-anchor="middle" font-size="10.5" font-weight="700" fill="#3a1a52">phase 1</text>
+  <text x="716" y="394" text-anchor="middle" font-size="13" fill="#c98bdb">→</text>
+  <rect x="732" y="372" width="92" height="34" rx="6" fill="#ddd4f0"/><text x="778" y="394" text-anchor="middle" font-size="10.5" font-weight="700" fill="#3a1a52">phase 2…</text>
+  <text x="492" y="426" font-size="10.5" fill="#c9c4be">arriveAndAwaitAdvance()마다 단계가 한 칸 오른다</text>
+  <rect x="492" y="442" width="370" height="76" rx="8" fill="#0d0d0d" stroke="#8a857f" stroke-width="1"/>
+  <text x="504" y="464" font-size="10.5" fill="#c9c4be">대기: 현재 단계 참여자 전원 도달까지 (배리어처럼)</text>
+  <text x="504" y="484" font-size="10.5" fill="#c9c4be">방향: Latch+Barrier 합본 + 참여자 런타임 증감</text>
+  <text x="504" y="504" font-size="10.5" fill="#e8e4df">쓰임: 참여자 수가 변하는 다단계 파이프라인</text>
+</svg>

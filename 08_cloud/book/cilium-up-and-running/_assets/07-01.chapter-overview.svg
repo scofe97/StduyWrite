@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 430" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">Cilium Ingress 의 외부 트래픽 처리 경로</title><desc id="dd">클라이언트가 LoadBalancer IP 로 보낸 HTTP 요청을 eBPF 와 Envoy 가 백엔드로 전달한다</desc>
+<rect width="920" height="430" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">CILIUM UP AND RUNNING · 07-01</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">Cilium Ingress 의 외부 트래픽 처리 경로</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">별도 Ingress 컨트롤러 없이 노드 상주 Envoy 와 eBPF 데이터패스가 L7 경로를 처리한다</text>
+<rect x="24" y="104" width="180" height="290" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="114.0" y="130" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">외부 클라이언트</text>
+<text x="114.0" y="150" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">curl HTTP 요청</text>
+<rect x="38" y="178" width="152" height="80" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="114.0" y="206" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">HTTP GET</text>
+<text x="114.0" y="230" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">172.18.255.200:80</text>
+<text x="114.0" y="248" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">경로 / 또는 /details</text>
+<rect x="38" y="278" width="152" height="92" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="114.0" y="302" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">LB IPAM 풀</text>
+<text x="114.0" y="324" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#3FB98C">172.18.255.200/29</text>
+<text x="114.0" y="350" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">서비스마다 주소 1개</text>
+<rect x="232" y="104" width="420" height="290" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="248" y="130" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">worker 노드</text>
+<rect x="248" y="150" width="388" height="60" rx="6" fill="#3FB98C10" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="262" y="174" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">L2 Announcements (policy1 · eth0)</text>
+<text x="262" y="196" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">ARP 응답으로 172.18.255.200 수신</text>
+<rect x="248" y="226" width="388" height="66" rx="6" fill="#F08A5912" stroke="#F08A59" stroke-width="1.2"/>
+<text x="262" y="250" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">Cilium eBPF 데이터패스</text>
+<text x="262" y="274" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">eBPF 가로채기 → TPROXY → Envoy</text>
+<rect x="248" y="308" width="388" height="72" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="262" y="332" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">Envoy DaemonSet (cilium-envoy)</text>
+<text x="262" y="354" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">CiliumEnvoyConfig (CEC) 규칙 적용</text>
+<text x="262" y="372" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">경로 파싱: /details vs /</text>
+<rect x="680" y="104" width="216" height="290" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="788.0" y="130" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">백엔드 Pod</text>
+<text x="788.0" y="150" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">Bookinfo 애플리케이션</text>
+<rect x="694" y="178" width="188" height="86" rx="6" fill="#3FB98C10" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="788.0" y="202" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">details:9080</text>
+<text x="788.0" y="224" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">경로 /details 매칭</text>
+<text x="788.0" y="246" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">책 상세 정보 JSON</text>
+<rect x="694" y="280" width="188" height="86" rx="6" fill="#3FB98C10" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="788.0" y="304" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">productpage:9080</text>
+<text x="788.0" y="326" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">경로 / 매칭 (기본)</text>
+<text x="788.0" y="348" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">메인 웹 화면 200 OK</text>
+<path d="M 204 180 L 248 180" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)"/>
+<path d="M 442.0 210 L 442.0 226" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<path d="M 442.0 292 L 442.0 308" fill="none" stroke="#F08A59" stroke-width="1.5" marker-end="url(#acc)"/>
+<path d="M 636 334 L 658 334 L 658 221 L 694 221" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<path d="M 636 354 L 658 354 L 658 323 L 694 323" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+</svg>

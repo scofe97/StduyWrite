@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 576" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">아홉 명령이 배선에서 경로까지 한 줄로 이어집니다</title><desc id="dd">1~2번은 Pod 의 배선, 3~5번은 kube-proxy 의 규칙이 서비스 주소를 Pod 주소로 바꾸는 과정, 6번은 conntrack 상태, 7~9번은 바뀐 주소로 가는 경로를 확인한다. Calico BGP 비오버레이와 iptables 모드를 전제하며, 8번의 PERMANENT 는 VXLAN 모드로 돌릴 때 vxlan.calico 이웃에 찍힌다. cali… 인터페이스는 호스트 네트워크가 아닌 Pod 마다 하나씩 생긴다. 10.244.242.66 은 Calico 예시 클러스터의 CoreDNS Pod 주소이고 다른 도식의 주소와는 다른 클러스터 예시다.</desc>
+<rect width="1000" height="576" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">CALICO + IPTABLES MODE · NINE-STEP CHECK</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">아홉 명령이 배선에서 경로까지 한 줄로 이어집니다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">어디서 끊기는지가 곧 어느 컴포넌트의 문제인지를 가른다</text>
+<rect x="53.0" y="148" width="30.0" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="68" y="162" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">배선</text>
+<rect x="124" y="112" width="200" height="100" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="136" y="136" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">1 · Pod 의 길</text>
+<text x="136" y="158" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">kubectl exec probe</text>
+<text x="136" y="174" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">-- ip route</text>
+<text x="136" y="202" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">default via 169.254.1.1</text>
+<path d="M 326 162 L 336 162" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<rect x="340" y="112" width="200" height="100" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="352" y="136" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">2 · calico 인터페이스</text>
+<text x="352" y="158" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">ip link | grep cali</text>
+<text x="352" y="202" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">cali… = 비호스트망 Pod 수</text>
+<rect x="53.0" y="292" width="30.0" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="68" y="306" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">규칙</text>
+<rect x="124" y="256" width="200" height="100" rx="6" fill="#E3B34114" stroke="#E3B341" stroke-width="1.1"/>
+<text x="136" y="280" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">3 · 진입 체인</text>
+<text x="136" y="302" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">iptables -t nat</text>
+<text x="136" y="318" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">-L KUBE-SERVICES</text>
+<text x="136" y="346" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">10.96.0.10 → KUBE-SVC-…</text>
+<path d="M 326 306 L 336 306" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<rect x="340" y="256" width="200" height="100" rx="6" fill="#E3B34114" stroke="#E3B341" stroke-width="1.1"/>
+<text x="352" y="280" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">4 · 서비스 체인</text>
+<text x="352" y="302" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">iptables -t nat</text>
+<text x="352" y="318" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">-L KUBE-SVC-…</text>
+<text x="352" y="346" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">random probability 0.5</text>
+<path d="M 542 306 L 552 306" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<rect x="556" y="256" width="200" height="100" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.4"/>
+<text x="568" y="280" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">5 · 엔드포인트 체인</text>
+<text x="568" y="302" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">iptables -t nat</text>
+<text x="568" y="318" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">-L KUBE-SEP-…</text>
+<text x="568" y="346" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">DNAT 10.244.242.66:53</text>
+<rect x="25.5" y="436" width="85.0" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="68" y="450" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">상태 · 경로</text>
+<rect x="124" y="400" width="200" height="100" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="136" y="424" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">6 · conntrack 장부</text>
+<text x="136" y="446" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">conntrack -L | head -5</text>
+<text x="136" y="490" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">ASSURED · UDP 30·120초</text>
+<path d="M 326 450 L 336 450" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<rect x="340" y="400" width="200" height="100" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="352" y="424" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">7 · 경로 예측</text>
+<text x="352" y="446" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">ip route get</text>
+<text x="352" y="462" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">10.244.242.66</text>
+<text x="352" y="490" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">cali… 또는 via 노드 IP</text>
+<path d="M 542 450 L 552 450" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<rect x="556" y="400" width="200" height="100" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="568" y="424" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">8 · 이웃 캐시</text>
+<text x="568" y="446" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">ip neigh</text>
+<text x="568" y="474" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">REACHABLE</text>
+<text x="568" y="490" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">(VXLAN 이면 PERMANENT)</text>
+<path d="M 758 450 L 768 450" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<rect x="772" y="400" width="200" height="100" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="784" y="424" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">9 · 실측</text>
+<text x="784" y="446" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">traceroute</text>
+<text x="784" y="462" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">10.244.242.66</text>
+<text x="784" y="490" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">예측한 hop 과 일치</text>
+<path d="M 440 214 L 440 234 L 224 234 L 224 252" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<path d="M 656 358 L 656 378 L 224 378 L 224 396" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<line x1="12" y1="528" x2="952" y2="528" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="550" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="540" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="550" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">배선 · 1~2번</text>
+<rect x="261" y="540" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="283" y="550" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">규칙 · 3~5번</text>
+<rect x="422" y="540" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="444" y="550" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">상태 · 경로 · 6~9번</text>
+<rect x="648" y="540" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="670" y="550" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">주소가 바뀌는 칸</text>
+</svg>

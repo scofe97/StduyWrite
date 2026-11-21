@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 380" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">OpenShift ImageStream과 트리거 자동 연계</title><desc id="dd">BuildConfig 빌드 완료 시 ImageStreamTag 변경 이벤트를 감지해 자동 재빌드와 재배포를 조율하는 아키텍처</desc>
+<rect width="960" height="380" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">KUBERNETES PATTERNS · 30-01</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">OpenShift ImageStream과 트리거 자동 연계</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">BuildConfig · ImageStream · imageChange trigger 자동 연계 파이프라인</text>
+<rect x="40" y="106" width="200" height="80" rx="6" fill="#6A95D810" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="140" y="130" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#6A95D8">BuildConfig</text>
+<text x="140" y="150" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#F5F5F3">S2I · Docker 빌드 명세</text>
+<text x="140" y="170" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">빌드 파이프라인 설정</text>
+<path d="M 242 146 L 348 146" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<text x="295" y="138" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#F5F5F3">(1) 빌드 기동</text>
+<rect x="350" y="106" width="260" height="80" rx="6" fill="#3FB98C10" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="480" y="130" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#3FB98C">Build 실행 (S2I / Docker)</text>
+<text x="480" y="150" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#F5F5F3">S2I: assemble 로 컴파일</text>
+<text x="480" y="170" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">클러스터 통합 실행</text>
+<path d="M 612 146 L 708 146" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<text x="660" y="138" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#3FB98C">(2) 이미지 등록</text>
+<rect x="710" y="106" width="210" height="80" rx="6" fill="#F08A5916" stroke="#F08A59" stroke-width="1.4"/>
+<text x="815" y="130" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F08A59">ImageStream</text>
+<text x="815" y="150" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="500" fill="#F5F5F3">ImageStreamTag 갱신</text>
+<text x="815" y="170" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#F08A59">변경 이벤트 자동 발행</text>
+<path d="M 750 188 L 750 208 L 480 208 L 480 228" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<text x="610" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#F08A59">(3) 태그 변경 감지</text>
+<rect x="350" y="230" width="260" height="80" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.4"/>
+<text x="480" y="254" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F08A59">imageChange 트리거</text>
+<text x="480" y="274" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#F5F5F3">태그 변경 감지 컨트롤러</text>
+<text x="480" y="294" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#F08A59">후속 파이프라인 자동 조율</text>
+<path d="M 348 270 L 242 270" fill="none" stroke="#E3B341" stroke-width="1.3" marker-end="url(#warn)"/>
+<text x="295" y="262" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#E3B341">(4a) 연쇄 빌드</text>
+<rect x="40" y="230" width="200" height="80" rx="6" fill="#E3B34110" stroke="#E3B341" stroke-width="1.1"/>
+<text x="140" y="254" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#E3B341">chained build (2차)</text>
+<text x="140" y="274" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#F5F5F3">S2I 산출물 → Docker 전달</text>
+<text x="140" y="294" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">슬림 런타임 이미지 완성</text>
+<path d="M 90 228 L 90 188" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<text x="100" y="212" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">BuildConfig 로 정의</text>
+<path d="M 612 270 L 708 270" fill="none" stroke="#6A95D8" stroke-width="1.3" marker-end="url(#info)"/>
+<text x="660" y="262" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#6A95D8">(4b) 자동 배포</text>
+<rect x="710" y="230" width="210" height="80" rx="6" fill="#6A95D810" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="815" y="254" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#6A95D8">대상 Deployment / Pod</text>
+<text x="815" y="274" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#F5F5F3">새 이미지 자동 롤아웃</text>
+<text x="815" y="294" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">대상 Pod 재배포</text>
+<path d="M 880 188 L 880 228" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<text x="870" y="212" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">새 이미지 참조</text>
+<line x1="12" y1="330" x2="912" y2="330" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="352" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="342" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="352" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">빌드 설정 · 실행</text>
+<rect x="274" y="342" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="296" y="352" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">트리거 연계 (focal)</text>
+<rect x="500" y="342" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="522" y="352" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">배포 롤아웃</text>
+<rect x="622" y="342" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="644" y="352" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">연쇄 빌드</text>
+</svg>

@@ -1,0 +1,87 @@
+<svg viewBox="0 0 880 520" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>같은 ClusterRole을 RoleBinding으로 쓸 때와 ClusterRoleBinding으로 쓸 때의 범위 차이</title>
+  <desc>Kubernetes Patterns 그림 26-4와 26-5를 나란히 놓은 것입니다. 위쪽은 RoleBinding으로 ClusterRole을 참조한 경우입니다. test namespace의 ServiceAccount가 dev-1과 dev-2 namespace의 Pod를 읽을 수 있지만, 그 권한은 RoleBinding을 건 namespace에만 미칩니다. RoleBinding을 걸지 않은 namespace에는 접근하지 못하므로 kube-system 같은 민감한 namespace를 제외할 수 있습니다. 아래쪽은 같은 ClusterRole을 ClusterRoleBinding으로 부여한 경우입니다. 권한이 클러스터의 모든 namespace에 한 번에 적용되며 나중에 만들어지는 namespace에도 자동으로 미칩니다. 편리하지만 범위가 넓어 관리 목적에만 쓰기를 권합니다.</desc>
+
+  <defs>
+    <marker id="ca" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="cr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#f44336"/>
+    </marker>
+  </defs>
+
+  <rect width="880" height="520" fill="#0d0d0d"/>
+
+  <!-- upper: RoleBinding scope -->
+  <text x="24" y="30" fill="#e8e4df" font-size="13">RoleBinding 참조 범위</text>
+
+  <rect x="640" y="74" width="216" height="44" fill="#f2d4d4"/>
+  <text x="748" y="94" text-anchor="middle" fill="#7a1f1f" font-size="10" font-weight="700">ClusterRole view-pod</text>
+  <text x="748" y="110" text-anchor="middle" fill="#7a1f1f" font-size="9">get · list</text>
+
+  <rect x="24" y="136" width="180" height="76" fill="#cdeccf"/>
+  <text x="114" y="160" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">namespace dev-1</text>
+  <text x="114" y="180" text-anchor="middle" fill="#14521d" font-size="9">Pods</text>
+  <text x="114" y="198" text-anchor="middle" fill="#14521d" font-size="9">RoleBinding 있음</text>
+
+  <rect x="224" y="136" width="180" height="76" fill="#cdeccf"/>
+  <text x="314" y="160" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">namespace dev-2</text>
+  <text x="314" y="180" text-anchor="middle" fill="#14521d" font-size="9">Pods</text>
+  <text x="314" y="198" text-anchor="middle" fill="#14521d" font-size="9">RoleBinding 있음</text>
+
+  <rect x="424" y="136" width="180" height="76" fill="#f2d4d4"/>
+  <text x="514" y="160" text-anchor="middle" fill="#7a1f1f" font-size="10" font-weight="700">kube-system</text>
+  <text x="514" y="180" text-anchor="middle" fill="#7a1f1f" font-size="9">RoleBinding 없음</text>
+  <text x="514" y="198" text-anchor="middle" fill="#7a1f1f" font-size="9">접근 불가</text>
+
+  <rect x="224" y="238" width="180" height="56" fill="#dceaf7"/>
+  <text x="314" y="262" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">namespace test</text>
+  <text x="314" y="280" text-anchor="middle" fill="#10243a" font-size="9">SA test-sa</text>
+
+  <path d="M280 238 L130 218" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ca)"/>
+  <path d="M314 238 L314 218" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ca)"/>
+  <path d="M404 260 L470 260 L470 218" fill="none" stroke="#f44336" stroke-width="2" stroke-dasharray="5,4"/>
+  <line x1="455" y1="231" x2="485" y2="251" stroke="#f44336" stroke-width="3"/>
+  <line x1="485" y1="231" x2="455" y2="251" stroke="#f44336" stroke-width="3"/>
+
+  <path d="M114 136 L114 96 L634 96" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ca)"/>
+  <path d="M314 136 L314 116 L620 116 L620 102" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ca)"/>
+  <text x="360" y="90" fill="rgb(212,168,83)" font-size="9">각 RoleBinding이 참조</text>
+
+  <line x1="24" y1="296" x2="856" y2="296" stroke="#b8b3ad" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- lower: ClusterRoleBinding scope -->
+  <text x="24" y="324" fill="#e8e4df" font-size="13">CRB 부여 범위</text>
+
+  <rect x="24" y="344" width="150" height="66" fill="#cdeccf"/>
+  <text x="99" y="368" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">dev-1</text>
+  <text x="99" y="388" text-anchor="middle" fill="#14521d" font-size="9">Pods</text>
+
+  <rect x="194" y="344" width="150" height="66" fill="#cdeccf"/>
+  <text x="269" y="368" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">dev-2</text>
+  <text x="269" y="388" text-anchor="middle" fill="#14521d" font-size="9">Pods</text>
+
+  <rect x="364" y="344" width="150" height="66" fill="#cdeccf"/>
+  <text x="439" y="368" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">kube-system</text>
+  <text x="439" y="388" text-anchor="middle" fill="#14521d" font-size="9">여기도 포함</text>
+
+  <rect x="534" y="344" width="150" height="66" fill="#cdeccf"/>
+  <text x="609" y="368" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">앞으로 만들 것</text>
+  <text x="609" y="388" text-anchor="middle" fill="#14521d" font-size="9">자동 포함</text>
+
+  <rect x="194" y="446" width="180" height="56" fill="#dceaf7"/>
+  <text x="284" y="470" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">namespace test</text>
+  <text x="284" y="488" text-anchor="middle" fill="#10243a" font-size="9">SA test-sa</text>
+
+  <rect x="640" y="446" width="216" height="56" fill="#dceaf7"/>
+  <text x="748" y="470" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">ClusterRoleBinding</text>
+  <text x="748" y="488" text-anchor="middle" fill="#10243a" font-size="9">namespace 필드 무시</text>
+
+  <line x1="634" y1="474" x2="380" y2="474" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ca)"/>
+
+  <path d="M240 446 L99 416" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ca)"/>
+  <path d="M272 446 L269 416" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ca)"/>
+  <path d="M320 446 L439 416" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ca)"/>
+  <path d="M350 446 L609 416" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ca)"/>
+</svg>

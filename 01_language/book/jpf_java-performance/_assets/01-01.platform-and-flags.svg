@@ -1,0 +1,55 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Java 성능의 두 지식 축, JVM 플래그 문법, 컨테이너 ergonomics</title>
+  <desc>Java 성능 지식은 두 축으로 나뉜다. 첫째는 JVM 자체의 성능으로 주로 튜닝 플래그로 조정하고, 둘째는 Java 플랫폼(언어+API) 기능의 성능으로 애플리케이션 코드의 모범 사례로 결정된다. devops로 가면서 둘의 경계는 흐려진다. JVM 튜닝 플래그는 두 종류다. boolean 플래그는 -XX:+FlagName으로 켜고 -XX:-FlagName으로 끈다. 파라미터 플래그는 -XX:FlagName=값 형식이다. 각 플래그의 기본값은 환경에 따라 자동으로 정해지는데 이를 ergonomics라 하고, -XX:+PrintFlagsFinal로 특정 환경의 실제 기본값을 확인한다. 하드웨어는 거의 다 멀티코어이며 하이퍼스레딩으로 코어마다 두 하드웨어 스레드가 보인다. 4코어 하이퍼스레딩 머신은 OS에 8 CPU로 보이지만 CPU bound 작업은 4개까지 4배, 5번째부터는 스톨 시간(20~40%)만큼만 더해져 결국 단일 코어의 5~6배에 그친다. 컨테이너 환경에서 Java 8 update 192 이상과 Java 11은 Docker가 건 CPU·메모리 제한을 인식해 ergonomics에 반영하지만, 이전 버전은 호스트 전체 자원을 보고 스레드와 힙을 과다 설정해 컨테이너가 죽을 수 있다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">성능의 두 지식 축 · JVM 플래그 · 컨테이너</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">JVM 튜닝(플래그)과 플랫폼 모범 사례(코드), 그리고 환경이 성능을 결정합니다</text>
+
+  <!-- 두 지식 축 -->
+  <rect x="20" y="74" width="320" height="92" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="96" fill="rgb(212,168,83)" font-size="13" font-weight="bold">축 ① JVM 자체의 성능</text>
+  <text x="38" y="116" fill="#e8e4df" font-size="11">주로 튜닝 플래그로 조정 (코드 변경 없이)</text>
+  <text x="38" y="134" fill="rgb(138,133,128)" font-size="10">C++의 컴파일러 플래그 선택과 같은 성격</text>
+  <text x="38" y="152" fill="rgb(138,133,128)" font-size="10">GC·JIT 동작을 환경에 맞게 조정</text>
+
+  <rect x="350" y="74" width="312" height="92" fill="rgba(127,168,201,0.10)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="368" y="96" fill="#9cc3df" font-size="13" font-weight="bold">축 ② 플랫폼(언어+API) 성능</text>
+  <text x="368" y="116" fill="#e8e4df" font-size="11">애플리케이션 코드의 모범 사례로 결정</text>
+  <text x="368" y="134" fill="rgb(138,133,128)" font-size="10">언어: 스레딩·동기화 / API: 문자열 처리</text>
+  <text x="368" y="152" fill="#66bb6a" font-size="10">devops로 가며 두 축의 경계가 흐려짐</text>
+
+  <!-- JVM 플래그 문법 -->
+  <rect x="20" y="178" width="642" height="116" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="200" fill="#e8e4df" font-size="13" font-weight="bold">JVM 튜닝 플래그 — 두 종류</text>
+  <rect x="38" y="212" width="300" height="26" fill="rgba(102,187,106,0.13)" stroke="#66bb6a"/><text x="48" y="229" fill="#66bb6a" font-family="'JetBrains Mono',monospace" font-size="10">-XX:+FlagName  /  -XX:-FlagName</text>
+  <text x="346" y="229" fill="rgb(138,133,128)" font-size="10">boolean: + 켜기 / - 끄기</text>
+  <rect x="38" y="244" width="300" height="26" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/><text x="48" y="261" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="10">-XX:FlagName=N</text>
+  <text x="346" y="261" fill="rgb(138,133,128)" font-size="10">파라미터: 임의 값 N 설정</text>
+  <text x="38" y="286" fill="#e8e4df" font-size="11">기본값은 환경 따라 자동 결정 = ergonomics · 실제값 확인: <tspan fill="#9cc3df" font-family="'JetBrains Mono',monospace" font-size="10">-XX:+PrintFlagsFinal</tspan></text>
+
+  <!-- 하이퍼스레딩 -->
+  <rect x="20" y="306" width="642" height="118" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="328" fill="#e8e4df" font-size="13" font-weight="bold">하드웨어 — 4코어 하이퍼스레딩의 실제 처리량</text>
+  <text x="38" y="348" fill="rgb(138,133,128)" font-size="11">코어마다 하드웨어 스레드 2개 → OS에는 8 CPU로 보임 (동시 실행은 코어당 1개)</text>
+  <rect x="38" y="360" width="180" height="24" fill="rgba(102,187,106,0.13)" stroke="#66bb6a"/><text x="128" y="376" fill="#66bb6a" font-size="10" text-anchor="middle">CPU bound 4개 → 4배</text>
+  <text x="226" y="376" fill="rgb(138,133,128)" font-size="20">→</text>
+  <rect x="248" y="360" width="200" height="24" fill="rgba(244,127,114,0.13)" stroke="#f47f72"/><text x="348" y="376" fill="#f47f72" font-size="10" text-anchor="middle">5번째부터 스톨(20~40%)만큼만</text>
+  <text x="456" y="376" fill="rgb(138,133,128)" font-size="20">→</text>
+  <rect x="478" y="360" width="184" height="24" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/><text x="570" y="376" fill="rgb(212,168,83)" font-size="10" text-anchor="middle">결국 단일 코어의 5~6배</text>
+  <text x="38" y="404" fill="rgb(138,133,128)" font-size="10">스레드는 main memory 로드 등에서 stall → 다른 하드웨어 스레드로 전환해 사이클 활용</text>
+
+  <!-- 컨테이너 ergonomics -->
+  <rect x="20" y="436" width="642" height="148" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="458" fill="#9cc3df" font-size="13" font-weight="bold">컨테이너 — Docker 자원 제한과 ergonomics</text>
+  <text x="38" y="478" fill="#e8e4df" font-size="11">JVM은 머신 크기 기반으로 힙·GC 스레드 수를 자동(ergonomic) 설정합니다</text>
+  <rect x="38" y="490" width="304" height="58" fill="rgba(102,187,106,0.10)" stroke="#66bb6a"/>
+  <text x="50" y="510" fill="#66bb6a" font-size="11" font-weight="bold">Java 8 u192+ · Java 11</text>
+  <text x="50" y="528" fill="rgb(138,133,128)" font-size="10">Docker CPU·메모리 제한을 인식</text>
+  <text x="50" y="543" fill="rgb(138,133,128)" font-size="10">제한값 기준으로 힙·스레드 설정</text>
+  <rect x="350" y="490" width="312" height="58" fill="rgba(244,67,54,0.10)" stroke="#f44336"/>
+  <text x="362" y="510" fill="#f44336" font-size="11" font-weight="bold">Java 8 u192 이전</text>
+  <text x="362" y="528" fill="rgb(138,133,128)" font-size="10">호스트 전체 자원을 봄 → 힙·스레드 과다</text>
+  <text x="362" y="543" fill="#f47f72" font-size="10">힙이 컨테이너 한도 초과 시 컨테이너 kill</text>
+  <text x="38" y="570" fill="rgb(138,133,128)" font-size="10">VM(가상머신)은 호스트의 부분집합을 받아 일반 머신과 구분 불가 — 같은 방식으로 튜닝하면 됩니다</text>
+</svg>

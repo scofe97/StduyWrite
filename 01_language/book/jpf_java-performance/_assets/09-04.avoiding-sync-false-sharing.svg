@@ -1,0 +1,53 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>동기화 회피와 false sharing</title>
+  <desc>동기화를 아예 피하면 락 페널티가 없다. 두 접근이 있다. 첫째 스레드마다 다른 객체를 써 경쟁을 없앤다. Random처럼 thread-safe하지만 공유할 필요 없는 객체가 그렇다. NumberFormat처럼 생성이 비싼 객체는 thread-local로 객체 수를 제한하면서 경쟁도 없앤다. 둘째 CAS 기반 대안을 쓴다. AtomicLong vs synchronized 차이는 마이크로벤치마크로 못 잰다. 단일 스레드는 경쟁이 없고 두 스레드는 비현실적 경쟁이라 둘 다 실제를 반영 못 한다. 가이드라인은 경쟁 없으면 CAS가 약간 빠르고 아예 안 쓰면 더 빠르다. 경미 중간 경쟁은 CAS가 훨씬 빠르고 heavy 경쟁은 대형 머신에서 synchronized가 유리하다. LongAdder는 스레드별로 값을 따로 담아 heavy 경쟁에서 더 빠르다. false sharing은 cache line 때문이다. 인접 변수가 같은 cache line에 로드되고 한 스레드가 쓰면 다른 코어 cache가 무효화된다. local 변수로 모으거나 padding으로 다른 cache line에 둔다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">동기화 회피와 false sharing</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">동기화를 피하면 락 페널티가 없고, false sharing은 cache line 무효화로 성능을 갉습니다</text>
+
+  <!-- 회피 두 접근 -->
+  <rect x="20" y="74" width="320" height="118" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="96" fill="#66bb6a" font-size="12" font-weight="bold">① thread-local — 다른 객체</text>
+  <text x="38" y="116" fill="rgb(138,133,128)" font-size="10">스레드마다 다른 객체 → 경쟁 없음</text>
+  <text x="38" y="134" fill="rgb(138,133,128)" font-size="10">Random: 공유 불필요한 thread-safe 객체</text>
+  <text x="38" y="152" fill="rgb(138,133,128)" font-size="10">NumberFormat: 생성 비싼 객체</text>
+  <text x="38" y="172" fill="#66bb6a" font-size="10">객체 수 제한(GC↓) + 경쟁 없음</text>
+
+  <rect x="350" y="74" width="312" height="118" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="368" y="96" fill="#9cc3df" font-size="12" font-weight="bold">② CAS 기반 대안</text>
+  <text x="368" y="116" fill="rgb(138,133,128)" font-size="10">AtomicLong vs synchronized++</text>
+  <text x="368" y="134" fill="#f47f72" font-size="10">마이크로벤치로 못 잼(경쟁 비현실)</text>
+  <text x="368" y="152" fill="rgb(138,133,128)" font-size="10">단일=경쟁無, 2스레드=과도 경쟁</text>
+  <text x="368" y="172" fill="#9cc3df" font-size="10">→ 실제 애플리케이션에서 판단</text>
+
+  <!-- CAS 가이드라인 -->
+  <rect x="20" y="200" width="642" height="116" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="222" fill="#e8e4df" font-size="13" font-weight="bold">CAS vs synchronized 가이드라인</text>
+  <text x="38" y="244" fill="rgb(138,133,128)" font-size="11">경쟁 없음 → CAS 약간 빠름 (아예 안 쓰면 더 빠름, Vector flushing 같은 코너 회피)</text>
+  <text x="38" y="264" fill="#66bb6a" font-size="11">경미~중간 경쟁 → CAS가 훨씬 빠름</text>
+  <text x="38" y="284" fill="#f47f72" font-size="11">heavy 경쟁 → 어느 시점부터 synchronized가 유리 (대형 머신·다수 스레드뿐)</text>
+  <text x="38" y="304" fill="rgb(138,133,128)" font-size="11">읽기만 하면 CAS는 경쟁 없음</text>
+
+  <!-- LongAdder -->
+  <rect x="20" y="324" width="642" height="64" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="346" fill="rgb(212,168,83)" font-size="13" font-weight="bold">LongAdder — heavy 경쟁용</text>
+  <text x="38" y="368" fill="rgb(138,133,128)" font-size="11">스레드별로 값을 따로 담아(배열) 서로 안 기다림 → 조회 시 합산. heavy 경쟁에서 atomic보다 빠름</text>
+  <text x="38" y="384" fill="rgb(138,133,128)" font-size="10">단 메모리↑, 조회는 약간 느림(pending 처리)</text>
+
+  <!-- false sharing -->
+  <rect x="20" y="396" width="642" height="186" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="38" y="418" fill="#f47f72" font-size="13" font-weight="bold">false sharing (cache line sharing)</text>
+  <text x="38" y="440" fill="rgb(138,133,128)" font-size="11">인접 변수(l1·l2·l3·l4)가 같은 128B cache line에 로드됨 → 한 코어가 쓰면 다른 코어 cache 무효화</text>
+  <rect x="38" y="450" width="290" height="64" fill="rgba(244,127,114,0.10)" stroke="#f47f72"/>
+  <text x="50" y="470" fill="#f47f72" font-size="11" font-weight="bold">100,000 합산 (변수 비공유)</text>
+  <text x="50" y="488" fill="rgb(138,133,128)" font-size="10">1 스레드 0.8ms → 4 스레드 15.5ms</text>
+  <text x="50" y="506" fill="#f47f72" font-size="10">경쟁 없어도 무효화로 직렬화</text>
+  <rect x="336" y="450" width="318" height="64" fill="rgba(102,187,106,0.10)" stroke="#66bb6a"/>
+  <text x="348" y="470" fill="#66bb6a" font-size="11" font-weight="bold">대응</text>
+  <text x="348" y="488" fill="rgb(138,133,128)" font-size="10">local 변수로 모아 끝에 한 번만 쓰기(최선)</text>
+  <text x="348" y="506" fill="rgb(138,133,128)" font-size="10">padding으로 다른 cache line에 분리</text>
+  <text x="38" y="534" fill="rgb(212,168,83)" font-size="11">@Contended (JDK private) — JVM이 자동 padding. Thread·ConcurrentHashMap이 사용</text>
+  <text x="38" y="554" fill="rgb(138,133,128)" font-size="10">앱 사용은 -XX:-RestrictContended 필요 / JDK padding 끄려면 -XX:-EnableContended</text>
+  <text x="38" y="574" fill="#f47f72" font-size="10">탐지 어려움 — VTune cache miss, 또는 코드 검사(loop가 오래 걸리면 비공유 변수 접근 확인)</text>
+</svg>

@@ -1,0 +1,54 @@
+<svg viewBox="0 0 900 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>무상태 서비스의 빌딩 블록과 PVC accessModes 4종</title>
+  <desc>Kubernetes Patterns 11장. 무상태 서비스는 동일하고 교체 가능한 임시 replica로 구성됩니다. Kubernetes는 이를 위해 계층적 빌딩 블록을 제공합니다. Pod가 컨테이너 생존을, ReplicaSet이 원하는 수의 동일 Pod를, Deployment가 업그레이드·롤백을, Service가 고정 IP와 트래픽 분배를, PVC가 영속 스토리지를 담당합니다. PVC accessModes는 스토리지가 어떻게 마운트되는지를 정합니다 — ReadWriteOnce(노드 하나), ReadOnlyMany(여러 노드 읽기), ReadWriteMany(여러 노드 읽기쓰기), ReadWriteOncePod(Pod 하나만). ReplicaSet의 모든 Pod는 같은 PVC를 공유합니다.</desc>
+
+  <rect x="0" y="0" width="900" height="500" fill="#0d0d0d"/>
+  <text x="24" y="34" fill="#e8e4df" font-size="16">무상태 서비스 — 동일·교체 가능한 임시 replica</text>
+  <text x="24" y="57" fill="rgb(138,133,128)" font-size="11">무상태의 검증: <tspan fill="#e8e4df">sticky session 없는 랜덤 로드밸런서 뒤에서도</tspan> 목적을 다하는가. 상태는 외부 스토리지로 오프로드.</text>
+
+  <!-- building block stack -->
+  <text x="24" y="88" fill="#e8e4df" font-size="12">계층적 빌딩 블록</text>
+  <rect x="24" y="98" width="410" height="40" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="40" y="114" fill="rgb(212,168,83)" font-size="11" font-weight="700">Pod</text>
+  <text x="90" y="123" fill="rgb(138,133,128)" font-size="9.5">liveness로 컨테이너가 늘 살아 있게</text>
+  <rect x="24" y="142" width="410" height="40" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="40" y="158" fill="rgb(212,168,83)" font-size="11" font-weight="700">ReplicaSet</text>
+  <text x="120" y="167" fill="rgb(138,133,128)" font-size="9.5">원하는 수의 동일 Pod를 건강한 노드에 유지</text>
+  <rect x="24" y="186" width="410" height="40" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="40" y="202" fill="rgb(212,168,83)" font-size="11" font-weight="700">Deployment</text>
+  <text x="128" y="211" fill="rgb(138,133,128)" font-size="9.5">업그레이드·롤백 자동화 (권장 사용자 추상)</text>
+  <rect x="24" y="230" width="410" height="40" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="40" y="246" fill="rgb(212,168,83)" font-size="11" font-weight="700">Service</text>
+  <text x="104" y="255" fill="rgb(138,133,128)" font-size="9.5">고정 IP·readiness 통과 Pod로 트래픽 분배</text>
+  <rect x="24" y="274" width="410" height="40" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="40" y="290" fill="rgb(212,168,83)" font-size="11" font-weight="700">PVC</text>
+  <text x="90" y="299" fill="rgb(138,133,128)" font-size="9.5">필요 시 영속 스토리지 요청·마운트</text>
+
+  <text x="24" y="336" fill="rgb(138,133,128)" font-size="9">Pod IP는 재시작마다 바뀜 → 소비자는 Service의 고정 clusterIP를 씀. Deployment/ReplicaSet은 Service 존재를 모름(느슨히 결합).</text>
+
+  <!-- accessModes -->
+  <rect x="452" y="98" width="424" height="216" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="468" y="120" fill="#e8e4df" font-size="12" font-weight="700">PVC accessModes — 스토리지 마운트 방식</text>
+  <rect x="468" y="132" width="392" height="40" fill="#dceaf7"/>
+  <text x="476" y="148" fill="#10243a" font-size="10" font-weight="700">ReadWriteOnce</text>
+  <text x="476" y="164" fill="#10243a" font-size="8.5">노드 하나에 마운트. 그 노드의 여러 Pod가 읽기쓰기 가능.</text>
+  <rect x="468" y="176" width="392" height="34" fill="#cdeccf"/>
+  <text x="476" y="192" fill="#14521d" font-size="10" font-weight="700">ReadOnlyMany</text>
+  <text x="476" y="205" fill="#14521d" font-size="8.5">여러 노드에 마운트. 모든 Pod 읽기 전용.</text>
+  <rect x="468" y="214" width="392" height="34" fill="#f5edda"/>
+  <text x="476" y="230" fill="#0d0d0d" font-size="10" font-weight="700">ReadWriteMany</text>
+  <text x="476" y="243" fill="#0d0d0d" font-size="8.5">여러 노드 마운트 + 읽기쓰기. (네트워크 파일시스템 등)</text>
+  <rect x="468" y="252" width="392" height="52" fill="#f2d4d4"/>
+  <text x="476" y="268" fill="#7a1f1f" font-size="10" font-weight="700">ReadWriteOncePod</text>
+  <text x="476" y="283" fill="#7a1f1f" font-size="8.5">Pod 하나만 접근 보장 (앞 셋은 노드 단위). 단일 라이터·</text>
+  <text x="476" y="296" fill="#7a1f1f" font-size="8.5">데이터 정합성용. ⚠ 서비스를 싱글턴으로 만들어 스케일 막음.</text>
+
+  <!-- bottom -->
+  <rect x="24" y="352" width="852" height="28" fill="#f5edda"/>
+  <text x="36" y="370" fill="#0d0d0d" font-size="10" font-weight="700">ReplicaSet의 모든 Pod는 동일 — 같은 PVC 공유, 같은 PV 참조. (StatefulSet은 Pod마다 PVC를 동적 생성 — 12장)</text>
+
+  <text x="24" y="404" fill="rgb(138,133,128)" font-size="9.5">주의: bare Pod가 ReplicaSet 셀렉터와 일치하는 라벨을 가지면 ReplicaSet이 그것을 acquire·관리하고, 초과분을 종료할 수 있음.</text>
+  <text x="24" y="422" fill="rgb(138,133,128)" font-size="9.5">→ bare Pod가 ReplicaSet 셀렉터와 겹치는 라벨을 갖지 않게 할 것.</text>
+  <text x="24" y="446" fill="rgb(138,133,128)" font-size="9.5">ReplicaSet을 직접 쓸 때: Deployment 업데이트 전략이 안 맞거나, 커스텀 메커니즘이 필요하거나, 업데이트 제어가 아예 불필요할 때.</text>
+  <text x="24" y="470" fill="rgb(138,133,128)" font-size="9.5">K8s 프리미티브로 부족하면 Knative·KEDA로 오토스케일·서버리스화 (29장 Elastic Scale).</text>
+</svg>

@@ -1,0 +1,51 @@
+<svg viewBox="0 0 900 660" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>TestAllocation GC 로그 분석 흐름</title>
+  <desc>JDK 21에서 TestAllocation을 실행했을 때 GC 로그를 해석하는 순서다. Using Parallel, Pause Young Allocation Failure, Young/Old 변화량을 확인해 Eden 부족, Survivor 이동, Old 승격을 읽는다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}.sub{font-size:11px;fill:rgb(138,133,128)}.head{font-size:13px;font-weight:800;fill:rgb(212,168,83)}.label{font-size:11px;font-weight:750;fill:#e8e4df}.body{font-size:10px;fill:rgb(180,175,170)}.note{font-size:9.5px;fill:rgb(138,133,128)}.code{font-size:10px;font-weight:700;fill:rgb(212,168,83);font-family:'JetBrains Mono',monospace}.ok{font-size:10px;font-weight:750;fill:#81c784}.bad{font-size:10px;font-weight:750;fill:#e57373}
+    </style>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgb(212,168,83)"/></marker>
+    <marker id="arrRed" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#e57373"/></marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="660" fill="#0d0d0d"/>
+  <text x="26" y="36" class="title">실제 GC 로그는 "무엇이 줄고 어디로 갔는지"를 읽는다</text>
+  <text x="26" y="56" class="sub">Pause Young은 Minor GC 이벤트다. Young 변화량과 Old 증가량을 같이 보면 Survivor 이동과 승격이 보인다.</text>
+
+  <rect x="42" y="88" width="214" height="64" rx="8" fill="#1e3a4a" stroke="#4a8ab0"/>
+  <text x="149" y="112" class="label" text-anchor="middle">1. 어떤 GC인가?</text>
+  <text x="149" y="132" class="code" text-anchor="middle">Using Parallel</text>
+  <line x1="256" y1="120" x2="322" y2="120" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="324" y="88" width="240" height="64" rx="8" fill="#2a2a1a" stroke="rgb(212,168,83)"/>
+  <text x="444" y="112" class="label" text-anchor="middle">2. 영역 크기 확인</text>
+  <text x="444" y="132" class="body" text-anchor="middle">Young 9216K, Eden 8192K, Survivor 1024K</text>
+  <line x1="564" y1="120" x2="630" y2="120" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="632" y="88" width="226" height="64" rx="8" fill="#2a2a1a" stroke="rgb(212,168,83)"/>
+  <text x="745" y="112" class="label" text-anchor="middle">3. Pause 라인 확인</text>
+  <text x="745" y="132" class="code" text-anchor="middle">Pause / Allocation Failure</text>
+
+  <line x1="745" y1="152" x2="745" y2="216" stroke="#81c784" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="620" y="218" width="250" height="82" rx="8" fill="#142418" stroke="#81c784"/>
+  <text x="745" y="244" class="ok" text-anchor="middle">현재 로그: Pause Young 있음</text>
+  <text x="745" y="264" class="body" text-anchor="middle">Allocation Failure로 Minor GC 발생</text>
+  <text x="745" y="282" class="body" text-anchor="middle">정지 시간 약 1ms</text>
+
+  <line x1="444" y1="152" x2="444" y2="216" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="290" y="218" width="308" height="82" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)"/>
+  <text x="444" y="244" class="head" text-anchor="middle">Young 변화량</text>
+  <text x="444" y="264" class="body" text-anchor="middle">PSYoungGen 7455K → 512K, Eden 7455K → 0K</text>
+  <text x="444" y="282" class="note" text-anchor="middle">From Survivor 0K → 512K: 일부 생존 객체 이동</text>
+
+  <rect x="42" y="350" width="816" height="130" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="66" y="380" class="head">분석 결론</text>
+  <text x="86" y="406" class="body">1. Parallel GC로 실행됐고, Young은 Eden 8MB + Survivor 1MB + Survivor 1MB 구조다.</text>
+  <text x="86" y="428" class="body">2. Eden 부족으로 Young GC가 발생했고, Eden은 7455K에서 0K로 비워졌다.</text>
+  <text x="86" y="450" class="body">3. Survivor는 512K만 받았고, Old는 0K에서 6152K로 늘어 생존 객체 승격이 발생했다.</text>
+
+  <rect x="42" y="520" width="816" height="74" rx="8" fill="#111" stroke="#333"/>
+  <text x="66" y="550" class="code">분석 원칙</text>
+  <text x="166" y="550" class="body">GC 이벤트는 Pause 줄로 찾고, 객체 이동은 Young 감소량·Survivor 증가량·Old 증가량을 함께 본다.</text>
+  <text x="166" y="572" class="note">이번 실습은 Eden 부족 → Minor GC → Survivor 일부 이동 → Old 승격 흐름을 보여 준다.</text>
+</svg>

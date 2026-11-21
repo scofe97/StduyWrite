@@ -1,0 +1,65 @@
+<svg viewBox="0 0 680 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>think time — 처리량 테스트 vs 응답 시간 테스트</title>
+  <desc>think time은 클라이언트가 한 응답을 받은 뒤 다음 요청을 보내기 전까지 일부러 쉬는 시간이다. 실제 사용자가 화면을 읽고 생각하는 행동을 흉내 낸다. 처리량 테스트는 think time이 0이라 응답을 받자마자 즉시 다음 요청을 보낸다. 한 스레드가 쉴 새 없이 서버를 두드리므로 스레드 하나의 부하가 매우 커서, 적은 스레드로도 서버를 포화시킬 수 있다. 스레드를 너무 많이 두면 클라이언트 CPU가 포화되어 요청을 제때 못 만들고, 그러면 서버가 아니라 클라이언트 성능을 재게 된다. 그래서 처리량 테스트는 클라이언트 스레드를 적게 둔다. 응답 시간 테스트는 think time(예 30초)을 두므로 한 스레드가 30초에 한 번꼴로만 요청한다. 부하가 약해 의미 있는 부하를 주려면 스레드를 많이 둬야 한다. think time이 들어오면 처리량은 클라이언트 수와 think time으로 거의 고정되고, 그때 핵심 지표는 그 고정 부하에 서버가 얼마나 빨리 응답하느냐가 된다.</desc>
+  <rect x="0" y="0" width="680" height="560" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">think time — 처리량 테스트 vs 응답 시간 테스트</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">think time은 응답을 받은 뒤 다음 요청 전까지 일부러 쉬는 시간 — 사용자가 화면을 읽는 행동을 흉내 냅니다</text>
+
+  <!-- 처리량 테스트 -->
+  <rect x="20" y="74" width="642" height="186" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="98" fill="#66bb6a" font-size="14" font-weight="bold">처리량 테스트 — think time 0</text>
+  <text x="38" y="118" fill="#e8e4df" font-size="11">응답을 받자마자 즉시 다음 요청. 쉬지 않고 서버를 두드립니다.</text>
+
+  <!-- 타임라인 축 -->
+  <line x1="60" y1="150" x2="620" y2="150" stroke="rgb(138,133,128)" stroke-width="1"/>
+  <text x="38" y="154" fill="rgb(138,133,128)" font-size="10">시간 →</text>
+  <!-- 요청 블록들 (빈틈없이 붙음) -->
+  <rect x="60" y="138" width="78" height="24" fill="rgba(102,187,106,0.30)" stroke="#66bb6a" stroke-width="1"/>
+  <text x="99" y="154" fill="#e8e4df" font-size="9" text-anchor="middle">요청1</text>
+  <rect x="138" y="138" width="78" height="24" fill="rgba(102,187,106,0.30)" stroke="#66bb6a" stroke-width="1"/>
+  <text x="177" y="154" fill="#e8e4df" font-size="9" text-anchor="middle">요청2</text>
+  <rect x="216" y="138" width="78" height="24" fill="rgba(102,187,106,0.30)" stroke="#66bb6a" stroke-width="1"/>
+  <text x="255" y="154" fill="#e8e4df" font-size="9" text-anchor="middle">요청3</text>
+  <rect x="294" y="138" width="78" height="24" fill="rgba(102,187,106,0.30)" stroke="#66bb6a" stroke-width="1"/>
+  <text x="333" y="154" fill="#e8e4df" font-size="9" text-anchor="middle">요청4</text>
+  <rect x="372" y="138" width="78" height="24" fill="rgba(102,187,106,0.30)" stroke="#66bb6a" stroke-width="1"/>
+  <text x="411" y="154" fill="#e8e4df" font-size="9" text-anchor="middle">요청5</text>
+  <rect x="450" y="138" width="78" height="24" fill="rgba(102,187,106,0.30)" stroke="#66bb6a" stroke-width="1"/>
+  <text x="489" y="154" fill="#e8e4df" font-size="9" text-anchor="middle">요청6</text>
+  <rect x="528" y="138" width="78" height="24" fill="rgba(102,187,106,0.30)" stroke="#66bb6a" stroke-width="1"/>
+  <text x="567" y="154" fill="#e8e4df" font-size="9" text-anchor="middle">요청7</text>
+
+  <text x="38" y="190" fill="#e8e4df" font-size="11">한 스레드의 부하가 큼 → <tspan fill="#66bb6a" font-weight="bold">적은 스레드로도 서버 포화</tspan></text>
+  <text x="38" y="210" fill="rgb(138,133,128)" font-size="10">스레드를 많이 두면 클라이언트 CPU가 포화 → 요청을 제때 못 만듦</text>
+  <text x="38" y="226" fill="#f47f72" font-size="10">→ 그 순간 재는 것은 서버 한계가 아니라 클라이언트 한계 (잘못된 측정)</text>
+  <text x="38" y="248" fill="rgb(212,168,83)" font-size="11" font-weight="bold">측정 대상 = 처리량(OPS) 그 자체</text>
+
+  <!-- 응답 시간 테스트 -->
+  <rect x="20" y="270" width="642" height="186" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="294" fill="rgb(212,168,83)" font-size="14" font-weight="bold">응답 시간 테스트 — think time 30초</text>
+  <text x="38" y="314" fill="#e8e4df" font-size="11">응답을 받으면 30초 쉬고(읽고 생각) 다음 요청. 사용자 행동을 흉내 냅니다.</text>
+
+  <line x1="60" y1="346" x2="620" y2="346" stroke="rgb(138,133,128)" stroke-width="1"/>
+  <text x="38" y="350" fill="rgb(138,133,128)" font-size="10">시간 →</text>
+  <!-- 요청 블록 + think time 간격 -->
+  <rect x="60" y="334" width="48" height="24" fill="rgba(212,168,83,0.30)" stroke="rgb(212,168,83)" stroke-width="1"/>
+  <text x="84" y="350" fill="#e8e4df" font-size="9" text-anchor="middle">요청1</text>
+  <text x="170" y="350" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">think 30s</text>
+  <rect x="288" y="334" width="48" height="24" fill="rgba(212,168,83,0.30)" stroke="rgb(212,168,83)" stroke-width="1"/>
+  <text x="312" y="350" fill="#e8e4df" font-size="9" text-anchor="middle">요청2</text>
+  <text x="398" y="350" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">think 30s</text>
+  <rect x="516" y="334" width="48" height="24" fill="rgba(212,168,83,0.30)" stroke="rgb(212,168,83)" stroke-width="1"/>
+  <text x="540" y="350" fill="#e8e4df" font-size="9" text-anchor="middle">요청3</text>
+
+  <text x="38" y="386" fill="#e8e4df" font-size="11">한 스레드의 부하가 약함 → <tspan fill="rgb(212,168,83)" font-weight="bold">많은 스레드를 둬야 의미 있는 부하</tspan></text>
+  <text x="38" y="406" fill="rgb(138,133,128)" font-size="10">클라이언트 N개 · think time T → 처리량 ≈ N / T 로 거의 고정됨</text>
+  <text x="38" y="422" fill="rgb(138,133,128)" font-size="10">처리량이 고정되니 측정해도 의미가 적음</text>
+  <text x="38" y="444" fill="rgb(212,168,83)" font-size="11" font-weight="bold">측정 대상 = 고정 부하에 서버가 얼마나 빨리 응답하나(응답 시간)</text>
+
+  <!-- 한 줄 정리 -->
+  <rect x="20" y="466" width="642" height="74" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="488" fill="#e8e4df" font-size="12" font-weight="bold">핵심 — 한 스레드가 만드는 부하의 양이 다릅니다</text>
+  <text x="38" y="508" fill="#66bb6a" font-size="10">think 0: 스레드 하나가 무거움 → 적게 둠 (많으면 클라이언트가 병목)</text>
+  <text x="38" y="524" fill="rgb(212,168,83)" font-size="10">think 30s: 스레드 하나가 가벼움 → 많이 둠 (처리량은 고정, 응답 시간이 핵심)</text>
+</svg>

@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 984 680" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">리플렉션은 경계에서 쓰고 안쪽은 제네릭에 맡깁니다</title><desc id="dd">16-02 의 키워드 개념도. 첫 줄은 csv.ReadAll 로 읽은 텍스트를 Unmarshal 이 구조체 slice 로, Marshal 이 다시 머리글과 행으로 바꾼다는 것이다. 둘째 줄은 필드의 Kind 를 switch 로 갈라 strconv 로 바꾸고 모르는 종류는 오류를 낸다는 것이다. 셋째 줄은 MakeFunc 가 아무 함수나 감싸 시간 측정·캐시를 더하지만 메서드는 만들 수 없다는 것이다. 넷째 줄은 원소 1,000개 문자열을 거르는 리플렉션 Filter 가 108,951 ns/op·2,219 할당이고 제네릭판은 1,848 ns/op·1 할당이라는 것이다.</desc>
+<rect width="984" height="680" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">ARCHITECTURE · 16-02 OVERVIEW</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">리플렉션은 경계에서 쓰고 안쪽은 제네릭에 맡깁니다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">화살표 위 글자는 두 키워드의 관계, 왼쪽 칩은 그 줄을 다루는 절입니다.</text>
+<rect x="23.18" y="130.0" width="21.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="34" y="144.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">§1</text>
+<rect x="23.18" y="258.0" width="21.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="34" y="272.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">§1</text>
+<rect x="23.18" y="386.0" width="21.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="34" y="400.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">§2</text>
+<rect x="23.18" y="514.0" width="21.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="34" y="528.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">§3</text>
+<rect x="60" y="112" width="216" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="168.0" y="139" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">CSV 텍스트</text>
+<text x="168.0" y="160" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">csv.ReadAll</text>
+<rect x="400" y="112" width="216" height="64" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="508.0" y="139" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#6A95D8">[]MyData</text>
+<text x="508.0" y="160" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">태그로 열 찾기</text>
+<rect x="740" y="112" width="216" height="64" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="848.0" y="139" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#3FB98C">[][]string</text>
+<text x="848.0" y="160" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">머리글 + 행</text>
+<path d="M 278 144.0 L 396 144.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="338.0" y="135.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#8B98A9">Unmarshal</text>
+<path d="M 618 144.0 L 736 144.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="678.0" y="135.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#8B98A9">Marshal</text>
+<rect x="60" y="240" width="216" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="168.0" y="267" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">필드 Kind</text>
+<text x="168.0" y="288" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">Int · String · Bool</text>
+<rect x="400" y="240" width="216" height="64" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="508.0" y="267" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#6A95D8">strconv 변환</text>
+<text x="508.0" y="288" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">ParseInt · FormatBool</text>
+<rect x="740" y="240" width="216" height="64" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.1"/>
+<text x="848.0" y="267" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F08A59">오류</text>
+<text x="848.0" y="288" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">cannot handle field</text>
+<path d="M 278 272.0 L 396 272.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="338.0" y="263.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#8B98A9">switch</text>
+<path d="M 618 272.0 L 736 272.0" fill="none" stroke="#F08A59" stroke-width="1.3" marker-end="url(#acc)"/>
+<text x="678.0" y="263.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">모르는 종류</text>
+<rect x="60" y="368" width="216" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="168.0" y="395" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#F5F5F3">func(int) int</text>
+<text x="168.0" y="416" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">아무 함수</text>
+<rect x="400" y="368" width="216" height="64" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="508.0" y="395" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#6A95D8">감싼 함수</text>
+<text x="508.0" y="416" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">시간 측정 · 캐시</text>
+<rect x="740" y="368" width="216" height="64" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.1"/>
+<text x="848.0" y="395" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F08A59">메서드 생성 불가</text>
+<text x="848.0" y="416" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">StructOf 도 승격 없음</text>
+<path d="M 278 400.0 L 396 400.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="338.0" y="391.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#8B98A9">MakeFunc</text>
+<path d="M 618 400.0 L 736 400.0" fill="none" stroke="#F08A59" stroke-width="1.3" marker-end="url(#acc)"/>
+<text x="678.0" y="391.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">그러나</text>
+<rect x="60" y="496" width="216" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="168.0" y="523" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#F5F5F3">Filter(any, any)</text>
+<text x="168.0" y="544" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">리플렉션판</text>
+<rect x="400" y="496" width="216" height="64" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.1"/>
+<text x="508.0" y="523" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#F08A59">108,951 ns/op</text>
+<text x="508.0" y="544" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">2,219 할당</text>
+<rect x="740" y="496" width="216" height="64" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="848.0" y="523" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#3FB98C">1,848 ns/op</text>
+<text x="848.0" y="544" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">제네릭 · 약 59배 빠름</text>
+<path d="M 278 528.0 L 396 528.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="338.0" y="519.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#8B98A9">문자열 1,000개</text>
+<path d="M 618 528.0 L 736 528.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="678.0" y="519.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#8B98A9">제네릭판은</text>
+<line x1="12" y1="584" x2="936" y2="584" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="606" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="596" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="606" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">리플렉션 장치</text>
+<rect x="235" y="596" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="257" y="606" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">결과</text>
+<rect x="305" y="596" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="327" y="606" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">한계·비용</text>
+</svg>

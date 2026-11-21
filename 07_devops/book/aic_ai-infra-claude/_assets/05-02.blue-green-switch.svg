@@ -1,0 +1,63 @@
+<svg viewBox="0 0 900 420" width="100%" xmlns="http://www.w3.org/2000/svg" role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Blue/Green 전환 — active/preview 공존에서 원자적 스위치</title>
+  <desc>왼쪽은 전환 전 Blue(v1, active, 트래픽 100%)와 Green(v2, preview, 트래픽 0%)이 공존하는 상태, 오른쪽은 autoPromotionSeconds 30초 뒤 트래픽이 한 번에 Green으로 넘어가고 Blue는 롤백 대비로 남는 상태</desc>
+  <defs>
+    <marker id="bgBlue" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#5b9bd5"/></marker>
+    <marker id="bgGreen" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#66bb6a"/></marker>
+    <marker id="bgGray" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#8a8580"/></marker>
+    <marker id="bgAmber" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto"><path d="M0,0 L9,4 L0,8 Z" fill="rgb(212,168,83)"/></marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="420" fill="#0d0d0d"/>
+
+  <!-- 좌: 전환 전 (공존) -->
+  <text x="215" y="36" text-anchor="middle" fill="#e8e4df" font-size="17" font-weight="700">전환 전 — 두 버전 공존</text>
+  <text x="215" y="58" text-anchor="middle" fill="#8a8580" font-size="12">preview로 v2를 먼저 검증</text>
+
+  <!-- 트래픽 소스 -->
+  <rect x="40" y="150" width="86" height="42" rx="6" fill="#dceaf7"/>
+  <text x="83" y="176" text-anchor="middle" font-size="12" style="fill:#0d0d0d">트래픽</text>
+
+  <!-- Blue active -->
+  <rect x="180" y="86" width="150" height="52" rx="6" fill="#5b9bd5"/>
+  <text x="255" y="108" text-anchor="middle" font-size="13" font-weight="700" style="fill:#e8e4df">Blue · v1 (active)</text>
+  <text x="255" y="126" text-anchor="middle" font-size="11" style="fill:#e8e4df">운영 트래픽 100%</text>
+  <!-- Green preview -->
+  <rect x="180" y="200" width="150" height="52" rx="6" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <text x="255" y="222" text-anchor="middle" font-size="13" font-weight="700" style="fill:#66bb6a">Green · v2 (preview)</text>
+  <text x="255" y="240" text-anchor="middle" font-size="11" style="fill:#66bb6a">검증 트래픽 · 운영 0%</text>
+
+  <line x1="126" y1="164" x2="178" y2="120" stroke="#5b9bd5" stroke-width="2.5" marker-end="url(#bgBlue)"/>
+  <line x1="126" y1="178" x2="178" y2="220" stroke="#66bb6a" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#bgGreen)"/>
+  <text x="150" y="284" text-anchor="middle" fill="#8a8580" font-size="11">preview Service로 v2 스모크 테스트</text>
+
+  <!-- 중앙 전환 화살표 -->
+  <line x1="360" y1="170" x2="470" y2="170" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#bgAmber)"/>
+  <text x="415" y="150" text-anchor="middle" fill="rgb(212,168,83)" font-size="12" font-weight="700">autoPromotion</text>
+  <text x="415" y="192" text-anchor="middle" fill="rgb(212,168,83)" font-size="12" font-weight="700">Seconds: 30</text>
+
+  <!-- 우: 전환 후 -->
+  <text x="690" y="36" text-anchor="middle" fill="#e8e4df" font-size="17" font-weight="700">전환 후 — 원자적 스위치</text>
+  <text x="690" y="58" text-anchor="middle" fill="#8a8580" font-size="12">트래픽을 한 번에 Green으로</text>
+
+  <rect x="505" y="150" width="86" height="42" rx="6" fill="#dceaf7"/>
+  <text x="548" y="176" text-anchor="middle" font-size="12" style="fill:#0d0d0d">트래픽</text>
+
+  <!-- Blue 롤백 대기 -->
+  <rect x="645" y="86" width="150" height="52" rx="6" fill="#0d0d0d" stroke="#8a8580" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <text x="720" y="108" text-anchor="middle" font-size="13" font-weight="700" style="fill:#8a8580">Blue · v1</text>
+  <text x="720" y="126" text-anchor="middle" font-size="11" style="fill:#8a8580">롤백 대비로 잠시 유지</text>
+  <!-- Green active -->
+  <rect x="645" y="200" width="150" height="52" rx="6" fill="#66bb6a"/>
+  <text x="720" y="222" text-anchor="middle" font-size="13" font-weight="700" style="fill:#0d0d0d">Green · v2 (active)</text>
+  <text x="720" y="240" text-anchor="middle" font-size="11" style="fill:#0d0d0d">운영 트래픽 100%</text>
+
+  <line x1="591" y1="156" x2="643" y2="118" stroke="#8a8580" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#bgGray)"/>
+  <line x1="591" y1="176" x2="643" y2="220" stroke="#66bb6a" stroke-width="2.5" marker-end="url(#bgGreen)"/>
+  <text x="690" y="284" text-anchor="middle" fill="#66bb6a" font-size="11" font-weight="700">문제 시 active를 Blue로 되돌리면 즉시 롤백</text>
+
+  <!-- 하단 결론 -->
+  <line x1="60" y1="330" x2="840" y2="330" stroke="#2a2520" stroke-width="1"/>
+  <text x="450" y="360" text-anchor="middle" fill="rgb(212,168,83)" font-size="13" font-weight="700">active는 항상 한 버전 → 버전 혼재 없음 · 스위치만 되돌리면 즉시 롤백</text>
+  <text x="450" y="388" text-anchor="middle" fill="#8a8580" font-size="11">대가: 전환 순간 두 환경이 동시에 떠 자원이 잠시 두 배(replicas 2 → 4 Pod)</text>
+</svg>

@@ -1,0 +1,49 @@
+<svg viewBox="0 0 900 470" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>BLOCKED vs WAITING — 무엇을 기다리는가</title>
+  <desc>BLOCKED는 남이 모니터 락을 쥐고 있어서 synchronized 진입을 못 하는 비자발적 상태이고, notify가 아니라 락 해제로 풀린다. WAITING은 wait·join·park로 자발적으로 다른 스레드의 깨움을 기다리는 상태이고 notify·unpark로 풀린다. 둘 다 IO 대기와는 무관하며, IO로 막힌 스레드는 자바에서 보통 RUNNABLE로 보인다.</desc>
+  <rect x="0" y="0" width="900" height="470" fill="#0d0d0d"/>
+
+  <text x="450" y="36" text-anchor="middle" font-size="21" font-weight="700" fill="#e8e4df">BLOCKED vs WAITING — 가르는 질문은 "왜 멈췄나"</text>
+  <text x="450" y="58" text-anchor="middle" font-size="13" fill="#8a857f">남이 락을 쥐어서 못 들어감  vs  내가 자발적으로 깨움을 기다림</text>
+
+  <!-- ===== BLOCKED (왼쪽) ===== -->
+  <rect x="30" y="84" width="400" height="300" rx="12" fill="#0d0d0d" stroke="#c0504d" stroke-width="2"/>
+  <text x="230" y="114" text-anchor="middle" font-size="17" font-weight="700" fill="#e08a87">BLOCKED</text>
+  <text x="230" y="136" text-anchor="middle" font-size="12.5" fill="#8a857f">비자발 — 락 경쟁에서 짐</text>
+
+  <rect x="58" y="156" width="344" height="44" rx="7" fill="#f2d4d4"/>
+  <text x="230" y="174" text-anchor="middle" font-size="12.5" fill="#7a1f1f">synchronized 진입하려는데</text>
+  <text x="230" y="191" text-anchor="middle" font-size="12.5" font-weight="700" fill="#7a1f1f">남이 모니터 락을 쥐고 있음</text>
+
+  <text x="58" y="232" font-size="12.5" font-weight="700" fill="#e08a87">무엇을 기다리나</text>
+  <text x="74" y="252" font-size="12.5" fill="#c9c4be">모니터 락 하나 (단 하나)</text>
+
+  <text x="58" y="286" font-size="12.5" font-weight="700" fill="#e08a87">어떻게 풀리나</text>
+  <text x="74" y="306" font-size="12.5" fill="#c9c4be">락을 쥔 스레드가 락을 놓으면</text>
+
+  <rect x="58" y="328" width="344" height="40" rx="6" fill="#0d0d0d" stroke="#c0504d" stroke-width="1.2"/>
+  <text x="230" y="353" text-anchor="middle" font-size="12" fill="#e8e4df">진입 시도 = 내 의지, 막힘 = 남 때문</text>
+
+  <!-- ===== WAITING (오른쪽) ===== -->
+  <rect x="470" y="84" width="400" height="300" rx="12" fill="#0d0d0d" stroke="#66bb6a" stroke-width="2"/>
+  <text x="670" y="114" text-anchor="middle" font-size="17" font-weight="700" fill="#66bb6a">WAITING</text>
+  <text x="670" y="136" text-anchor="middle" font-size="12.5" fill="#8a857f">자발 — 깨워줄 때까지 잠듦</text>
+
+  <rect x="498" y="156" width="344" height="44" rx="7" fill="#e6f7e7"/>
+  <text x="670" y="174" text-anchor="middle" font-size="12.5" fill="#14521d">wait() / join() / park() 를 불러</text>
+  <text x="670" y="191" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14521d">스스로 잠들어 깨움을 기다림</text>
+
+  <text x="498" y="232" font-size="12.5" font-weight="700" fill="#66bb6a">무엇을 기다리나</text>
+  <text x="514" y="252" font-size="12.5" fill="#c9c4be">다른 스레드의 깨움 (신호)</text>
+
+  <text x="498" y="286" font-size="12.5" font-weight="700" fill="#66bb6a">어떻게 풀리나</text>
+  <text x="514" y="306" font-size="12.5" fill="#c9c4be">notify() / notifyAll() / unpark()</text>
+
+  <rect x="498" y="328" width="344" height="40" rx="6" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="670" y="353" text-anchor="middle" font-size="12" fill="#e8e4df">잠듦 = 내 의지, 깨움 = 남이 신호</text>
+
+  <!-- IO 못박기 -->
+  <rect x="30" y="404" width="840" height="46" rx="10" fill="#fdf3df"/>
+  <text x="52" y="424" font-size="13" font-weight="700" fill="#5a3d0a">⚠ 둘 다 IO 대기가 아니다</text>
+  <text x="52" y="441" font-size="12" fill="#5a3d0a">파일·네트워크 IO로 막힌 스레드는 자바에서 보통 RUNNABLE로 보인다 — JVM은 OS의 IO 블로킹을 따로 상태로 두지 않는다.</text>
+</svg>

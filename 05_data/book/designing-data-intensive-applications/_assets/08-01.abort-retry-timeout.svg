@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 744" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">네트워크 타임아웃과 abort 재시도 중복 실행 함정 흐름</title><desc id="dd">트랜잭션 커밋 성공 후 응답 유실 시 클라이언트 관점 타임아웃과 중복 제거 없는 재시도로 인한 중복 실행 함정.</desc>
+<rect width="880" height="744" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">08-01 · §6 ABORT &amp; RETRY HAZARD</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">네트워크 타임아웃과 abort 재시도 중복 실행 함정 흐름</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">커밋 성공 · 응답 유실 타임아웃 · 재시도 · 중복 제거 유무 분기 · 중복 실행 오염</text>
+<rect x="230" y="104" width="220" height="36" rx="18" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="340" y="127" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">트랜잭션 커밋 요청</text>
+<path d="M 340 140 L 340 172" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="200" y="172" width="280" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="340" y="190" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">데이터베이스 트랜잭션 커밋</text>
+<text x="340" y="206" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">트랜잭션 실제 성공</text>
+<path d="M 340 216 L 340 248" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<path d="M 340 248.0 L 460.0 280 L 340 312.0 L 220.0 280 Z" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<text x="340" y="284" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">성공 ACK 응답 수신?</text>
+<path d="M 460.0 280 L 580 280" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ok)"/>
+<rect x="497.5" y="260" width="25.0" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="510" y="274" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">예</text>
+<rect x="580" y="262" width="230" height="36" rx="18" fill="#161B22" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="695" y="285" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">정상 완료 (추가 재시도 없음)</text>
+<path d="M 340 312.0 L 340 348" fill="none" stroke="#E3B341" stroke-width="1.2" marker-end="url(#warn)"/>
+<rect x="317.0" y="318" width="102.0" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="368" y="332" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">아니오 (유실)</text>
+<rect x="190" y="348" width="300" height="48" rx="6" fill="#161B22" stroke="#E3B341" stroke-width="1.1"/>
+<text x="340" y="366" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">네트워크 타임아웃 발생</text>
+<text x="340" y="384" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">클라이언트 관점에서 실패</text>
+<path d="M 340 396 L 340 428" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="210" y="428" width="260" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="340" y="446" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">동일 트랜잭션 재시도 트리거</text>
+<text x="340" y="462" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">단순 재시도 규칙 실행</text>
+<path d="M 340 472 L 340 508" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<path d="M 340 508.0 L 460.0 540 L 340 572.0 L 220.0 540 Z" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<text x="340" y="544" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">앱 수준 중복 제거 존재?</text>
+<path d="M 460.0 540 L 580 540" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ok)"/>
+<rect x="497.5" y="520" width="25.0" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="510" y="534" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">예</text>
+<rect x="580" y="522" width="230" height="36" rx="18" fill="#161B22" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="695" y="545" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">중복 감지 및 안전 완료</text>
+<path d="M 340 572.0 L 340 608" fill="none" stroke="#F0616D" stroke-width="1.4" marker-end="url(#bad)"/>
+<rect x="317.0" y="578" width="102.0" height="20" rx="4" fill="#0D1117" stroke="#F0616D" stroke-width="0.8"/>
+<text x="368" y="592" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">아니오 (부재)</text>
+<rect x="180" y="608" width="320" height="48" rx="22" fill="#161B22" stroke="#F08A59" stroke-width="1.5"/>
+<text x="340" y="626" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">동일 작업 2회 중복 실행</text>
+<text x="340" y="644" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">중복·잘못된 데이터</text>
+<line x1="12" y1="688" x2="832" y2="688" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="710" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="700" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="710" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">중복 함정 (focal)</text>
+<rect x="313" y="700" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="335" y="710" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">안전 완료</text>
+<rect x="422" y="700" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="444" y="710" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">진행 단계</text>
+<rect x="531" y="700" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="553" y="710" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">타임아웃</text>
+<rect x="627" y="700" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="649" y="710" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">오염 위험</text>
+</svg>

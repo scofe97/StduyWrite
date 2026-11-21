@@ -1,0 +1,275 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 832" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">LV 를 늘리면 구간 표 끝에 줄 하나가 붙는다</title><desc id="dd">디스크 두 개 sda2·sdb 를 PV 로 만들어 VG vgdemo 하나에 모은다. LV lvdemo 는 LE 0–14 가 sda2 PE 0–14, LE 15–19 가 sdb PE 0–4 에 놓여 두 디스크에 걸친다. pvresize 로 sda2 가 15 PE 에서 23 PE 로 커져 끝에 빈 PE 15–22 가 생겨도 LV 와 구간 표는 그대로다. lvextend 로 5 PE 를 더하면 LV 끝에 LE 20–24 → sda2 PE 15–19 줄이 붙고 앞 두 줄은 번호도 자리도 바뀌지 않는다. 숫자는 OrbStack VM 에서 64 MiB loop 장치 둘(loop0 을 sda2, loop1 을 sdb 자리)로 재현한 lvs --segments 값이다.</desc>
+<rect width="960" height="832" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING MODERN LINUX · 05-01 §5</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">LV 를 늘리면 구간 표 끝에 줄 하나가 붙는다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">LV 번호는 빈틈없이 이어지고 실제 자리는 디스크가 섞인다 — 늘리면 표 끝에 줄이 붙을 뿐 옛 데이터는 그대로</text>
+<rect x="16" y="104" width="928" height="176" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="32" y="130" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">1 · 처음 — LV 가 두 디스크에 걸침</text>
+<text x="36" y="167" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">LV lvdemo</text>
+<rect x="201" y="148" width="238" height="28" rx="3" fill="#6A95D826" stroke="#6A95D8" stroke-width="1"/>
+<line x1="216" y1="171" x2="216" y2="176" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="232" y1="171" x2="232" y2="176" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="248" y1="171" x2="248" y2="176" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="264" y1="171" x2="264" y2="176" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="280" y1="171" x2="280" y2="176" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="296" y1="171" x2="296" y2="176" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="312" y1="171" x2="312" y2="176" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="328" y1="171" x2="328" y2="176" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="344" y1="171" x2="344" y2="176" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="360" y1="171" x2="360" y2="176" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="376" y1="171" x2="376" y2="176" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="392" y1="171" x2="392" y2="176" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="408" y1="171" x2="408" y2="176" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="424" y1="171" x2="424" y2="176" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="320.0" y="166.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">LE 0–14</text>
+<rect x="441" y="148" width="78" height="28" rx="3" fill="#3FB98C26" stroke="#3FB98C" stroke-width="1"/>
+<line x1="456" y1="171" x2="456" y2="176" stroke="#3FB98C" stroke-width="0.8"/>
+<line x1="472" y1="171" x2="472" y2="176" stroke="#3FB98C" stroke-width="0.8"/>
+<line x1="488" y1="171" x2="488" y2="176" stroke="#3FB98C" stroke-width="0.8"/>
+<line x1="504" y1="171" x2="504" y2="176" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="480.0" y="166.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">LE 15–19</text>
+<rect x="28" y="184" width="612" height="88" rx="8" fill="none" stroke="#8B98A9" stroke-width="1"/>
+<text x="36" y="202" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">VG vgdemo · 웅덩이</text>
+<text x="36" y="228" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F5F5F3">PV sda2</text>
+<rect x="201" y="212" width="238" height="22" rx="3" fill="#6A95D826" stroke="#6A95D8" stroke-width="1"/>
+<line x1="216" y1="229" x2="216" y2="234" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="232" y1="229" x2="232" y2="234" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="248" y1="229" x2="248" y2="234" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="264" y1="229" x2="264" y2="234" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="280" y1="229" x2="280" y2="234" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="296" y1="229" x2="296" y2="234" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="312" y1="229" x2="312" y2="234" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="328" y1="229" x2="328" y2="234" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="344" y1="229" x2="344" y2="234" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="360" y1="229" x2="360" y2="234" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="376" y1="229" x2="376" y2="234" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="392" y1="229" x2="392" y2="234" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="408" y1="229" x2="408" y2="234" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="424" y1="229" x2="424" y2="234" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="452" y="227.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">15 PE</text>
+<text x="36" y="260" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F5F5F3">PV sdb</text>
+<rect x="201" y="244" width="78" height="22" rx="3" fill="#3FB98C26" stroke="#3FB98C" stroke-width="1"/>
+<line x1="216" y1="261" x2="216" y2="266" stroke="#3FB98C" stroke-width="0.8"/>
+<line x1="232" y1="261" x2="232" y2="266" stroke="#3FB98C" stroke-width="0.8"/>
+<line x1="248" y1="261" x2="248" y2="266" stroke="#3FB98C" stroke-width="0.8"/>
+<line x1="264" y1="261" x2="264" y2="266" stroke="#3FB98C" stroke-width="0.8"/>
+<rect x="281" y="244" width="158" height="22" rx="3" fill="none" stroke="#E3B341" stroke-width="1" stroke-dasharray="4 3"/>
+<line x1="296" y1="261" x2="296" y2="266" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="312" y1="261" x2="312" y2="266" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="328" y1="261" x2="328" y2="266" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="344" y1="261" x2="344" y2="266" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="360" y1="261" x2="360" y2="266" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="376" y1="261" x2="376" y2="266" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="392" y1="261" x2="392" y2="266" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="408" y1="261" x2="408" y2="266" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="424" y1="261" x2="424" y2="266" stroke="#E3B341" stroke-width="0.8"/>
+<text x="360.0" y="259.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#E3B341">빈 PE 5–14</text>
+<text x="452" y="259.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">15 PE</text>
+<text x="688" y="158" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">LV 구간</text>
+<text x="792" y="158" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">실제 위치</text>
+<line x1="664" y1="168" x2="928" y2="168" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="666" y="183" width="12" height="12" rx="2" fill="#6A95D833" stroke="#6A95D8" stroke-width="1"/>
+<text x="688" y="194" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F5F5F3">LE 0–14</text>
+<text x="792" y="194" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F5F5F3">sda2 PE 0–14</text>
+<rect x="666" y="215" width="12" height="12" rx="2" fill="#3FB98C33" stroke="#3FB98C" stroke-width="1"/>
+<text x="688" y="226" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F5F5F3">LE 15–19</text>
+<text x="792" y="226" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F5F5F3">sdb PE 0–4</text>
+<rect x="16" y="328" width="928" height="176" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="32" y="354" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">2 · pvresize — sda2 끝에 빈 PE 8 개</text>
+<text x="36" y="391" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">LV lvdemo</text>
+<rect x="201" y="372" width="238" height="28" rx="3" fill="#6A95D826" stroke="#6A95D8" stroke-width="1"/>
+<line x1="216" y1="395" x2="216" y2="400" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="232" y1="395" x2="232" y2="400" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="248" y1="395" x2="248" y2="400" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="264" y1="395" x2="264" y2="400" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="280" y1="395" x2="280" y2="400" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="296" y1="395" x2="296" y2="400" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="312" y1="395" x2="312" y2="400" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="328" y1="395" x2="328" y2="400" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="344" y1="395" x2="344" y2="400" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="360" y1="395" x2="360" y2="400" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="376" y1="395" x2="376" y2="400" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="392" y1="395" x2="392" y2="400" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="408" y1="395" x2="408" y2="400" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="424" y1="395" x2="424" y2="400" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="320.0" y="390.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">LE 0–14</text>
+<rect x="441" y="372" width="78" height="28" rx="3" fill="#3FB98C26" stroke="#3FB98C" stroke-width="1"/>
+<line x1="456" y1="395" x2="456" y2="400" stroke="#3FB98C" stroke-width="0.8"/>
+<line x1="472" y1="395" x2="472" y2="400" stroke="#3FB98C" stroke-width="0.8"/>
+<line x1="488" y1="395" x2="488" y2="400" stroke="#3FB98C" stroke-width="0.8"/>
+<line x1="504" y1="395" x2="504" y2="400" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="480.0" y="390.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">LE 15–19</text>
+<rect x="28" y="408" width="612" height="88" rx="8" fill="none" stroke="#8B98A9" stroke-width="1"/>
+<text x="36" y="426" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">VG vgdemo · 웅덩이</text>
+<text x="36" y="452" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F5F5F3">PV sda2</text>
+<rect x="201" y="436" width="238" height="22" rx="3" fill="#6A95D826" stroke="#6A95D8" stroke-width="1"/>
+<line x1="216" y1="453" x2="216" y2="458" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="232" y1="453" x2="232" y2="458" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="248" y1="453" x2="248" y2="458" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="264" y1="453" x2="264" y2="458" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="280" y1="453" x2="280" y2="458" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="296" y1="453" x2="296" y2="458" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="312" y1="453" x2="312" y2="458" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="328" y1="453" x2="328" y2="458" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="344" y1="453" x2="344" y2="458" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="360" y1="453" x2="360" y2="458" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="376" y1="453" x2="376" y2="458" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="392" y1="453" x2="392" y2="458" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="408" y1="453" x2="408" y2="458" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="424" y1="453" x2="424" y2="458" stroke="#6A95D8" stroke-width="0.8"/>
+<rect x="441" y="436" width="126" height="22" rx="3" fill="none" stroke="#E3B341" stroke-width="1" stroke-dasharray="4 3"/>
+<line x1="456" y1="453" x2="456" y2="458" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="472" y1="453" x2="472" y2="458" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="488" y1="453" x2="488" y2="458" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="504" y1="453" x2="504" y2="458" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="520" y1="453" x2="520" y2="458" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="536" y1="453" x2="536" y2="458" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="552" y1="453" x2="552" y2="458" stroke="#E3B341" stroke-width="0.8"/>
+<text x="504.0" y="451.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#E3B341">빈 PE 15–22</text>
+<text x="580" y="451.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">23 PE</text>
+<text x="36" y="484" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F5F5F3">PV sdb</text>
+<rect x="201" y="468" width="78" height="22" rx="3" fill="#3FB98C26" stroke="#3FB98C" stroke-width="1"/>
+<line x1="216" y1="485" x2="216" y2="490" stroke="#3FB98C" stroke-width="0.8"/>
+<line x1="232" y1="485" x2="232" y2="490" stroke="#3FB98C" stroke-width="0.8"/>
+<line x1="248" y1="485" x2="248" y2="490" stroke="#3FB98C" stroke-width="0.8"/>
+<line x1="264" y1="485" x2="264" y2="490" stroke="#3FB98C" stroke-width="0.8"/>
+<rect x="281" y="468" width="158" height="22" rx="3" fill="none" stroke="#E3B341" stroke-width="1" stroke-dasharray="4 3"/>
+<line x1="296" y1="485" x2="296" y2="490" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="312" y1="485" x2="312" y2="490" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="328" y1="485" x2="328" y2="490" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="344" y1="485" x2="344" y2="490" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="360" y1="485" x2="360" y2="490" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="376" y1="485" x2="376" y2="490" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="392" y1="485" x2="392" y2="490" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="408" y1="485" x2="408" y2="490" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="424" y1="485" x2="424" y2="490" stroke="#E3B341" stroke-width="0.8"/>
+<text x="360.0" y="483.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#E3B341">빈 PE 5–14</text>
+<text x="452" y="483.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">15 PE</text>
+<text x="688" y="382" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">LV 구간</text>
+<text x="792" y="382" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">실제 위치</text>
+<line x1="664" y1="392" x2="928" y2="392" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="666" y="407" width="12" height="12" rx="2" fill="#6A95D833" stroke="#6A95D8" stroke-width="1"/>
+<text x="688" y="418" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F5F5F3">LE 0–14</text>
+<text x="792" y="418" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F5F5F3">sda2 PE 0–14</text>
+<rect x="666" y="439" width="12" height="12" rx="2" fill="#3FB98C33" stroke="#3FB98C" stroke-width="1"/>
+<text x="688" y="450" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F5F5F3">LE 15–19</text>
+<text x="792" y="450" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F5F5F3">sdb PE 0–4</text>
+<text x="688" y="482" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">LV 그대로 · 표 그대로</text>
+<rect x="16" y="552" width="928" height="176" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="32" y="578" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">3 · lvextend — LV 끝에 구간 한 줄</text>
+<text x="36" y="615" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">LV lvdemo</text>
+<rect x="201" y="596" width="238" height="28" rx="3" fill="#6A95D826" stroke="#6A95D8" stroke-width="1"/>
+<line x1="216" y1="619" x2="216" y2="624" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="232" y1="619" x2="232" y2="624" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="248" y1="619" x2="248" y2="624" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="264" y1="619" x2="264" y2="624" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="280" y1="619" x2="280" y2="624" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="296" y1="619" x2="296" y2="624" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="312" y1="619" x2="312" y2="624" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="328" y1="619" x2="328" y2="624" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="344" y1="619" x2="344" y2="624" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="360" y1="619" x2="360" y2="624" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="376" y1="619" x2="376" y2="624" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="392" y1="619" x2="392" y2="624" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="408" y1="619" x2="408" y2="624" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="424" y1="619" x2="424" y2="624" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="320.0" y="614.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">LE 0–14</text>
+<rect x="441" y="596" width="78" height="28" rx="3" fill="#3FB98C26" stroke="#3FB98C" stroke-width="1"/>
+<line x1="456" y1="619" x2="456" y2="624" stroke="#3FB98C" stroke-width="0.8"/>
+<line x1="472" y1="619" x2="472" y2="624" stroke="#3FB98C" stroke-width="0.8"/>
+<line x1="488" y1="619" x2="488" y2="624" stroke="#3FB98C" stroke-width="0.8"/>
+<line x1="504" y1="619" x2="504" y2="624" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="480.0" y="614.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">LE 15–19</text>
+<rect x="521" y="596" width="78" height="28" rx="3" fill="#F08A5926" stroke="#F08A59" stroke-width="1"/>
+<line x1="536" y1="619" x2="536" y2="624" stroke="#F08A59" stroke-width="0.8"/>
+<line x1="552" y1="619" x2="552" y2="624" stroke="#F08A59" stroke-width="0.8"/>
+<line x1="568" y1="619" x2="568" y2="624" stroke="#F08A59" stroke-width="0.8"/>
+<line x1="584" y1="619" x2="584" y2="624" stroke="#F08A59" stroke-width="0.8"/>
+<text x="560.0" y="614.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">LE 20–24</text>
+<rect x="28" y="632" width="612" height="88" rx="8" fill="none" stroke="#8B98A9" stroke-width="1"/>
+<text x="36" y="650" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">VG vgdemo · 웅덩이</text>
+<text x="36" y="676" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F5F5F3">PV sda2</text>
+<rect x="201" y="660" width="238" height="22" rx="3" fill="#6A95D826" stroke="#6A95D8" stroke-width="1"/>
+<line x1="216" y1="677" x2="216" y2="682" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="232" y1="677" x2="232" y2="682" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="248" y1="677" x2="248" y2="682" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="264" y1="677" x2="264" y2="682" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="280" y1="677" x2="280" y2="682" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="296" y1="677" x2="296" y2="682" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="312" y1="677" x2="312" y2="682" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="328" y1="677" x2="328" y2="682" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="344" y1="677" x2="344" y2="682" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="360" y1="677" x2="360" y2="682" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="376" y1="677" x2="376" y2="682" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="392" y1="677" x2="392" y2="682" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="408" y1="677" x2="408" y2="682" stroke="#6A95D8" stroke-width="0.8"/>
+<line x1="424" y1="677" x2="424" y2="682" stroke="#6A95D8" stroke-width="0.8"/>
+<rect x="441" y="660" width="78" height="22" rx="3" fill="#F08A5926" stroke="#F08A59" stroke-width="1"/>
+<line x1="456" y1="677" x2="456" y2="682" stroke="#F08A59" stroke-width="0.8"/>
+<line x1="472" y1="677" x2="472" y2="682" stroke="#F08A59" stroke-width="0.8"/>
+<line x1="488" y1="677" x2="488" y2="682" stroke="#F08A59" stroke-width="0.8"/>
+<line x1="504" y1="677" x2="504" y2="682" stroke="#F08A59" stroke-width="0.8"/>
+<rect x="521" y="660" width="46" height="22" rx="3" fill="none" stroke="#E3B341" stroke-width="1" stroke-dasharray="4 3"/>
+<line x1="536" y1="677" x2="536" y2="682" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="552" y1="677" x2="552" y2="682" stroke="#E3B341" stroke-width="0.8"/>
+<text x="580" y="675.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">23 PE</text>
+<text x="36" y="708" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F5F5F3">PV sdb</text>
+<rect x="201" y="692" width="78" height="22" rx="3" fill="#3FB98C26" stroke="#3FB98C" stroke-width="1"/>
+<line x1="216" y1="709" x2="216" y2="714" stroke="#3FB98C" stroke-width="0.8"/>
+<line x1="232" y1="709" x2="232" y2="714" stroke="#3FB98C" stroke-width="0.8"/>
+<line x1="248" y1="709" x2="248" y2="714" stroke="#3FB98C" stroke-width="0.8"/>
+<line x1="264" y1="709" x2="264" y2="714" stroke="#3FB98C" stroke-width="0.8"/>
+<rect x="281" y="692" width="158" height="22" rx="3" fill="none" stroke="#E3B341" stroke-width="1" stroke-dasharray="4 3"/>
+<line x1="296" y1="709" x2="296" y2="714" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="312" y1="709" x2="312" y2="714" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="328" y1="709" x2="328" y2="714" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="344" y1="709" x2="344" y2="714" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="360" y1="709" x2="360" y2="714" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="376" y1="709" x2="376" y2="714" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="392" y1="709" x2="392" y2="714" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="408" y1="709" x2="408" y2="714" stroke="#E3B341" stroke-width="0.8"/>
+<line x1="424" y1="709" x2="424" y2="714" stroke="#E3B341" stroke-width="0.8"/>
+<text x="360.0" y="707.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#E3B341">빈 PE 5–14</text>
+<text x="452" y="707.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">15 PE</text>
+<text x="688" y="606" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">LV 구간</text>
+<text x="792" y="606" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">실제 위치</text>
+<line x1="664" y1="616" x2="928" y2="616" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="666" y="631" width="12" height="12" rx="2" fill="#6A95D833" stroke="#6A95D8" stroke-width="1"/>
+<text x="688" y="642" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F5F5F3">LE 0–14</text>
+<text x="792" y="642" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F5F5F3">sda2 PE 0–14</text>
+<rect x="666" y="663" width="12" height="12" rx="2" fill="#3FB98C33" stroke="#3FB98C" stroke-width="1"/>
+<text x="688" y="674" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F5F5F3">LE 15–19</text>
+<text x="792" y="674" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F5F5F3">sdb PE 0–4</text>
+<rect x="660" y="688" width="268" height="26" rx="4" fill="#F08A5912" stroke="#F08A59" stroke-width="1.4"/>
+<rect x="666" y="695" width="12" height="12" rx="2" fill="#F08A5933" stroke="#F08A59" stroke-width="1"/>
+<text x="688" y="706" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F5F5F3">LE 20–24</text>
+<text x="792" y="706" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F5F5F3">sda2 PE 15–19</text>
+<path d="M 96 284 L 96 324" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="112" y="309.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">pvresize sda2</text>
+<text x="232" y="309.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">디스크 64 → 96 MiB 뒤</text>
+<path d="M 96 508 L 96 548" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="112" y="533.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">lvextend -l +5 vgdemo/lvdemo sda2</text>
+<text x="392" y="533.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">LV 에 5 PE</text>
+<text x="16" y="752" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">실측 loop0 → sda2 · loop1 → sdb · PE 4 MiB</text>
+<text x="16" y="772" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">떼어 올 PV: 할당기가 고르거나 명령에서 지정</text>
+<line x1="12" y1="788" x2="912" y2="788" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="810" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="800" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="810" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">LV 구간 LE 0–14</text>
+<rect x="313" y="800" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="335" y="810" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">LE 15–19</text>
+<rect x="461" y="800" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="483" y="810" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">새 구간 LE 20–24</text>
+<rect x="674" y="800" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="696" y="810" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">빈 PE</text>
+</svg>

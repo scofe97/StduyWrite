@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 400" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif" role="img" aria-label="같은 타입 bean이 여러 개일 때 모호함과 해소 도식">
+  <title>같은 타입 bean이 여러 개일 때 — 모호함과 두 해소법</title>
+  <desc>같은 타입 Parrot bean 세 개(parrot1·parrot2·parrot3)가 Context에 올라간 상태에서 타입만으로 getBean(Parrot.class)을 호출하면 NoUniqueBeanDefinitionException이 난다. 해소법은 두 가지로, 이름을 지정해 getBean("parrot2", Parrot.class)로 꺼내거나 하나를 @Primary로 지정해 기본 선택이 되게 한다</desc>
+  <rect x="0" y="0" width="760" height="400" fill="#0d0d0d"/>
+  <text x="24" y="34" fill="#e8e4df" font-size="16" font-weight="bold">같은 타입 bean이 여러 개면 타입만으로는 못 꺼냅니다</text>
+  <text x="24" y="56" fill="rgb(138,133,128)" font-size="12">Spring이 어느 것인지 못 골라 예외를 던집니다 — 이름이나 @Primary로 지목합니다</text>
+
+  <!-- Context with 3 beans -->
+  <rect x="24" y="80" width="230" height="290" rx="12" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="44" y="106" fill="rgb(212,168,83)" font-size="13" font-weight="bold">Spring Context</text>
+
+  <rect x="52" y="124" width="174" height="44" rx="5" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="139" y="143" fill="#e8e4df" font-size="12" font-weight="bold" text-anchor="middle">parrot1</text>
+  <text x="139" y="159" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">name = Koko</text>
+
+  <rect x="52" y="176" width="174" height="44" rx="5" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="139" y="195" fill="#e8e4df" font-size="12" font-weight="bold" text-anchor="middle">parrot2</text>
+  <text x="139" y="211" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">name = Miki</text>
+
+  <rect x="52" y="228" width="174" height="44" rx="5" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="139" y="247" fill="#e8e4df" font-size="12" font-weight="bold" text-anchor="middle">parrot3</text>
+  <text x="139" y="263" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">name = Riki</text>
+
+  <text x="139" y="300" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">bean 이름 ≠ 앵무새 name 속성</text>
+  <text x="139" y="316" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">(이름은 메서드명 = 식별자)</text>
+
+  <!-- 실패 경로 -->
+  <line x1="254" y1="150" x2="326" y2="150" stroke="#f44336" stroke-width="1.5" marker-end="url(#arF3)"/>
+  <rect x="330" y="110" width="406" height="86" rx="6" fill="#0d0d0d" stroke="#f44336" stroke-width="1.5"/>
+  <text x="346" y="134" fill="#f44336" font-size="12" font-weight="bold">✗ 타입만으로 꺼내면</text>
+  <text x="346" y="156" fill="#e8e4df" font-size="11">context.getBean(Parrot.class)</text>
+  <text x="346" y="180" fill="rgb(230,115,107)" font-size="11">→ NoUniqueBeanDefinitionException</text>
+
+  <!-- 해소 1: 이름 -->
+  <line x1="254" y1="205" x2="326" y2="240" stroke="#66bb6a" stroke-width="1.5" marker-end="url(#arG3)"/>
+  <rect x="330" y="214" width="406" height="66" rx="6" fill="rgba(102,187,106,0.12)" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="346" y="238" fill="#66bb6a" font-size="12" font-weight="bold">✓ 해소 ① 이름으로 지목</text>
+  <text x="346" y="262" fill="#e8e4df" font-size="11">context.getBean("parrot2", Parrot.class)</text>
+
+  <!-- 해소 2: @Primary -->
+  <line x1="254" y1="250" x2="326" y2="316" stroke="#66bb6a" stroke-width="1.5" marker-end="url(#arG3)"/>
+  <rect x="330" y="298" width="406" height="72" rx="6" fill="rgba(102,187,106,0.12)" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="346" y="322" fill="#66bb6a" font-size="12" font-weight="bold">✓ 해소 ② @Primary로 기본 지정</text>
+  <text x="346" y="344" fill="#e8e4df" font-size="11">@Bean @Primary Parrot parrot2() {...}</text>
+  <text x="346" y="362" fill="rgb(138,133,128)" font-size="10">이름 없이 꺼낼 때 선택됨 · 타입당 하나만</text>
+
+  <defs>
+    <marker id="arF3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#f44336"/></marker>
+    <marker id="arG3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#66bb6a"/></marker>
+  </defs>
+</svg>

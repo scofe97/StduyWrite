@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 692" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">노드 다운 쓰기와 복귀 후 읽기 복구 시퀀스</title><desc id="dd">레플리카 장애 중 성공한 병렬 쓰기 후, 복귀 노드에서 stale 값을 감지해 최신 버전을 되쓰는 과정을 보인다.</desc>
+<rect width="880" height="692" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">06-06 §1 · READ REPAIR SEQUENCE</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">노드 다운 쓰기와 복귀 후 읽기 복구 시퀀스</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">병렬 쓰기 수용 (w=2) · 노드 장애 복귀 · 병렬 읽기 (r=2) · 최신 버전 읽기 복구</text>
+<rect x="24.0" y="104" width="176" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="112.0" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">클라이언트</text>
+<text x="112.0" y="141" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">user 1234 · 2345</text>
+<rect x="234.66666666666663" y="104" width="176" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="322.66666666666663" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">레플리카 1</text>
+<text x="322.66666666666663" y="141" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">Replica 1 (가용)</text>
+<rect x="445.33333333333326" y="104" width="176" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="533.3333333333333" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">레플리카 2</text>
+<text x="533.3333333333333" y="141" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">Replica 2 (가용)</text>
+<rect x="656.0" y="104" width="176" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="744.0" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">레플리카 3</text>
+<text x="744.0" y="141" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">Replica 3 (장애 후 복귀)</text>
+<line x1="112.0" y1="154" x2="112.0" y2="612" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="322.66666666666663" y1="154" x2="322.66666666666663" y2="612" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="533.3333333333333" y1="154" x2="533.3333333333333" y2="612" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="744.0" y1="154" x2="744.0" y2="612" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<path d="M 122.0 172 L 310.66666666666663 172" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="217.33333333333331" y="164" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">set 'me-new.jpg' v7</text>
+<path d="M 312.66666666666663 200 L 124.0 200" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)" stroke-dasharray="4 3"/>
+<text x="217.33333333333331" y="192" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">OK</text>
+<path d="M 122.0 228 L 521.3333333333333 228" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="322.66666666666663" y="220" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">set 'me-new.jpg' v7</text>
+<path d="M 523.3333333333333 256 L 124.0 256" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)" stroke-dasharray="4 3"/>
+<text x="322.66666666666663" y="248" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">OK</text>
+<path d="M 122.0 284 L 732.0 284" fill="none" stroke="#F0616D" stroke-width="1.5" marker-end="url(#bad)" stroke-dasharray="2 3"/>
+<text x="428.0" y="276" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F0616D">쓰기 놓침 (노드 오프라인)</text>
+<rect x="560.0" y="301" width="296.0" height="22" rx="4" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="708.0" y="317" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">노드 오프라인 ('me-old.jpg' v6 유지)</text>
+<rect x="32" y="332" width="816" height="24" rx="4" fill="#3FB98C1c" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="440.0" y="348" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">OK 2개 수신 · 쓰기 성공으로 간주 (w=2)</text>
+<rect x="641.0" y="369" width="206.0" height="22" rx="4" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="744.0" y="385" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">노드 복귀 (v6 stale 상태)</text>
+<path d="M 122.0 414 L 310.66666666666663 414" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="217.33333333333331" y="406" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">get picture_url</text>
+<path d="M 312.66666666666663 438 L 124.0 438" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)" stroke-dasharray="4 3"/>
+<text x="217.33333333333331" y="430" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">'me-new.jpg' v7 (최신)</text>
+<path d="M 122.0 466 L 732.0 466" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="428.0" y="458" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">get picture_url</text>
+<path d="M 734.0 490 L 124.0 490" fill="none" stroke="#E3B341" stroke-width="1.5" marker-end="url(#warn)" stroke-dasharray="4 3"/>
+<text x="428.0" y="482" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">'me-old.jpg' v6 (옛 값)</text>
+<rect x="32" y="512" width="816" height="24" rx="4" fill="#F08A5926" stroke="#F08A59" stroke-width="1.4"/>
+<text x="440.0" y="528" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">버전 비교 (v7 &gt; v6) · 최신 채택 및 Replica 3 stale 감지</text>
+<path d="M 122.0 560 L 732.0 560" fill="none" stroke="#F08A59" stroke-width="1.5" marker-end="url(#acc)"/>
+<text x="428.0" y="552" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">set 'me-new.jpg' v7 (read repair)</text>
+<path d="M 734.0 586 L 124.0 586" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)" stroke-dasharray="4 3"/>
+<text x="428.0" y="578" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">OK</text>
+<rect x="656.0" y="599" width="176.0" height="22" rx="4" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="744.0" y="615" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">최신 값으로 따라잡음 (v7)</text>
+<line x1="12" y1="636" x2="832" y2="636" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="658" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="648" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="658" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">최신 쓰기·동기화 완료</text>
+<rect x="300" y="648" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="322" y="658" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">stale 상태·옛 값</text>
+<rect x="500" y="648" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="522" y="658" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">노드 다운·쓰기 누락</text>
+<rect x="687" y="648" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="709" y="658" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">read repair (focal)</text>
+</svg>

@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 600" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">스트림 조인 세 가지 유형과 상태 관리 구조</title><desc id="dd">입력 스트림의 성격(이벤트 vs 변경로그)에 따른 내부 로컬 상태 유지 및 파생 출력 생성 아키텍처</desc>
+<rect width="880" height="600" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">12-03 · SECTION 4</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">스트림 조인 세 가지 유형과 상태 관리 구조</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">스트림-스트림 윈도우 조인 · 스트림-테이블 캐시 강화 · 테이블-테이블 구체화 뷰 · SCD 시간 의존성</text>
+<rect x="20" y="108" width="840" height="116" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.2"/>
+<text x="36" y="128" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">스트림-스트림 조인 (윈도우 조인)</text>
+<rect x="28" y="140" width="196" height="34" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="0.8"/>
+<text x="36" y="154" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">검색 이벤트</text>
+<text x="36" y="168" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">session_id · query</text>
+<rect x="28" y="180" width="196" height="34" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="0.8"/>
+<text x="36" y="194" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">클릭 이벤트</text>
+<text x="36" y="208" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">session_id · url</text>
+<path d="M 228 177 L 256 177" fill="none" stroke="#5E6B7E" stroke-width="1.2" marker-end="url(#soft)"/>
+<rect x="260" y="124" width="312" height="92" rx="4" fill="#F08A5914" stroke="#F08A59" stroke-width="1.0"/>
+<text x="272" y="140" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">스트림 프로세서 (1시간 세션 윈도우)</text>
+<text x="272" y="160" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">• 세션 ID 기준 양방향 이벤트 인덱스 버퍼 유지</text>
+<text x="272" y="178" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">• 새 이벤트 도착 시 상대 인덱스 매칭 즉시 조회</text>
+<text x="272" y="196" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">• 1시간 만료 시 미매칭(클릭 없음) 이벤트 방출</text>
+<path d="M 576 177 L 600 177" fill="none" stroke="#5E6B7E" stroke-width="1.2" marker-end="url(#soft)"/>
+<rect x="604" y="124" width="248" height="92" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="0.8"/>
+<text x="616" y="142" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">조인 결과 파생 스트림</text>
+<text x="616" y="164" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">• 검색-클릭 매칭 이벤트 방출</text>
+<text x="616" y="184" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">• 1시간 만료 미매칭 이벤트 방출</text>
+<rect x="20" y="228" width="840" height="116" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="36" y="248" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">스트림-테이블 조인 (스트림 강화)</text>
+<rect x="28" y="260" width="196" height="34" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="36" y="274" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">사용자 활동 이벤트</text>
+<text x="36" y="288" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">user_id · action</text>
+<rect x="28" y="300" width="196" height="34" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="36" y="314" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">프로필 CDC 변경로그</text>
+<text x="36" y="328" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">user_id · profile</text>
+<path d="M 228 297 L 256 297" fill="none" stroke="#5E6B7E" stroke-width="1.2" marker-end="url(#soft)"/>
+<rect x="260" y="244" width="312" height="92" rx="4" fill="#6A95D808" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="272" y="260" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">스트림 프로세서 (로컬 해시 테이블)</text>
+<text x="272" y="280" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">• 사용자 프로필 DB 복사본을 로컬 메모리에 로드</text>
+<text x="272" y="298" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">• CDC 스트림 구독으로 로컬 캐시 사본 최신 유지</text>
+<text x="272" y="316" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">• 네트워크 왕복 없이 로컬에서 조회</text>
+<path d="M 576 297 L 600 297" fill="none" stroke="#5E6B7E" stroke-width="1.2" marker-end="url(#soft)"/>
+<rect x="604" y="244" width="248" height="92" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="616" y="262" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">프로필 강화 활동 스트림</text>
+<text x="616" y="284" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">• 사용자 프로필 속성 결합 이벤트</text>
+<text x="616" y="304" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">• 원격 DB 질의의 지연·과부하 회피</text>
+<rect x="20" y="348" width="840" height="116" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="36" y="368" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">테이블-테이블 조인 (구체화 뷰 유지)</text>
+<rect x="28" y="380" width="196" height="34" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="36" y="394" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">게시물 CDC 변경로그</text>
+<text x="36" y="408" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">posts: post_id · sender_id</text>
+<rect x="28" y="420" width="196" height="34" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="36" y="434" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">팔로우 CDC 변경로그</text>
+<text x="36" y="448" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">follows: follower · followee</text>
+<path d="M 228 417 L 256 417" fill="none" stroke="#5E6B7E" stroke-width="1.2" marker-end="url(#soft)"/>
+<rect x="260" y="364" width="312" height="92" rx="4" fill="#3FB98C08" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="272" y="380" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">스트림 프로세서 (타임라인 캐시 뷰)</text>
+<text x="272" y="400" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">• 사용자별 팔로워 목록 DB + 게시물 캐시 유지</text>
+<text x="272" y="418" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">• 새 게시물 발행 시 팔로워 홈 타임라인에 삽입</text>
+<text x="272" y="436" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">• 팔로우·언팔로우 발생 시 타임라인 증분 갱신</text>
+<path d="M 576 417 L 600 417" fill="none" stroke="#5E6B7E" stroke-width="1.2" marker-end="url(#soft)"/>
+<rect x="604" y="364" width="248" height="92" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="616" y="382" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">홈 타임라인 구체화 뷰</text>
+<text x="616" y="404" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">• 홈 타임라인 캐시 단일 키 조회</text>
+<text x="616" y="424" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">• 팔로우 변경 시 타임라인 갱신</text>
+<rect x="20" y="476" width="840" height="50" rx="4" fill="#E3B34112" stroke="#E3B341" stroke-width="1.0"/>
+<text x="36" y="494" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">조인의 시간 의존성과 SCD 패턴 (DDIA p.50)</text>
+<text x="36" y="514" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">상태 변경 시점 대조 문제: 판매 시점 세금율 등 특정 레코드 버전에 고유 ID를 부여하여 결정론적 조인 재처리 보장</text>
+<line x1="24" y1="538" x2="856" y2="538" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="24" y="560" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="80" y="550" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="100" y="560" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">스트림-스트림 (윈도우, focal)</text>
+<rect x="298" y="550" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="318" y="560" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">스트림-테이블 (로컬 캐시)</text>
+<rect x="485" y="550" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="505" y="560" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">테이블-테이블 (구체화 뷰)</text>
+<rect x="672" y="550" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="692" y="560" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">SCD (시간 의존성)</text>
+</svg>

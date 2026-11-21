@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 582" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">12장 스트림 처리 전체 체계와 배치의 연속성</title><desc id="dd">브로커 인프라부터 데이터베이스 CDC, 윈도우 조인, 시간 추론, 내결함성에 이르는 12장 전체 스트림 처리 아키텍처와 배치와의 연속성을 종합한다.</desc>
+<rect width="880" height="582" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">12-04 · §4 CHAPTER SUMMARY</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">12장 스트림 처리 전체 체계와 배치의 연속성</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">브로커 2대 축 · DB 스트림화 · 윈도우 조인 · 시간 추론 통제 · 배치-스트림 연속성</text>
+<rect x="28" y="104" width="824" height="36" rx="4" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="440.0" y="127" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#F5F5F3">패러다임 통합: 배치는 스트림의 특수 케이스 (유한 입력 = 종료 신호를 받은 스트림 처리)</text>
+<rect x="28" y="156" width="264" height="150" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="160.0" y="178" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">메시지 전달 인프라</text>
+<text x="160.0" y="195" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">브로커 2대 아키텍처</text>
+<line x1="38" y1="204" x2="282" y2="204" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="36" y="212" width="248" height="38" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="42" y="228" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#6A95D8">AMQP/JMS</text>
+<text x="42" y="242" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">파괴적 소비 · 메시지 단위 ACK</text>
+<rect x="36" y="256" width="248" height="38" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="42" y="272" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#6A95D8">로그 기반 브로커</text>
+<text x="42" y="286" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">비파괴적 저장 · 오프셋 순차 재생</text>
+<rect x="308" y="156" width="264" height="150" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="440.0" y="178" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">데이터베이스 연계</text>
+<text x="440.0" y="195" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">불변 로그와 상태 동기화</text>
+<line x1="318" y1="204" x2="562" y2="204" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="316" y="212" width="248" height="38" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="322" y="228" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">변경 데이터 캡처 (CDC)</text>
+<text x="322" y="242" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">DB 복제 로그 기반 파생 시스템 동기화</text>
+<rect x="316" y="256" width="248" height="38" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="322" y="272" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">이벤트 소싱</text>
+<text x="322" y="286" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">불변 사실 기록 · 상태 구체화 뷰</text>
+<rect x="588" y="156" width="264" height="150" rx="6" fill="#161B22" stroke="#E3B341" stroke-width="1.2"/>
+<text x="720.0" y="178" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">연산 및 조인 패턴</text>
+<text x="720.0" y="195" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">실시간 분석과 윈도우 조인</text>
+<line x1="598" y1="204" x2="842" y2="204" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="596" y="212" width="248" height="38" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="602" y="228" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#E3B341">CEP 및 실시간 분석</text>
+<text x="602" y="242" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">패턴 탐지 · 윈도우 집계 분석</text>
+<rect x="596" y="256" width="248" height="38" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="602" y="272" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#E3B341">스트림 조인 3종</text>
+<text x="602" y="286" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">스트림-스트림 · 테이블 조인 상태</text>
+<rect x="28" y="322" width="404" height="120" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="230.0" y="344" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">시간 추론 체계</text>
+<text x="230.0" y="361" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">이벤트 시간과 윈도우 마감</text>
+<line x1="40" y1="370" x2="420" y2="370" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="38" y="378" width="384" height="24" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="46" y="394" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#6A95D8">이벤트 vs 처리 시간</text>
+<text x="414" y="394" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">타임스탬프 결정론성 vs 처리 지연 왜곡</text>
+<rect x="38" y="406" width="384" height="24" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="46" y="422" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#6A95D8">지각 이벤트 제어</text>
+<text x="414" y="422" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">워터마크 마커 · 폐기 vs 수정값 발행</text>
+<rect x="448" y="322" width="404" height="120" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.2"/>
+<text x="650.0" y="344" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">내결함성 보장</text>
+<text x="650.0" y="361" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">Exactly-Once 달성 체계</text>
+<line x1="460" y1="370" x2="840" y2="370" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="458" y="378" width="384" height="24" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="466" y="394" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">4대 복구 기법</text>
+<text x="834" y="394" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">마이크로배치 · 체크포인트 · 원자 커밋 · 멱등성</text>
+<rect x="458" y="406" width="384" height="24" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="466" y="422" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">상태 복구 메커니즘</text>
+<text x="834" y="422" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">로컬 상태 분산 스냅샷 및 토픽 복제</text>
+<rect x="28" y="458" width="404.0" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="230.0" y="476" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#6A95D8">배치 처리 패러다임 (11장)</text>
+<text x="230.0" y="492" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">유한 데이터셋 · 태스크 완료 후 출력 일괄 가시화</text>
+<rect x="448.0" y="458" width="404.0" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="650.0" y="476" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#3FB98C">스트림 처리 패러다임 (12장)</text>
+<text x="650.0" y="492" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">무한 데이터 흐름 · 연속 출력 및 세밀한 상태 복구 체계</text>
+<line x1="12" y1="530" x2="832" y2="530" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="552" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="542" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="552" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">브로커 · 시간 추론</text>
+<rect x="287" y="542" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="309" y="552" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">DB 연계</text>
+<rect x="396" y="542" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="418" y="552" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">연산 · 조인</text>
+<rect x="531" y="542" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="553" y="552" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">내결함성</text>
+</svg>

@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 480" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">두 kprobe 는 다른 헬퍼로 읽어 같은 data.path 를 채운다</title><desc id="dd">__x64_sys_execve 의 pathname 은 사용자 공간 포인터라 bpf_probe_read_user_str 로, do_execve 의 filename 은 커널 구조체라 BPF_CORE_READ 와 bpf_probe_read_kernel_str 로 읽는다. 둘 다 data.path 에 /bin/ls 가 들어가 bpf_perf_event_output 으로 나간다. do_execve 는 v7.0 에서 제거됐다.</desc>
+<rect width="1000" height="480" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING EBPF · 07-01 §2</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">두 kprobe 는 다른 헬퍼로 읽어 같은 data.path 를 채운다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">읽는 헬퍼가 포인터의 주소 공간을 따라갑니다</text>
+<rect x="66.0" y="100" width="104" height="20" rx="10" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="118.0" y="114" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">01 호출 지점</text>
+<rect x="274.0" y="100" width="104" height="20" rx="10" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="326.0" y="114" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">02 꺼낸 값</text>
+<rect x="482.0" y="100" width="104" height="20" rx="10" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="534.0" y="114" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">03 읽기 헬퍼</text>
+<rect x="690.0" y="100" width="104" height="20" rx="10" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="742.0" y="114" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">04 채운 필드</text>
+<rect x="876.0" y="100" width="80" height="20" rx="10" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="916.0" y="114" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">05 출구</text>
+<text x="24" y="140" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">syscall kprobe</text>
+<rect x="24" y="148" width="188" height="72" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="118.0" y="178" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">__x64_sys_execve</text>
+<text x="118.0" y="200" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">execve("/bin/ls", …)</text>
+<rect x="232" y="148" width="188" height="72" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="326.0" y="178" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">pathname</text>
+<text x="326.0" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">사용자 공간 포인터</text>
+<path d="M 214 184 L 226 184" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)"/>
+<rect x="440" y="148" width="188" height="72" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="534.0" y="178" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">bpf_probe_read_user_str</text>
+<text x="534.0" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">사용자 주소를 읽음</text>
+<path d="M 422 184 L 434 184" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<rect x="648" y="148" width="188" height="72" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="742.0" y="178" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">data.path</text>
+<text x="742.0" y="200" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">"/bin/ls"</text>
+<path d="M 630 184 L 642 184" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)"/>
+<text x="24" y="308" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">함수 kprobe</text>
+<rect x="24" y="316" width="188" height="72" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.2"/>
+<text x="118.0" y="346" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#E3B341">do_execve</text>
+<text x="118.0" y="368" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">v7.0 에서 제거</text>
+<rect x="232" y="316" width="188" height="72" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="326.0" y="346" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">filename-&gt;name</text>
+<text x="326.0" y="368" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">커널 포인터</text>
+<path d="M 214 352 L 226 352" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)"/>
+<rect x="440" y="316" width="188" height="72" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="534.0" y="346" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">bpf_probe_read_kernel_str</text>
+<text x="534.0" y="368" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">커널 주소를 읽음</text>
+<path d="M 422 352 L 434 352" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<rect x="648" y="316" width="188" height="72" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="742.0" y="346" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">data.path</text>
+<text x="742.0" y="368" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">"/bin/ls"</text>
+<path d="M 630 352 L 642 352" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)"/>
+<rect x="856" y="148" width="120" height="240" rx="6" fill="#F08A591F" stroke="#F08A59" stroke-width="1.4"/>
+<text x="916.0" y="254.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#F08A59">output</text>
+<text x="916.0" y="276.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">perf 버퍼</text>
+<path d="M 838 184 L 850 184" fill="none" stroke="#F08A59" stroke-width="1.6" marker-end="url(#acc)"/>
+<path d="M 838 352 L 850 352" fill="none" stroke="#F08A59" stroke-width="1.6" marker-end="url(#acc)"/>
+<rect x="663.39" y="258" width="157.22" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="742.0" y="272" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">bpf_perf_event_output</text>
+<line x1="12" y1="424" x2="952" y2="424" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="446" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="436" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="446" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">값·필드</text>
+<rect x="196" y="436" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="218" y="446" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">읽기 헬퍼</text>
+<rect x="305" y="436" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="327" y="446" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">제거된 함수</text>
+<rect x="427" y="436" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="449" y="446" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">출구</text>
+</svg>

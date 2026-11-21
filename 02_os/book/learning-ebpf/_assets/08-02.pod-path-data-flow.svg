@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 988 432" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">Pod 로 가는 패킷은 iptables 경로에서 스택을 두 번, eBPF 경로에서 한 번 지난다</title><desc id="dd">바깥 패킷이 eth0 에서 호스트 스택의 iptables·conntrack 규칙을 순서대로 훑고(O(n)) veth 를 건너 Pod 스택을 지나 앱에 닿는다. eBPF 경로는 NodePort 로 들어온 패킷을 eth0 의 XDP·TC 에서 서비스 맵 해시 조회(O(1))로 백엔드에 잇고, Host-Routing 이 켜져 있으면 호스트 스택을 건너뛰고 Pod 스택을 한 번 지난다.</desc>
+<rect width="988" height="432" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING EBPF · 08-02 §2</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">Pod 로 가는 패킷은 iptables 경로에서 스택을 두 번, eBPF 경로에서 한 번 지난다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">같은 패킷이 거치는 스택 횟수와 규칙 조회 비용이 다릅니다</text>
+<rect x="12" y="136" width="964" height="108" fill="#161B22" opacity="0.6"/>
+<line x1="12" y1="136" x2="976" y2="136" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<line x1="12" y1="244" x2="976" y2="244" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<line x1="12" y1="352" x2="976" y2="352" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<line x1="120" y1="136" x2="120" y2="352" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="188" y="90" width="32" height="16" rx="8" fill="#8B98A933" />
+<text x="204" y="102" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#8B98A9">01</text>
+<text x="204" y="122" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">수신</text>
+<rect x="356" y="90" width="32" height="16" rx="8" fill="#8B98A933" />
+<text x="372" y="102" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#8B98A9">02</text>
+<text x="372" y="122" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">규칙 조회</text>
+<rect x="524" y="90" width="32" height="16" rx="8" fill="#8B98A933" />
+<text x="540" y="102" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#8B98A9">03</text>
+<text x="540" y="122" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">전달</text>
+<rect x="692" y="90" width="32" height="16" rx="8" fill="#F08A5933" />
+<text x="708" y="102" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F08A59">04</text>
+<text x="708" y="122" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">Pod 스택</text>
+<rect x="860" y="90" width="32" height="16" rx="8" fill="#8B98A933" />
+<text x="876" y="102" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#8B98A9">05</text>
+<text x="876" y="122" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">앱</text>
+<text x="60" y="186" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#8B98A9">iptables</text>
+<text x="60" y="204" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">스택 2회</text>
+<text x="60" y="294" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#8B98A9">eBPF</text>
+<text x="60" y="312" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">스택 1회</text>
+<path d="M 274 190 L 298 190" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 442 190 L 466 190" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 610 190 L 634 190" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 778 190 L 802 190" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 274 298 L 298 298" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 778 298 L 802 298" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 442 298 L 634 298" fill="none" stroke="#F08A59" stroke-width="1.7" marker-end="url(#acc)"/>
+<rect x="472.0" y="270" width="136" height="20" fill="#0D1117"/>
+<text x="540.0" y="285" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">Host-Routing 시 건너뜀</text>
+<rect x="136" y="148" width="136" height="84" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="204" y="178" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">eth0</text>
+<text x="204" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">호스트 NIC</text>
+<rect x="304" y="148" width="136" height="84" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.2"/>
+<text x="372" y="178" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">호스트 스택</text>
+<text x="372" y="200" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">iptables·conntrack</text>
+<text x="372" y="220" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">선형 탐색 O(n)</text>
+<rect x="472" y="148" width="136" height="84" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="540" y="178" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">veth</text>
+<text x="540" y="200" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">lxc* → eth0</text>
+<rect x="640" y="148" width="136" height="84" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.2"/>
+<text x="708" y="178" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">Pod 스택</text>
+<text x="708" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">두 번째 통과</text>
+<rect x="808" y="148" width="136" height="84" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="876" y="196" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">앱</text>
+<rect x="136" y="256" width="136" height="84" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="204" y="286" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">eth0</text>
+<text x="204" y="308" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">XDP · TC</text>
+<rect x="304" y="256" width="136" height="84" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="372" y="286" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">서비스 맵 조회</text>
+<text x="372" y="308" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">해시 맵 O(1)</text>
+<text x="372" y="328" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">NodePort → 백엔드</text>
+<rect x="640" y="256" width="136" height="84" rx="6" fill="#F08A591F" stroke="#F08A59" stroke-width="1.4"/>
+<text x="708" y="286" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">Pod 스택</text>
+<text x="708" y="308" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">한 번 통과</text>
+<rect x="808" y="256" width="136" height="84" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="876" y="304" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">앱</text>
+<line x1="12" y1="376" x2="940" y2="376" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="398" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="388" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="122" y="398" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">스택·규칙 비용</text>
+<rect x="248" y="388" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="270" y="398" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">맵 조회</text>
+<rect x="344" y="388" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="366" y="398" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">한 번 통과</text>
+</svg>

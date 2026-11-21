@@ -1,0 +1,42 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Lambda·Stream·Serialization</title>
+  <desc>lambda와 anonymous class는 성능 차이가 거의 없다. 선택은 프로그래밍 편의로 한다. 단 lambda는 static 메서드라 classloading이 중요한 환경에서 약간 빠르다. anonymous class는 별도 class 파일이라 로드된다. stream은 lazy 자료구조다. filter는 포인터만 설정하고 findFirst가 호출돼야 처리한다. 그래서 일부만 처리하고 멈출 수 있다. filter findFirst는 0.76밀리초인데 iterator는 108밀리초로 두 자릿수 차이다. 전체를 처리해도 단일 filter가 iterator보다 약간 빠르다. serialization은 큰 병목이 될 수 있다. transient로 표시해 데이터를 적게 직렬화한다. writeObject readObject로 더 최적화하지만 객체 참조를 잘못 다루면 미묘한 버그가 난다. Point 배열 예처럼 공유 객체가 별개가 되면 안 된다. 압축은 느린 네트워크가 아니어도 메모리 절약에 유용하다. lazy 압축 해제로 CPU와 메모리를 아낀다. Externalizable보다 Serializable이 유지보수에 낫다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">Lambda·Stream·Serialization</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">lambda는 anonymous와 차이 없고, stream은 lazy, serialization은 transient가 핵심입니다</text>
+
+  <!-- lambda -->
+  <rect x="20" y="74" width="642" height="84" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="96" fill="#66bb6a" font-size="13" font-weight="bold">lambda vs anonymous class — 차이 거의 없음</text>
+  <text x="38" y="118" fill="rgb(138,133,128)" font-size="11">성능 동등(3 표현식 10ns) → 선택은 프로그래밍 편의로</text>
+  <text x="38" y="138" fill="#9cc3df" font-size="11">단 lambda는 static 메서드(별도 class 파일 아님) → classloading 중요 환경에서 약간 빠름</text>
+
+  <!-- stream lazy -->
+  <rect x="20" y="166" width="642" height="148" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="188" fill="#9cc3df" font-size="13" font-weight="bold">stream — lazy 평가</text>
+  <text x="38" y="210" fill="rgb(138,133,128)" font-size="11">filter()는 포인터만 설정 → findFirst()가 호출돼야 비로소 처리(콜백 체인)</text>
+  <text x="38" y="230" fill="rgb(138,133,128)" font-size="11">→ 일부만 처리하고 멈춤 가능. eager는 임시 ArrayList 다수 + 전체 반복</text>
+  <rect x="38" y="240" width="606" height="64" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="50" y="260" fill="#e8e4df" font-size="11" font-weight="bold">lazy vs eager (45만 중 BBBB까지 18,278개만)</text>
+  <text x="50" y="280" fill="#66bb6a" font-size="11">filter/findFirst 0.76ms vs iterator/findFirst 108ms (두 자릿수 차)</text>
+  <text x="50" y="298" fill="rgb(138,133,128)" font-size="10">전체 처리해도 단일 filter(7ms)가 iterator(7.4ms)보다 약간 빠름</text>
+
+  <!-- serialization -->
+  <rect x="20" y="322" width="642" height="192" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="344" fill="rgb(212,168,83)" font-size="13" font-weight="bold">serialization — transient와 함정</text>
+  <text x="38" y="366" fill="rgb(138,133,128)" font-size="11">큰 병목 가능 → transient로 적게 직렬화(계산 가능한 필드는 receiver에서 재생성)</text>
+  <text x="38" y="386" fill="#f47f72" font-size="11">writeObject/readObject로 최적화하나 객체 참조 잘못 다루면 미묘한 버그</text>
+  <text x="56" y="404" fill="#f47f72" font-size="10">Point 배열 예: 공유 JFK 객체가 역직렬화 후 별개 객체가 됨(틀림)</text>
+  <rect x="38" y="414" width="606" height="48" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="50" y="434" fill="#e8e4df" font-size="10" font-weight="bold">transient histogram</text>
+  <text x="50" y="450" fill="#66bb6a" font-size="10">직렬화 19.1→16.7ms, 데이터 785KB→754KB (약 13~15% 절감)</text>
+  <text x="38" y="482" fill="#9cc3df" font-size="11">압축 + lazy 해제 → CPU·메모리 절약(느린 네트워크 아니어도 유용)</text>
+  <text x="38" y="502" fill="rgb(138,133,128)" font-size="10">TreeMap은 키·값만 쓰고 재정렬 → 20% 빠름. Externalizable보다 Serializable이 유지보수 우위</text>
+
+  <!-- 책 요약 -->
+  <rect x="20" y="522" width="642" height="60" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="544" fill="#66bb6a" font-size="13" font-weight="bold">책 전체를 관통하는 주제</text>
+  <text x="38" y="564" fill="#e8e4df" font-size="11">JDK 자신의 성능 진화 — 반복 예외 stack 생략, ThreadLocalRandom, ConcurrentHashMap 기본 크기↓</text>
+  <text x="38" y="578" fill="rgb(138,133,128)" font-size="10">컴파일러·GC 튜닝 → 메모리 효율 → API 차이 이해 → 지속적 점진 개선</text>
+</svg>

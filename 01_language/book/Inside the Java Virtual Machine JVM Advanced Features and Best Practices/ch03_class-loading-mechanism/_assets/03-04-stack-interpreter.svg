@@ -1,0 +1,93 @@
+<svg viewBox="0 0 900 640" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>스택 기반 해석 실행 — calc() 바이트코드의 피연산자 스택 추적</title>
+  <desc>자바 바이트코드는 스택 기반 인스트럭션 셋이라, 레지스터를 지정하지 않고 피연산자 스택을 밀고 당겨 계산한다. calc 메서드 ((100+200)*3)의 바이트코드를 한 줄씩 실행하며 피연산자 스택과 지역 변수 테이블의 변화를 추적한다. 스택 기반은 이식성이 높지만 명령어 수가 많아 레지스터 기반보다 느릴 수 있다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11.5px; fill: rgb(138,133,128); }
+      .h     { font-size: 12px; font-weight: 800; fill: rgb(212,168,83); }
+      .step  { font-size: 10px; font-family: 'JetBrains Mono', monospace; fill: #e8e4df; }
+      .note  { font-size: 9.5px; fill: rgb(138,133,128); }
+      .stk   { font-size: 9.5px; font-family: 'JetBrains Mono', monospace; fill: #0d0d0d; font-weight: 700; }
+      .cmp   { font-size: 10.5px; fill: #0d0d0d; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="640" fill="#0d0d0d"/>
+  <text x="28" y="38" class="title">스택 기반 해석 실행 — calc() 바이트코드 추적</text>
+  <text x="28" y="58" class="sub">레지스터 미지정 · 피연산자 스택을 밀고(push) 당겨(pop) 계산 · 추적 대상: (a + b) * c = (100 + 200) * 300</text>
+
+  <!-- 바이트코드 -->
+  <rect x="28" y="84" width="300" height="234" rx="10" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="48" y="110" class="h">calc() 바이트코드</text>
+  <text x="44" y="136" class="step">0: bipush 100</text>
+  <text x="44" y="156" class="step">2: istore_1</text>
+  <text x="44" y="176" class="step">3: sipush 200</text>
+  <text x="44" y="196" class="step">6: istore_2</text>
+  <text x="44" y="216" class="step">7: sipush 300</text>
+  <text x="44" y="236" class="step">10: istore_3</text>
+  <text x="44" y="256" class="step">11: iload_1</text>
+  <text x="44" y="272" class="step">12: iload_2</text>
+  <text x="44" y="288" class="step">13: iadd</text>
+  <text x="44" y="304" class="step">14: iload_3 · 15: imul · 16: ireturn</text>
+
+  <!-- 스택 추적 4컷 -->
+  <text x="356" y="106" class="h">피연산자 스택 변화 (핵심 4컷)</text>
+
+  <!-- 컷1: iload_1 -->
+  <rect x="356" y="120" width="118" height="100" rx="7" fill="#5b9bd5"/>
+  <text x="415" y="140" class="stk" text-anchor="middle">iload_1</text>
+  <rect x="380" y="150" width="70" height="22" rx="3" fill="#dceaf7"/>
+  <text x="415" y="166" class="stk" text-anchor="middle">100</text>
+  <text x="415" y="200" class="note" text-anchor="middle" style="fill:#1a1a1a">스택: [100]</text>
+
+  <!-- 컷2: iload_2 -->
+  <rect x="488" y="120" width="118" height="100" rx="7" fill="#5b9bd5"/>
+  <text x="547" y="140" class="stk" text-anchor="middle">iload_2</text>
+  <rect x="512" y="150" width="70" height="22" rx="3" fill="#dceaf7"/>
+  <text x="547" y="166" class="stk" text-anchor="middle">200</text>
+  <rect x="512" y="174" width="70" height="22" rx="3" fill="#dceaf7"/>
+  <text x="547" y="190" class="stk" text-anchor="middle">100</text>
+  <text x="547" y="212" class="note" text-anchor="middle" style="fill:#1a1a1a">스택: [100,200]</text>
+
+  <!-- 컷3: iadd -->
+  <rect x="620" y="120" width="118" height="100" rx="7" fill="rgb(212,168,83)"/>
+  <text x="679" y="140" class="stk" text-anchor="middle">iadd</text>
+  <rect x="644" y="150" width="70" height="22" rx="3" fill="#f5edda"/>
+  <text x="679" y="166" class="stk" text-anchor="middle">300</text>
+  <text x="679" y="200" class="note" text-anchor="middle" style="fill:#1a1a1a">두 값 pop, 합 push</text>
+
+  <!-- 컷4: imul -->
+  <rect x="752" y="120" width="118" height="100" rx="7" fill="#66bb6a"/>
+  <text x="811" y="140" class="stk" text-anchor="middle">imul</text>
+  <rect x="776" y="150" width="70" height="22" rx="3" fill="#dceaf7"/>
+  <text x="811" y="166" class="stk" text-anchor="middle">90000</text>
+  <text x="811" y="200" class="note" text-anchor="middle" style="fill:#1a1a1a">300*300 → ireturn</text>
+
+  <text x="356" y="252" class="note">iload_1·iload_2 로 100·200 을 스택에 쌓고 → iadd 가 둘을 꺼내 300 을 얹음 →</text>
+  <text x="356" y="270" class="note">iload_3(변수 c=300) → imul 로 곱해 90000 → ireturn 으로 반환. 레지스터 번호가 없음.</text>
+
+  <!-- 스택 vs 레지스터 -->
+  <rect x="28" y="340" width="842" height="260" rx="11" fill="rgba(91,155,213,0.06)" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="48" y="366" class="h" style="fill:#5b9bd5">스택 기반 vs 레지스터 기반 인스트럭션 셋</text>
+
+  <rect x="48" y="382" width="396" height="200" rx="8" fill="#5b9bd5"/>
+  <text x="246" y="406" class="cmp" text-anchor="middle" font-weight="800">스택 기반 (자바 바이트코드)</text>
+  <text x="64" y="432" class="cmp">· 피연산자 스택으로 계산 — 레지스터 미지정</text>
+  <text x="64" y="454" class="cmp">· 이식성 높음 — 하드웨어 레지스터 수에 무관</text>
+  <text x="64" y="476" class="cmp">· 코드가 조밀 (옵코드 1바이트, 피연산자 적음)</text>
+  <text x="64" y="498" class="cmp">· 구현이 단순</text>
+  <text x="64" y="524" class="note" style="fill:#1a1a1a">단점: 같은 계산에 명령어 수가 많음</text>
+  <text x="64" y="544" class="note" style="fill:#1a1a1a">→ 스택 push/pop 잦아 메모리 접근 ↑</text>
+  <text x="64" y="564" class="note" style="fill:#1a1a1a">→ 해석 실행 시 레지스터 기반보다 느릴 수 있음</text>
+
+  <rect x="456" y="382" width="396" height="200" rx="8" fill="#1a1a1a" stroke="rgb(138,133,128)" stroke-width="1"/>
+  <text x="654" y="406" class="cmp" text-anchor="middle" font-weight="800" style="fill:#e8e4df">레지스터 기반 (x86 등 물리 CPU)</text>
+  <text x="472" y="432" class="note">· 레지스터를 직접 지정 — add eax, ebx</text>
+  <text x="472" y="454" class="note">· 같은 계산에 명령어 수가 적음</text>
+  <text x="472" y="476" class="note">· 하드웨어에 직접 매핑 → 빠름</text>
+  <text x="472" y="498" class="note">· 그러나 특정 CPU 아키텍처에 종속</text>
+  <text x="472" y="524" class="note">자바가 스택 기반을 택한 이유:</text>
+  <text x="472" y="544" class="note">이식성("Write Once, Run Anywhere") 우선</text>
+  <text x="472" y="564" class="note">속도 손실은 JIT 컴파일로 메움</text>
+</svg>
