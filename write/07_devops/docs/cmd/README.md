@@ -24,7 +24,6 @@ updated: 2026-11-21
 지금은 분류와 후보 명령만 정해 두었고, 이 폴더 안에 쓴 시트는 아직 없습니다. 시트를 쓰면 해당 분류의 표에 한 행을 더합니다.
 
 - [image: 이미지 빌드와 레지스트리](#image--이미지-빌드와-레지스트리)
-- [manifest: 매니페스트 패키징과 렌더](#manifest--매니페스트-패키징과-렌더)
 - [gitops: 배포와 동기화](#gitops--배포와-동기화)
 - [vcs: 소스 저장소](#vcs--소스-저장소)
 - [ci: 빌드와 품질 검사](#ci--빌드와-품질-검사)
@@ -33,7 +32,7 @@ updated: 2026-11-21
 
 시트의 절 순서와 코드 블록 안 `#` 줄의 뜻은 [리눅스 명령어 시트](../../../02_os/docs/cmd/README.md)의 「이 폴더를 쓰는 법」을 그대로 따릅니다. 개요, 핵심 문법, 종료 코드, 유스케이스, 주의사항과 동작 원리, 관련 문서 순서입니다. 실측한 환경과 도구 버전은 시트마다 개요에 적습니다.
 
-다른 명령어 시트와 겹치는 도구는 한쪽에만 둡니다. 운영체제 기능을 직접 보는 명령(`ps`·`ss`·`systemctl`)은 리눅스 명령어 시트에, 컨테이너 실행과 클러스터 조작 명령(`docker`·`crictl`·`kubectl`)은 [클라우드 명령어 시트](../../../08_cloud/docs/cmd/README.md)에, 빌드와 배포 흐름에서 쓰는 도구는 이쪽에 둡니다. 이미 다른 폴더에 있는 시트는 옮기지 않고 아래 표에서 링크로 가리킵니다.
+다른 명령어 시트와 겹치는 도구는 한쪽에만 둡니다. 운영체제 기능을 직접 보는 명령(`ps`·`ss`·`systemctl`)은 리눅스 명령어 시트에, 컨테이너 실행과 클러스터 조작 명령(`docker`·`crictl`·`kubectl`)은 [클라우드 명령어 시트](../../../08_cloud/docs/cmd/README.md)에, 빌드와 배포 흐름에서 쓰는 도구는 이쪽에 둡니다. 이미 다른 폴더에 있는 시트는 옮기지 않고 아래 표에서 링크로 가리킵니다. `helm`·`kustomize` 는 시트를 따로 두지 않습니다. 명령과 실행 예까지 [iac](../iac/README.md) 문서가 주제별로 다룹니다.
 
 
 
@@ -49,22 +48,11 @@ updated: 2026-11-21
 
 
 
-## manifest — 매니페스트 패키징과 렌더
-
-> 매니페스트를 템플릿이나 patch 로 만들어 내고, 적용하기 전에 결과를 비교하는 도구입니다. 후보는 `helm`·`helmfile`·`kustomize` 입니다.
-
-차트 구조와 base·overlay 의 원리는 [iac](../iac/README.md)의 [Helm 기초](../iac/Helm%20%EA%B8%B0%EC%B4%88.md)·[Helm 고급](../iac/Helm%20%EA%B3%A0%EA%B8%89.md)·[Kustomize](../iac/Kustomize.md)가 맡습니다.
-
-| 시트 | 다루는 명령 | 이런 때 찾습니다 |
-|------|------------|----------------|
-
-
-
 ## gitops — 배포와 동기화
 
 > Git 에 적힌 상태를 클러스터에 맞추고, 새 버전을 조금씩 내보내는 도구입니다. 후보는 `argocd`·`kubectl argo rollouts` 입니다.
 
-Argo CD 의 원리는 [Argo CD 정독 노트](../../book/argocd-up-and-running/README.md)가, 배포 전략은 [deployment](../deployment/README.md)가 맡습니다.
+Argo CD 의 원리는 [Argo CD 정독 노트](../../book/argocd-up-and-running/README.md)가, 배포 전략은 [Blue/Green 무중단 전환과 아키텍처 결정 기록](../../book/aic_ai-infra-claude/05-02.Blue-Green%20%EB%AC%B4%EC%A4%91%EB%8B%A8%20%EC%A0%84%ED%99%98%EA%B3%BC%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98%20%EA%B2%B0%EC%A0%95%20%EA%B8%B0%EB%A1%9D.md)과 [점진적 배포 Canary와 claude-context](../../book/aic_ai-infra-claude/06-02.%EC%A0%90%EC%A7%84%EC%A0%81%20%EB%B0%B0%ED%8F%AC%20Canary%EC%99%80%20claude-context.md) 정독 노트가 맡습니다.
 
 | 시트 | 다루는 명령 | 이런 때 찾습니다 |
 |------|------------|----------------|
@@ -111,6 +99,6 @@ Argo CD 의 원리는 [Argo CD 정독 노트](../../book/argocd-up-and-running/R
 
 - [07_devops](../../README.md) — DevOps 카테고리 지도
 - [리눅스 명령어 시트](../../../02_os/docs/cmd/README.md) — 운영체제 명령의 시트와 시트 작성 형식
-- [iac](../iac/README.md) — Helm·Kustomize 의 원리
+- [iac](../iac/README.md) — Helm·Kustomize 의 원리와 명령
 - [artifact](../artifact/README.md) — 이미지 빌드의 원리와 `buildctl` 시트
 - [클라우드 명령어 시트](../../../08_cloud/docs/cmd/README.md) — `docker`·`crictl`·`kubectl` 처럼 컨테이너와 클러스터를 다루는 명령의 시트

@@ -32,7 +32,7 @@ updated: 2026-11-21
 | 11-02 | [SonarQube on K8s](11_devtools/11-02.SonarQube%20on%20K8s.md) | SonarQube의 영속성 전략을 봅니다. |
 | 11-04 | [Harbor](11_devtools/11-04.Harbor.md) | 이미지와 OCI Helm chart를 어디서 통합 관리하는지 봅니다. |
 
-11-03 [ArgoCD와 GitOps](../../07_devops/docs/deployment/ArgoCD%C2%B7GitOps.md)는 2026-11-21 에 `07_devops/docs/deployment/` 로 옮겨서 번호가 비어 있습니다.
+옛 11-03 은 [Argo CD Up and Running — 정독 인덱스](../../07_devops/book/argocd-up-and-running/README.md)로 흡수되어 번호가 비어 있습니다.
 
 ## 관련 문서
 

@@ -89,16 +89,16 @@ updated: 2026-11-03
 
 | 개념 | 우선순위 | 노트 | 책 |
 |---|:---:|---|---|
-| Helm 차트 구조 · Chart.yaml · values.yaml · 템플릿 렌더링 | 필수 | [Helm 기초](docs/iac/Helm%20%EA%B8%B0%EC%B4%88.md) | [Helm 공식 문서](https://helm.sh/docs/) |
-| Helm 릴리스 생애주기 · 롤백 · 의존성 관리 · 라이프사이클 훅 | 추천 | [Helm 고급](docs/iac/Helm%20%EA%B3%A0%EA%B8%89.md) | [Helm 공식 문서](https://helm.sh/docs/) |
+| Helm 차트 구조 · Chart.yaml · values.yaml · 템플릿 렌더링 | 필수 | [Helm 차트 작성](docs/iac/Helm%20%EC%B0%A8%ED%8A%B8%20%EC%9E%91%EC%84%B1.md) | [Helm 공식 문서](https://helm.sh/docs/) |
+| Helm 릴리스 생애주기 · 롤백 · 의존성 관리 · 라이프사이클 훅 | 추천 | [Helm 릴리스 운영](docs/iac/Helm%20%EB%A6%B4%EB%A6%AC%EC%8A%A4%20%EC%9A%B4%EC%98%81.md) · [Helm Hook](docs/iac/Helm%20Hook.md) | [Helm 공식 문서](https://helm.sh/docs/) |
 | Helm 값 검증 — `required` · `fail` 로 렌더링 단계에서 실패시키기 | 추천 | | [Helm 차트 팁](https://helm.sh/docs/howto/charts_tips_and_tricks/) |
 | Helm 설정 변경 시 파드 롤링 — Deployment 의 `checksum/config` annotation | 추천 | | Kubernetes Best Practices 4장 · [Helm 차트 팁](https://helm.sh/docs/howto/charts_tips_and_tricks/) |
-| Helm `helm.sh/resource-policy: keep` — 삭제·롤백에서 리소스 남기기 | 선택 | [Helm 고급](docs/iac/Helm%20%EA%B3%A0%EA%B8%89.md) | [Helm 차트 팁](https://helm.sh/docs/howto/charts_tips_and_tricks/) |
-| Helm `.Files.Get` — 차트 안 파일 읽기 | 선택 | [Helm 고급](docs/iac/Helm%20%EA%B3%A0%EA%B8%89.md) | [Accessing Files](https://helm.sh/docs/chart_template_guide/accessing_files/) |
-| `helm upgrade --reset-then-reuse-values` · `--reuse-values` 와의 갈림 | 추천 | [Helm 기초](docs/iac/Helm%20%EA%B8%B0%EC%B4%88.md) | [helm upgrade](https://helm.sh/docs/iac/helm_upgrade/) |
-| Helm 렌더 결과 테스트 — `helm template` + 셸·단위 테스트로 RBAC·매니페스트 고정 · helm-unittest | 추천 | [Helm 기초](docs/iac/Helm%20%EA%B8%B0%EC%B4%88.md) | [helm template](https://helm.sh/docs/iac/helm_template/) · [helm-unittest](https://github.com/helm-unittest/helm-unittest) |
+| Helm `helm.sh/resource-policy: keep` — 삭제·롤백에서 리소스 남기기 | 선택 | [Helm 릴리스 운영](docs/iac/Helm%20%EB%A6%B4%EB%A6%AC%EC%8A%A4%20%EC%9A%B4%EC%98%81.md) | [Helm 차트 팁](https://helm.sh/docs/howto/charts_tips_and_tricks/) |
+| Helm `.Files.Get` — 차트 안 파일 읽기 | 선택 | [Helm 차트 작성](docs/iac/Helm%20%EC%B0%A8%ED%8A%B8%20%EC%9E%91%EC%84%B1.md) | [Accessing Files](https://helm.sh/docs/chart_template_guide/accessing_files/) |
+| `helm upgrade --reset-then-reuse-values` · `--reuse-values` 와의 갈림 | 추천 | [Helm values와 렌더 검증](docs/iac/Helm%20values%EC%99%80%20%EB%A0%8C%EB%8D%94%20%EA%B2%80%EC%A6%9D.md) | [helm upgrade](https://helm.sh/docs/iac/helm_upgrade/) |
+| Helm 렌더 결과 테스트 — `helm template` + 셸·단위 테스트로 RBAC·매니페스트 고정 · helm-unittest | 추천 | [Helm values와 렌더 검증](docs/iac/Helm%20values%EC%99%80%20%EB%A0%8C%EB%8D%94%20%EA%B2%80%EC%A6%9D.md) | [helm template](https://helm.sh/docs/iac/helm_template/) · [helm-unittest](https://github.com/helm-unittest/helm-unittest) |
 | Kustomize 오버레이 · base 와 overlays · 리소스 패치 | 필수 | [Kustomize](docs/iac/Kustomize.md) | [Kustomize 공식 문서](https://kubectl.docs.kubernetes.io/) |
-| Helm · Kustomize | 추천 | [Helm 기초](docs/iac/Helm%20%EA%B8%B0%EC%B4%88.md) ~ [Kustomize](docs/iac/Kustomize.md) |  |
+| Helm · Kustomize | 추천 | [IaC 와 쿠버네티스 매니페스트 관리](docs/iac/README.md) ~ [Kustomize](docs/iac/Kustomize.md) |  |
 
 
 
@@ -110,7 +110,7 @@ updated: 2026-11-03
 | ArgoCD 접근과 선언적 설정 — GitOps 로 ArgoCD 자체 관리 | 추천 | [선언적 설정](book/argocd-up-and-running/03-01.Argo%20CD%20%EC%99%80%20%EC%83%81%ED%98%B8%EC%9E%91%EC%9A%A9%ED%95%98%EA%B8%B0%20%E2%80%94%20UI%C2%B7CLI%C2%B7REST%20API%20%EC%99%80%20%EC%84%A0%EC%96%B8%EC%A0%81%20%EA%B5%AC%EC%84%B1.md) | [ArgoCD 공식 문서](https://argo-cd.readthedocs.io/) |
 | Application CRD — 배포 소스(Git)와 목적지(Cluster) 관리 | 필수 | [Application 관리](book/argocd-up-and-running/04-01.Application%20%EA%B4%80%EB%A6%AC%ED%95%98%EA%B8%B0%20%E2%80%94%20%EC%86%8C%EC%8A%A4%C2%B7%EB%8C%80%EC%83%81%C2%B7Helm%C2%B7Kustomize%20%EC%99%80%20%EC%82%AD%EC%A0%9C%C2%B7finalizer.md) | DevOps Tools for Java Developers 8장 |
 | Sync 전략과 순서 제어 — automated sync · self-heal · prune · Sync Waves | 필수 | [Sync 전략](book/argocd-up-and-running/05-01.Application%20%EB%8F%99%EA%B8%B0%ED%99%94%20%E2%80%94%20%EC%9E%90%EB%8F%99%20%EB%8F%99%EA%B8%B0%ED%99%94%C2%B7Sync%20Option%C2%B7Hook%C2%B7Sync%20Wave%20%EC%99%80%20%EC%B0%A8%EC%9D%B4%20%EB%AC%B4%EC%8B%9C.md) | Kubernetes Best Practices 18장 |
-| GitOps · ArgoCD · App of Apps · ApplicationSet | 추천 | [ArgoCD와 GitOps](docs/deployment/ArgoCD%C2%B7GitOps.md) · [ArgoCD 노트](book/argocd-up-and-running/README.md) | Kubernetes Best Practices 18장 |
+| GitOps · ArgoCD · App of Apps · ApplicationSet | 추천 | [ArgoCD 노트](book/argocd-up-and-running/README.md) | Kubernetes Best Practices 18장 |
 | 대규모 배포 패턴 — App of Apps 패턴 · ApplicationSet 생성기 | 추천 | [App of Apps와 ApplicationSet](book/argocd-up-and-running/10-01.Application%20%EC%97%AC%EB%9F%BF%EC%9D%84%20%EC%88%9C%EC%84%9C%EB%8C%80%EB%A1%9C%20%E2%80%94%20%ED%97%AC%EC%8A%A4%20%EC%B2%B4%ED%81%AC%C2%B7App-of-Apps%20sync%20wave%C2%B7Progressive%20Sync.md) · [App of Apps와 멀티테넌시](../07_devops/book/aic_ai-infra-claude/07-02.App%20of%20Apps%EC%99%80%20%EB%A9%80%ED%8B%B0%ED%85%8C%EB%84%8C%EC%8B%9C.md) | Kubernetes Best Practices 18장 |
 | 멀티테넌시와 권한 격리 — AppProject · 리소스 화이트리스트 | 추천 | [SSO 연결과 RBAC](book/argocd-up-and-running/06-02.SSO%20%EC%97%B0%EA%B2%B0%EA%B3%BC%20RBAC%20%E2%80%94%20Dex%C2%B7%EC%A7%81%EC%A0%91%20OIDC%C2%B7%EC%97%AD%ED%95%A0%EA%B3%BC%20%EC%A0%95%EC%B1%85.md) · [멀티 테넌시](book/argocd-up-and-running/08-01.%EB%A9%80%ED%8B%B0%20%ED%85%8C%EB%84%8C%EC%8B%9C%20%E2%80%94%20%EC%84%A4%EC%B9%98%20%EB%AA%A8%EB%93%9C%EC%99%80%20AppProject%C2%B7%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%20%EC%97%AD%ED%95%A0.md) | [ArgoCD 공식 문서](https://argo-cd.readthedocs.io/) |
 | 환경 승격 파이프라인 — 저장소 분리 · staging→prod 승격 | 필수 | [CD와 GitOps](../07_devops/02_Jenkins/06_infra/05-03.CD%EC%99%80%20GitOps%20%E2%80%94%20%EA%B0%9C%EB%85%90%C2%B7%EB%B8%8C%EB%9E%9C%EC%B9%98%20%EC%A0%84%EB%9E%B5.md) · [Argo CD로 CD 설계](../07_devops/02_Jenkins/06_infra/05-04.Argo%20CD%EB%A1%9C%20CD%20%EC%84%A4%EA%B3%84%20%E2%80%94%20Jenkins%20%EC%97%AD%ED%95%A0%EB%B6%84%EB%8B%B4%C2%B7staging%E2%86%92prod.md) | Learning Continuous Integration with Jenkins 10·11장 |
@@ -127,8 +127,8 @@ updated: 2026-11-03
 | Blue-Green 배포 — Service / Gateway API 스위칭과 무중단 전환 | 필수 | [Blue-Green 무중단 전환](../07_devops/book/aic_ai-infra-claude/05-02.Blue-Green%20%EB%AC%B4%EC%A4%91%EB%8B%A8%20%EC%A0%84%ED%99%98%EA%B3%BC%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98%20%EA%B2%B0%EC%A0%95%20%EA%B8%B0%EB%A1%9D.md) | CI/CD Design Patterns 6·10장 · DevOps Tools for Java Developers 10장 |
 | Canary 배포 — 소량 트래픽 점진 이동과 위험 최소화 | 필수 | [점진적 배포 Canary](../07_devops/book/aic_ai-infra-claude/06-02.%EC%A0%90%EC%A7%84%EC%A0%81%20%EB%B0%B0%ED%8F%AC%20Canary%EC%99%80%20claude-context.md) | CI/CD Design Patterns 6·10장 |
 | 점진 배포 — canary · blue-green · Argo Rollouts · progressive delivery | 추천 |  | [Argo Rollouts](https://argo-rollouts.readthedocs.io/) |
-| Argo Rollouts — Rollout CRD 와 트래픽 라우팅 연동 | 필수 | [Argo Rollouts와 배포 전략](docs/deployment/01-01.Argo%20Rollouts%EC%99%80%20%EB%B0%B0%ED%8F%AC%20%EC%A0%84%EB%9E%B5.md) | [Argo Rollouts](https://argo-rollouts.readthedocs.io/) |
-| AnalysisTemplate — 관측 지표 기반 자동 분석과 실패 시 자동 롤백 | 추천 | [Argo Rollouts와 배포 전략](docs/deployment/01-01.Argo%20Rollouts%EC%99%80%20%EB%B0%B0%ED%8F%AC%20%EC%A0%84%EB%9E%B5.md) | [Argo Rollouts](https://argo-rollouts.readthedocs.io/) |
+| Argo Rollouts — Rollout CRD 와 트래픽 라우팅 연동 | 필수 | [Blue/Green 무중단 전환과 아키텍처 결정 기록](../07_devops/book/aic_ai-infra-claude/05-02.Blue-Green%20%EB%AC%B4%EC%A4%91%EB%8B%A8%20%EC%A0%84%ED%99%98%EA%B3%BC%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98%20%EA%B2%B0%EC%A0%95%20%EA%B8%B0%EB%A1%9D.md) | [Argo Rollouts](https://argo-rollouts.readthedocs.io/) |
+| AnalysisTemplate — 관측 지표 기반 자동 분석과 실패 시 자동 롤백 | 추천 | [점진적 배포 Canary와 claude-context](../07_devops/book/aic_ai-infra-claude/06-02.%EC%A0%90%EC%A7%84%EC%A0%81%20%EB%B0%B0%ED%8F%AC%20Canary%EC%99%80%20claude-context.md) | [Argo Rollouts](https://argo-rollouts.readthedocs.io/) |
 | Progressive Delivery — 피처 플래그 · Dark Launch · 비즈니스 분리 | 추천 | [배포 전략 패턴](../07_devops/book/cicd_cicd-patterns/06-01.Deployment%20Strategies%20for%20Structural%20Patterns.md) | DevOps Tools for Java Developers 10장 |
 | 배포 후 검증 — smoke test · E2E(Playwright) · 배포 검증 게이트 | 필수 | [첫 CD Jenkinsfile 구현](../07_devops/02_Jenkins/06_infra/05-05.%EC%B2%AB%20CD%20Jenkinsfile%20%EA%B5%AC%ED%98%84%20%E2%80%94%20values%20%EA%B0%B1%EC%8B%A0%C2%B7Argo%20CD%20%ED%97%AC%EC%8A%A4%EC%B2%B4%ED%81%AC%C2%B7k6%20%EA%B2%8C%EC%9D%B4%ED%8A%B8.md) |  |
 | Expand and Contract — DB 스키마 변경과 버전 공존 · dual write · backfill | 필수 |  |  |

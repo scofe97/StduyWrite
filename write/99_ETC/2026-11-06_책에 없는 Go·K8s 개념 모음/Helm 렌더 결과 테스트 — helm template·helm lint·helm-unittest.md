@@ -238,5 +238,5 @@ steps:
 
 ## 관련 문서
 
-- [Helm 고급](../../07_devops/docs/iac/Helm 고급.md) — `helm template` 워크플로우와 `kubeconform`
-- [Helm 기초](../../07_devops/docs/iac/Helm 기초.md) — `helm template` 과 `--dry-run` 차이
+- [Helm values와 렌더 검증](../../07_devops/docs/iac/Helm values와 렌더 검증.md) — `helm template` 과 `--dry-run` 차이, 렌더 워크플로우
+- [Helm 차트 작성](../../07_devops/docs/iac/Helm 차트 작성.md) — 차트 변경 검증 순서

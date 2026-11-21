@@ -30,7 +30,7 @@ updated: 2026-07-11
 > 이 장은 다음을 안다고 가정합니다.
 
 1. Deployment·Service 매니페스트를 직접 작성·`apply` 해 본 경험이 있습니다.
-2. [Helm 기초](Helm%20%EA%B8%B0%EC%B4%88.md)의 템플릿·values 개념을 이해합니다.
+2. [Helm values와 렌더 검증](Helm%20values%EC%99%80%20%EB%A0%8C%EB%8D%94%20%EA%B2%80%EC%A6%9D.md)의 템플릿·values 개념을 이해합니다.
 3. dev/prod 처럼 환경별로 설정이 달라지는 상황을 겪어 봤습니다.
 
 
@@ -233,5 +233,5 @@ Kustomize 는 템플릿 없이 base 원본에 overlay 로 환경별 차이만 �
 
 > Helm 다음 단계와 GitOps 연결 지점을 함께 봅니다.
 
-- [Helm 고급](Helm%20%EA%B3%A0%EA%B8%89.md) — 차트 패키징과 Hook, 템플릿 설계
-- [ArgoCD와 GitOps](../deployment/ArgoCD%C2%B7GitOps.md) — Kustomize 소스를 GitOps 로 지속 반영
+- [Helm 차트 작성](Helm%20%EC%B0%A8%ED%8A%B8%20%EC%9E%91%EC%84%B1.md) — 템플릿 설계와 차트 작성
+- [Application 관리하기 — 소스·대상·Helm·Kustomize 와 삭제·finalizer](../../book/argocd-up-and-running/04-01.Application%20%EA%B4%80%EB%A6%AC%ED%95%98%EA%B8%B0%20%E2%80%94%20%EC%86%8C%EC%8A%A4%C2%B7%EB%8C%80%EC%83%81%C2%B7Helm%C2%B7Kustomize%20%EC%99%80%20%EC%82%AD%EC%A0%9C%C2%B7finalizer.md) — Kustomize 소스를 GitOps 로 지속 반영

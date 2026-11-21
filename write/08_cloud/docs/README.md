@@ -27,7 +27,7 @@ updated: 2026-11-21
 | [cncf-certification/](cncf-certification/README.md) | CNCF·Linux Foundation 자격증 커리큘럼·시험 안내 |
 | [istio/](istio/README.md) | istio.io 공식 문서 |
 
-Helm·Kustomize 와 Argo Rollouts 는 쿠버네티스 위에서 쓰지만 플랫폼보다 전달 절차에 속해서 [07_devops/docs](../../07_devops/README.md) 로 옮겼습니다. 각각 [`iac/`](../../07_devops/docs/iac/README.md) 와 [`deployment/`](../../07_devops/docs/deployment/README.md) 개념 폴더에 있습니다.
+Helm·Kustomize 와 Argo Rollouts 는 쿠버네티스 위에서 쓰지만 플랫폼보다 전달 절차에 속해서 [07_devops](../../07_devops/README.md) 로 옮겼습니다. 각각 [`iac/`](../../07_devops/docs/iac/README.md) 개념 폴더와 [Blue/Green 무중단 전환과 아키텍처 결정 기록](../../07_devops/book/aic_ai-infra-claude/05-02.Blue-Green%20%EB%AC%B4%EC%A4%91%EB%8B%A8%20%EC%A0%84%ED%99%98%EA%B3%BC%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98%20%EA%B2%B0%EC%A0%95%20%EA%B8%B0%EB%A1%9D.md)·[점진적 배포 Canary와 claude-context](../../07_devops/book/aic_ai-infra-claude/06-02.%EC%A0%90%EC%A7%84%EC%A0%81%20%EB%B0%B0%ED%8F%AC%20Canary%EC%99%80%20claude-context.md) 정독 노트에 있습니다.
 
 [`cmd/`](cmd/README.md) 는 제품 폴더가 아니라 컨테이너·쿠버네티스 명령어 시트 자리입니다. 지금은 docker 이미지 반입 시트 한 편이 있고, 나머지는 분류와 후보 명령만 정해 두었습니다.
 

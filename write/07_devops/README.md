@@ -53,6 +53,5 @@ Jenkins 파이프라인 그루비 작성법은 여기로 배치합니다. 반면
   - [`argocd-up-and-running/`](book/argocd-up-and-running/README.md) — 《Argo CD: Up and Running》 정독 노트 16편 (5단계 GitOps)
 - [`docs/`](docs/) — 공식 문서 기반 노트
   - [`sonarqube/`](docs/sonarqube/) — 정적 분석, Quality Gate, CI 연계, Web API (2026.1 LTA 기준 19편)
-  - [`iac/`](docs/iac/README.md) — IaC 개념 폴더. Helm 기초·고급, Kustomize (4단계 패키징·7단계 인프라를 코드로)
+  - [`iac/`](docs/iac/README.md) — IaC 개념 폴더. Helm 다섯 편(차트 작성·values와 렌더 검증·릴리스 운영·Hook·의존성과 저장소), Kustomize (4단계 패키징·7단계 인프라를 코드로)
   - [`cmd/`](docs/cmd/README.md) — DevOps 명령어 시트. 도구별 분류와 후보 명령 (시트는 아직 없음). 컨테이너·쿠버네티스 명령은 [08_cloud 의 시트](../08_cloud/docs/cmd/README.md)
-  - [`deployment/`](docs/deployment/README.md) — 배포 전략 개념 폴더. ArgoCD 와 GitOps 입문 (5단계 GitOps), Argo Rollouts 의 Blue-Green·Canary (6단계 점진 배포)

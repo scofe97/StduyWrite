@@ -231,5 +231,6 @@ return newVals, nil
 
 ## 관련 문서
 
-- [Helm 기초](../../07_devops/docs/iac/Helm 기초.md) — values 우선순위와 `--reuse-values` 비권장 언급
-- [Helm 고급](../../07_devops/docs/iac/Helm 고급.md)
+- [Helm values와 렌더 검증](../../07_devops/docs/iac/Helm values와 렌더 검증.md) — values 우선순위와 `--reuse-values`·`--reset-then-reuse-values`
+- [Helm 차트 작성](../../07_devops/docs/iac/Helm 차트 작성.md) — ConfigMap 변경 감지와 파드 롤링
+- [Helm 릴리스 운영](../../07_devops/docs/iac/Helm 릴리스 운영.md) — 지우기와 남는 것(`resource-policy: keep`)

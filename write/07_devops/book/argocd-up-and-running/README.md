@@ -47,7 +47,7 @@ updated: 2026-11-21
 
 옛 argocd/ 노트 16편은 이 책을 바탕으로 쓴 것이었습니다. 16편 가운데 14편은 frontmatter `source` 에 `docs/03_CloudNative/03_ArgoCD/NN_<장 이름>.md` 를 적었고, 그 장 이름이 이 책의 장 이름과 같습니다. 다만 책의 서지가 어디에도 적혀 있지 않아 출처가 끊긴 상태였습니다.
 
-장별 정독 노트를 쓰면서 옛 노트와 그 `deepdive/` 점검 질문, [ArgoCD와 GitOps](../../docs/deployment/ArgoCD%C2%B7GitOps.md), [ArgoCD App-of-Apps 패턴](../../../99_ETC/2026-04-19_ArgoCD%20App-of-Apps%20%ED%8C%A8%ED%84%B4.md)을 보충 재료로 흡수했습니다. 모든 장이 흡수되어 옛 `argocd/` 폴더는 정리했습니다. 옛 노트 04-03 Argo Rollouts 는 책에 대응하는 장이 없어 [docs/deployment/](../../docs/deployment/README.md) 로 옮겼습니다.
+장별 정독 노트를 쓰면서 옛 노트와 그 `deepdive/` 점검 질문, 옛 입문 정리(ArgoCD와 GitOps), [ArgoCD App-of-Apps 패턴](../../../99_ETC/2026-04-19_ArgoCD%20App-of-Apps%20%ED%8C%A8%ED%84%B4.md)을 보충 재료로 흡수했습니다. 모든 장이 흡수되어 옛 `argocd/` 폴더는 정리했습니다. 옛 노트 04-03 Argo Rollouts 는 Blue-Green·Canary 를 다루는 정독 노트([Blue/Green 무중단 전환과 아키텍처 결정 기록](../aic_ai-infra-claude/05-02.Blue-Green%20%EB%AC%B4%EC%A4%91%EB%8B%A8%20%EC%A0%84%ED%99%98%EA%B3%BC%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98%20%EA%B2%B0%EC%A0%95%20%EA%B8%B0%EB%A1%9D.md)와 [점진적 배포 Canary와 claude-context](../aic_ai-infra-claude/06-02.%EC%A0%90%EC%A7%84%EC%A0%81%20%EB%B0%B0%ED%8F%AC%20Canary%EC%99%80%20claude-context.md))가 맡아 2026-11-21 에 정리했습니다.
 
 ### 로드맵 속 자리
 
@@ -92,7 +92,7 @@ updated: 2026-11-21
 
 | 편 | 제목 | 상태 | 보충 재료 |
 |----|------|------|----------|
-| 01-01 | [Argo CD 가 푸는 문제 — GitOps 원칙과 Argo 생태계](./01-01.Argo%20CD%20%EA%B0%80%20%ED%91%B8%EB%8A%94%20%EB%AC%B8%EC%A0%9C%20%E2%80%94%20GitOps%20%EC%9B%90%EC%B9%99%EA%B3%BC%20Argo%20%EC%83%9D%ED%83%9C%EA%B3%84.md) | 작성 완료 | 흡수 완료(옛 01-01), [ArgoCD와 GitOps (docs/deployment, 옛 kubernetes/11-03)](../../docs/deployment/ArgoCD%C2%B7GitOps.md) |
+| 01-01 | [Argo CD 가 푸는 문제 — GitOps 원칙과 Argo 생태계](./01-01.Argo%20CD%20%EA%B0%80%20%ED%91%B8%EB%8A%94%20%EB%AC%B8%EC%A0%9C%20%E2%80%94%20GitOps%20%EC%9B%90%EC%B9%99%EA%B3%BC%20Argo%20%EC%83%9D%ED%83%9C%EA%B3%84.md) | 작성 완료 | 흡수 완료(옛 01-01, 옛 kubernetes/11-03 ArgoCD와 GitOps) |
 | 02-01 | [Argo CD 설치하기 — 구성 요소·설치 유형·매니페스트와 Helm](./02-01.Argo%20CD%20%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0%20%E2%80%94%20%EA%B5%AC%EC%84%B1%20%EC%9A%94%EC%86%8C%C2%B7%EC%84%A4%EC%B9%98%20%EC%9C%A0%ED%98%95%C2%B7%EB%A7%A4%EB%8B%88%ED%8E%98%EC%8A%A4%ED%8A%B8%EC%99%80%20Helm.md) | 작성 완료 | 흡수 완료(옛 01-02) |
 | 03-01 | [Argo CD 와 상호작용하기 — UI·CLI·REST API 와 선언적 구성](./03-01.Argo%20CD%20%EC%99%80%20%EC%83%81%ED%98%B8%EC%9E%91%EC%9A%A9%ED%95%98%EA%B8%B0%20%E2%80%94%20UI%C2%B7CLI%C2%B7REST%20API%20%EC%99%80%20%EC%84%A0%EC%96%B8%EC%A0%81%20%EA%B5%AC%EC%84%B1.md) | 작성 완료 | 흡수 완료(옛 01-03) |
 | 04-01 | [Application 관리하기 — 소스·대상·Helm·Kustomize 와 삭제·finalizer](./04-01.Application%20%EA%B4%80%EB%A6%AC%ED%95%98%EA%B8%B0%20%E2%80%94%20%EC%86%8C%EC%8A%A4%C2%B7%EB%8C%80%EC%83%81%C2%B7Helm%C2%B7Kustomize%20%EC%99%80%20%EC%82%AD%EC%A0%9C%C2%B7finalizer.md) | 작성 완료 | 흡수 완료(옛 02-01) |
@@ -168,7 +168,7 @@ Argo CD 는 버전마다 CRD 필드와 기능 상태가 바뀝니다. 그래서 
 
 - [『CKS Study Guide』 정독본](../../../08_cloud/book/cks-study-guide/README.md) — 08_cloud 의 `book/` 영역, 클러스터 하드닝 절차의 짝이자 9장 보안과 층이 다른 비교 대상
 - [『Kubernetes: Up and Running』 정독본](../../../08_cloud/book/kubernetes-up-and-running/README.md) — 오브젝트와 운영 관점의 짝, Application 이 배포하는 대상의 기초
-- [Argo Rollouts 정독](../../docs/deployment/README.md) — 이 책에 대응하는 장이 없어 옛 argocd/ 노트에서 옮긴 Rollouts 두 편
+- [Blue/Green 무중단 전환과 아키텍처 결정 기록](../aic_ai-infra-claude/05-02.Blue-Green%20%EB%AC%B4%EC%A4%91%EB%8B%A8%20%EC%A0%84%ED%99%98%EA%B3%BC%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98%20%EA%B2%B0%EC%A0%95%20%EA%B8%B0%EB%A1%9D.md) · [점진적 배포 Canary와 claude-context](../aic_ai-infra-claude/06-02.%EC%A0%90%EC%A7%84%EC%A0%81%20%EB%B0%B0%ED%8F%AC%20Canary%EC%99%80%20claude-context.md) — 옛 노트 04-03 Argo Rollouts 는 Blue-Green·Canary 를 다루는 정독 노트가 맡아 2026-11-21 에 정리했습니다
 - [DevOps 로드맵](../../devops-keywords.md) — 5단계 GitOps·6단계 점진 배포에서 이 주제가 놓인 자리
 - [07_devops MOC](../../README.md) — 상위 카테고리 경계
 
