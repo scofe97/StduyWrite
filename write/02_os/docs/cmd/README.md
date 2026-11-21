@@ -263,6 +263,7 @@ SELinux 와 `update-ca-trust` 는 RHEL 계열 명령이라 이 분류의 출력�
 | [flock](./shell/flock.md) | `flock` | 같은 작업이 겹쳐 돌지 않게 락을 걸거나, 락이 잡혀 있을 때 기다릴지 포기할지 옵션으로 고를 때 |
 | [crontab](./shell/crontab.md) | `crontab` | 시각을 정해 명령을 돌리는 예약 표를 등록하거나, cron 이 작업에 주는 환경과 오류 출력을 확인할 때 |
 | [timeout](./shell/timeout.md) | `timeout` | 명령에 제한 시간을 걸고 124·137 로 끝난 이유를 읽을 때(uutils 와 GNU 의 차이, 파이프에서의 함정 포함) |
+| [eval](./shell/eval.md) | `eval` | 문자열에 담은 명령이나 다른 명령이 출력한 셸 코드(`ssh-agent -s`)를 실행할 때, 값 속 `;` 가 명령이 되는 함정을 피할 때 |
 
 
 
