@@ -20,7 +20,7 @@ updated: 2026-11-15
 
 | 폴더 | 산출물 | 지금 상태 |
 |------|--------|-----------|
-| `container/` | 컨테이너 이미지 | 개념 편 셋과 도구 시트 하나 |
+| `container/` | 컨테이너 이미지 | 개념 편 넷과 도구 시트 하나 |
 | `package/` | JAR·바이너리 같은 실행 패키지 | 아직 없음. 정본은 아래 「다른 폴더가 맡는 것」 |
 | `vm/` | VM 이미지 | 폴더를 만들지 않았습니다. 아래 「다른 폴더가 맡는 것」 의 fdsd 두 절이 지금의 자리입니다 |
 
@@ -37,6 +37,7 @@ updated: 2026-11-15
 | [01-01 컨테이너 안 빌드가 문제가 되는 이유](container/01-01.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EC%95%88%20%EB%B9%8C%EB%93%9C%EA%B0%80%20%EB%AC%B8%EC%A0%9C%EA%B0%80%20%EB%90%98%EB%8A%94%20%EC%9D%B4%EC%9C%A0.md) | 컨테이너 이미지 | CI 에이전트를 VM 에서 Pod 로 옮겼더니 `docker build` 가 데몬을 못 찾을 때 |
 | [01-02 rootless 빌드의 조건](container/01-02.rootless%20%EB%B9%8C%EB%93%9C%EC%9D%98%20%EC%A1%B0%EA%B1%B4.md) | 컨테이너 이미지 | 특권 없이 빌드하려는데 RUN 단계가 권한 오류로 멈출 때 |
 | [01-03 이미지 빌더 종류와 선택](container/01-03.%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EB%B9%8C%EB%8D%94%20%EC%A2%85%EB%A5%98%EC%99%80%20%EC%84%A0%ED%83%9D.md) | 컨테이너 이미지 | BuildKit·Buildah·Jib·Buildpacks 가운데 무엇을 쓸지 정할 때 |
+| [02-01 JDK 이미지가 서로 다른 이유](container/02-01.JDK%20%EC%9D%B4%EB%AF%B8%EC%A7%80%EA%B0%80%20%EC%84%9C%EB%A1%9C%20%EB%8B%A4%EB%A5%B8%20%EC%9D%B4%EC%9C%A0.md) | 컨테이너 이미지 | 보안 패치로 이미지의 JDK 만 바꾸려는데, 이미지마다 JDK 가 들어 있는 모양이 달라 어디를 봐야 할지 모를 때 |
 | [buildkit](container/buildkit.md) | 컨테이너 이미지 | `buildctl` 로 빌드하고 결과를 registry·tar 로 내보내거나 캐시를 주고받을 때 |
 
 
