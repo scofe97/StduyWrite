@@ -1,6 +1,7 @@
 # 03-01 「Linux 에서 fork 의 비용」 — fork 직후 부모와 자식이 같은 물리 페이지를 읽기 전용으로 함께 쓰다가 부모가 쓰는 순간 그 페이지만 복사되어 자식의 값은 그대로 남는 세 시점.
 # 본문 근거: 이 노트 「1. fork 로 프로세스 복제하기」 — Linux 에서 fork 의 비용.
 # 값 근거: x = 100, 200 은 설명용으로 고른 값이다.
+# 시점 3 자식 항목 근거: Linux v6.18 mm/memory.c copy_present_page 계열 __copy_present_ptes(fork 때 양쪽 쓰기 보호), wp_page_copy(부모 쪽 PTE 만 바꿈), do_wp_page·wp_can_reuse_anon_folio·wp_page_reuse(자식은 쓸 때 폴트 후 복사 없이 재사용).
 # 공식 근거: fork(2) 의 copy-on-write 문장, OSTEP 23장의 copy-on-write 설명(읽기 전용 표시, 쓰면 trap, 새 페이지를 잡아 쓴 프로세스에 매핑).
 # 타입 스펙: type-process — 부모·자식의 페이지 테이블과 물리 메모리가 세 시점에서 바뀌는 과정.
 import sys; sys.path.insert(0, ".")
@@ -113,12 +114,9 @@ for i, (ttl, sub, mode) in enumerate(stages):
 
     # 3) 자식 페이지 테이블
     d.box(x + 8, Y_C_BOX, PW - 16, H_PT, PAPER, RULE, 0.9)
-    if mode in ("shared", "cow"):
-        d.tone(lx, Y_C_ENT, bw, H_ENT, WARN, 6, "14", 1.2)
-        d.t(lcx, Y_C_ENT + 21, "x · 읽기 전용", 12, WARN, KR, "middle", 600)
-    else:
-        d.tone(lx, Y_C_ENT, bw, H_ENT, OK, 6, "14", 1.2)
-        d.t(lcx, Y_C_ENT + 21, "x", 13, OK, MONO, "middle", 600)
+    # 시점 3 에서도 자식 항목은 읽기 전용으로 남는다: 자식이 쓰면 다시 폴트가 나지만 복사 없이 쓰기 가능으로 돌아간다(mm/memory.c do_wp_page).
+    d.tone(lx, Y_C_ENT, bw, H_ENT, WARN, 6, "14", 1.2)
+    d.t(lcx, Y_C_ENT + 21, "x · 읽기 전용", 12, WARN, KR, "middle", 600)
 
     d.box(rx, Y_C_ENT, bw, H_ENT, PAPER2, RULE, 0.9)
     d.t(rcx, Y_C_ENT + 21, "다른 페이지", 12, MUTED, KR)
