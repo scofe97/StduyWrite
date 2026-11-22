@@ -20,7 +20,7 @@ updated: 2026-11-15
 
 | 폴더 | 산출물 | 지금 상태 |
 |------|--------|-----------|
-| `container/` | 컨테이너 이미지 | 개념 편 넷과 도구 시트 하나 |
+| `container/` | 컨테이너 이미지 | 개념 편 다섯과 도구 시트 하나 |
 | `package/` | JAR·바이너리 같은 실행 패키지 | 아직 없음. 정본은 아래 「다른 폴더가 맡는 것」 |
 | `vm/` | VM 이미지 | 폴더를 만들지 않았습니다. 아래 「다른 폴더가 맡는 것」 의 fdsd 두 절이 지금의 자리입니다 |
 
@@ -38,6 +38,7 @@ updated: 2026-11-15
 | [01-02 rootless 빌드의 조건](container/01-02.rootless%20%EB%B9%8C%EB%93%9C%EC%9D%98%20%EC%A1%B0%EA%B1%B4.md) | 컨테이너 이미지 | 특권 없이 빌드하려는데 RUN 단계가 권한 오류로 멈출 때 |
 | [01-03 이미지 빌더 종류와 선택](container/01-03.%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EB%B9%8C%EB%8D%94%20%EC%A2%85%EB%A5%98%EC%99%80%20%EC%84%A0%ED%83%9D.md) | 컨테이너 이미지 | BuildKit·Buildah·Jib·Buildpacks 가운데 무엇을 쓸지 정할 때 |
 | [02-01 JDK 이미지가 서로 다른 이유](container/02-01.JDK%20%EC%9D%B4%EB%AF%B8%EC%A7%80%EA%B0%80%20%EC%84%9C%EB%A1%9C%20%EB%8B%A4%EB%A5%B8%20%EC%9D%B4%EC%9C%A0.md) | 컨테이너 이미지 | 보안 패치로 이미지의 JDK 만 바꾸려는데, 이미지마다 JDK 가 들어 있는 모양이 달라 어디를 봐야 할지 모를 때 |
+| [02-02 JDK 배포판이 여럿인 이유](container/02-02.JDK%20%EB%B0%B0%ED%8F%AC%ED%8C%90%EC%9D%B4%20%EC%97%AC%EB%9F%BF%EC%9D%B8%20%EC%9D%B4%EC%9C%A0.md) | 컨테이너 이미지 | JDK 를 바꾸면 TLS 같은 동작이 달라질 수 있다는데, 배포판 차이인지 업데이트 판 차이인지 가려야 할 때 |
 | [buildkit](container/buildkit.md) | 컨테이너 이미지 | `buildctl` 로 빌드하고 결과를 registry·tar 로 내보내거나 캐시를 주고받을 때 |
 
 
@@ -48,7 +49,7 @@ updated: 2026-11-15
 
 - `container/` 도구 시트: `kaniko.md`(저장소가 2025-06-03 보관된 상태와 옮겨 갈 곳 포함), `jib.md`, `buildpacks.md`, `buildah.md`
 - `container/02-01.레이어 캐시와 multi-stage.md`
-- `container/02-02.멀티 플랫폼 이미지 빌드.md`
+- `container/02-03.멀티 플랫폼 이미지 빌드.md`
 - `package/01-01.빌드 산출물과 CI 빌드의 조건.md`
 
 
