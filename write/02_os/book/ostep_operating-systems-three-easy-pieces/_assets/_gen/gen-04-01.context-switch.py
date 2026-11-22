@@ -37,7 +37,7 @@ d.t((CXL + CXR) / 2, 324, "A 가 쓰던 값 → B 가 쓸 값", 12, MUTED, KR)
 ax, bx = LX + BW / 2, RX + BW / 2
 # 1. 하드웨어가 A 의 사용자 레지스터를 k-stack(A) 에
 d.arrow([(CXL, 266), (ax, 266), (ax, 206)], ACC, "acc", 1.6)
-d.t(ax + 14, 252, "1. 하드웨어가 저장", 12, ACC, KR, "start", 600)
+d.t(ax + 14, 236, "1. 하드웨어가 저장", 12, ACC, KR, "start", 600)
 # 2. swtch 가 A 의 커널 레지스터를 proc_t(A) 에
 d.arrow([(CXL, 318), (ax, 318), (ax, 398)], INFO, "info", 1.6)
 d.t(ax + 14, 342, "2. swtch 가 저장", 12, INFO, KR, "start", 600)
@@ -46,7 +46,7 @@ d.arrow([(bx, 400), (bx, 318), (CXR, 318)], INFO, "info", 1.6)
 d.t(bx - 14, 342, "3. swtch 가 복원", 12, INFO, KR, "end", 600)
 # 4. return-from-trap 이 k-stack(B) 에서 사용자 레지스터를 복원
 d.arrow([(bx, 206), (bx, 266), (CXR, 266)], ACC, "acc", 1.6)
-d.t(bx - 14, 252, "4. return-from-trap 이 복원", 12, ACC, KR, "end", 600)
+d.t(bx - 14, 236, "4. return-from-trap 이 복원", 12, ACC, KR, "end", 600)
 
 # 가운데 아래: 커널 스택 전환
 d.chip(bx - 200, 376, "3 번에서 스택이 k-stack(B) 로 바뀜", INFO, 12, 8)

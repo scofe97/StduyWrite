@@ -27,7 +27,7 @@ d.t(CX, cy + 16, "CPU 를 내놓는가", 12, INK, KR, "middle", 600)
 # 예 (왼쪽)
 LXc, RXc = 180, 700
 d.arrow([(CX - hw, cy), (LXc, cy), (LXc, 300)], INFO, "info", 1.4)
-d.chip((CX - hw + LXc) / 2, cy, "예", INFO, 12, 8)
+d.chip((CX - hw + LXc) / 2, cy + 18, "예", INFO, 12, 8)
 d.tone(LXc - 130, 300, 260, 64, INFO)
 d.t(LXc, 326, "yield · 시스템 콜", 12, INK, KR, "middle", 600)
 d.t(LXc, 348, "trap 으로 운영체제를 부름", 12, MUTED, KR)
@@ -35,7 +35,7 @@ d.t(50, 206, "협력 방식 — 프로그램을 믿는다", 12, MUTED, KR, "star
 
 # 아니오 (오른쪽)
 d.arrow([(CX + hw, cy), (RXc, cy), (RXc, 300)], ACC, "acc", 1.6)
-d.chip((CX + hw + RXc) / 2, cy, "아니오", ACC, 12, 8)
+d.chip((CX + hw + RXc) / 2, cy + 18, "아니오", ACC, 12, 8)
 d.tone(RXc - 130, 300, 260, 64, ACC)
 d.t(RXc, 326, "타이머 인터럽트", 12, ACC, KR, "middle", 600)
 d.t(RXc, 348, "부팅 때 시작시킨 장치가 강제", 12, MUTED, KR)

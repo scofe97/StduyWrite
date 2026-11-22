@@ -29,13 +29,13 @@ def node(x, y, w, h, name, c=None, sub=None):
 
 
 # 열 머리글: 모든 행이 같은 노드 열(앱 · 받는 곳 · 처리 · 호스트 요청)을 쓴다
-for x, label in ((24, "환경"), (196, "앱"), (346, "받는 곳"), (666, "처리"), (796, "호스트 요청")):
+for x, label in ((24, "환경"), (196, "앱"), (346, "받는 곳"), (646, "처리"), (796, "호스트 요청")):
     d.t(x, 122, label, 12, SOFT, KR, "start", 600)
 
 rows = [
     (150, "일반 컨테이너", "호스트 커널을 공유", "host kernel", None, "그대로", "host kernel", "없음", None, MUTED),
     (260, "gVisor · systrap", "기본 플랫폼", "host kernel", "실행하지 않음", "seccomp 필터 → SIGSYS", "Sentry", "host kernel", "필요한 일만", ACC),
-    (370, "gVisor · KVM", "가상화 필요", "Sentry", "게스트 OS 자리", "그대로", "Sentry", "host kernel", "필요한 일만", INFO),
+    (370, "gVisor · KVM", "가상화 필요", "Sentry", "게스트 OS 자리", "Sentry 가 처리", "Sentry", "host kernel", "필요한 일만", INFO),
 ]
 for y, env, envsub, recv, recvsub, how, proc, host, hop, c in rows:
     mk = "ar" if c == MUTED else ("acc" if c == ACC else "info")
@@ -44,12 +44,12 @@ for y, env, envsub, recv, recvsub, how, proc, host, hop, c in rows:
     node(196, y + 4, 80, 52, "앱")
     d.arrow([(276, y + 30), (346, y + 30)], c, mk, 1.6)
     d.t(311, y + 21, "syscall", 12, c if c != MUTED else INK, MONO, "middle", 600)
-    node(346, y + 4, 150, 52, recv, None, recvsub)
-    d.arrow([(496, y + 30), (666, y + 30)], c, mk, 1.6)
-    d.t(581, y + 21, how, 12, c if c != MUTED else INK, kr(how), "middle", 600)
-    node(666, y + 4, 110, 52, proc, None if c == MUTED else c)
+    node(346, y + 4, 130, 52, recv, None, recvsub)
+    d.arrow([(476, y + 30), (646, y + 30)], c, mk, 1.6)
+    d.t(561, y + 21, how, 12, c if c != MUTED else INK, kr(how), "middle", 600)
+    node(646, y + 4, 100, 52, proc, None if c == MUTED else c)
     if hop:
-        d.arrow([(776, y + 30), (796, y + 30)], MUTED, "ar", 1.2, "3 3")
+        d.arrow([(746, y + 30), (796, y + 30)], MUTED, "ar", 1.2, "3 3")
         node(796, y + 4, 100, 52, host)
         d.t(846, y + 76, hop, 12, MUTED, KR, "middle")
     else:
