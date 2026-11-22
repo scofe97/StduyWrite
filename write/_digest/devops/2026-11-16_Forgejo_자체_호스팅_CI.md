@@ -27,8 +27,8 @@
 | :--- | :--- | :--- |
 | Forgejo·Forgejo Actions | 경량 자체 호스팅 Git 서비스와 그 안의 GitHub Actions 형 workflow | |
 | Self-hosted Runner (Forgejo Runner) | job 을 받아 실행하는 서버를 직접 등록·운영하는 CI 실행기 | |
-| DinD vs `docker.sock` 마운트 | job 안 Docker 명령을 별도 데몬으로 돌릴지 호스트 데몬을 공유할지의 선택 | [컨테이너 이미지 빌드](../../07_devops/02_Jenkins/03_agent/01-04.컨테이너 이미지 빌드.md) |
-| 소켓 마운트의 권한 위험 | 소켓을 꽂은 job 이 호스트 root 와 같은 힘을 갖는 이유와 완화 | [VM Jenkins 에서의 Docker 보안 모델](../../07_devops/02_Jenkins/03_agent/01-05.VM Jenkins에서의 Docker 보안 모델.md) |
+| DinD vs `docker.sock` 마운트 | job 안 Docker 명령을 별도 데몬으로 돌릴지 호스트 데몬을 공유할지의 선택 | [컨테이너 안 빌드가 문제가 되는 이유](../../07_devops/docs/artifact/container/01-01.컨테이너%20안%20빌드가%20문제가%20되는%20이유.md) |
+| 소켓 마운트의 권한 위험 | 소켓을 꽂은 job 이 호스트 root 와 같은 힘을 갖는 이유와 완화 | [컨테이너 안 빌드가 문제가 되는 이유](../../07_devops/docs/artifact/container/01-01.컨테이너%20안%20빌드가%20문제가%20되는%20이유.md) |
 | VM 격리 | 신뢰할 수 없는 코드를 컨테이너보다 강한 경계에서 돌리는 방식 | [가상머신](../../08_cloud/book/container-security/05-01.가상머신 — 왜 VM 격리가 더 강하다고 하는가.md) |
 | OCI 이미지 (manifest·config·layer) | 이미지가 설정과 층 묶음이고 manifest 가 이를 기술한다는 구조 | [컨테이너 이미지 해부](../../08_cloud/book/container-security/06-01.컨테이너 이미지 해부 — 두 부분과 층과 식별자.md) |
 | 태그 vs digest | 바뀔 수 있는 이름과, 내용 해시로 늘 같은 이미지를 가리키는 식별자 | [컨테이너 이미지 해부](../../08_cloud/book/container-security/06-01.컨테이너 이미지 해부 — 두 부분과 층과 식별자.md) |

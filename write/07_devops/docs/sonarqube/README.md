@@ -25,7 +25,7 @@ SonarQube 에는 볼 만한 전용 단행본이 없습니다. 전용서는 둘�
 
 둘 다 Quality Gate 의 현행 모델보다 앞섭니다. Clean as You Code 와 MQR 모드, Security Hotspot 이 등장하기 전에 쓰인 책입니다. O'Reilly 에도 챕터 단위 언급만 있습니다. 그래서 이 카테고리는 공식 문서를 정본으로 삼아 `07_devops/book/` 과 분리해 둡니다.
 
-Jenkins 파이프라인 문법 자체는 `../../02_Jenkins/` 가 담당합니다. 다만 4장은 SonarQube 를 CI 에 붙이는 과정을 처음부터 끝까지 자족적으로 다룹니다. 학습 중 폴더를 왕복하지 않게 하려는 의도이며, 그만큼 `02_Jenkins/06_infra/` 와 겹치는 부분이 있습니다.
+Jenkins 파이프라인 문법 자체는 `../jenkins/` 가 담당합니다. 다만 4장은 SonarQube 를 CI 에 붙이는 과정을 처음부터 끝까지 자족적으로 다룹니다. 학습 중 폴더를 왕복하지 않게 하려는 의도입니다.
 
 
 

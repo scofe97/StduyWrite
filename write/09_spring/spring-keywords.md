@@ -82,7 +82,7 @@ updated: 2026-11-03
 | JSON-MessagePack 직렬화 · 스트리밍 응답 | 선택 | | |
 | 오프셋 페이지네이션 · 커서 기반 페이지네이션 · 배치 API | 선택 | | |
 | 키셋 페이지네이션 · 안정 정렬 키 | 선택 | | |
-| 웹훅 검증 · 웹훅 재시도 | 선택 | [웹훅 검증](../07_devops/02_Jenkins/05_operations/02-06a.Webhook%EA%B3%BC%20%EC%99%B8%EB%B6%80%20%EC%97%B0%EB%8F%99.md) · [웹훅 재시도](../07_devops/02_Jenkins/05_operations/02-06a.Webhook%EA%B3%BC%20%EC%99%B8%EB%B6%80%20%EC%97%B0%EB%8F%99.md) | |
+| 웹훅 검증 · 웹훅 재시도 | 선택 | [웹훅 검증](../07_devops/docs/jenkins/08-02.stage%20%EC%83%81%ED%83%9C%EC%99%80%20%EB%A1%9C%EA%B7%B8%EB%A5%BC%20%EA%B0%80%EC%A0%B8%EC%98%A4%EB%8A%94%20wfapi.md#5-jenkins-%ED%98%B8%EC%B6%9C%EC%9E%90%EC%9D%98-%EC%84%B8-%EA%B0%80%EC%A7%80-%EC%84%A4%EA%B3%84-%ED%8C%90%EB%8B%A8) | |
 
 
 
@@ -187,15 +187,15 @@ updated: 2026-11-03
 | Micrometer 와 메트릭 | 필수 | | Spring in Action 16·17장 |
 | Prometheus 연동 | 추천 | | Cloud Native Spring 13장 |
 | 세션 관리 · MFA | 선택 | | |
-| 리프레시 토큰 · 토큰 로테이션 | 선택 | [토큰 로테이션](../07_devops/02_Jenkins/04_api/03-03.API%20%ED%86%A0%ED%81%B0%20%EB%B0%9C%EA%B8%89%C2%B7%ED%9A%8C%EC%A0%84%C2%B7%EC%88%98%EB%AA%85%20%EC%A0%90%EA%B2%80.md) | |
+| 리프레시 토큰 · 토큰 로테이션 | 선택 |  | |
 | OpenID Connect · 인가 코드 그랜트 · 클라이언트 자격 증명 그랜트 · 디바이스 코드 플로우 | 선택 | [OpenID Connect](../07_devops/book/argocd-up-and-running/06-02.SSO%20%EC%97%B0%EA%B2%B0%EA%B3%BC%20RBAC%20%E2%80%94%20Dex%C2%B7%EC%A7%81%EC%A0%91%20OIDC%C2%B7%EC%97%AD%ED%95%A0%EA%B3%BC%20%EC%A0%95%EC%B1%85.md) · [인가 코드 그랜트](../99_ETC/security/01_concepts/2026-05-29_OAuth2%EC%99%80%20OIDC%20%E2%80%94%20%EC%9C%84%EC%9E%84%20%EC%9D%B8%EA%B0%80%EC%99%80%20%EA%B7%B8%20%EC%9C%84%EC%9D%98%20%EC%9D%B8%EC%A6%9D.md) | |
 | 비밀번호 해싱 · bcrypt · scrypt · Argon2 · PBKDF2 · 비밀번호 스트레칭 · 솔트·솔팅 · 페퍼 · 레인보우 테이블 | 선택 | [비밀번호 해싱](../02_os/book/ostep_operating-systems-three-easy-pieces/45-01.%EC%9B%90%EA%B2%A9%20%EA%B8%B0%EA%B3%84%EB%8A%94%20%EB%AC%B4%EC%97%87%EC%9C%BC%EB%A1%9C%20%EB%AF%BF%EB%8A%94%EA%B0%80%20%E2%80%94%20%EC%9D%B8%EC%A6%9D%EC%84%9C%EC%9D%98%20%EC%84%9C%EB%AA%85%EA%B3%BC%20%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%20%ED%95%B4%EC%8B%9C.md) · [솔트·솔팅](../02_os/book/ostep_operating-systems-three-easy-pieces/45-01.%EC%9B%90%EA%B2%A9%20%EA%B8%B0%EA%B3%84%EB%8A%94%20%EB%AC%B4%EC%97%87%EC%9C%BC%EB%A1%9C%20%EB%AF%BF%EB%8A%94%EA%B0%80%20%E2%80%94%20%EC%9D%B8%EC%A6%9D%EC%84%9C%EC%9D%98%20%EC%84%9C%EB%AA%85%EA%B3%BC%20%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%20%ED%95%B4%EC%8B%9C.md) | |
-| 입력 유효성 검사 · SQL 인젝션 방지 · 준비된 문장 · XSS 방지 · CSRF 방지 | 선택 | [준비된 문장](../01_language/book/jpf_java-performance/11-01.JDBC%20%EA%B8%B0%EC%B4%88%20%E2%80%94%20%EB%93%9C%EB%9D%BC%EC%9D%B4%EB%B2%84%C2%B7connection%20pool%C2%B7prepared%20statement.md) · [XSS 방지](../07_devops/02_Jenkins/02_security/04-01.%EC%9B%B9%20%EA%B3%84%EC%B8%B5%20%EB%B3%B4%ED%98%B8%20%E2%80%94%20CSRF%C2%B7CSP%C2%B7%EC%82%AC%EC%9A%A9%EC%9E%90%20%EC%BD%98%ED%85%90%EC%B8%A0.md) · [CSRF 방지](../07_devops/02_Jenkins/02_security/04-01.%EC%9B%B9%20%EA%B3%84%EC%B8%B5%20%EB%B3%B4%ED%98%B8%20%E2%80%94%20CSRF%C2%B7CSP%C2%B7%EC%82%AC%EC%9A%A9%EC%9E%90%20%EC%BD%98%ED%85%90%EC%B8%A0.md) | |
+| 입력 유효성 검사 · SQL 인젝션 방지 · 준비된 문장 · XSS 방지 · CSRF 방지 | 선택 | [준비된 문장](../01_language/book/jpf_java-performance/11-01.JDBC%20%EA%B8%B0%EC%B4%88%20%E2%80%94%20%EB%93%9C%EB%9D%BC%EC%9D%B4%EB%B2%84%C2%B7connection%20pool%C2%B7prepared%20statement.md) · [XSS 방지](../07_devops/docs/jenkins/06-02.%EB%B9%8C%EB%93%9C%20%EA%B2%A9%EB%A6%AC%EC%99%80%20%EA%B3%B5%EA%B2%A9%20%ED%91%9C%EB%A9%B4.md#4-%EC%9B%B9-%EA%B3%84%EC%B8%B5%EC%9D%98-crumb-%ED%86%A0%ED%81%B0%EA%B3%BC-csp) · [CSRF 방지](../07_devops/docs/jenkins/06-02.%EB%B9%8C%EB%93%9C%20%EA%B2%A9%EB%A6%AC%EC%99%80%20%EA%B3%B5%EA%B2%A9%20%ED%91%9C%EB%A9%B4.md#4-%EC%9B%B9-%EA%B3%84%EC%B8%B5%EC%9D%98-crumb-%ED%86%A0%ED%81%B0%EA%B3%BC-csp) | |
 | API 게이트웨이 보안 · 레이트 리밋 바이패스 | 선택 | | |
 | 요청 필터링 | 선택 | | |
 | 봇 탐지 · 캡차 · 디바이스 핑거프린팅 · 행동 분석 · 이상 탐지 | 선택 | | |
 | 액세스 토큰 | 선택 | | |
-| CSP | 선택 | [CSP](../07_devops/02_Jenkins/02_security/04-01.%EC%9B%B9%20%EA%B3%84%EC%B8%B5%20%EB%B3%B4%ED%98%B8%20%E2%80%94%20CSRF%C2%B7CSP%C2%B7%EC%82%AC%EC%9A%A9%EC%9E%90%20%EC%BD%98%ED%85%90%EC%B8%A0.md) | |
+| CSP | 선택 | [CSP](../07_devops/docs/jenkins/06-02.%EB%B9%8C%EB%93%9C%20%EA%B2%A9%EB%A6%AC%EC%99%80%20%EA%B3%B5%EA%B2%A9%20%ED%91%9C%EB%A9%B4.md#4-%EC%9B%B9-%EA%B3%84%EC%B8%B5%EC%9D%98-crumb-%ED%86%A0%ED%81%B0%EA%B3%BC-csp) | |
 
 
 
@@ -217,7 +217,7 @@ updated: 2026-11-03
 | 컨테이너화와 쿠버네티스 | 추천 | [Boot 컨테이너화](../09_spring/books/cloud-native-spring-in-action/06.Spring%20Boot%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%ED%99%94.md) | Cloud Native Spring 6·7장 |
 | 지속 배포와 GitOps | 선택 | | Cloud Native Spring 15장 |
 | 유닛 테스트 · 통합 테스트 · 테스트 더블 목·스텁·페이크 · 엔드투엔드 테스트 · 컨트랙트 테스팅 · 컨슈머 주도 컨트랙트 · 프로퍼티 기반 테스트 · 뮤테이션 테스팅 | 선택 | [유닛 테스트](../09_spring/04_testing/01-02.JUnit%205%20%2B%20AssertJ%EB%A1%9C%20%EB%8B%A8%EC%9C%84%20%ED%85%8C%EC%8A%A4%ED%8A%B8%20%EC%9E%91%EC%84%B1.md) · [통합 테스트](../09_spring/04_testing/02-01.Testcontainers%EC%99%80%20%EC%A7%84%EC%A7%9C%20DB%20%ED%86%B5%ED%95%A9%20%ED%85%8C%EC%8A%A4%ED%8A%B8.md) · [테스트 더블 목·스텁·페이크](../09_spring/04_testing/01-03.Mockito%EC%99%80%20MockMvc%20%EC%8A%AC%EB%9D%BC%EC%9D%B4%EC%8A%A4.md) · [엔드투엔드 테스트](../03_architecture/book/bmf_building-micro-frontends/06-05.E2E%20%ED%85%8C%EC%8A%A4%ED%8A%B8%20%E2%80%94%20%EA%B2%BD%EA%B3%84%EB%A5%BC%20%EB%84%98%EB%8A%94%20%EC%8B%9C%EB%82%98%EB%A6%AC%EC%98%A4%EB%8A%94%20%EB%88%84%EA%B5%AC%20%EA%B2%83%EC%9D%B8%EA%B0%80.md) · [컨슈머 주도 컨트랙트](../04_messaging/08_advanced/01_variants/01-04.%EC%8A%A4%ED%82%A4%EB%A7%88%20%EA%B1%B0%EB%B2%84%EB%84%8C%EC%8A%A4.md) | |
-| 부하 테스트 · 스트레스 테스트 · 소크 테스트 · 카오스 엔지니어링 · 장애 주입 | 선택 | [카오스 엔지니어링](../09_spring/04_testing/02-04.WireMock%EA%B3%BC%20%EC%99%B8%EB%B6%80%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20E2E.md) · [장애 주입](../07_devops/02_Jenkins/05_operations/01-02.%EA%B0%80%EC%9A%A9%EC%84%B1%20%ED%85%8C%EC%8A%A4%ED%8A%B8%20%EC%8B%9C%EB%82%98%EB%A6%AC%EC%98%A4.md) | |
+| 부하 테스트 · 스트레스 테스트 · 소크 테스트 · 카오스 엔지니어링 · 장애 주입 | 선택 | [카오스 엔지니어링](../09_spring/04_testing/02-04.WireMock%EA%B3%BC%20%EC%99%B8%EB%B6%80%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20E2E.md) | |
 | 정적 분석 | 선택 | [정적 분석](../07_devops/docs/sonarqube/01-01.%EC%A0%95%EC%A0%81%20%EB%B6%84%EC%84%9D%EC%9D%B4%20%ED%91%B8%EB%8A%94%20%EA%B2%B0%ED%95%A8.md) | |
 | 퍼징 | 선택 | [퍼징](../01_language/book/lgo_learning-go/15-03.%ED%8D%BC%EC%A7%95%EC%9D%80%20%EC%8B%9C%EB%93%9C%EB%A5%BC%20%EB%B9%84%ED%8B%80%EC%96%B4%20%EB%86%93%EC%B9%9C%20%EC%9E%85%EB%A0%A5%EC%9D%84%20%EC%B0%BE%EA%B3%A0%20%EB%B2%A4%EC%B9%98%EB%A7%88%ED%81%AC%EB%8A%94%20b.Loop%20%EB%A1%9C%20%ED%95%9C%20%EB%B2%88%EC%9D%98%20%EB%B9%84%EC%9A%A9%EC%9D%84%20%EC%9E%BD%EB%8B%88%EB%8B%A4.md) | |
 

@@ -797,7 +797,6 @@ docker volume ls -q | grep -c "$vol"    # 0
 - [이미지 빌더 종류와 선택](01-03.이미지%20빌더%20종류와%20선택.md) — BuildKit 을 다른 빌더와 견주는 기준
 - [rootless 빌드의 조건](01-02.rootless%20빌드의%20조건.md) — user namespace·seccomp 가 rootless 빌드에 필요한 이유
 - [Image Builder — 클러스터 안에서 이미지를 빌드하기](../../../../08_cloud/book/kubernetes-patterns/30-01.Image%20Builder%20—%20클러스터%20안에서%20이미지를%20빌드하기.md) — Pod 안에서 BuildKit rootless 로 빌드한 실측
-- [컨테이너 이미지 빌드](../../../02_Jenkins/03_agent/01-04.컨테이너%20이미지%20빌드.md) — Kaniko 와 daemon-free 빌드의 비교
 
 
 
