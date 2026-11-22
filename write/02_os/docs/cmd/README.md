@@ -162,6 +162,7 @@ resource 는 쓰이는 양을 재고, 여기는 쓸 수 있는 양에 한도를 
 | [ss](./net/ss.md) | `ss` | 듣는 포트와 연결 상태를 보고, 필터로 좁히고, 소켓 큐와 그 소켓을 쥔 프로세스를 찾을 때 |
 | [netstat](./net/netstat.md) | `netstat` | 듣는 포트·연결·라우팅 표를 옛 도구로 볼 때와 `ss`·`ip` 로 바꿔 쓸 때 |
 | [firewall-cmd](./net/firewall-cmd.md) | `firewall-cmd` | firewalld 의 zone·서비스·포트 규칙을 보고 넣고, runtime 과 permanent 를 나눠 다룰 때 |
+| [iptables](./net/iptables.md) | `iptables` · `iptables-save` · `iptables-restore` | Netfilter 체인에 필터·NAT 규칙을 넣고, 카운터·LOG·TRACE 로 매칭을 확인하고, 규칙을 저장·복원할 때 |
 
 
 
