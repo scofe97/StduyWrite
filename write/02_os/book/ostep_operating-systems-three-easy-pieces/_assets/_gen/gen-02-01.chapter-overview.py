@@ -60,9 +60,8 @@ harrow(0, 1, "겉으로는")
 
 node(1, 0, "생성", "셸 명령 · 아이콘 클릭", INFO)
 node(1, 1, "대기 · 제어", "wait · 멈춤과 재개", INFO)
-node(1, 2, "소멸 · 상태", "강제 종료 · 실행 시간", OK)
-harrow(1, 0, "만든 뒤")
-harrow(1, 1, "끝내거나 살피려")
+node(1, 2, "소멸 · 상태", "강제 종료 · 실행 시간", INFO)
+# 2행은 순서가 아닌 API 다섯 종류의 병렬 분류이므로 화살표를 잇지 않는다
 
 node(2, 0, "디스크의 프로그램", "code · static data", INFO)
 node(2, 1, "주소 공간", "코드 · 힙 · 스택", INFO)
@@ -71,7 +70,7 @@ harrow(2, 0, "읽어서 올려")
 harrow(2, 1, "초기화한 뒤")
 
 node(3, 0, "Ready", "돌 준비는 됨", INFO)
-node(3, 1, "Running", "CPU 에서 실행 중", ACC)
+node(3, 1, "Running", "CPU 에서 실행 중", OK)
 node(3, 2, "Blocked", "I/O 완료를 기다림", WARN)
 harrow(3, 0, "scheduled")
 harrow(3, 1, "I/O: initiate")
@@ -88,6 +87,6 @@ node(5, 2, "CPU 이용률", "I/O 때 전환하는지", OK)
 harrow(5, 0, "예측한 뒤")
 harrow(5, 1, "견주어")
 
-d.legend(H - 40, [("호출 · 동작", INFO), ("결과 · 이점", OK), ("대가 · 위험", WARN), ("핵심 대상", ACC)])
+d.legend(H - 40, [("기본 개념 · 자료구조", INFO), ("실행 · 결과", OK), ("대기 · 주의", WARN), ("핵심 대상", ACC)])
 d.save("02-01.chapter-overview.svg")
 print("ok 02-01 overview")
