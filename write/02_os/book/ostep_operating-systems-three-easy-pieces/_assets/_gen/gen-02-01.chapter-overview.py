@@ -1,92 +1,112 @@
-# 02-01 개념도 — 물리 CPU 가 몇 개뿐이어도 프로세스라는 추상과 시분할로 CPU 가 끝없이 있는 듯 보이게 만들고, 프로세스는 상태와 PCB 로 추적된다.
-# 본문 요구(02-01 「학습 목표」 개념도 문단): 1행 시분할과 가상 CPU(§1), 2행 프로세스 API(§2), 3행 프로그램의 적재와 main 진입(§3),
-#           4행 Ready·Running·Blocked 전이(§4), 5행 프로세스 목록·PCB·zombie(§5), 6행 process-run.py 숙제(§6).
+# 02-01 개념도 — 프로세스 한 개가 적재에서 회수까지 일생을 거치고, 시분할이 그 일생을 받치며, 운영체제가 PCB 와 프로세스 목록으로 일생을 추적한다.
+# 본문 요구(02-01 「학습 목표」 개념도 문단): 가운데 줄은 적재(§3) → 실행 중 세 상태(§4) → zombie → 부모의 회수(§5),
+#           위 띠는 시분할이 만드는 CPU 환상(§1), 아래 띠는 PCB 와 프로세스 목록(§5), 곁가지는 프로세스 API(§2).
 # 값 근거: 개념도라 값은 없다.
-# 공식 근거: OSTEP 4장 §4.1~§4.6 과 Homework (Simulation).
-# 타입 스펙: type-architecture — 키워드 개념도. 6행 × 3열 노드 격자(04-01 개념도와 같은 공식: 열 x = 60 + j·340, 노드 216×64), 행 안은 가로 화살표.
+# 공식 근거: OSTEP 4장 §4.1~§4.5 (VERSION 1.10).
+# 타입 스펙: type-state — 대상 하나(프로세스)가 국면을 차례로 지나고 종료(zombie 와 회수)가 정상 경로만큼 중요한 생애 지도.
+#             고른 이유: 이 장의 줄기는 인과나 절 목록이 아니라 한 프로세스의 일생이다. 일생 한 줄에 실행 중 세 상태의 순환을
+#             한 덩어리로 얹고, 위아래에 일생을 받치는 띠를 둔다. 스펙에 이 모양의 공식은 없어 좌표는 직접 잡았다.
+#             (옛 판의 6행 × 3열 격자 공식 열 x = 60 + j·340 은 쓰지 않는다.)
 import sys; sys.path.insert(0, ".")
-from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, INFO, KR, MONO
+from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, INFO, KR, MONO
 
-COL_X, STRIDE, NW, NH = 60, 340, 216, 64
-ROW_Y, ROW_STRIDE = 112, 104
-W, H = 984, 776
+W, H = 984, 696
 
 
 def kr(t):
     return KR if any("가" <= c <= "힣" for c in t) else MONO
 
 
-def nx(j):
-    return COL_X + j * STRIDE
+d = D(W, H, "STATE · 02-01 OVERVIEW",
+      "프로세스는 적재에서 회수까지 일생을 거치고 운영체제가 목록으로 추적한다",
+      "02-01 의 키워드 개념도. 가운데 줄은 프로세스 한 개의 일생이다. 디스크의 프로그램이 적재되어 main 에서 시작하고, 실행 중에는 Ready 와 Running 과 Blocked 를 오가다 끝나면 zombie 로 남고, 부모가 wait 로 회수한다. "
+      "위 띠는 물리 CPU 몇 개를 번갈아 돌리는 시분할이 CPU 가 끝없이 있는 듯한 환상을 만들고 Ready 와 Running 사이의 오감을 낳는 까닭이다. "
+      "아래 띠는 운영체제가 프로세스마다 PCB 를 두고 프로세스 목록으로 묶어 상태를 추적하는 방법이다. 오른쪽 위 곁가지는 프로세스 API 다.",
+      lead="화살표 옆 글자는 두 요소의 관계, 칩은 그 요소를 다루는 절입니다. 가운데 줄이 일생이고 위아래 띠가 일생을 받칩니다.")
 
 
-def ny(i):
-    return ROW_Y + i * ROW_STRIDE
+def node(x, y, w, h, title, sub, c, sec, sub2=None):
+    d.tone(x, y, w, h, c, 6, "14", 1.4 if c == ACC else 1.1)
+    d.chip(x + 24, y + 14, sec, c if c != MUTED else MUTED, 11)
+    d.t(x + w / 2, y + 40, title, 14, c, kr(title), "middle", 600)
+    d.t(x + w / 2, y + 58, sub, 13, MUTED, kr(sub), "middle")
+    if sub2:
+        d.t(x + w / 2, y + 74, sub2, 13, MUTED, kr(sub2), "middle")
 
 
-d = D(W, H, "ARCHITECTURE · 02-01 OVERVIEW",
-      "프로세스는 CPU 를 번갈아 쓰며 끝없는 CPU 의 환상을 만든다",
-      "02-01 의 키워드 개념도. 1행은 물리 CPU 가 몇 개뿐이어도 프로세스를 번갈아 돌려 가상 CPU 가 여럿인 듯 보이게 하는 시분할이다. "
-      "2행은 프로세스를 만들고 기다리고 제어하고 없애고 살피는 API 다. 3행은 디스크의 프로그램이 주소 공간에 올라 main 에서 시작하는 과정이다. "
-      "4행은 Ready 와 Running 과 Blocked 사이의 전이이고, 5행은 프로세스 목록과 PCB 와 zombie 상태다. 6행은 process-run.py 시뮬레이터 숙제다.",
-      lead="화살표 위 글자는 두 키워드의 관계, 왼쪽 칩은 그 줄을 다루는 절입니다.")
+def head(y, cap, x2):
+    d.t(24, y, cap, 13, MUTED, KR, "start", 600)
+    d.line(24, y + 8, x2, y + 8, RULE, 0.8)
 
 
-def node(i, j, title, sub, c=None):
-    x, y = nx(j), ny(i)
-    if c:
-        d.tone(x, y, NW, NH, c, 6, "14", 1.4 if c == ACC else 1.1)
-    else:
-        d.box(x, y, NW, NH)
-    d.t(x + NW / 2, y + 27, title, 14, c or INK, kr(title), "middle", 600)
-    d.t(x + NW / 2, y + 48, sub, 13, MUTED, kr(sub), "middle")
+# 구역 머리
+head(108, "왜 이렇게 하나", 232)
+head(236, "프로세스의 일생", 232)
+head(508, "운영체제의 추적", 232)
 
+# 위 띠 — 시분할이 만드는 환상
+TY = 132
+node(24, TY, 160, 72, "물리 CPU 몇 개", "수십 · 수백 프로세스", INFO, "§1")
+node(248, TY, 160, 72, "시분할", "돌리다 멈추기를 되풀이", INFO, "§1")
+node(480, TY, 180, 72, "CPU 환상", "끝없이 있는 듯한", ACC, "§1")
+d.arrow([(186, TY + 36), (246, TY + 36)], INFO, "info", 1.5)
+d.t(216, TY + 26, "번갈아", 13, MUTED, KR, "middle", 600)
+d.arrow([(410, TY + 36), (478, TY + 36)], INFO, "info", 1.5)
+d.t(444, TY + 26, "겉보기에", 13, MUTED, KR, "middle", 600)
 
-def harrow(i, j, label, c=SOFT, m="soft"):
-    y = ny(i) + NH / 2
-    x1, x2 = nx(j) + NW, nx(j + 1)
-    d.arrow([(x1 + 2, y), (x2 - 4, y)], c, m, 1.3)
-    d.t((x1 + x2) / 2, y - 9, label, 13, MUTED, kr(label), "middle", 600)
+# 곁가지 — 프로세스 API
+node(712, TY, 240, 72, "프로세스 API", "생성 · 대기 · 소멸 · 제어 · 상태", MUTED, "§2")
 
+# 가운데 줄 — 일생
+LY = 336
+node(24, 294, 176, 84, "프로그램 적재", "디스크 → 주소 공간", INFO, "§3", "스택 · 힙 · 표준 입출력")
 
-for i, sec in enumerate(("§1", "§2", "§3", "§4", "§5", "§6")):
-    d.chip(34, ny(i) + NH / 2 - 4, sec, MUTED, 12)
+# 실행 중 세 상태 (한 덩어리)
+d.box(248, 252, 328, 220, "#161B22", RULE, 1.0, 8)
+d.chip(272, 266, "§4", INFO, 11)
+d.t(412, 292, "실행 중 세 상태", 14, INFO, KR, "middle", 600)
+for x, y, name in ((264, 314, "Ready"), (472, 314, "Running"), (472, 412, "Blocked")):
+    d.tone(x, y, 88, 44, INFO, 6, "14", 1.1)
+    d.t(x + 44, y + 28, name, 14, INFO, MONO, "middle", 600)
+d.arrow([(356, 328), (468, 328)], INFO, "info", 1.4)
+d.t(412, 322, "scheduled", 13, MUTED, MONO, "middle", 600)
+d.arrow([(468, 344), (356, 344)], INFO, "info", 1.4)
+d.t(412, 364, "descheduled", 13, MUTED, MONO, "middle", 600)
+d.arrow([(516, 360), (516, 410)], INFO, "info", 1.4)
+d.t(508, 390, "I/O 시작", 13, MUTED, KR, "end", 600)
+d.arrow([(470, 434), (308, 434), (308, 362)], INFO, "info", 1.4)
+d.t(392, 424, "I/O 완료", 13, MUTED, KR, "middle", 600)
 
-node(0, 0, "물리 CPU 몇 개", "프로그램은 수십~수백", INFO)
-node(0, 1, "시분할", "돌리다 멈추고 다음 실행", INFO)
-node(0, 2, "가상 CPU 여럿", "끝없이 있는 듯한 환상", ACC)
-harrow(0, 0, "번갈아 돌려")
-harrow(0, 1, "겉으로는")
+d.arrow([(202, LY), (246, LY)], INFO, "info", 1.5)
+d.t(224, LY - 10, "시작", 13, MUTED, KR, "middle", 600)
 
-node(1, 0, "생성", "셸 명령 · 아이콘 클릭", INFO)
-node(1, 1, "대기 · 제어", "wait · 멈춤과 재개", INFO)
-node(1, 2, "소멸 · 상태", "강제 종료 · 실행 시간", INFO)
-# 2행은 순서가 아닌 API 다섯 종류의 병렬 분류이므로 화살표를 잇지 않는다
+# 시분할 → 세 상태
+d.arrow([(328, 206), (328, 250)], INFO, "info", 1.5)
+d.t(340, 232, "Ready 와 Running 을 오가며", 13, MUTED, KR, "start", 600)
 
-node(2, 0, "디스크의 프로그램", "code · static data", INFO)
-node(2, 1, "주소 공간", "코드 · 힙 · 스택", INFO)
-node(2, 2, "main() 진입", "CPU 제어를 넘김", OK)
-harrow(2, 0, "읽어서 올려")
-harrow(2, 1, "초기화한 뒤")
+# 세 상태 → zombie → 회수
+d.arrow([(578, LY), (638, LY)], INFO, "info", 1.5)
+d.t(608, LY - 10, "끝나면", 13, MUTED, KR, "middle", 600)
+node(640, 300, 120, 72, "zombie", "끝났지만 정리 전", INFO, "§5")
+d.arrow([(762, LY), (830, LY)], INFO, "info", 1.5)
+d.t(796, LY - 10, "wait()", 13, MUTED, MONO, "middle", 600)
+node(832, 300, 120, 72, "부모가 회수", "반환값 · 정리", INFO, "§5")
 
-node(3, 0, "Ready", "돌 준비는 됨", INFO)
-node(3, 1, "Running", "CPU 에서 실행 중", OK)
-node(3, 2, "Blocked", "I/O 완료를 기다림", WARN)
-harrow(3, 0, "scheduled")
-harrow(3, 1, "I/O: initiate")
+# 곁가지 → 회수
+d.arrow([(892, TY + 74), (892, 298)], SOFT, "soft", 1.3, "4 3")
+d.t(884, 256, "대기 기능", 13, MUTED, KR, "end", 600)
 
-node(4, 0, "프로세스 목록", "모든 프로세스를 추적", INFO)
-node(4, 1, "PCB", "struct proc", ACC)
-node(4, 2, "zombie", "끝났지만 정리 전", WARN)
-harrow(4, 0, "항목마다")
-harrow(4, 1, "끝나면")
+# 아래 띠 — 추적
+BY = 540
+node(24, BY, 180, 72, "PCB", "프로세스마다 하나", OK, "§5")
+node(296, BY, 656, 72, "프로세스 목록", "시스템의 모든 프로세스 정보", OK, "§5")
+d.arrow([(206, BY + 36), (294, BY + 36)], OK, "ok", 1.4)
+d.t(250, BY + 26, "묶어", 13, MUTED, KR, "middle", 600)
+d.arrow([(412, BY - 2), (412, 474)], OK, "ok", 1.4)
+d.t(424, 512, "상태를 추적", 13, MUTED, KR, "start", 600)
+d.arrow([(700, 374), (700, BY - 2)], OK, "ok", 1.4)
+d.t(712, 460, "칸을 차지", 13, MUTED, KR, "start", 600)
 
-node(5, 0, "process-run.py", "상태 변화 시뮬레이터", INFO)
-node(5, 1, "-c · -p 플래그", "예측과 대조", INFO)
-node(5, 2, "CPU 이용률", "I/O 때 전환하는지", OK)
-harrow(5, 0, "예측한 뒤")
-harrow(5, 1, "견주어")
-
-d.legend(H - 40, [("기본 개념 · 자료구조", INFO), ("실행 · 결과", OK), ("대기 · 주의", WARN), ("핵심 대상", ACC)])
+d.legend(H - 40, [("프로세스의 일생과 시분할", INFO), ("추적 장치", OK), ("핵심 환상", ACC), ("곁가지", MUTED)])
 d.save("02-01.chapter-overview.svg")
 print("ok 02-01 overview")

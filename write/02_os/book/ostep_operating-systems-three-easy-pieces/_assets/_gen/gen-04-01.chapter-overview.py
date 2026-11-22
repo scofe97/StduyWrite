@@ -1,101 +1,105 @@
-# 04-01 개념도 — 제한된 직접 실행은 프로그램을 CPU 에서 그대로 돌리되, trap 으로 커널에 들어가고 타이머 인터럽트로 통제권을 되찾으며, 프로세스 전환은 swtch 가 맡는다.
-# 본문 요구(04-01 「학습 목표」 개념도 문단): 1행 직접 실행·통제 상실·제한된 직접 실행(§1), 2행 사용자 모드·trap·return-from-trap(§2),
-#           3행 협력 방식·타이머 인터럽트·통제권 회수(§3), 4행 스케줄러·swtch·프로세스 B(§4), 5행 인터럽트 중 인터럽트·인터럽트 끄기·락(§5), 6행 시스템 콜 비용·문맥 교환 비용·비용 추정(§5), 7행 시스템 콜·Sentry·호스트 커널(§6).
+# 04-01 개념도 — 직접 실행이 낳는 두 문제(위험한 일, 통제권 되찾기)가 갈라지고, 문제마다 짝지은 장치가 같은 trap table 을 거쳐 커널에 들어간다.
+# 본문 요구(04-01 「학습 목표」 개념도 문단): 왼쪽 출발 직접 실행(§1), 가운데 두 문제(§1), 오른쪽 제한된 직접 실행 틀 안의 대응 —
+#           위 갈래 사용자·커널 모드(§2)·시스템 콜과 trap(§2), 아래 갈래 타이머 인터럽트(§3)·문맥 교환(§4), 둘이 함께 쓰는 trap table(§2),
+#           곁가지 인터럽트 중첩·비용 측정(§5), 위쪽 gVisor 가 받는 쪽을 바꾼 사례(§6).
 # 값 근거: 개념도라 값은 없다.
 # 공식 근거: OSTEP 6장 §6.1~§6.5, gVisor 플랫폼 문서(systrap·KVM).
-# 타입 스펙: type-architecture — 키워드 개념도. 7행 × 3열 노드 격자(27-01 개념도와 같은 공식: 열 x = 60 + j·340, 노드 216×64), 행 안은 가로 화살표.
+# 타입 스펙: type-architecture — 구성요소를 존으로 묶고 라벨 붙은 화살표로 잇는 노드 그래프. 고른 이유: 이 장의 줄기가
+#             「하나(직접 실행)에서 두 문제로 갈라지고 문제마다 장치가 짝지어지되 두 갈래가 같은 trap table 로 모인다」는 갈래·합류라
+#             절 순서의 격자로는 짝과 합류가 안 보인다. 존(제한된 직접 실행 틀)과 라벨 화살표를 그릴 수 있는 가장 가까운 타입이라 골랐다.
+#             스펙에 갈래 전용 공식은 없어 좌표는 4 의 배수 stride 로 직접 잡았다.
+#             (옛 판의 7행 × 3열 격자 공식 열 x = 60 + j·340 은 쓰지 않는다.)
 import sys; sys.path.insert(0, ".")
-from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, INFO, KR, MONO
+from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, INFO, KR, MONO
 
-COL_X, STRIDE, NW, NH = 60, 340, 216, 64
-ROW_Y, ROW_STRIDE = 112, 104
-W, H = 984, 880
+W, H = 984, 796
 
 
 def kr(t):
     return KR if any("가" <= c <= "힣" for c in t) else MONO
 
 
-def nx(j):
-    return COL_X + j * STRIDE
-
-
-def ny(i):
-    return ROW_Y + i * ROW_STRIDE
-
-
 d = D(W, H, "ARCHITECTURE · 04-01 OVERVIEW",
-      "제한된 직접 실행은 속도를 지키면서 통제권을 놓지 않는다",
-      "04-01 의 키워드 개념도. 1행은 프로그램을 CPU 에서 그대로 돌리면 빠르지만 통제를 잃으므로 제한된 직접 실행이 필요하다는 문제다. "
-      "2행은 사용자 모드 프로그램이 trap 으로 커널에 들어갔다가 return-from-trap 으로 돌아오는 시스템 콜 경로다. "
-      "3행은 협력 방식이 무한 루프 앞에서 막히므로 타이머 인터럽트로 통제권을 되찾는 방법이다. "
-      "4행은 스케줄러가 프로세스를 바꾸기로 하면 swtch 가 커널 레지스터를 교체해 B 를 실행하는 문맥 교환이다. "
-      "5행은 인터럽트 처리 중 또 인터럽트가 오는 문제와 그 대응이고, 6행은 시스템 콜과 문맥 교환의 비용을 재는 방법이며, 7행은 gVisor 가 시스템 콜을 처리하는 쪽을 Sentry 로 바꾸는 방식이다.",
-      lead="화살표 위 글자는 두 키워드의 관계, 왼쪽 칩은 그 줄을 다루는 절입니다.")
+      "직접 실행이 낳는 두 문제를 모드·trap 과 타이머·문맥 교환이 나눠 푼다",
+      "04-01 의 키워드 개념도. 왼쪽 직접 실행은 빠르지만 그동안 운영체제 코드가 돌지 않아 통제를 잃는다. 여기서 두 문제가 갈라진다. "
+      "위 갈래는 프로그램이 위험한 일을 하는 문제이고 사용자 모드와 시스템 콜 trap 이 막는다. 아래 갈래는 CPU 를 쥔 프로그램에게서 제어를 되찾는 문제이고 "
+      "타이머 인터럽트로 되찾은 뒤 문맥 교환으로 프로세스를 바꾼다. 책의 모델에서 두 갈래는 부팅 때 깔아 둔 같은 trap table 을 거쳐 커널에 들어간다. "
+      "주황 틀이 속도는 직접 실행으로 얻고 통제는 미리 깔아 둔 길로 지키는 제한된 직접 실행이다. 위쪽의 gVisor 는 시스템 콜을 받는 쪽을 Sentry 로 바꾸고, "
+      "아래쪽은 인터럽트 중첩과 비용 측정이라는 곁가지다.",
+      lead="화살표 위 글자는 두 요소의 관계, 칩은 그 요소를 다루는 절, 왼쪽에서 오른쪽으로 읽습니다.")
 
 
-def node(i, j, title, sub, c=None):
-    x, y = nx(j), ny(i)
-    if c:
-        d.tone(x, y, NW, NH, c, 6, "14", 1.4 if c == ACC else 1.1)
-    else:
-        d.box(x, y, NW, NH)
-    d.t(x + NW / 2, y + 27, title, 14, c or INK, kr(title), "middle", 600)
-    d.t(x + NW / 2, y + 48, sub, 13, MUTED, kr(sub), "middle")
+def node(x, y, w, h, title, sub, c, sec, sub2=None):
+    d.tone(x, y, w, h, c, 6, "14", 1.1)
+    d.chip(x + 24, y + 14, sec, c, 11)
+    d.t(x + w / 2, y + 40, title, 14, c, kr(title), "middle", 600)
+    d.t(x + w / 2, y + 58, sub, 13, MUTED, kr(sub), "middle")
+    if sub2:
+        d.t(x + w / 2, y + 74, sub2, 13, MUTED, kr(sub2), "middle")
 
 
-def harrow(i, j, label, c=SOFT, m="soft"):
-    y = ny(i) + NH / 2
-    x1, x2 = nx(j) + NW, nx(j + 1)
-    d.arrow([(x1 + 2, y), (x2 - 4, y)], c, m, 1.3)
-    d.t((x1 + x2) / 2, y - 9, label, 13, MUTED, kr(label), "middle", 600)
+NH = 68
+TOP_Y, BOT_Y, MID_Y = 288, 524, 408
 
+# 왼쪽 구역 머리
+for x, x2, cap in ((24, 164, "출발"), (288, 428, "두 문제")):
+    d.t(x, 262, cap, 13, MUTED, KR, "start", 600)
+    d.line(x, 270, x2, 270, RULE, 0.8)
 
-for i, sec in enumerate(("§1", "§2", "§3", "§4", "§5", "§5", "§6")):
-    d.chip(34, ny(i) + NH / 2 - 4, sec, MUTED, 12)
+# 출발 — 직접 실행
+node(24, 398, 140, 84, "직접 실행", "CPU 에서 그대로", INFO, "§1", "빠르지만 통제를 잃음")
 
-node(0, 0, "직접 실행", "CPU 에서 그대로", INFO)
-node(0, 1, "통제 상실", "아무 일이나 가능", WARN)
-node(0, 2, "제한된 직접 실행", "속도와 통제를 함께", ACC)
-harrow(0, 0, "제한이 없으면")
-harrow(0, 1, "둘을 함께 얻으려")
+# 두 문제
+node(288, TOP_Y, 140, NH, "위험한 일", "하지 못하게 막기", INFO, "§1")
+node(288, BOT_Y, 140, NH, "제어 되찾기", "쥔 프로그램에게서", INFO, "§1")
+d.arrow([(166, 440), (176, 440), (176, TOP_Y + 34), (286, TOP_Y + 34)], INFO, "info", 1.5)
+d.t(231, TOP_Y + 24, "제한이 없으면", 13, MUTED, KR, "middle", 600)
+d.arrow([(176, 440), (176, BOT_Y + 34), (286, BOT_Y + 34)], INFO, "info", 1.5)
+d.t(231, BOT_Y + 24, "실행되지 않으면", 13, MUTED, KR, "middle", 600)
 
-node(1, 0, "사용자 모드", "제한된 연산만", INFO)
-node(1, 1, "trap", "행선지는 trap table", INFO)
-node(1, 2, "return-from-trap", "사용자 모드로 복귀", OK)
-harrow(1, 0, "시스템 콜로")
-harrow(1, 1, "일을 마치면")
+# 제한된 직접 실행 틀
+FX, FY, FW, FH = 544, 224, 424, 384
+d.tone(FX, FY, FW, FH, ACC, 8, "10", 1.4)
+d.t(FX + 16, FY + 28, "제한된 직접 실행", 17, ACC, KR, "start", 700)
+d.t(FX + 16, FY + 48, "속도는 직접 실행, 통제는 깔아 둔 길", 13, MUTED, KR, "start")
+d.chip(FX + FW - 28, FY + 24, "§1", ACC, 11)
 
-node(2, 0, "협력 방식", "넘겨주길 기다림", WARN)
-node(2, 1, "타이머 인터럽트", "하드웨어가 강제", ACC)
-node(2, 2, "통제권 회수", "핸들러가 실행됨", OK)
-harrow(2, 0, "무한 루프면")
-harrow(2, 1, "일정 시간마다")
+AX, AW, BX, BW = 560, 148, 808, 144
+node(AX, TOP_Y, AW, NH, "사용자 · 커널 모드", "제한된 연산 보호", OK, "§2")
+node(BX, TOP_Y, BW, NH, "시스템 콜 · trap", "커널에 들어감", OK, "§2")
+node(AX, BOT_Y, AW, NH, "타이머 인터럽트", "하드웨어가 강제로", OK, "§3")
+node(BX, BOT_Y, BW, NH, "문맥 교환", "swtch() · 레지스터", OK, "§4")
 
-node(3, 0, "스케줄러", "계속할지 바꿀지", INFO)
-node(3, 1, "swtch()", "커널 레지스터 교체", INFO)
-node(3, 2, "프로세스 B 실행", "return-from-trap 으로", OK)
-harrow(3, 0, "B 로 바꾸기로 하면")
-harrow(3, 1, "스택을 바꾼 뒤")
+# 두 갈래가 함께 쓰는 trap table
+node(AX, MID_Y, 392, 64, "trap table", "책의 모델에서 부팅 때 깔아 둔 행선지", OK, "§2")
 
-node(4, 0, "인터럽트 중 인터럽트", "커널이 감당할 문제", WARN)
-node(4, 1, "인터럽트 끄기", "처리 중엔 전달 안 됨", INFO)
-node(4, 2, "락", "커널 자료 구조 보호", OK)
-harrow(4, 0, "단순한 대응은")
-harrow(4, 1, "자료 구조는")
+# 문제 → 대응
+d.arrow([(430, TOP_Y + 34), (558, TOP_Y + 34)], INFO, "info", 1.5)
+d.t(493, TOP_Y + 24, "모드로 막고", 13, MUTED, KR, "middle", 600)
+d.arrow([(430, BOT_Y + 34), (558, BOT_Y + 34)], INFO, "info", 1.5)
+d.t(493, BOT_Y + 24, "타이머로 되찾고", 13, MUTED, KR, "middle", 600)
 
-node(5, 0, "시스템 콜 비용", "0 바이트 read 반복", INFO)
-node(5, 1, "문맥 교환 비용", "파이프 두 개로 왕복", INFO)
-node(5, 2, "비용 추정", "반복 횟수로 나눔", OK)
-harrow(5, 0, "같은 방식으로")
-harrow(5, 1, "CPU 하나에 묶고")
+# 대응 안의 흐름
+d.arrow([(AX + AW + 2, TOP_Y + 34), (BX - 2, TOP_Y + 34)], OK, "ok", 1.4)
+d.t((AX + AW + BX) / 2, TOP_Y + 24, "시스템 콜로", 13, MUTED, KR, "middle", 600)
+d.arrow([(AX + AW + 2, BOT_Y + 34), (BX - 2, BOT_Y + 34)], OK, "ok", 1.4)
+d.t((AX + AW + BX) / 2, BOT_Y + 24, "바꾸기로 하면", 13, MUTED, KR, "middle", 600)
 
-node(6, 0, "시스템 콜", "받는 쪽이 바뀜", INFO)
-node(6, 1, "Sentry", "gVisor 의 응용 커널", ACC)
-node(6, 2, "호스트 커널", "필요한 일만 받음", OK)
-harrow(6, 0, "플랫폼이 가로채")
-harrow(6, 1, "필요한 일만 요청")
+# 두 갈래가 trap table 로 모인다
+d.arrow([(880, TOP_Y + NH + 2), (880, MID_Y - 4)], OK, "ok", 1.4)
+d.t(868, 388, "행선지를 정함", 13, MUTED, KR, "end", 600)
+d.arrow([(634, BOT_Y - 2), (634, MID_Y + 64 + 4)], OK, "ok", 1.4)
+d.t(646, 504, "같은 표에 등록", 13, MUTED, KR, "start", 600)
 
-d.legend(H - 40, [("호출 · 동작", INFO), ("결과 · 이점", OK), ("대가 · 위험", WARN), ("핵심 문제", ACC)])
+# 곁가지 — 받는 쪽을 바꾼 gVisor, 인터럽트 중첩과 비용 측정
+node(760, 104, 208, NH, "gVisor", "Sentry 가 시스템 콜을 처리", MUTED, "§6")
+d.arrow([(880, TOP_Y - 2), (880, 104 + NH + 4)], SOFT, "soft", 1.3, "4 3")
+d.t(868, 206, "받는 쪽을 바꾸면", 13, MUTED, KR, "end", 600)
+
+node(560, 648, 260, NH, "인터럽트 중첩 · 비용 측정", "남긴 질문 · 비용 재는 법", MUTED, "§5")
+d.arrow([(634, BOT_Y + NH + 2), (634, 644)], SOFT, "soft", 1.3, "4 3")
+d.t(646, 632, "다른 인터럽트가 오면", 13, MUTED, KR, "start", 600)
+
+d.legend(H - 40, [("전제 · 문제", INFO), ("대응", OK), ("이 편의 핵심", ACC), ("곁가지 · 예고", MUTED)])
 d.save("04-01.chapter-overview.svg")
 print("ok 04-01 overview")

@@ -1,89 +1,86 @@
-# 27-01 개념도 — 이벤트 루프와 select() 로 스레드 없이 동시 요청을 받고, 막히는 호출은 aio_read 로 넘기며, 비동기 뒤의 상태는 job_t 로 넘긴다.
-# 본문 요구(27-01 「학습 목표」 개념도 문단): 1행 이벤트 루프·select()·락 불필요(§1), 2행 블로킹 호출·루프 정지·TIME 지연(§2),
-#           3행 aio_read·aio_error·aio_return(§3), 4행 job_t·재호출·close(§4), 5행 스레드·이벤트·세 원칙(§5).
-# 검증 근거: macOS(Darwin 25.6, 2026-11-08 재실행)에서 SLOW 뒤 TIME 지연 1,709 ms(Linux 7.2.12, macOS 재실행 1,702 ms), 400,001 바이트 FILE 은 aio_read 완료 25회(16,384 바이트 24회 + 6,785 바이트 1회)와 0 바이트 1회로 끝남.
-# 공식 근거: Linux man-pages 6.19 select(2), aio_read(3), aio_error(3), aio_return(3).
-# 타입 스펙: type-architecture — 키워드 개념도. 5행 × 3열 노드 격자(03-02 개념도와 같은 공식: 열 x = 60 + j·340, 노드 216×64), 행 안은 가로 화살표.
+# 27-01 개념도 — 이벤트 루프 한 바퀴를 닫힌 고리로 그리고, 그 고리에서 문제(핸들러 안의 블로킹 호출)와 대응(aio_read 와 상태 남기기), 치르는 값과 결론이 시계 방향으로 뻗는다.
+# 본문 요구(27-01 「학습 목표」 개념도 문단): 고리 = select() 로 기다림 → 이벤트 하나 꺼냄 → 핸들러 실행 → 처음으로(§1), 고리 안 = 락이 필요 없음(§1),
+#           고리에서 뻗는 문제 = 핸들러 안 블로킹 호출 → 서버 전체가 멈춤(§2), 대응 = aio_read 로 넘김(§3) → 상태를 직접 남김(§4),
+#           치르는 값 = 수동 스택 관리의 복잡함·여러 CPU 에서 되살아나는 락(§4·§5), 결론 = 단순한 방식부터(§5).
+# 값 근거: 같은 노트 「핸들러 하나가 루프를 세우는 실험」 — SLOW 뒤 TIME 응답이 1,709 ms 뒤에 왔다(본문 실험 기록의 값. 각주의 다른 실행은 1,701~1,708 ms).
+# 공식 근거: OSTEP 33장 Event-based Concurrency (VERSION 1.10), Linux man-pages 6.19 select(2), aio_read(3), aio_error(3).
+# 타입 스펙: type-architecture — 구성요소를 존으로 묶고 라벨 붙은 화살표로 잇는 노드 그래프. 고른 이유: 이 편의 줄기가 「닫힌 고리 하나에서
+#             문제와 대응이 가지로 뻗는다」는 순환이라 격자나 한 줄 흐름으로는 닫힘이 안 보인다. type-loop 는 역 5~8개와 허브 하나를 요구해
+#             세 단계 고리에 맞지 않는다. 그래서 직각 화살표만으로 닫힌 고리를 그리고(dd-lint 가 대각선 연결선을 막는다)
+#             시계 방향 나선으로 고리 → 문제 → 대응 → 값 → 결론을 잇는다. 스펙에 이 배치의 공식은 없어 좌표는 4 의 배수로 직접 잡았다.
+#             (옛 판의 5행 × 3열 격자 공식 열 x = 60 + j·340 은 쓰지 않는다.)
 import sys; sys.path.insert(0, ".")
-from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, INFO, KR, MONO
+from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, INFO, KR, MONO
 
-COL_X, STRIDE, NW, NH = 60, 340, 216, 64
-ROW_Y, ROW_STRIDE = 112, 124
-W, H = 984, 756
+W, H = 984, 700
 
 
 def kr(t):
     return KR if any("가" <= c <= "힣" for c in t) else MONO
 
 
-def nx(j):
-    return COL_X + j * STRIDE
-
-
-def ny(i):
-    return ROW_Y + i * ROW_STRIDE
-
-
 d = D(W, H, "ARCHITECTURE · 27-01 OVERVIEW",
-      "이벤트 루프는 막히는 일을 루프 밖으로 넘긴다",
-      "27-01 의 키워드 개념도. 1행은 이벤트 루프가 select() 로 준비된 fd 를 골라 핸들러를 하나씩 돌리므로 락이 필요 없다는 구조다. "
-      "2행은 핸들러 안의 블로킹 호출이 루프를 세워 다른 요청의 응답이 1,709 ms 밀린 실험이다. "
-      "3행은 aio_read 로 요청만 내고 aio_error 로 완료를 확인한 뒤 aio_return 으로 읽은 바이트 수를 받는 비동기 읽기다. "
-      "4행은 완료 핸들러가 쓸 소켓과 읽은 위치를 job_t 에 남겨 다음 aio_read 를 이어 내는 상태 넘기기다. "
-      "5행은 스레드 서버와 이벤트 서버를 비교하고 병행성을 고르는 세 원칙으로 마무리한다.",
-      lead="화살표 위 글자는 두 키워드의 관계, 왼쪽 칩은 그 줄을 다루는 절입니다.")
+      "이벤트 루프는 한 번에 하나만 돌고 막히는 일은 루프 밖으로 넘긴다",
+      "27-01 의 키워드 개념도. 왼쪽 고리가 이벤트 루프 한 바퀴다. select() 로 기다리고 준비된 이벤트 하나를 꺼내 핸들러를 끝까지 돌린 뒤 다시 기다리며, 한 번에 핸들러 하나만 돌아 락이 필요 없다. "
+      "고리 오른쪽은 핸들러 안에서 막히는 호출이 서버 전체를 멈추는 문제로, SLOW 뒤 TIME 응답이 1,709 ms 뒤에 왔다. "
+      "그 오른쪽은 aio_read 로 넘기고 aio_error 로 나중에 확인하며 이어 처리할 상태를 직접 남기는 대응이다. "
+      "아래는 치르는 값, 곧 수동 스택 관리의 복잡함과 여러 CPU 에서 되살아나는 락이고, 그래서 단순한 방식부터 고른다는 결론으로 끝난다.",
+      lead="화살표 위 글자는 두 요소의 관계, 칩은 그 요소를 다루는 절, 고리에서 시작해 시계 방향으로 읽습니다.")
 
 
-def node(i, j, title, sub, c=None):
-    x, y = nx(j), ny(i)
-    if c:
-        d.tone(x, y, NW, NH, c, 6, "14", 1.4 if c == ACC else 1.1)
-    else:
-        d.box(x, y, NW, NH)
-    d.t(x + NW / 2, y + 27, title, 14, c or INK, kr(title), "middle", 600)
-    d.t(x + NW / 2, y + 48, sub, 13, MUTED, kr(sub), "middle")
+def node(x, y, w, h, title, sub, c, sec, sub2=None, chip_dx=24):
+    d.tone(x, y, w, h, c, 6, "1e" if c == ACC else "14", 1.4 if c == ACC else 1.1)
+    d.chip(x + chip_dx, y + 14, sec, c, 11)
+    d.t(x + w / 2, y + 40, title, 14, c, kr(title), "middle", 600)
+    d.t(x + w / 2, y + 58, sub, 13, MUTED, kr(sub), "middle")
+    if sub2:
+        d.t(x + w / 2, y + 74, sub2, 13, MUTED, kr(sub2), "middle")
 
 
-def harrow(i, j, label, c=SOFT, m="soft"):
-    y = ny(i) + NH / 2
-    x1, x2 = nx(j) + NW, nx(j + 1)
-    d.arrow([(x1 + 2, y), (x2 - 4, y)], c, m, 1.3)
-    d.t((x1 + x2) / 2, y - 9, label, 13, MUTED, kr(label), "middle", 600)
+# 구역 머리
+for x, x2, cap in ((24, 476, "루프 한 바퀴"), (560, 720, "루프를 세우는 것"), (792, 960, "세우지 않게 하는 길")):
+    d.t(x, 112, cap, 13, MUTED, KR, "start", 600)
+    d.line(x, 120, x2, 120, RULE, 0.8)
 
+NW, NH = 160, 64
 
-for i, sec in enumerate(("§1", "§2", "§3", "§4", "§5")):
-    d.chip(34, ny(i) + NH / 2 - 4, sec, MUTED, 12)
+# 고리 — 기다림(왼쪽 아래) → 꺼냄(왼쪽 위) → 핸들러(오른쪽 위) → 처음으로
+node(24, 160, NW, NH, "이벤트 하나 꺼냄", "준비된 fd 를 고름", INFO, "§1")
+node(316, 160, NW, NH, "핸들러 실행", "하나를 끝까지", INFO, "§1")
+node(24, 336, NW, NH, "select() 로 기다림", "준비된 fd 만 남겨", INFO, "§1")
+node(212, 264, NW, NH, "락이 필요 없음", "핸들러를 하나씩", INFO, "§1")
+d.arrow([(104, 334), (104, 226)], INFO, "info", 1.5)
+d.t(116, 284, "기다린 뒤", 13, MUTED, KR, "start", 600)
+d.arrow([(186, 192), (314, 192)], INFO, "info", 1.5)
+d.t(250, 182, "핸들러에 넘겨", 13, MUTED, KR, "middle", 600)
+d.arrow([(396, 226), (396, 368), (186, 368)], INFO, "info", 1.5)
+d.t(408, 300, "끝까지 처리한 뒤", 13, MUTED, KR, "start", 600)
+d.t(290, 388, "다시 기다림", 13, MUTED, KR, "middle", 600)
 
-node(0, 0, "이벤트 루프", "핸들러를 하나씩", INFO)
-node(0, 1, "select()", "준비된 fd 만 남김", INFO)
-node(0, 2, "락 불필요", "한 번에 핸들러 하나", OK)
-harrow(0, 0, "fd 집합을 넘겨")
-harrow(0, 1, "단일 CPU 에서")
+# 고리에서 뻗는 문제 — 주황은 서버 전체가 멈추는 한 곳
+node(560, 160, NW, NH, "막히는 호출", "핸들러 안 sleep(2)", INFO, "§2")
+node(560, 288, NW, NH, "서버 전체가 멈춤", "TIME 응답 1,709 ms 뒤", ACC, "§2")
+d.arrow([(478, 192), (558, 192)], INFO, "info", 1.5)
+d.t(518, 182, "핸들러에서", 13, MUTED, KR, "middle", 600)
+d.arrow([(640, 226), (640, 286)], ACC, "acc", 1.5)
+d.t(652, 262, "자는 동안", 13, MUTED, KR, "start", 600)
 
-node(1, 0, "블로킹 호출", "핸들러 안 sleep(2)", WARN)
-node(1, 1, "루프 정지", "다음 이벤트를 못 꺼냄", ACC)
-node(1, 2, "TIME 지연", "1,709 ms", WARN)
-harrow(1, 0, "서버 전체가")
-harrow(1, 1, "뒤 요청의 응답이")
+# 대응
+node(792, 288, 168, NH, "aio_read() 로 넘김", "aio_error 로 확인", OK, "§3")
+node(792, 416, 168, NH, "상태 넘기기", "continuation · job_t", OK, "§4")
+d.arrow([(722, 320), (790, 320)], OK, "ok", 1.5)
+d.t(756, 310, "피하려면", 13, MUTED, KR, "middle", 600)
+d.arrow([(876, 354), (876, 414)], OK, "ok", 1.5)
+d.t(864, 390, "이어받으려면", 13, MUTED, KR, "end", 600)
 
-node(2, 0, "aio_read()", "요청만 내고 반환", INFO)
-node(2, 1, "aio_error()", "EINPROGRESS 확인", INFO)
-node(2, 2, "aio_return()", "읽은 바이트 수", OK)
-harrow(2, 0, "완료 여부를 묻고")
-harrow(2, 1, "끝났으면 한 번만")
+# 치르는 값과 결론
+node(484, 416, 232, 84, "치르는 값", "수동 스택 관리의 복잡함", INFO, "§4·§5", "여러 CPU 에서 되살아나는 락", 32)
+node(24, 548, 360, NH, "단순한 방식부터", "병행성은 꼭 필요할 때만", OK, "§5")
+d.arrow([(790, 448), (718, 448)], INFO, "info", 1.5)
+d.t(754, 438, "대가는", 13, MUTED, KR, "middle", 600)
+d.arrow([(482, 458), (204, 458), (204, 546)], OK, "ok", 1.5)
+d.t(343, 448, "고르는 기준은", 13, MUTED, KR, "middle", 600)
 
-node(3, 0, "job_t {sd, off}", "continuation", WARN)
-node(3, 1, "aio_read 재호출", "off 부터 다시", INFO)
-node(3, 2, "n = 0 → close", "파일 끝", OK)
-harrow(3, 0, "읽은 만큼 off 증가")
-harrow(3, 1, "0 바이트를 받으면")
-
-node(4, 0, "스레드 서버", "운영체제가 순서를 고름")
-node(4, 1, "이벤트 서버", "응용이 순서를 고름")
-node(4, 2, "세 원칙", "단순하게 · 필요할 때만", OK)
-harrow(4, 0, "스케줄링 주체 이동")
-harrow(4, 1, "어느 쪽도 정답 아님")
-
-d.legend(716, [("호출 · 동작", INFO), ("결과 · 이점", OK), ("대가 · 위험", WARN), ("핵심 문제", ACC)])
+d.legend(H - 40, [("전제 · 문제", INFO), ("대응", OK), ("핵심 문제", ACC)])
 d.save("27-01.chapter-overview.svg")
 print("ok 27-01 overview")
