@@ -21,7 +21,7 @@ updated: 2026-11-21
 
 > 도구 하나를 한 시트에 두고, 하는 일에 따라 아래 분류의 하위 폴더에 둡니다.
 
-이 폴더 안에 쓴 시트는 image 분류의 [buildah](image/buildah.md)·[crane](image/crane.md)·[trivy](image/trivy.md)·[cosign](image/cosign.md) 네 편이고, 나머지는 분류와 후보 명령만 정해 두었습니다. 시트를 쓰면 해당 분류의 표에 한 행을 더합니다.
+이 폴더에 쓴 시트는 image 분류 다섯 편([buildkit](image/buildkit.md)·[buildah](image/buildah.md)·[crane](image/crane.md)·[trivy](image/trivy.md)·[cosign](image/cosign.md))입니다. 나머지는 분류와 후보 명령만 정해 두었습니다. 시트를 쓰면 해당 분류의 표에 한 행을 더합니다.
 
 - [image: 이미지 빌드와 레지스트리](#image--이미지-빌드와-레지스트리)
 - [gitops: 배포와 동기화](#gitops--배포와-동기화)
@@ -32,7 +32,7 @@ updated: 2026-11-21
 
 시트의 절 순서와 코드 블록 안 `#` 줄의 뜻은 [리눅스 명령어 시트](../../../02_os/docs/cmd/README.md)의 「이 폴더를 쓰는 법」을 그대로 따릅니다. 개요, 핵심 문법, 종료 코드, 유스케이스, 주의사항과 동작 원리, 관련 문서 순서입니다. 실측한 환경과 도구 버전은 시트마다 개요에 적습니다.
 
-다른 명령어 시트와 겹치는 도구는 한쪽에만 둡니다. 운영체제 기능을 직접 보는 명령(`ps`·`ss`·`systemctl`)은 리눅스 명령어 시트에, 컨테이너 실행과 클러스터 조작 명령(`docker`·`crictl`·`kubectl`)은 [클라우드 명령어 시트](../../../08_cloud/docs/cmd/README.md)에, 빌드와 배포 흐름에서 쓰는 도구는 이쪽에 둡니다. 이미 다른 폴더에 있는 시트는 옮기지 않고 아래 표에서 링크로 가리킵니다. `helm`·`kustomize` 는 시트를 따로 두지 않습니다. 명령과 실행 예까지 [iac](../iac/README.md) 문서가 주제별로 다룹니다.
+다른 명령어 시트와 겹치는 도구는 한쪽에만 둡니다. 운영체제 기능을 직접 보는 명령(`ps`·`ss`·`systemctl`)은 리눅스 명령어 시트에, 컨테이너 실행과 클러스터 조작 명령(`docker`·`crictl`·`kubectl`)은 [클라우드 명령어 시트](../../../08_cloud/docs/cmd/README.md)에, 빌드와 배포 흐름에서 쓰는 도구는 이쪽에 둡니다. `helm`·`kustomize` 는 시트를 따로 두지 않습니다. 명령과 실행 예까지 [iac](../iac/README.md) 문서가 주제별로 다룹니다.
 
 
 
@@ -40,11 +40,11 @@ updated: 2026-11-21
 
 > 이미지를 만들고, 레지스트리 사이로 옮기고, 내용과 취약점을 확인하는 도구입니다. 후보는 `docker build`·`docker buildx`·`skopeo`·`crane`·`trivy` 입니다.
 
-빌더를 고르는 기준과 rootless 빌드의 조건은 [artifact](../artifact/README.md)의 개념 편이 맡습니다. `buildctl` 시트는 그 폴더에 이미 있어서 링크만 둡니다. `docker` 로 컨테이너를 실행하고 조회하는 명령은 클라우드 명령어 시트가 맡고, 여기는 빌드와 레지스트리 전송만 다룹니다.
+빌더를 고르는 기준과 rootless 빌드의 조건은 [artifact](../artifact/README.md)의 개념 편이 맡습니다. `docker` 로 컨테이너를 실행하고 조회하는 명령은 클라우드 명령어 시트가 맡고, 여기는 빌드와 레지스트리 전송만 다룹니다.
 
 | 시트 | 다루는 명령 | 이런 때 찾습니다 |
 |------|------------|----------------|
-| [buildkit](../artifact/container/buildkit.md) | `buildctl` · `buildkitd` | `buildctl` 로 빌드하고 결과를 registry·tar 로 내보내거나 캐시를 주고받을 때 |
+| [buildkit](image/buildkit.md) | `buildctl` · `buildkitd` | `buildctl` 로 빌드하고 결과를 registry·tar 로 내보내거나 캐시를 주고받을 때 |
 | [buildah](image/buildah.md) | `buildah` | 데몬 없이 Dockerfile 이나 셸 명령으로 OCI 이미지를 빌드하고, 셸 없는 이미지를 만들고, 저장소·tar 로 내보내고, 캐시·격리 방식을 고를 때 |
 | [crane](image/crane.md) | `crane` | 데몬 없이 원격 저장소의 digest·manifest·config 를 읽거나, 저장소 사이 복사·태그·pull/push·mutate/append·삭제를 할 때 |
 | [trivy](image/trivy.md) | `trivy` | 이미지·디렉터리·설정 파일·SBOM 의 알려진 취약점과 설정 오류를 찾고, CI 에서 종료 코드로 빌드를 막거나 폐쇄망에서 DB 갱신 없이 스캔할 때 |
@@ -104,5 +104,5 @@ Argo CD 의 원리는 [Argo CD 정독 노트](../../book/argocd-up-and-running/R
 - [07_devops](../../README.md) — DevOps 카테고리 지도
 - [리눅스 명령어 시트](../../../02_os/docs/cmd/README.md) — 운영체제 명령의 시트와 시트 작성 형식
 - [iac](../iac/README.md) — Helm·Kustomize 의 원리와 명령
-- [artifact](../artifact/README.md) — 이미지 빌드의 원리와 `buildctl` 시트
+- [artifact](../artifact/README.md) — 이미지 빌드의 원리
 - [클라우드 명령어 시트](../../../08_cloud/docs/cmd/README.md) — `docker`·`crictl`·`kubectl` 처럼 컨테이너와 클러스터를 다루는 명령의 시트

@@ -16,15 +16,15 @@ updated: 2026-11-23
 
 ## 폴더 규칙
 
-> 산출물 종류마다 폴더를 하나 두고, 그 안에서 개념 편은 번호로, 도구 시트는 도구 이름으로 둡니다.
+> 산출물 종류마다 폴더를 하나 두고, 개념 편은 번호로 둡니다. 도구별 명령어 시트는 [명령어 시트](../cmd/README.md)에 둡니다.
 
 | 폴더 | 산출물 | 지금 상태 |
 |------|--------|-----------|
-| `container/` | 컨테이너 이미지 | 개념 편 여덟과 도구 시트 하나 |
+| `container/` | 컨테이너 이미지 | 개념 편 여덟 |
 | `package/` | JAR·바이너리 같은 실행 패키지 | 아직 없음. 정본은 아래 「다른 폴더가 맡는 것」 |
 | `vm/` | VM 이미지 | 폴더를 만들지 않았습니다. 아래 「다른 폴더가 맡는 것」 의 fdsd 두 절이 지금의 자리입니다 |
 
-개념 편은 `{장}-{절}.{제목}.md` 로 번호를 받습니다. 여러 도구에 걸친 질문(왜 컨테이너 안 빌드가 어려운가, rootless 는 무엇을 요구하는가)을 차례로 쌓아 가기 때문입니다. 도구 시트는 `buildkit.md` 처럼 번호 없는 이름 파일로 둡니다. 개념 편과 읽는 순서를 다투지 않고, 도구 이름이 곧 찾는 단서이기 때문입니다. 도식은 개념 편에만 둡니다.
+개념 편은 `{장}-{절}.{제목}.md` 로 번호를 받습니다. 여러 도구에 걸친 질문(왜 컨테이너 안 빌드가 어려운가, rootless 는 무엇을 요구하는가)을 차례로 쌓아 가기 때문입니다. 도구별 CLI 시트는 `buildkit`·`buildah` 처럼 [명령어 시트](../cmd/README.md)가 맡습니다. 도식은 개념 편에만 둡니다.
 
 
 
@@ -42,7 +42,6 @@ updated: 2026-11-23
 | [03-01 이미지 구조와 digest](container/03-01.%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EA%B5%AC%EC%A1%B0%EC%99%80%20digest.md) | 컨테이너 이미지 | 같은 이미지인데 머신마다 이미지 ID 가 다르거나, 레지스트리를 옮긴 뒤 digest 가 달라져 같은 이미지인지 가려야 할 때 |
 | [03-02 레지스트리 통신과 오프라인 반입](container/03-02.%EB%A0%88%EC%A7%80%EC%8A%A4%ED%8A%B8%EB%A6%AC%20%ED%86%B5%EC%8B%A0%EA%B3%BC%20%EC%98%A4%ED%94%84%EB%9D%BC%EC%9D%B8%20%EB%B0%98%EC%9E%85.md) | 컨테이너 이미지 | HTTP 사내 레지스트리에서 이미지를 받아 폐쇄망으로 옮겨 올리는데 로그인·pull·push 가 막힐 때 |
 | [03-03 layer 변경분과 whiteout](container/03-03.layer%20%EB%B3%80%EA%B2%BD%EB%B6%84%EA%B3%BC%20whiteout.md) | 컨테이너 이미지 | Dockerfile 뒤 단계에서 지운 파일 때문에 이미지 크기가 줄지 않거나, 지운 줄 알았던 파일이 tar 에서 꺼내질 때 |
-| [buildkit](container/buildkit.md) | 컨테이너 이미지 | `buildctl` 로 빌드하고 결과를 registry·tar 로 내보내거나 캐시를 주고받을 때 |
 
 
 
@@ -50,7 +49,8 @@ updated: 2026-11-23
 
 > 쓸 순서대로 적었습니다. 이름이 정해진 파일은 그 이름으로 만듭니다.
 
-- `container/` 도구 시트: `kaniko.md`(저장소가 2025-06-03 보관된 상태와 옮겨 갈 곳 포함), `jib.md`, `buildpacks.md` (`buildah` 는 [명령어 시트](../cmd/image/buildah.md)로 썼습니다)
+- `container/` 도구 시트([cmd/image/](../cmd/README.md#image--이미지-빌드와-레지스트리)): `kaniko.md`(2025-06-03 보관 상태와 이전 경로 포함), `jib.md`, `buildpacks.md`
+  - `buildkit` 은 [buildkit](../cmd/image/buildkit.md), `buildah` 는 [buildah](../cmd/image/buildah.md) 시트로 썼습니다
 - `container/02-01.레이어 캐시와 multi-stage.md`
 - `container/02-03.멀티 플랫폼 이미지 빌드.md`
 - `package/01-01.빌드 산출물과 CI 빌드의 조건.md`
@@ -98,3 +98,4 @@ runtime-spec 은 빌드 산출물이 아니라 실행 영역이므로, 후보가
 
 - [07_devops MOC](../../README.md) — 대분류 지도
 - [docs/jenkins](../jenkins/01-01.Controller%C2%B7Agent%C2%B7Executor%20%EC%99%80%20JENKINS_HOME.md) — 빌드를 돌리는 쪽. Agent 가 VM 인지 Pod 인지가 01-01 의 출발점입니다
+- [DevOps 명령어 시트](../cmd/README.md) — `buildkit`·`buildah`·`crane`·`trivy`·`cosign` 시트 모음

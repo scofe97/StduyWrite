@@ -15,7 +15,7 @@ related:
   - "../README.md"
   - "../../artifact/container/01-02.rootless%20%EB%B9%8C%EB%93%9C%EC%9D%98%20%EC%A1%B0%EA%B1%B4.md"
   - "../../artifact/container/01-03.%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EB%B9%8C%EB%8D%94%20%EC%A2%85%EB%A5%98%EC%99%80%20%EC%84%A0%ED%83%9D.md"
-  - "../../artifact/container/buildkit.md"
+  - "buildkit.md"
   - "../../../../08_cloud/docs/cmd/container/podman.md"
   - "../../../../08_cloud/docs/cmd/container/docker.md"
 updated: "2026-11-23"
@@ -869,7 +869,7 @@ cd ~ && rm -rf ~/sheet-buildah
 - [DevOps 명령어 시트](../README.md) — 같은 폴더 지도
 - [rootless 빌드의 조건](../../artifact/container/01-02.rootless%20%EB%B9%8C%EB%93%9C%EC%9D%98%20%EC%A1%B0%EA%B1%B4.md) — 일반 사용자 빌드가 되는 사용자 namespace 와 매핑의 원리
 - [이미지 빌더 종류와 선택](../../artifact/container/01-03.%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EB%B9%8C%EB%8D%94%20%EC%A2%85%EB%A5%98%EC%99%80%20%EC%84%A0%ED%83%9D.md) — buildah 와 다른 빌더 중 무엇을 고를지
-- [buildctl·buildkitd 참조 시트](../../artifact/container/buildkit.md) — BuildKit 으로 같은 이미지를 빌드할 때
+- [buildctl·buildkitd 참조 시트](buildkit.md) — BuildKit 으로 같은 이미지를 빌드할 때
 - [podman 참조 시트](../../../../08_cloud/docs/cmd/container/podman.md) — 같은 저장소의 이미지를 실행하고 관리할 때
 - [docker 참조 시트](../../../../08_cloud/docs/cmd/container/docker.md) — tar 로 내보낸 이미지를 docker 로 불러올 때
 

@@ -9,8 +9,9 @@ source:
   - https://docs.docker.com/build/buildkit/
   - moby/buildkit:v0.34.1 이미지의 `buildctl --help`·`buildkitd --help` 원문
 related:
-  - 01-02.rootless 빌드의 조건.md
-  - 01-03.이미지 빌더 종류와 선택.md
+  - ../README.md
+  - ../../artifact/container/01-02.rootless%20%EB%B9%8C%EB%93%9C%EC%9D%98%20%EC%A1%B0%EA%B1%B4.md
+  - ../../artifact/container/01-03.%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EB%B9%8C%EB%8D%94%20%EC%A2%85%EB%A5%98%EC%99%80%20%EC%84%A0%ED%83%9D.md
 updated: 2026-11-15
 ---
 
@@ -794,8 +795,9 @@ docker volume ls -q | grep -c "$vol"    # 0
 
 > 이 시트의 예와 이어지는 개념 편과 K8s 쪽 실측 노트입니다.
 
-- [이미지 빌더 종류와 선택](01-03.이미지%20빌더%20종류와%20선택.md) — BuildKit 을 다른 빌더와 견주는 기준
-- [rootless 빌드의 조건](01-02.rootless%20빌드의%20조건.md) — user namespace·seccomp 가 rootless 빌드에 필요한 이유
+- [DevOps 명령어 시트](../README.md) — 같은 폴더 지도
+- [이미지 빌더 종류와 선택](../../artifact/container/01-03.%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EB%B9%8C%EB%8D%94%20%EC%A2%85%EB%A5%98%EC%99%80%20%EC%84%A0%ED%83%9D.md) — BuildKit 을 다른 빌더와 견주는 기준
+- [rootless 빌드의 조건](../../artifact/container/01-02.rootless%20%EB%B9%8C%EB%93%9C%EC%9D%98%20%EC%A1%B0%EA%B1%B4.md) — user namespace·seccomp 가 rootless 빌드에 필요한 이유
 - [Image Builder — 클러스터 안에서 이미지를 빌드하기](../../../../08_cloud/book/kubernetes-patterns/30-01.Image%20Builder%20—%20클러스터%20안에서%20이미지를%20빌드하기.md) — Pod 안에서 BuildKit rootless 로 빌드한 실측
 
 
