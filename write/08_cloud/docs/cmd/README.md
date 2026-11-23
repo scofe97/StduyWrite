@@ -20,7 +20,7 @@ updated: 2026-11-21
 
 > 도구 하나를 한 시트에 두고, 하는 일에 따라 아래 분류의 하위 폴더에 둡니다.
 
-이 폴더 안에 쓴 시트는 [docker](container/docker.md) 한 편이고, 나머지는 분류와 후보 명령만 정해 두었습니다. 시트를 쓰면 해당 분류의 표에 한 행을 더합니다.
+이 폴더 안에 쓴 시트는 [docker](container/docker.md)·[podman](container/podman.md) 두 편이고, 나머지는 분류와 후보 명령만 정해 두었습니다. 시트를 쓰면 해당 분류의 표에 한 행을 더합니다.
 
 - [container: 컨테이너 실행과 조회](#container--컨테이너-실행과-조회)
 - [k8s: 클러스터 조작](#k8s--클러스터-조작)
@@ -46,6 +46,7 @@ updated: 2026-11-21
 | 문서 | 다루는 명령 | 이런 때 찾습니다 |
 |------|------------|----------------|
 | [docker](container/docker.md) | `docker save` · `docker load` · `docker export` · `docker import` | 이미지를 tar 로 내보내 다른 호스트에 들이고, 태그를 되살려 저장소에 올릴 때. 실행·조회 명령은 아직 없습니다 |
+| [podman](container/podman.md) | `podman` | 데몬 없이 rootless 컨테이너·pod 를 띄우고, UID 매핑·저장소 분리·short-name 해석·Kubernetes YAML 생성·Quadlet 등록을 다룰 때 |
 | [nerdctl](../../../02_os/docs/cmd/isolate/nerdctl.md) | `nerdctl` | containerd 위의 컨테이너·이미지를 docker 문법으로 보고 실행하고, namespace 를 가르고, tar 로 반입한 이미지를 저장소에 올릴 때 |
 | [컨테이너 런타임 인터페이스·crictl](../kubernetes/architecture/%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EB%9F%B0%ED%83%80%EC%9E%84%20%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4%C2%B7crictl.md) | `crictl` | 워커 노드에서 `docker ps` 로 보이지 않는 Pod 컨테이너와 샌드박스를 CRI 소켓으로 볼 때 |
 

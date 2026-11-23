@@ -21,7 +21,7 @@ updated: 2026-11-21
 
 > 도구 하나를 한 시트에 두고, 하는 일에 따라 아래 분류의 하위 폴더에 둡니다.
 
-지금은 분류와 후보 명령만 정해 두었고, 이 폴더 안에 쓴 시트는 아직 없습니다. 시트를 쓰면 해당 분류의 표에 한 행을 더합니다.
+이 폴더 안에 쓴 시트는 image 분류의 [buildah](image/buildah.md)·[crane](image/crane.md)·[trivy](image/trivy.md)·[cosign](image/cosign.md) 네 편이고, 나머지는 분류와 후보 명령만 정해 두었습니다. 시트를 쓰면 해당 분류의 표에 한 행을 더합니다.
 
 - [image: 이미지 빌드와 레지스트리](#image--이미지-빌드와-레지스트리)
 - [gitops: 배포와 동기화](#gitops--배포와-동기화)
@@ -45,6 +45,10 @@ updated: 2026-11-21
 | 시트 | 다루는 명령 | 이런 때 찾습니다 |
 |------|------------|----------------|
 | [buildkit](../artifact/container/buildkit.md) | `buildctl` · `buildkitd` | `buildctl` 로 빌드하고 결과를 registry·tar 로 내보내거나 캐시를 주고받을 때 |
+| [buildah](image/buildah.md) | `buildah` | 데몬 없이 Dockerfile 이나 셸 명령으로 OCI 이미지를 빌드하고, 셸 없는 이미지를 만들고, 저장소·tar 로 내보내고, 캐시·격리 방식을 고를 때 |
+| [crane](image/crane.md) | `crane` | 데몬 없이 원격 저장소의 digest·manifest·config 를 읽거나, 저장소 사이 복사·태그·pull/push·mutate/append·삭제를 할 때 |
+| [trivy](image/trivy.md) | `trivy` | 이미지·디렉터리·설정 파일·SBOM 의 알려진 취약점과 설정 오류를 찾고, CI 에서 종료 코드로 빌드를 막거나 폐쇄망에서 DB 갱신 없이 스캔할 때 |
+| [cosign](image/cosign.md) | `cosign` | 이미지·파일에 서명하고 받는 쪽에서 확인하거나, 검증이 실패한 이유(서명 없음·다른 키·바뀐 이미지)를 가를 때 |
 
 
 
