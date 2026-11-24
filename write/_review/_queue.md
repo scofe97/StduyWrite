@@ -6,7 +6,7 @@ related:
   - ./_template/review-routine.md
   - ./_template/review-template.md
   - ./README.md
-updated: 2026-11-23
+updated: 2026-11-24
 ---
 
 # 복습 대기 큐
@@ -55,7 +55,7 @@ updated: 2026-11-23
 
 ## 큐
 
-> `책` 은 slug 다 — kia(kubernetes-in-action) · cntd(computer-networking-top-down) · lml(learning-modern-linux) · nak(networking-and-kubernetes) · paw(packet-analysis-wireshark) · bmf(building-micro-frontends) · istio(istio-in-action) · coredns(learning-coredns) · sp(systems-performance) · lgo(lgo_learning-go, Learning Go 2판) · ostep(ostep_operating-systems-three-easy-pieces).
+> `책` 은 slug 다 — kia(kubernetes-in-action) · cntd(computer-networking-top-down) · lml(learning-modern-linux) · nak(networking-and-kubernetes) · paw(packet-analysis-wireshark) · bmf(building-micro-frontends) · istio(istio-in-action) · coredns(learning-coredns) · sp(systems-performance) · lgo(lgo_learning-go, Learning Go 2판) · ostep(ostep_operating-systems-three-easy-pieces) · container-image(07_devops/docs/artifact/container).
 
 | 책 | 챕터 | 노트 | 상태 | 회차 | 다음 | 비고 |
 |---|---|---|---|---|---|---|
@@ -146,3 +146,4 @@ updated: 2026-11-23
 | ostep | ch04 | 1 | 대기 | - | - | 02-01 Phase 1·2·4 완료(2026-11-22, 기록 위치 `02_os/book/ostep_operating-systems-three-easy-pieces/README.md` 학습 상태). Phase 3(process-run.py 숙제)은 미실행 — 사용자가 실습을 나중에 몰아서 하기로 함. Phase 4 5문항 중 1막힘: 왜 필요한가 축(프로세스 단위로 메모리·레지스터 값·열린 파일을 따로 붙잡아야 멈췄다 이어 감 — Phase 1 에서 도출했으나 회상 못 함). 원리 축은 되묻기 뒤 완성(요청 순간 이미 Running, Blocked→Ready 계기는 I/O 완료) |
 | ostep | ch05 | 1 | 대기 | - | - | 03-01 Phase 1·2·4 완료(2026-11-22, 기록 위치 `02_os/book/ostep_operating-systems-three-easy-pieces/README.md` 학습 상태). Phase 3(cpu-api/fork.py·p1~p4)은 미실행 — 사용자가 실습을 나중에 몰아서 하기로 함. Phase 4 5문항(실습 축 생략) 중 1막힘: 핵심 동작 원리 축(최초 응답에서 `fork()` 반환값·시작 지점 미답, `execvp()` 성공 시 `this shouldn't print out` 출력 오답 → 3절 1단계 인용 힌트 뒤 덮어쓰기·`wc`→`done` 도출; Phase 2 에서도 같은 자리에서 막혔던 도출·정착 간극). 복습 출제 축: `exec()` 성공 시 복귀 불가 이유, `fork()` 반환값(`0` 대 자식 PID)과 시작 지점, FD·페이지 테이블 용어 구분(`파일 시스템`/`파일` 혼동) |
 | ostep | ch06 | 1 | 게이트 | - | - | 04-01 Phase 1·2·4 완료(2026-11-23, 기록 위치 `02_os/book/ostep_operating-systems-three-easy-pieces/README.md` 학습 상태). Phase 3(0바이트 `read`·2-파이프 문맥 교환 측정 코드)은 미실행 — 사용자가 실습을 나중에 몰아서 하기로 함. Phase 4 5문항(실습 축 생략) 중 4응시 2막힘 + 1자기 신고(건너뜀): 막힌 축 1) 왜 필요한가(1절 — 직접 실행 성능 이유는 힌트 뒤 도출, 둘째 문제 '프로세스 중단·전환 불가'는 오답), 2) 핵심 동작 원리(4절 — 문맥 교환 레지스터 2회 저장·복원의 횟수·커널 스택 대 PCB·하드웨어 대 `swtch()` 누락, 설명 요청). 미확인·세부 보강 축: 3) 함정·주의점(5절 `gettimeofday()` 1회 정밀도·반복 평균 및 멀티코어 `sched_setaffinity()` 단일 코어 고정·2-파이프 왕복 — 자기 신고 건너뜀이라 다음 회차에서 1문항 확인), 4) 트레이드오프 세부(6절 `systrap` 대 `KVM` 구분 미답, `systrap`·Sentry 혼동), 5) 대안 차이 전제 세부(3절 부팅 때 특권 명령으로 하드웨어 타이머 시작·핸들러 등록) |
+| container-image | ch03 | 1 | 게이트 | - | - | 03-01 Phase 1~4 완료(2026-11-24, 기록 위치 `07_devops/docs/artifact/container/STATE.md`). Phase 3 옆 창(`lab-03-01`) 3단계 실행 완료. Phase 4 6문항 중 통과 3(원리·대안·실습)·막힘 3(왜·함정·트레이드오프) — 게이트 재확인 축: (1) 왜 필요한가(태그 포인터 이동·이미지 ID 가 환경·경로마다 다른 이유), (2) 함정·주의점(호스트 OS 가 아니라 daemon 플랫폼 `linux/arm64` 아키텍처 기준·둘 다 생략 시 `save` 자체는 성공), (3) 트레이드오프(`config digest` 만 볼 때 압축 바이트·`mediaType` 누락 및 `ENV`·`Cmd`·`history` 변경 시 `config digest` 변경 예외). ZPD 기본→입문 |
