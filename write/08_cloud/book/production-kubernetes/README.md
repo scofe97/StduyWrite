@@ -10,7 +10,7 @@ related:
   - ../kubernetes-up-and-running/README.md
   - ../networking-and-kubernetes/README.md
   - ../cks-study-guide/README.md
-  - ../../kubernetes/README.md
+  - ../../../_archive/08_cloud/kubernetes/README.md
 updated: 2026-11-18
 ---
 
@@ -107,4 +107,4 @@ updated: 2026-11-18
 - [Kubernetes: Up and Running 정독 인덱스](../kubernetes-up-and-running/README.md) — 운영자의 최소 조작 경로를 다루는 실전서
 - [Networking and Kubernetes 정독 인덱스](../networking-and-kubernetes/README.md) — 네트워크 계층 수직 심화 정독본
 - [CKS Study Guide 정독 인덱스](../cks-study-guide/README.md) — 클러스터 보안 하드닝 실기 정독본
-- [08_cloud/kubernetes 개념 노트 인덱스](../../kubernetes/README.md) — 쿠버네티스 개념 축 통합 인덱스
+- [08_cloud/kubernetes 개념 노트 인덱스](../../../_archive/08_cloud/kubernetes/README.md) — 쿠버네티스 개념 축 통합 인덱스

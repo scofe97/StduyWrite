@@ -9,7 +9,7 @@ related:
   - ../kubernetes-in-action/README.md
   - ../kubernetes-patterns/README.md
   - ../networking-and-kubernetes/README.md
-  - ../../kubernetes/README.md
+  - ../../../_archive/08_cloud/kubernetes/README.md
 updated: 2026-08-23
 ---
 
@@ -146,7 +146,7 @@ RBAC처럼 이미 여러 문서가 다룬 주제는 축을 나눠 씁니다. 권
 - [Kubernetes in Action, 2판 정독 인덱스](../kubernetes-in-action/README.md) — 오브젝트를 바닥부터 쌓는 입문·레퍼런스 정독본
 - [Kubernetes Patterns, 2판 정독 인덱스](../kubernetes-patterns/README.md) — 오브젝트 조합으로 반복 문제를 푸는 패턴 카탈로그
 - [Networking and Kubernetes 정독 인덱스](../networking-and-kubernetes/README.md) — 네트워크 계층 수직 심화
-- [08_cloud/kubernetes — Kubernetes 실전 운영](../../kubernetes/README.md) — 개념 축 노트 인덱스
+- [08_cloud/kubernetes — Kubernetes 실전 운영](../../../_archive/08_cloud/kubernetes/README.md) — 개념 축 노트 인덱스
 
 
 

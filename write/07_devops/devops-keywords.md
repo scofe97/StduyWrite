@@ -59,7 +59,7 @@ updated: 2026-11-03
 | 정적 분석과 결함 탐지 — 버그 · 취약점 · 코드 스멜 | 필수 | [정적 분석이 푸는 결함](../07_devops/docs/sonarqube/01-01.%EC%A0%95%EC%A0%81%20%EB%B6%84%EC%84%9D%EC%9D%B4%20%ED%91%B8%EB%8A%94%20%EA%B2%B0%ED%95%A8.md) | Software Engineering at Google 20장 |
 | Clean as You Code — 신규 코드 중심 품질 관리 | 추천 | [Clean as You Code](../07_devops/docs/sonarqube/01-03.Clean%20as%20You%20Code%EC%99%80%20MQR.md) |  |
 | SonarQube Quality Gate — 임계치 판정과 빌드 게이트 | 필수 | [Quality Gate](../07_devops/docs/sonarqube/02-04.Quality%20Gate.md) · [Jenkins 연계](../07_devops/docs/sonarqube/04-01.Jenkins%20%EC%97%B0%EA%B3%84.md) | CI/CD Design Patterns 7장 |
-| 클러스터 안 CI 도구 — Jenkins · SonarQube · Harbor | 선택 | [Jenkins on K8s](../08_cloud/kubernetes/11_devtools/11-01.Jenkins%20on%20K8s.md) · [Harbor](../08_cloud/kubernetes/11_devtools/11-04.Harbor.md) |  |
+| 클러스터 안 CI 도구 — Jenkins · SonarQube · Harbor | 선택 | [Jenkins on K8s](../_archive/08_cloud/kubernetes/11_devtools/11-01.Jenkins%20on%20K8s.md) · [Harbor](../_archive/08_cloud/kubernetes/11_devtools/11-04.Harbor.md) |  |
 | 파이프라인 행위·생성 디자인 패턴 — Observer · Strategy · Builder | 선택 | [행위 디자인 패턴](../07_devops/book/cicd_cicd-patterns/07-01.Understanding%20Behavioral%20Design%20Patterns%20for%20CICD.md) · [생성 디자인 패턴](../07_devops/book/cicd_cicd-patterns/09-01.Applying%20Creational%20CICD%20Design%20Patterns.md) | CI/CD Design Patterns 7·9장 |
 | Jenkins REST API — 빌드 트리거 · 큐 및 실행기 원격 제어 | 선택 | [Jenkins API](../07_devops/docs/jenkins/08-01.REST%20API%20로%20빌드를%20부르고%20추적하기.md) |  |
 | Jenkins 내부 엔진 — Stapler 라우팅 · Queue 스케줄링 | 선택 | [Jenkins 엔진](../07_devops/docs/jenkins/README.md) |  |
@@ -79,7 +79,7 @@ updated: 2026-11-03
 | Build Once, Deploy Many — 같은 digest 를 staging 에서 prod 로 승격 | 필수 |  |  |
 | 아티팩트 관리 기초 — 바이너리 격리 · hosted · proxy · group | 필수 | [아티팩트 관리 기초](../07_devops/03_Nexus/01-01.%EC%95%84%ED%8B%B0%ED%8C%A9%ED%8A%B8%20%EA%B4%80%EB%A6%AC%EC%9D%98%20%EA%B8%B0%EC%B4%88.md) · [리포지토리 포맷](../07_devops/03_Nexus/02-01.%EB%A6%AC%ED%8F%AC%EC%A7%80%ED%86%A0%EB%A6%AC%20%ED%8F%AC%EB%A7%B7%EA%B3%BC%20%EA%B5%AC%EC%84%B1.md) | DevOps Tools for Java Developers 6장 |
 | 사설 Docker 레지스트리 운영 — Nexus Docker Registry | 추천 | [Docker Registry Nexus](../07_devops/03_Nexus/04-02.Docker%20Registry%EB%A1%9C%EC%84%9C%EC%9D%98%20Nexus.md) |  |
-| 클라우드 네이티브 레지스트리 — Harbor 프로젝트 격리와 복제 | 추천 | [Harbor](../08_cloud/kubernetes/11_devtools/11-04.Harbor.md) |  |
+| 클라우드 네이티브 레지스트리 — Harbor 프로젝트 격리와 복제 | 추천 | [Harbor](../_archive/08_cloud/kubernetes/11_devtools/11-04.Harbor.md) |  |
 | 엔터프라이즈 산출물 관리 — Artifactory 와 build-info 추적 | 선택 |  | DevOps Tools for Java Developers 6장 |
 | 객체 스토리지 산출물 보관 — MinIO 아티팩트 레지스트리 | 선택 |  |  |
 

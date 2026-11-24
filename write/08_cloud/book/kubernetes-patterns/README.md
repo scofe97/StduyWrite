@@ -9,7 +9,7 @@ source:
 related:
   - ./01-01.분산 프리미티브 — OOP·Java 개념을 Kubernetes로.md
   - ../kubernetes-in-action/README.md
-  - ../../kubernetes/README.md
+  - ../../../_archive/08_cloud/kubernetes/README.md
   - ../../README.md
 updated: 2026-07-12
 ---
@@ -160,5 +160,5 @@ updated: 2026-07-12
 > 같은 `book/` 영역의 다른 정독본과, 이 책이 링크로 위임하는 개념 노트 묶음입니다.
 
 - [Kubernetes in Action, 2판 정독 인덱스](../kubernetes-in-action/README.md) — 같은 `08_cloud/book/` 영역의 입문·레퍼런스 정독본(49편). 이 책이 재료로 쓰는 오브젝트 설명을 위임
-- [08_cloud/kubernetes — Kubernetes 실전 운영](../../kubernetes/README.md) — 이 책이 개념 중복을 링크로 위임하는 개념 노트 인덱스
+- [08_cloud/kubernetes — Kubernetes 실전 운영](../../../_archive/08_cloud/kubernetes/README.md) — 이 책이 개념 중복을 링크로 위임하는 개념 노트 인덱스
 - [Kubernetes Patterns 예제 코드 (k8spatterns/examples)](https://github.com/k8spatterns/examples) — 저자가 공개한 장별 예제 매니페스트·앱 소스

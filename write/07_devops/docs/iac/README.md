@@ -4,7 +4,7 @@ tags: [moc, iac, helm, kustomize, official-docs]
 status: final
 related:
   - ../../README.md
-  - ../../../08_cloud/kubernetes/README.md
+  - ../../../_archive/08_cloud/kubernetes/README.md
 updated: 2026-11-21
 ---
 
@@ -55,4 +55,4 @@ Terraform 처럼 클라우드 자원(VPC·로드밸런서·DB)을 만드는 도�
 - [07_devops MOC](../../README.md) — 대분류 지도와 로드맵 단계별 문서 수
 - [Blue/Green 무중단 전환과 아키텍처 결정 기록](../../book/aic_ai-infra-claude/05-02.Blue-Green%20%EB%AC%B4%EC%A4%91%EB%8B%A8%20%EC%A0%84%ED%99%98%EA%B3%BC%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98%20%EA%B2%B0%EC%A0%95%20%EA%B8%B0%EB%A1%9D.md) · [점진적 배포 Canary와 claude-context](../../book/aic_ai-infra-claude/06-02.%EC%A0%90%EC%A7%84%EC%A0%81%20%EB%B0%B0%ED%8F%AC%20Canary%EC%99%80%20claude-context.md) — 여기서 만든 매니페스트를 클러스터에 어떤 순서와 비율로 내보낼지
 - [Application 관리하기](../../book/argocd-up-and-running/04-01.Application%20%EA%B4%80%EB%A6%AC%ED%95%98%EA%B8%B0%20%E2%80%94%20%EC%86%8C%EC%8A%A4%C2%B7%EB%8C%80%EC%83%81%C2%B7Helm%C2%B7Kustomize%20%EC%99%80%20%EC%82%AD%EC%A0%9C%C2%B7finalizer.md) — Argo CD 가 Helm·Kustomize 소스를 렌더하는 방식
-- [kubernetes MOC](../../../08_cloud/kubernetes/README.md) — 전체 대주제 지도
+- [kubernetes MOC](../../../_archive/08_cloud/kubernetes/README.md) — 전체 대주제 지도

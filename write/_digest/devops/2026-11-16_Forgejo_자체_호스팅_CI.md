@@ -34,7 +34,7 @@
 | 태그 vs digest | 바뀔 수 있는 이름과, 내용 해시로 늘 같은 이미지를 가리키는 식별자 | [컨테이너 이미지 해부](../../08_cloud/book/container-security/06-01.컨테이너 이미지 해부 — 두 부분과 층과 식별자.md) |
 | pull-through 캐시·레지스트리 미러 | 외부 이미지를 내부 프록시가 받아 두고 다음 pull 을 캐시로 주는 구조 | [Docker Registry 로서의 Nexus](../../07_devops/03_Nexus/04-02.Docker Registry로서의 Nexus.md) |
 | Docker Hub rate limit | 익명·계정별 pull 횟수 제한과 429 응답, 인증 프록시로 여유를 만드는 법 | [Docker Registry 로서의 Nexus](../../07_devops/03_Nexus/04-02.Docker Registry로서의 Nexus.md) |
-| Harbor | 프로젝트 격리·복제·스캔을 갖춘 클라우드 네이티브 컨테이너 레지스트리 | [Harbor](../../08_cloud/kubernetes/11_devtools/11-04.Harbor.md) |
+| Harbor | 프로젝트 격리·복제·스캔을 갖춘 클라우드 네이티브 컨테이너 레지스트리 | [Harbor](../../_archive/08_cloud/kubernetes/11_devtools/11-04.Harbor.md) |
 | Nexus (범용 아티팩트 저장소) | hosted·proxy·group 으로 여러 패키지 형식을 한곳에서 다루는 저장소 | [아티팩트 관리의 기초](../../07_devops/03_Nexus/01-01.아티팩트 관리의 기초.md) |
 | 의존성을 담은 빌드 이미지 | 런타임과 의존성을 미리 설치한 이미지로 빌드해 네트워크 의존을 줄이는 방식 | |
 | uv 선택 의존성 그룹 | `pyproject.toml` 의 `optional-dependencies` 를 `--extra` 로 골라 설치하는 방식 | |

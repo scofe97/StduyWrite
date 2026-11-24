@@ -9,7 +9,7 @@ updated: 2026-11-21
 
 # 11_devtools — DevTools
 
-> Jenkins·SonarQube·Harbor를 K8s 위에 올려 개발 생산성을 얻습니다. ArgoCD 와 GitOps 는 07_devops 의 [Argo CD Up and Running 정독](../../../07_devops/book/argocd-up-and-running/README.md)이 맡습니다.
+> Jenkins·SonarQube·Harbor를 K8s 위에 올려 개발 생산성을 얻습니다. ArgoCD 와 GitOps 는 07_devops 의 [Argo CD Up and Running 정독](../../../../07_devops/book/argocd-up-and-running/README.md)이 맡습니다.
 
 
 
@@ -22,7 +22,7 @@ updated: 2026-11-21
 | 11-02 | [SonarQube on K8s](11-02.SonarQube%20on%20K8s.md) | SonarQube의 영속성 전략을 봅니다. |
 | 11-04 | [Harbor](11-04.Harbor.md) | 이미지와 OCI Helm chart를 어디서 통합 관리하는지 봅니다. |
 
-옛 11-03 은 [Argo CD Up and Running — 정독 인덱스](../../../07_devops/book/argocd-up-and-running/README.md)로 흡수되어 번호가 비어 있습니다.
+옛 11-03 은 [Argo CD Up and Running — 정독 인덱스](../../../../07_devops/book/argocd-up-and-running/README.md)로 흡수되어 번호가 비어 있습니다.
 
 
 

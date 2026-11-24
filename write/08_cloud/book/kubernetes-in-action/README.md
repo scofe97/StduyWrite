@@ -23,7 +23,7 @@ related:
   - ./15-01.Deployment%20%EA%B8%B0%EC%B4%88%20%E2%80%94%20%EC%83%9D%EC%84%B1%C2%B7pod-template-hash%C2%B7%EC%8A%A4%EC%BC%80%EC%9D%BC%EB%A7%81.md
   - ./18-01.Job%20%EA%B8%B0%EC%B4%88%20%E2%80%94%20%EC%8B%A4%ED%96%89%C2%B7%EC%83%81%ED%83%9C%C2%B7suspend%C2%B7%EC%9E%90%EB%8F%99%EC%82%AD%EC%A0%9C.md
   - ../ai-infra-gitaiops/README.md
-  - ../../kubernetes/README.md
+  - ../../../_archive/08_cloud/kubernetes/README.md
   - ../../README.md
 learning:
   topic: kubernetes-in-action
@@ -178,5 +178,5 @@ updated: 2026-09-10
 > 같은 `book/` 영역의 다른 정독본과, 이 책이 링크로 위임하는 개념 노트 묶음입니다.
 
 - `notiflex-platform 분석 — GitAIOps 실습 저장소 해부` <!-- 링크 끊김(2026-08): ../ai-infra-gitaiops/README.md --> — 같은 `08_cloud/book/` 영역의 다른 책-종속 노트
-- [08_cloud/kubernetes — Kubernetes 실전 운영](../../kubernetes/README.md) — 이 책이 개념 중복을 링크로 위임하는 개념 노트 27편의 인덱스
+- [08_cloud/kubernetes — Kubernetes 실전 운영](../../../_archive/08_cloud/kubernetes/README.md) — 이 책이 개념 중복을 링크로 위임하는 개념 노트 27편의 인덱스
 - [Kubernetes in Action 2판 예제 코드 (luksa/kubernetes-in-action-2nd-edition)](https://github.com/luksa/kubernetes-in-action-2nd-edition) — 저자가 공개한 장별 예제 매니페스트·앱 소스

@@ -6,7 +6,7 @@ related:
   - ../../os-keywords.md
   - ../../README.md
   - ../../../08_cloud/book/networking-and-kubernetes/README.md
-  - ../../../08_cloud/kubernetes/README.md
+  - ../../../_archive/08_cloud/kubernetes/README.md
 updated: 2026-09-12
 ---
 
@@ -38,4 +38,4 @@ updated: 2026-09-12
 - 통합 경로: [OS 학습 로드맵](../../os-keywords.md) — 자원·격리 단계의 진입점
 - 상위: [02_os/ MOC](../../README.md)
 - 이웃: [N&K 질문별 정본](../../../08_cloud/book/networking-and-kubernetes/README.md#%EC%A7%88%EB%AC%B8%EB%B3%84-%EC%A0%95%EB%B3%B8) — netns·veth·bridge·netfilter·conntrack·TC·eBPF 깊이
-- 활용처: [08_cloud/kubernetes/](../../../08_cloud/kubernetes/README.md) — Pod·자원 관리·보안 운영
+- 활용처: [08_cloud/kubernetes/](../../../_archive/08_cloud/kubernetes/README.md) — Pod·자원 관리·보안 운영

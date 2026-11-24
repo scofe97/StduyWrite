@@ -7,7 +7,7 @@ source:
   - https://www.amazon.com/Networking-Kubernetes-Approach-James-Strong/dp/1492081655  # 서지 확인 (2026-07-16 조회)
 related:
   - ../kubernetes-in-action/README.md
-  - ../../kubernetes/README.md
+  - ../../../_archive/08_cloud/kubernetes/README.md
   - ../../README.md
 learning:
   topic: networking-and-kubernetes
@@ -31,7 +31,7 @@ updated: 2026-11-09
 
 같은 폴더의 [『Kubernetes in Action』 정독본](../kubernetes-in-action/README.md)이 오브젝트 중심이라면 이 책은 패킷 중심입니다. 저쪽이 무엇을 배포하는가를 다루고, 여기는 그 오브젝트 사이를 트래픽이 실제로 어떻게 흐르는가를 다룹니다.
 
-그래서 Service·Ingress처럼 겹치는 주제가 나와도 관점이 다릅니다. 저쪽이 사용법이라면 여기는 구현 원리입니다. 개념이 겹치는 지점은 [`../../kubernetes/`](../../kubernetes/README.md) 개념 노트와 `../../service-mesh/` <!-- 링크 끊김(2026-08): ../../service-mesh/README.md -->로 링크를 걸어 넘깁니다. 이 폴더에는 이 책의 계층 관점과 예제에서 얻는 것을 중심으로 남깁니다. 예외가 하나 있습니다. 2026-09-21 에 `02_os/networking` 의 자체 노트 세 편을 합치면서, 원서에 없던 단락을 관련 편의 본문 안으로 옮겨 왔습니다. `## 심화 학습` 으로 격리하지 않고 본문에 둔 것은, 떨어뜨려 두면 본문과 따로 낡기 때문입니다. 그런 단락은 모두 `> 원서 밖 보강입니다` 표기와 출처로 시작하므로, 원서 대조는 그 표기가 없는 단락만 대상으로 하면 됩니다.
+그래서 Service·Ingress처럼 겹치는 주제가 나와도 관점이 다릅니다. 저쪽이 사용법이라면 여기는 구현 원리입니다. 개념이 겹치는 지점은 [`../../kubernetes/`](../../../_archive/08_cloud/kubernetes/README.md) 개념 노트와 `../../service-mesh/` <!-- 링크 끊김(2026-08): ../../service-mesh/README.md -->로 링크를 걸어 넘깁니다. 이 폴더에는 이 책의 계층 관점과 예제에서 얻는 것을 중심으로 남깁니다. 예외가 하나 있습니다. 2026-09-21 에 `02_os/networking` 의 자체 노트 세 편을 합치면서, 원서에 없던 단락을 관련 편의 본문 안으로 옮겨 왔습니다. `## 심화 학습` 으로 격리하지 않고 본문에 둔 것은, 떨어뜨려 두면 본문과 따로 낡기 때문입니다. 그런 단락은 모두 `> 원서 밖 보강입니다` 표기와 출처로 시작하므로, 원서 대조는 그 표기가 없는 단락만 대상으로 하면 됩니다.
 
 
 
@@ -210,5 +210,5 @@ updated: 2026-11-09
 ## 관련 문서
 
 - [『Kubernetes in Action, 2판』 정독본](../kubernetes-in-action/README.md) — 같은 `book/` 영역, 오브젝트 중심 관점의 짝
-- [08_cloud/kubernetes — 개념 노트](../../kubernetes/README.md) — 개념 중복을 링크로 위임하는 대상
+- [08_cloud/kubernetes — 개념 노트](../../../_archive/08_cloud/kubernetes/README.md) — 개념 중복을 링크로 위임하는 대상
 - `08_cloud/service-mesh` <!-- 링크 끊김(2026-08): ../../service-mesh/README.md --> — 이 책 이후 계층(L7 프록시·mTLS)을 다루는 이웃 카테고리

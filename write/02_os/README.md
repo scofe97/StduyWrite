@@ -122,4 +122,4 @@ updated: 2026-11-14
 
 - [OS 학습 로드맵](os-keywords.md) — OS 전체를 가로지르는 추천 순서
 - [write/ MOC](../README.md) — 전체 카테고리 지도
-- [08_cloud/kubernetes/](../08_cloud/kubernetes/README.md) — 본 카테고리의 활용처
+- [08_cloud/kubernetes/](../_archive/08_cloud/kubernetes/README.md) — 본 카테고리의 활용처

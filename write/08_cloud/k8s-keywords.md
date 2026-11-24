@@ -3,7 +3,7 @@ title: Kubernetes 개발 키워드
 tags: [keywords, kubernetes, k8s, cloud-native, operations, security, eks, iac]
 status: final
 source:
-  - ../08_cloud/kubernetes/README.md
+  - ../_archive/08_cloud/kubernetes/README.md
   - ../08_cloud/book/kubernetes-in-action/README.md
 related:
   - ../README.md
@@ -11,7 +11,7 @@ related:
   - ../02_os/network-keywords.md
   - ../06_observability/observability-keywords.md
   - ../07_devops/devops-keywords.md
-  - ../08_cloud/kubernetes/README.md
+  - ../_archive/08_cloud/kubernetes/README.md
 updated: 2026-10-28
 ---
 
@@ -108,7 +108,7 @@ updated: 2026-10-28
 | 개념 | 우선순위 | 노트 | 책 |
 |---|:---:|---|---|
 | API Server · etcd · Scheduler · Controller Manager | 필수 | [쿠버네티스 아키텍처](../08_cloud/book/kubernetes-in-action/01-01.%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4%EB%9E%80%20%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80%20%E2%80%94%20%EA%B8%B0%EC%9B%90%EA%B3%BC%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98.md) | Kubernetes in Action 1장 |
-| kubelet · CRI · CNI · CSI · containerd | 필수 | [Kubernetes MOC](../08_cloud/kubernetes/README.md) | Production Kubernetes 3~5장 |
+| kubelet · CRI · CNI · CSI · containerd | 필수 | [Kubernetes MOC](../_archive/08_cloud/kubernetes/README.md) | Production Kubernetes 3~5장 |
 | 조정 루프 · watch · informer · client-go | 필수 | | Programming Kubernetes 2·3장 |
 | List·Watch 와 resourceVersion · 410 Gone | 필수 | | Programming Kubernetes 3장 |
 | level-driven 과 edge-driven 의 차이 | 필수 | | Programming Kubernetes 1장 |

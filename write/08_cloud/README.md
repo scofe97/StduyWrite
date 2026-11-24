@@ -3,7 +3,7 @@ title: 08_cloud MOC
 tags: [moc, cloud, kubernetes, service-mesh]
 status: final
 related:
-  - ./kubernetes/README.md
+  - ../_archive/08_cloud/kubernetes/README.md
   - ./docs/README.md
   - ./book/networking-and-kubernetes/README.md
   - ./book/container-security/README.md
@@ -54,7 +54,7 @@ Helm·Kustomize·Argo Rollouts·Argo CD 는 쿠버네티스 위에서 쓰지만 
 
 | 서브카테고리 | 범위 | 문서 |
 |--------------|------|------|
-| [kubernetes/](./kubernetes/README.md) | 데브툴스 운영(Jenkins·SonarQube·Harbor) | 11_devtools (3편) |
+| [kubernetes/](../_archive/08_cloud/kubernetes/README.md) | 데브툴스 운영(Jenkins·SonarQube·Harbor) | 11_devtools (3편) |
 | [docs/](./docs/README.md) | 공식 문서·제품 사이트 정독 — 제품(kubernetes·cncf-certification·istio)마다 폴더를 두고 궁금한 주제만 한 편씩 | 16편 |
 | [book/networking-and-kubernetes/](./book/networking-and-kubernetes/README.md) | 《Networking and Kubernetes》 정독 — OSI/TCP-IP, Linux 네트워킹, 컨테이너·K8s 네트워킹, Service 추상화, AWS/GCP/Azure | 정독 노트 27편 + 용어집·결정 치트시트 |
 | [book/container-security/](./book/container-security/README.md) | 《Container Security》(Liz Rice, 1판) 정독 — 위협 모델, syscall·capability·cgroup·namespace가 세우는 격리 경계, 이미지·공급망 보안, 취약점 스캐닝, 샌드박싱과 격리 파괴 | 정독 노트 17편 (본문 14/14 + 부록 완독) |

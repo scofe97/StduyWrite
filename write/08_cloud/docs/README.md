@@ -15,7 +15,7 @@ updated: 2026-11-21
 
 ---
 
-> 공식 문서나 제품 사이트를 1차 자료로 삼아 궁금한 주제만 한 편씩 파고드는 자리입니다. 전체 개념을 순서대로 훑는 일은 [book/](../book/)의 정독 노트와 [kubernetes/](../kubernetes/README.md)의 주제별 노트가 맡습니다.
+> 공식 문서나 제품 사이트를 1차 자료로 삼아 궁금한 주제만 한 편씩 파고드는 자리입니다. 전체 개념을 순서대로 훑는 일은 [book/](../book/)의 정독 노트와 [kubernetes/](../../_archive/08_cloud/kubernetes/README.md)의 주제별 노트가 맡습니다.
 
 ## 폴더 규칙
 
@@ -65,5 +65,5 @@ Helm·Kustomize 와 Argo Rollouts 는 쿠버네티스 위에서 쓰지만 플랫
 > 이 폴더가 딛고 서거나 이어지는 이웃입니다.
 
 - [08_cloud MOC](../README.md) — 대분류 지도
-- [kubernetes/](../kubernetes/README.md) — 주제별 학습 노트. 공식 문서 정독과 겹치는 주제는 서로 링크로 잇습니다
+- [kubernetes/](../../_archive/08_cloud/kubernetes/README.md) — 주제별 학습 노트. 공식 문서 정독과 겹치는 주제는 서로 링크로 잇습니다
 - [book/](../book/) — 책 정독 노트. 전체 개념의 뼈대는 이쪽에서 잡습니다
