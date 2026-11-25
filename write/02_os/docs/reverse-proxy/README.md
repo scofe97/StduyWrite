@@ -42,6 +42,15 @@ Nginx 는 웹 서버의 설정 모델 위에서 프록시를 설정합니다. �
 
 
 
+## 아직 안 쓴 주제
+
+> 앞으로 쓸 후보입니다. 지금 연재는 Nginx 와 HAProxy 에 공통인 메커니즘만 다뤄서, HAProxy 설정 전체를 읽는 편이 없습니다.
+
+- HAProxy 설정 구조 — `global`·`defaults`·`frontend`·`backend` 가 나눠 맡는 일
+- HAProxy TCP 모드 — 쿠버네티스 API 서버(6443) 앞에 두는 L4 로드밸런싱
+
+
+
 ## 1차 자료
 
 > 공식 문서와 표준 RFC 규격입니다. HAProxy 매뉴얼은 2.8 판으로 고정했고, nginx.org 문서는 판을 나눠 두지 않아 늘 최신 판을 가리킵니다.

@@ -58,7 +58,7 @@ updated: 2026-11-15
 
 | 제목 | 한 줄 소개 |
 |------|-----------|
-| [자원 모니터링 파이프라인 — kubelet이 재는 것과 kubectl top이 읽는 것](operations/%EC%9E%90%EC%9B%90%20%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81%20%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8.md) | `kubectl top` 의 숫자가 cAdvisor 에서 metrics-server 를 거쳐 오는 경로를 따라가고, 이 내장 파이프라인의 경계를 긋습니다. |
+| [자원 모니터링 파이프라인 — kubelet이 재는 것과 kubectl top이 읽는 것](operations/%EC%9E%90%EC%9B%90%20%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81%20%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8.md) | `kubectl top` 의 숫자가 cAdvisor 에서 metrics-server 를 거쳐 오는 경로를 따라가고, 이 내장 파이프라인의 경계를 긋습니다. kubelet 통계 API(`/stats/summary`) 경로와 `nodes/stats`·`nodes/proxy` 권한도 함께 봅니다. |
 | [etcd 헬스와 유지보수 — 상태 판독과 compaction·defrag·quota](operations/etcd%20%ED%97%AC%EC%8A%A4%C2%B7%EC%9C%A0%EC%A7%80%EB%B3%B4%EC%88%98.md) | `etcdctl` 세 명령으로 멤버 상태를 읽고, compaction·defrag·quota 가 맞물려 NOSPACE 로 쓰기가 멈추는 과정과 복구 순서, snapshot 확인을 봅니다. |
 | [클러스터 업그레이드와 ETCD 백업·복구](operations/%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%97%85%EA%B7%B8%EB%A0%88%EC%9D%B4%EB%93%9C%C2%B7ETCD%20%EB%B0%B1%EC%97%85%C2%B7%EB%B3%B5%EA%B5%AC.md) | `kubeadm upgrade` 단계별 절차와 장애 롤백, 그리고 etcdctl snapshot 을 통한 백업 및 복구 검증을 다룹니다. |
 | [모니터링 개요와 트러블슈팅 루틴 — 관찰의 세 기둥과 장애 진단 순서](operations/%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81%20%EA%B0%9C%EC%9A%94%C2%B7%ED%8A%B8%EB%9F%AC%EB%B8%94%EC%8A%88%ED%8C%85%20%EB%A3%A8%ED%8B%B4.md) | 메트릭·로그·트레이스 관측 3요소와 kubectl 진단 명령, Pod·Node 장애 트러블슈팅 루틴을 다룹니다. |
@@ -80,6 +80,8 @@ updated: 2026-11-15
 ## 아직 안 쓴 주제
 
 > 앞으로 받을 공식 페이지입니다. 쓰는 순서는 정해 두지 않고 그때 궁금한 것부터 씁니다.
+
+클러스터를 직접 세우면 kubernetes.io 에 없는 부품도 함께 씁니다. 그래서 하위 프로젝트(kubernetes-sigs·kubernetes-csi)도 이 목록에 둡니다. 그런 항목은 괄호에 저장소를 적었습니다.
 
 ### 아키텍처
 
@@ -107,6 +109,16 @@ updated: 2026-11-15
 - `System Logs`
 - `Node Shutdowns`
 - `Node Autoscaling`
+- `Horizontal Pod Autoscaling` — CPU 사용률로 Pod 수를 늘리고 줄이는 규칙
+- `metrics-server` (kubernetes-sigs/metrics-server) — HPA·`kubectl top` 이 읽는 지표
+- `Installing Kubernetes with Kubespray` (kubernetes-sigs/kubespray) — Ansible 로 설치 자동화
+
+### 스토리지
+
+스토리지 묶음 폴더는 아직 없습니다. 첫 편을 쓸 때 `storage/` 폴더와 「문서 목록」 표를 함께 만듭니다.
+
+- `Container Storage Interface (CSI)` — 외부 스토리지 드라이버가 kubelet 에 붙는 규격
+- `csi-driver-nfs` (kubernetes-csi/csi-driver-nfs) — NFS 서버를 StorageClass 로 동적 프로비저닝하는 드라이버
 
 ### API
 
