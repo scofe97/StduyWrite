@@ -36,11 +36,11 @@ class SeqKR(Seq):
         s.t(x, y + 4, txt, 12, c, MONO)
 
 
-W, H = 920, 620
+W, H = 920, 656
 d = SeqKR(W, H, "CILIUM UP AND RUNNING · 05-01 §1", "같은 노드 Pod 간 ping 이 거치는 장치",
           "pod-a 에서 pod-b 로 echo request, 되돌아오는 echo reply — 장치 이름과 eBPF 프로그램", "pod-a 에서 pod-b 로 echo request, 되돌아오는 echo reply — 장치 이름과 eBPF 프로그램")
 A, B, C, E = "pod-a eth0", "lxcbee302eb186c", "lxcc5b0a1b7ddfb", "pod-b eth0"
-d.lanes([(A, "10.244.1.203"), (B, "ifindex 24"), (C, "ifindex 26"), (E, "10.244.1.69")],
+d.lanes([(A, "Pod 안 · 10.244.1.203"), (B, "호스트 veth · ifindex 24"), (C, "호스트 veth · ifindex 26"), (E, "Pod 안 · 10.244.1.69")],
         [120, 340, 560, 780])
 d.rails(588)
 
@@ -52,4 +52,5 @@ d.msg(E, C, "echo reply", 404, MUTED, "ar", dash="5 4", sub="10.244.1.69 → 10.
 d.state(C, "cil_from_container", 460, INFO)
 d.msg(C, B, "redirect", 516, MUTED, "ar", dash="5 4")
 d.msg(B, A, "echo reply", 572, MUTED, "ar", dash="5 4")
+d.legend(604, [("요청 판정", ACC), ("응답 판정", INFO)])
 d.save("05-01.intranode-sequence.svg")

@@ -1,62 +1,86 @@
-# 타입 스펙: type-dp-security-matrix — 행 = 패킷 경로 셋, 열 = 거치는 장치·추가 헤더·필요한 설정의 비교 행렬. 배정된 비교 타입 이름이 스펙 목록에 없어 비교 행렬 문법을 가진 이 타입으로 바꿨다. 셀 1개만 focal.
-# 사실 출처: Cilium Up and Running 5장 cil5.txt 줄 260-277(bpftool), 399-408(native 설정), 620-651(VXLAN 경로), 723-729(50바이트) / docs.cilium.io v1.20.2 network/concepts/routing(tunnel 기본값·포트)
+# 타입 스펙: type-flowchart — 패킷 한 개가 호스트 veth 의 cil_from_container 에서 출발해 같은 노드 직행(§1), native routing(§2), VXLAN(§3), Geneve(§4) 로 갈리는 분기 흐름도.
+# 사실 출처: Cilium Up and Running 5장 ch05.txt 줄 98-101(10.244.1.203→10.244.1.69, ttl=63), 260-277(cil_from_container), 486-494(10.10.0.32/27 via 172.18.0.2), 698-710(172.18.0.3→172.18.0.4 UDP 8472, 10.244.0.185→10.244.1.212, +50B), 940-955(192.168.10.5→192.168.10.4 UDP 6081, 10.0.0.125→10.0.2.75, TLV DSR)
 import sys
 sys.path.insert(0, ".")
-from dd import D, ACC, OK, INFO, SOFT, MUTED, INK, PAPER, PAPER2, RULE, KR, MONO
+from dd import D, ACC, OK, WARN, INFO, SOFT, MUTED, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 920, 424
-LP, COMP_W, GAP, ROLE_W, ROLE_GAP = 12, 200, 12, 204, 16
-HDR_Y, HDR_H = 96, 52
-ROW_Y0, ROW_H, STRIDE = 168, 52, 60
-RX = [LP + COMP_W + GAP + j * (ROLE_W + ROLE_GAP) for j in range(3)]
+W, H = 960, 760
+d = D(W, H, "CILIUM UP AND RUNNING · 05-01 OVERVIEW",
+      "패킷 하나가 목적지 Pod 에 닿는 세 길 (터널은 두 종류)",
+      "같은 노드인지는 패킷마다 판정하고, 다른 노드로 가는 길은 설치 때 고른 라우팅 모드를 따릅니다",
+      "같은 노드인지는 패킷마다 판정하고, 다른 노드로 가는 길은 설치 때 고른 라우팅 모드를 따릅니다")
 
-d = D(W, H, "CILIUM UP AND RUNNING · 05-01", "세 경로가 거치는 장치와 추가 헤더",
-      "같은 노드는 veth 와 eBPF 로 넘기고, 다른 노드는 경로표나 터널로 잇는다", "같은 노드는 veth 와 eBPF 로 넘기고, 다른 노드는 경로표나 터널로 잇는다")
+CX = 200
 
-d.box(LP, HDR_Y, COMP_W, HDR_H, PAPER2, RULE, 0.9)
-d.t(LP + COMP_W / 2, HDR_Y + 24, "경로", 13, INK, KR, "middle", 600)
-d.t(LP + COMP_W / 2, HDR_Y + 42, "path", 11, MUTED, MONO)
-for j, (nm, code) in enumerate([("거치는 장치", "device"), ("추가 헤더", "overhead"), ("필요한 설정", "helm value")]):
-    d.box(RX[j], HDR_Y, ROLE_W, HDR_H, PAPER2, SOFT, 1.0)
-    d.t(RX[j] + ROLE_W / 2, HDR_Y + 24, nm, 13, INK, KR, "middle", 600)
-    d.t(RX[j] + ROLE_W / 2, HDR_Y + 42, code, 11, MUTED, MONO)
 
-rows = [
-    ("같은 노드", "intranode", [
-        ("lxc* → lxc*", "cil_from_container", None),
-        ("없음", "", OK),
-        ("기본 설치", "", None)]),
-    ("다른 노드 · native", "routing", [
-        ("lxc* → eth0", "호스트 경로표", None),
-        ("없음", "", OK),
-        ("routingMode: native", "ipv4NativeRoutingCIDR", None)]),
-    ("다른 노드 · 터널", "overlay", [
-        ("lxc* → cilium_vxlan", "경로는 cilium_host", None),
-        ("+50바이트", "UDP 8472 · VNI", "focal"),
-        ("tunnelProtocol: vxlan", "routingMode: tunnel (기본)", None)]),
-]
+def diamond(cx, cy, hw, hh, lines):
+    pts = f"{cx},{cy - hh} {cx + hw},{cy} {cx},{cy + hh} {cx - hw},{cy}"
+    d.o.append(f'<polygon points="{pts}" fill="{PAPER2}" stroke="{SOFT}" stroke-width="1.1"/>')
+    if len(lines) == 1:
+        d.t(cx, cy + 5, lines[0], 13, INK, KR, "middle", 600)
+    else:
+        d.t(cx, cy - 5, lines[0], 13, INK, KR, "middle", 600)
+        d.t(cx, cy + 15, lines[1], 13, INK, KR, "middle", 600)
 
-for i, (name, hint, cells) in enumerate(rows):
-    y = ROW_Y0 + i * STRIDE
-    d.box(LP, y, COMP_W, ROW_H, PAPER2, RULE, 0.9, r=4)
-    d.t(LP + 12, y + 31, name, 13, INK, KR, "start", 600)
-    for j, (val, sub, tone) in enumerate(cells):
-        x = RX[j]
-        if tone == "focal":
-            d.tone(x, y, ROLE_W, ROW_H, ACC, r=4, op="14", sw=1.4)
-        elif tone == OK:
-            d.tone(x, y, ROLE_W, ROW_H, OK, r=4, op="10", sw=0.9)
-        else:
-            d.box(x, y, ROLE_W, ROW_H, PAPER2, RULE, 0.7, r=4)
-        fam = KR if any("가" <= c <= "힣" for c in val) else MONO
-        col = ACC if tone == "focal" else (OK if tone == OK else INK)
-        if sub:
-            d.t(x + ROLE_W / 2, y + 22, val, 12, col, fam, "middle", 600)
-            sfam = KR if any("가" <= c <= "힣" for c in sub) else MONO
-            d.t(x + ROLE_W / 2, y + 41, sub, 12, MUTED, sfam)
-        else:
-            d.t(x + ROLE_W / 2, y + 31, val, 12, col, fam, "middle", 600)
 
-LEG_Y = ROW_Y0 + 2 * STRIDE + ROW_H + 24
-d.legend(LEG_Y, [("추가 헤더 없음", OK), ("터널 헤더", ACC)])
+def outcome(y, sec, title, line1, line2, tone):
+    x, w, h = 480, 448, 84
+    d.tone(x, y, w, h, tone, r=6, op="14", sw=1.1)
+    d.chip(x + w - 24, y + 16, sec, tone, 11)
+    d.t(x + 16, y + 26, title, 14, tone, KR, "start", 600)
+    d.t(x + 16, y + 48, line1, 12, INK, MONO, "start")
+    d.t(x + 16, y + 70, line2, 13, MUTED, KR, "start")
+
+
+# 1. Start (oval rx=20)
+d.box(80, 96, 240, 44, PAPER2, SOFT, 1.1, r=20)
+d.t(CX, 115, "Pod eth0 출발", 13, INK, KR, "middle", 600)
+d.t(CX, 132, "예: 10.244.1.203 (pod-a)", 11, MUTED, MONO, "middle")
+d.arrow([(CX, 140), (CX, 166)], MUTED, "ar", 1.4)
+
+# 2. Common eBPF judgment (focal ACC)
+d.tone(48, 168, 304, 56, ACC, r=6, op="14", sw=1.4)
+d.chip(332, 184, "§1", ACC, 11)
+d.t(188, 192, "lxc* · cil_from_container", 13, ACC, MONO, "middle", 600)
+d.t(CX, 213, "tcx/ingress 신원·정책·연결 추적 판정", 13, MUTED, KR, "middle")
+d.arrow([(CX, 224), (CX, 254)], ACC, "acc", 1.4)
+
+# 3. Decision 1: same node?
+diamond(CX, 296, 112, 40, ["같은 노드 Pod 인가?"])
+d.arrow([(312, 296), (478, 296)], OK, "ok", 1.4)
+d.t(396, 286, "예 · 맵 일치", 13, OK, KR, "middle", 600)
+outcome(254, "§1", "같은 노드 직행 · eBPF 리다이렉트",
+        "lxcbee302eb186c → lxcc5b0a1b7ddfb → pod-b",
+        "10.244.1.203 → 10.244.1.69 · 추가 헤더 0B", OK)
+
+d.arrow([(CX, 336), (CX, 382)], MUTED, "ar", 1.4)
+d.t(214, 364, "아니오 (다른 노드)", 13, MUTED, KR, "start", 600)
+
+# 4. Decision 2: native routing?
+diamond(CX, 424, 120, 40, ["하부 망이 PodCIDR 을", "라우팅하는가?"])
+d.arrow([(320, 424), (478, 424)], OK, "ok", 1.4)
+d.t(398, 414, "예 · L2·정적·BGP", 13, OK, KR, "middle", 600)
+outcome(382, "§2", "native routing · 커널 경로표 전달",
+        "10.10.0.32/27 via 172.18.0.2 dev eth0",
+        "Pod IP 그대로 송출 · 추가 헤더 0B", OK)
+
+d.arrow([(CX, 464), (CX, 510)], WARN, "warn", 1.4)
+d.t(214, 492, "아니오 (터널 캡슐화)", 13, WARN, KR, "start", 600)
+
+# 5. Decision 3: Geneve option?
+diamond(CX, 552, 116, 40, ["DSR 등 TLV 옵션이", "필요한가?"])
+d.arrow([(316, 552), (478, 552)], WARN, "warn", 1.4)
+d.t(398, 542, "아니오 (기본값)", 13, WARN, KR, "middle", 600)
+outcome(508, "§3", "VXLAN 터널 · cilium_vxlan",
+        "외부 172.18.0.3 → 172.18.0.4 · UDP 8472",
+        "내부 10.244.0.185 → 10.244.1.212 · +50B", WARN)
+
+d.arrow([(CX, 592), (CX, 650), (478, 650)], WARN, "warn", 1.4)
+d.t(214, 624, "예 (TLV 옵션)", 13, WARN, KR, "start", 600)
+outcome(608, "§4", "Geneve 터널 · cilium_geneve",
+        "외부 192.168.10.5 → 192.168.10.4 · UDP 6081",
+        "내부 10.0.0.125 → 10.0.2.75 · TLV 옵션(DSR)", WARN)
+
+LEG_Y = 716
+d.legend(LEG_Y, [("공통 판정 (핵심)", ACC), ("추가 헤더 없음", OK), ("터널 헤더 비용", WARN)])
 d.save("05-01.chapter-overview.svg")

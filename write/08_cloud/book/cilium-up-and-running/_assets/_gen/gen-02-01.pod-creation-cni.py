@@ -1,6 +1,6 @@
 # 타입 스펙: type-sequence — Pod 생성 시 컨테이너 런타임과 Cilium CNI 플러그인·에이전트 호출 흐름.
-# 사실 출처: 《Cilium: Up and Running》 Ch.2 p.6-7 (Figure 2-3 "Pod creation workflow and CNI integration") 및 본문 §3 L131~137.
-# 단계 번호는 본문 목록 1~7 과 같다. containerd·CRI-O 는 원서 p.6, veth(또는 netkit)·lxc...·맵 이름은 본문 L133·L135.
+# 사실 출처: 《Cilium: Up and Running》 Ch.2 p.6-7 (Figure 2-3 "Pod creation workflow and CNI integration") 및 본문 §4 「Pod 생성 시의 배선 시퀀스」 1~7.
+# 단계 번호는 본문 목록 1~7 과 같다. containerd·CRI-O 는 원서 p.6, veth(또는 netkit)·lxc...·맵 이름은 본문 §4 「Pod 생성 시의 배선 시퀀스」 3·5.
 import sys
 sys.path.insert(0, ".")
 from dd import Seq, ACC, OK, WARN, INFO, SOFT, MUTED, INK, PAPER, PAPER2, RULE, KR, MONO
@@ -33,7 +33,7 @@ class KoreanSeq(Seq):
             s.t(mx, y + 17, sub, 11, MUTED, sub_fam)
 
 W, H = 920, 530
-s = KoreanSeq(W, H, "CILIUM UP AND RUNNING · 02-01 §3", "Pod 생성 시 CNI 네트워크 연결 흐름",
+s = KoreanSeq(W, H, "CILIUM UP AND RUNNING · 02-01 §4", "Pod 생성 시 CNI 네트워크 연결 흐름",
              "kubelet 과 런타임에서 cilium-cni 바이너리 및 cilium-agent 로 이어지는 배선 시퀀스",
              "런타임의 CNI 바이너리 호출과 로컬 에이전트 소켓 위임 시퀀스")
 
@@ -48,9 +48,9 @@ s.rails(ybot=466)
 
 # 메시지 흐름
 s.msg("컨테이너 런타임", "cilium-cni", "1. CNI ADD 실행", 168, INFO, "info", sub="NetNS 생성 뒤 설정 전달")
-s.msg("cilium-cni", "cilium-agent", "2. IPAM IP 할당 요청", 214, ACC, "acc", sub="UDS REST API 로 Pod IP 요청")
+s.msg("cilium-cni", "cilium-agent", "2. IPAM IP 할당 요청", 214, ACC, "acc", sub="유닉스 소켓 REST 로 Pod IP 요청")
 s.msg("cilium-cni", "리눅스 커널", "3. veth(또는 netkit) 쌍 생성", 260, OK, "ok", sub="호스트 lxc... · Pod 쪽 주소와 라우트")
-s.msg("cilium-cni", "cilium-agent", "4. EndpointCreate 요청", 306, ACC, "acc", sub="UDS REST 로 엔드포인트 생성 위임")
+s.msg("cilium-cni", "cilium-agent", "4. EndpointCreate 요청", 306, ACC, "acc", sub="유닉스 소켓 REST 로 엔드포인트 생성 위임")
 s.msg("cilium-agent", "리눅스 커널", "5. eBPF 적재 및 맵 등록", 352, OK, "ok", sub="cilium_lxc · cilium_ipcache_v2")
 s.msg("cilium-agent", "cilium-cni", "6. 엔드포인트 등록 결과 응답", 398, MUTED, "ar", dash="3 3")
 s.msg("cilium-cni", "컨테이너 런타임", "7. CNI Result JSON 반환", 444, MUTED, "ar", dash="3 3")

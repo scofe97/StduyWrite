@@ -1,55 +1,124 @@
-# 타입 스펙: type-process — 상태 확인에서 sysdump 까지 다섯 점검 단계와 기능별 세 분기. 주체 없는 단계 지도라 chapter-overview 폴더 관례대로 process 의 카드 문법을 쓴다.
-# 사실 출처: Cilium Up and Running 16장 cil16.txt 줄 424(cilium status), 458(--test '^(to-fqdns.*)$'), 485-491(3/3 reachable), 503-506(Gateway API CRD 누락 로그), 514-518(--node-list kind-worker2) / docs.cilium.io v1.20 l2-announcements(15s) · bgp-control-plane-configuration(120s) / values.yaml v1.20.2 cilium-envoy
+# 타입 스펙: type-flowchart — Day 2 장애 증상에서 4단계 범위 좁히기(§1)를 거쳐 기능별 점검(§2~§5)으로 갈리는 깔때기 흐름도.
+# 값 근거: 본문 §1~§5 및 ch16.txt 줄 424(cilium status), 458(--test '^(to-fqdns.*)$', 123 tests), 485-491(cilium-health status, 3/3 reachable), 503-518(Gateway API CRD 누락, cilium sysdump --node-list kind-worker2), 593-608(cilium-envoy·DNS 프록시), 634-654(lease 15s·5s·2s, 10~20초), 701-727(PodCIDR·Service /32·/128), 733-755(CiliumBGPPeerConfig·restartTimeSeconds 120s)
 import sys
+
 sys.path.insert(0, ".")
 from dd import D, ACC, OK, WARN, INFO, SOFT, MUTED, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 920, 448
-d = D(W, H, "CILIUM UP AND RUNNING · 16-02", "Day 2 점검 순서와 기능별 분기",
-      "범위가 넓은 도구에서 좁은 도구로 내려가고, 그다음 기능마다 의존하는 대상을 본다",
-      "단계마다 명령 하나와 그 단계에서 읽는 실제 값")
+W, H = 960, 720
+d = D(
+    W,
+    H,
+    "CILIUM UP AND RUNNING · 16-02 OVERVIEW",
+    "Day 2 장애 점검 순서와 기능별 분기",
+    "증상에서 시작해 cilium status, connectivity test, cilium-health, 로그와 sysdump 순으로 범위를 좁히고, 특정된 기능에 따라 L7, L2, BGP 층으로 내려갑니다.",
+    lead="왼쪽 깔때기에서 명령 결과에 따라 단계를 넘기고, 특정된 기능은 오른쪽 카드로 내려갑니다.",
+)
 
-X0, GAP, CW, CH, Y1 = 12, 24, 160, 140, 104
-steps = [
-    ("01", "상태", "cilium status", "구성 요소 건강", INFO),
-    ("02", "연결 시험", "--test", "'^(to-fqdns.*)$'", INFO),
-    ("03", "노드 건강", "cilium-health status", "3/3 reachable", INFO),
-    ("04", "로그", "에이전트 · 오퍼레이터", "Gateway API CRD 누락", WARN),
-    ("05", "스냅샷", "sysdump --node-list", "kind-worker2", ACC),
-]
-for i, (num, title, cmd, val, col) in enumerate(steps):
-    x = X0 + i * (CW + GAP)
-    cx = x + CW // 2
-    if col == ACC:
-        d.tone(x, Y1, CW, CH, ACC, r=6, op="12", sw=1.4)
+
+def kr(t):
+    return KR if any("가" <= c <= "힣" for c in t) else MONO
+
+
+def diamond(cx, cy, hw, hh, line1, line2=None):
+    pts = f"{cx},{cy - hh} {cx + hw},{cy} {cx},{cy + hh} {cx - hw},{cy}"
+    d.o.append(
+        f'<polygon points="{pts}" fill="{PAPER2}" stroke="{SOFT}" stroke-width="1.1"/>'
+    )
+    if line2:
+        d.t(cx, cy - 4, line1, 13, INK, kr(line1), "middle", 600)
+        d.t(cx, cy + 16, line2, 11, MUTED, kr(line2), "middle")
     else:
-        d.box(x, Y1, CW, CH, PAPER2, RULE, 0.9, 6)
-    d.chip(x + 28, Y1 + 20, num, col, size=10)
-    d.t(cx, Y1 + 56, title, 13, INK, KR, "middle", 600)
-    d.line(x + 12, Y1 + 72, x + CW - 12, Y1 + 72, RULE, 0.6)
-    d.t(cx, Y1 + 96, cmd, 12, col, KR if any("가" <= c <= "힣" for c in cmd) else MONO, "middle", 600)
-    d.t(cx, Y1 + 120, val, 12, MUTED, KR if any("가" <= c <= "힣" for c in val) else MONO, "middle")
-    if i < len(steps) - 1:
-        d.arrow([(x + CW + 2, Y1 + 70), (x + CW + GAP - 2, Y1 + 70)], MUTED, "ar", 1.2)
+        d.t(cx, cy + 5, line1, 13, INK, kr(line1), "middle", 600)
 
-# 05 아래로 내려 버스를 타고 세 분기로 갈라진다 (직각만)
-BUS_Y, Y2, BW, BH, BGAP, BX0 = 276, 300, 280, 72, 20, 12
-last_cx = X0 + 4 * (CW + GAP) + CW // 2
-branches = [
-    ("L7 기능", "Envoy · DNS 프록시", "교체 중 공백", INK),
-    ("L2 Announcements", "lease 15s · 5s · 2s", "페일오버 10~20초", INK),
-    ("BGP", "restartTimeSeconds", "기본 120초", INK),
+
+# Zone titles
+d.t(24, 108, "1단계 · 범위 좁히기 (§1)", 13, MUTED, KR, "start", 600)
+d.line(24, 116, 476, 116, RULE, 0.8)
+d.t(528, 108, "기능별 가지 (§2·§3·§5) · 설계 비교 (§4)", 13, MUTED, KR, "start", 600)
+d.line(528, 116, 936, 116, RULE, 0.8)
+
+CX = 160
+
+# Start oval
+d.box(40, 128, 240, 44, PAPER2, SOFT, 1.1, r=20)
+d.t(CX, 148, "Day 2 장애 증상", 14, INK, KR, "middle", 600)
+d.t(CX, 165, "연결 실패 · 지연", 13, MUTED, KR, "middle")
+d.arrow([(CX, 172), (CX, 196)], INFO, "info", 1.4)
+
+# Gate 1: cilium status
+diamond(CX, 236, 128, 38, "cilium status", "에이전트 정상?")
+d.chip(276, 208, "§1", INFO, 11)
+d.arrow([(288, 236), (332, 236)], WARN, "warn", 1.3)
+d.t(310, 224, "이상", 13, WARN, KR, "middle", 600)
+d.tone(336, 212, 140, 48, WARN, r=6, op="12", sw=1.0)
+d.t(406, 234, "해당 데몬 복구", 13, WARN, KR, "middle", 600)
+d.t(406, 252, "Pod 상태 점검", 13, MUTED, KR, "middle")
+
+d.arrow([(CX, 274), (CX, 304)], OK, "ok", 1.4)
+d.t(172, 294, "정상", 13, OK, KR, "start", 600)
+
+# Gate 2: connectivity test
+diamond(CX, 344, 136, 38, "connectivity test", "항목별 보고서")
+d.chip(280, 316, "§1", INFO, 11)
+d.arrow([(296, 344), (332, 344)], WARN, "warn", 1.3)
+d.t(314, 332, "실패", 13, WARN, KR, "middle", 600)
+d.tone(336, 320, 140, 48, WARN, r=6, op="12", sw=1.0)
+d.t(406, 342, "실패 시험 확인", 13, WARN, KR, "middle", 600)
+d.t(406, 360, "보고서에서 확인", 13, MUTED, KR, "middle")
+
+d.arrow([(CX, 382), (CX, 412)], INFO, "info", 1.4)
+d.t(172, 402, "실패 · 증상 남음", 13, INFO, KR, "start", 600)
+
+# Gate 3: cilium-health status
+diamond(CX, 452, 132, 38, "cilium-health status", "3/3 reachable?")
+d.chip(280, 424, "§1", INFO, 11)
+d.arrow([(292, 452), (332, 452)], WARN, "warn", 1.3)
+d.t(312, 440, "불통", 13, WARN, KR, "middle", 600)
+d.tone(336, 428, 140, 48, WARN, r=6, op="12", sw=1.0)
+d.t(406, 450, "하부 망 점검", 13, WARN, KR, "middle", 600)
+d.t(406, 468, "unreachable 경로", 13, MUTED, KR, "middle")
+
+d.arrow([(CX, 490), (CX, 524)], OK, "ok", 1.4)
+d.t(172, 512, "3/3 reachable", 12, OK, MONO, "start", 600)
+
+# Step 4: Logs + sysdump (Focal ACC)
+d.tone(24, 528, 272, 92, ACC, r=6, op="16", sw=1.4)
+d.chip(276, 544, "§1", ACC, 11)
+d.t(40, 554, "에이전트·오퍼레이터 로그", 14, ACC, KR, "start", 700)
+d.t(40, 578, "예: Gateway API CRD 누락", 13, INK, KR, "start")
+d.t(40, 602, "sysdump --node-list kind-worker2", 12, MUTED, MONO, "start")
+
+# Bus from Step 4 to Right Functional Cards (§2~§5)
+BUS_X = 500
+d.line(296, 566, BUS_X, 566, ACC, 1.4)
+d.line(BUS_X, 310, BUS_X, 566, ACC, 1.4)
+
+cards = [
+    ("§4", "BGP 광고 비교 · 흐름 밖", "PodCIDR vs Service", "/32 · /128 고정 VIP", OK, 128),
+    ("§2", "L7 프록시 공백", "cilium-envoy · DNS 프록시", "Pod 교체 중 연결 드롭", INFO, 256),
+    ("§3", "L2 Announcements", "Lease 15s · 5s · 2s", "ARP 캐시 · gARP 복구", INFO, 384),
+    ("§5", "BGP Graceful Restart", "restartTimeSeconds 120s", "유지 vs 장애 지연", WARN, 512),
 ]
-bxs = [BX0 + j * (BW + BGAP) for j in range(3)]
-d.line(last_cx, Y1 + CH, last_cx, BUS_Y, ACC, 1.4)
-d.line(bxs[0] + BW // 2, BUS_Y, last_cx, BUS_Y, ACC, 1.4)
-for j, (name, v1, v2, col) in enumerate(branches):
-    x = bxs[j]
-    d.arrow([(x + BW // 2, BUS_Y), (x + BW // 2, Y2 - 2)], ACC, "acc", 1.4)
-    d.box(x, Y2, BW, BH, PAPER2, RULE, 0.9, 6)
-    d.t(x + 16, Y2 + 24, name, 13, col, KR if any("가" <= c <= "힣" for c in name) else MONO, "start", 600)
-    d.t(x + 16, Y2 + 44, v1, 12, INK, KR if any("가" <= c <= "힣" for c in v1) else MONO, "start")
-    d.t(x + 16, Y2 + 62, v2, 12, MUTED, KR, "start")
 
-d.legend(Y2 + BH + 20, [("범위 좁히기", INFO), ("오류 메시지", WARN), ("전체 수집", ACC)])
+for sec, title, val1, val2, col, cy in cards:
+    mid_y = cy + 54
+    if sec != "§4":
+        d.arrow([(BUS_X, mid_y), (524, mid_y)], ACC, "acc", 1.4)
+    d.tone(528, cy, 408, 108, col, r=6, op="12", sw=1.1)
+    d.chip(912, cy + 20, sec, col, 11)
+    d.t(544, cy + 32, title, 14, col, KR, "start", 700)
+    d.t(544, cy + 60, val1, 13, INK, kr(val1), "start")
+    d.t(544, cy + 86, val2, 13, MUTED, kr(val2), "start")
+
+d.legend(
+    H - 44,
+    [
+        ("상태 점검 · 범위 좁히기", INFO),
+        ("진단 수집 · 분기점", ACC),
+        ("정상 경로 · VIP 절약", OK),
+        ("이상 · 공백 · 지연", WARN),
+    ],
+)
 d.save("16-02.chapter-overview.svg")
+print("ok 16-02 overview")

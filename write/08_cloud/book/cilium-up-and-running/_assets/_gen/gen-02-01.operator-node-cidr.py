@@ -1,12 +1,12 @@
 # 타입 스펙: type-swimlane — 새 노드 합류 시 Cilium Operator 와 Agent 간 PodCIDR 할당 스윔레인.
-# 사실 출처: 《Cilium: Up and Running》 Ch.2 p.8 (Figure 2-4 "The Cilium operator manages IP address allocation") 및 본문 §4 L161~165.
+# 사실 출처: 《Cilium: Up and Running》 Ch.2 p.8 (Figure 2-4 "The Cilium operator manages IP address allocation") 및 본문 §2 「새 노드 합류와 PodCIDR 배분 흐름」 1~5.
 # 단계 번호는 본문 목록 1~5 와 같다. 10.1.1.0/24 는 원서 Figure 2-4 (p.8) 의 podCIDRs 예 값이다(본문에는 값이 없다).
 import sys
 sys.path.insert(0, ".")
 from dd import D, ACC, OK, WARN, INFO, SOFT, MUTED, INK, PAPER, PAPER2, RULE, KR, MONO
 
 W, H = 920, 480
-d = D(W, H, "CILIUM UP AND RUNNING · 02-01 §4", "새 노드 합류 시 PodCIDR 할당 스윔레인",
+d = D(W, H, "CILIUM UP AND RUNNING · 02-01 §2", "새 노드 합류 시 PodCIDR 할당 스윔레인",
       "클러스터 전역 오퍼레이터와 노드별 에이전트 간 조율과 주소 블록 배분",
       "오퍼레이터의 중복 없는 IP 풀 배분과 에이전트의 로컬 데이터패스 반영 흐름")
 
@@ -65,9 +65,9 @@ d.t(X3 + 75, Y_OP + 52, "3. CiliumNode 생성", 11, ACC, KR, "middle", 600)
 d.t(X3 + 75, Y_OP + 70, "spec.ipam.podCIDRs", 10, INK, MONO, "middle")
 d.t(X3 + 75, Y_OP + 88, "10.1.1.0/24", 11, ACC, MONO, "middle", 600)
 
-# 핸드오프 3 -> 4: 에이전트가 CiliumNode 를 감시 (하향 화살표)
+# 핸드오프 3 -> 4: 오퍼레이터가 CiliumNode 에 적은 값을 에이전트가 읽음 (하향 화살표, 라벨의 주어는 출발 노드)
 d.arrow([(X3 + 75, Y_OP + 100), (X3 + 75, Y_AG + 30)], ACC, "acc", sw=1.4)
-d.t(X3 + 85, (Y_OP + 100 + Y_AG + 30)/2 + 4, "CiliumNode 감시", 11, ACC, KR, "start", 600)
+d.t(X3 + 85, (Y_OP + 100 + Y_AG + 30)/2 + 4, "CiliumNode 로 전달", 11, ACC, KR, "start", 600)
 
 
 # 단계 4: (노드 레인) 에이전트가 자기 노드 CIDR 수신

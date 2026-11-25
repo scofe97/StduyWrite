@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 608" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">Graceful Restart 와 업그레이드 · 장애의 갈래</title><desc id="dd">Graceful Restart 를 켜면 계획된 업그레이드 중 피어가 경로를 붙잡아 eBPF 데이터패스로 연결을 잇지만, 비자발적 장애에서는 타이머 만료까지 죽은 노드로 트래픽이 가 페일오버가 늦어집니다.</desc>
+<rect width="960" height="608" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">CILIUM UP AND RUNNING · 16-02 §5</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">Graceful Restart 와 업그레이드 · 장애의 갈래</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">CiliumBGPPeerConfig gracefulRestart.enabled=true · restartTimeSeconds 120s 기준</text>
+<rect x="36.0" y="100" width="236" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="154.0" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">상류 BGP 피어</text>
+<text x="154.0" y="139" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">BGP Router</text>
+<rect x="362.0" y="100" width="236" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="480.0" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">Cilium 에이전트</text>
+<text x="480.0" y="139" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">내장 BGP 스피커</text>
+<rect x="688.0" y="100" width="236" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="806.0" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">커널 데이터패스</text>
+<text x="806.0" y="139" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">eBPF Datapath</text>
+<line x1="154.0" y1="154" x2="154.0" y2="540" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="480.0" y1="154" x2="480.0" y2="540" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="806.0" y1="154" x2="806.0" y2="540" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<rect x="44" y="168" width="872" height="360" rx="4" fill="rgba(245,245,243,0.04)" stroke="rgba(245,245,243,0.22)" stroke-width="1"/>
+<rect x="44" y="168" width="44" height="18" rx="2" fill="#0D1117" stroke="rgba(245,245,243,0.22)" stroke-width="1"/>
+<text x="66" y="181" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="600" fill="#8B98A9">ALT</text>
+<text x="168" y="184" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">[계획된 업그레이드 · preflight 준비]</text>
+<rect x="418.0" y="204" width="124" height="24" rx="4" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="480.0" y="221" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">에이전트 재시작</text>
+<path d="M 470.0 256 L 166.0 256" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)" stroke-dasharray="4 3"/>
+<text x="317.0" y="247" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">BGP 세션 끊김 (재시작)</text>
+<text x="317.0" y="273" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">피어가 경로 즉시 철회 보류</text>
+<path d="M 164.0 304 L 794.0 304" fill="none" stroke="#F08A59" stroke-width="1.5" marker-end="url(#acc)"/>
+<text x="480.0" y="295" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">기존·신규 트래픽 계속 전달</text>
+<text x="480.0" y="321" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">eBPF 살아 있어 연결 유지</text>
+<path d="M 470.0 344 L 166.0 344" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)" stroke-dasharray="4 3"/>
+<text x="317.0" y="335" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">120초 내 복귀 · 세션 재개</text>
+<line x1="52" y1="368" x2="908" y2="368" stroke="rgba(245,245,243,0.20)" stroke-width="1.0" stroke-dasharray="4 3"/>
+<text x="168" y="390" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">[비자발적 장애 · 링크 단절·정전]</text>
+<rect x="418.0" y="408" width="124" height="24" rx="4" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="480.0" y="425" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">노드·링크 중단</text>
+<path d="M 164.0 464 L 520.0 464" fill="none" stroke="#E3B341" stroke-width="1.5" marker-end="url(#warn)"/>
+<text x="337.0" y="455" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">hold time + 120s 동안 계속 송신</text>
+<text x="337.0" y="481" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">죽은 노드로 전송 · 페일오버 지연</text>
+<text x="528.0" y="469" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">✕ 유실</text>
+<rect x="81.5" y="494" width="145.0" height="24" rx="4" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="154.0" y="511" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">만료 뒤 경로 철회</text>
+<line x1="12" y1="564" x2="912" y2="564" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="586" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="576" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="586" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">세션 중단 · 복귀</text>
+<rect x="274" y="576" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="296" y="586" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">트래픽 유지 (이득)</text>
+<rect x="461" y="576" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="483" y="586" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">세션 재개</text>
+<rect x="570" y="576" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="592" y="586" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">페일오버 지연 (대가)</text>
+<rect x="770" y="576" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="792" y="586" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">노드 정지</text>
+</svg>

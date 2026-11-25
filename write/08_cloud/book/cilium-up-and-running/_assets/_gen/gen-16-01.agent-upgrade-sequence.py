@@ -37,22 +37,25 @@ d = SeqKR(W, H, "CILIUM UP AND RUNNING · 16-01 §3", "에이전트 교체 중 �
           "기존 연결은 이어지고 에이전트가 돌아올 때까지 바뀐 백엔드로 가는 요청만 실패합니다",
           "백엔드가 하나뿐인 서비스에서 클라이언트 노드의 에이전트가 재시작되는 동안")
 L = d.lanes([("client Pod", "클라이언트 노드"), ("서비스 맵", "eBPF"),
-             ("cilium 에이전트", "DaemonSet"), ("backend Pod", "서비스 하나뿐")], y0=100, lane_w=180)
+             ("cilium 에이전트", "DaemonSet"), ("backend Pod", "백엔드 하나뿐")], y0=100, lane_w=180)
 d.rails(656)
 
 d.state("cilium 에이전트", "재시작 중", 196, WARN)
-d.msg("client Pod", "서비스 맵", "서비스 IP 로 요청", 252, OK, "ok", sub="backend-1 로 전달")
+d.msg("client Pod", "서비스 맵", "서비스 IP 로 요청", 252, OK, "ok")
+d.msg("서비스 맵", "backend Pod", "backend-1 로 전달", 252, OK, "ok")
 d.state("backend Pod", "backend-1 → backend-2", 312, INFO)
 d.state("서비스 맵", "backend-1 남음", 312, WARN)
 
 # focal: 낡은 항목으로 간 요청 여러 번
 d.tone(24, 346, W - 72, 72, ACC, r=6, op="0A", sw=1.2)
-d.msg("client Pod", "서비스 맵", "서비스 IP 로 요청", 380, BAD, "bad", sub="backend-1 · 도달 불가")
+d.msg("client Pod", "서비스 맵", "서비스 IP 로 요청", 380, BAD, "bad")
+d.msg("서비스 맵", "backend Pod", "backend-1 · 도달 불가", 380, BAD, "bad", dash="4 3")
 d.state("client Pod", "재시도 · 백오프", 452, INFO)
 
 d.state("cilium 에이전트", "기동 완료", 508, OK)
 d.msg("cilium 에이전트", "서비스 맵", "맵 갱신", 564, OK, "ok", sub="backend-2")
-d.msg("client Pod", "서비스 맵", "서비스 IP 로 요청", 624, OK, "ok", sub="backend-2 로 전달")
+d.msg("client Pod", "서비스 맵", "서비스 IP 로 요청", 624, OK, "ok")
+d.msg("서비스 맵", "backend Pod", "backend-2 로 전달", 624, OK, "ok")
 
 d.legend(668, [("정상 전달", OK), ("에이전트 없음", WARN), ("낡은 항목 요청", BAD), ("Pod 교체·재시도", INFO), ("초점 구간", ACC)])
 d.save("16-01.agent-upgrade-sequence.svg")

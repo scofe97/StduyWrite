@@ -24,7 +24,7 @@ for j, (nm, code) in enumerate([("VXLAN", "cilium_vxlan"), ("Geneve", "cilium_ge
 rows = [
     ("UDP 포트", "tunnelPort", [("8472", INFO), ("6081", INFO)]),
     ("옵션 필드", "TLV", [("없음", None), ("있음 · Opt Len", None)]),
-    ("VNI 의 쓰임", "24비트", [("출발 Pod 신원", None), ("신원 14382 (0x382e)", None)]),
+    ("VNI 의 쓰임", "24비트", [("출발 Pod 신원", None), ("출발 Pod 신원 (예 14382 · 0x382e)", None)]),
     ("고정 필드", "", [("flags I", None), ("ver 0 · flags 0x00 · proto 0x6558", None)]),
     ("옵션에 싣는 것", "", [("해당 없음", None), ("DSR 서비스 IP · 포트", "focal")]),
 ]

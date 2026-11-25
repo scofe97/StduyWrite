@@ -40,7 +40,7 @@ for k, (name, col, cmds, vals) in enumerate(lanes):
     x, w = COLS[2]
     d.box(x, y, w, LANE_H, PAPER, RULE, sw=0.8, r=6)
     d.t(x + w / 2, y + 44, "Helm 차트", 12, INK, KR, "middle", 600)
-    d.t(x + w / 2, y + 72, "--version 1.20.2", 11, MUTED, MONO, "middle")
+    d.t(x + w / 2, y + 72, "--version 1.20.5", 11, MUTED, MONO, "middle")
     ym = y + LANE_H / 2
     d.arrow([(COLS[0][0] + COLS[0][1] + 2, ym), (COLS[1][0] - 2, ym)], MUTED, "ar", 1.3)
     d.arrow([(COLS[1][0] + COLS[1][1] + 2, ym), (COLS[2][0] - 2, ym)], MUTED, "ar", 1.3)

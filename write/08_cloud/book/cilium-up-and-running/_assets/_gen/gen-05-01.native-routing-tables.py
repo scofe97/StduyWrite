@@ -4,7 +4,7 @@ import sys
 sys.path.insert(0, ".")
 from dd import D, ACC, INFO, SOFT, MUTED, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 920, 392
+W, H = 920, 424
 d = D(W, H, "CILIUM UP AND RUNNING · 05-01 §2", "native routing 에서 경로표가 PodCIDR 을 잇는 방식",
       "autoDirectNodeRoutes: true 가 상대 노드의 PodCIDR 을 경로표에 넣는다", "autoDirectNodeRoutes: true 가 상대 노드의 PodCIDR 을 경로표에 넣는다")
 
@@ -27,6 +27,7 @@ for x0, name, pod, pod_c, routes, eth in nodes:
     for k, (txt, hot) in enumerate(routes):
         d.t(x0 + 32, ZY + 124 + k * 32, txt, 12, ACC if hot else INK, MONO, "start", 600 if hot else 400)
     d.chip(x0 + 16 + 58, ZY + 228, eth, INFO, 11)
+    d.t(x0 + 336, ZY + 200, "172.18.0.4 = kind-control-plane", 11, MUTED, MONO, "end")
 
 # 왼쪽 노드: 일치한 경로 행 → eth0
 d.arrow([(98, ZY + 184), (98, ZY + 208)], ACC, "acc", 1.5)
@@ -34,4 +35,5 @@ d.arrow([(98, ZY + 184), (98, ZY + 208)], ACC, "acc", 1.5)
 d.arrow([(158, ZY + 228), (562, ZY + 228)], ACC, "acc", 1.7)
 d.t(460, ZY + 218, "dst 10.10.0.32/27", 12, ACC, MONO, "middle", 600)
 d.t(460, ZY + 24, "같은 L2 망", 12, MUTED, KR)
+d.legend(376, [("노드 NIC", INFO), ("목적지 경로", ACC)])
 d.save("05-01.native-routing-tables.svg")

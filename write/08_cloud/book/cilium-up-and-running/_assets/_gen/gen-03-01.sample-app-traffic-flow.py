@@ -17,16 +17,16 @@ d.t(XL + 14, Y0 + 24, "kind-worker", 12, INFO, MONO, "start", 600)
 d.tone(XL + 14, Y0 + 40, WL - 28, 64, INFO, r=6, op="10", sw=1.0)
 d.t(XL + 26, Y0 + 62, "netshoot-client", 12, INK, MONO, "start", 600)
 d.t(XL + 26, Y0 + 84, "10.244.1.67", 11, INFO, MONO, "start")
-d.tone(XL + 14, Y0 + 120, WL - 28, 100, ACC, r=6, op="12", sw=1.4)
-d.t(XL + 26, Y0 + 142, "Cilium eBPF", 12, ACC, KR, "start", 600)
-d.t(XL + 26, Y0 + 168, "10.96.242.74:80", 11, INK, MONO, "start", 600)
-d.t(XL + 26, Y0 + 192, "→ 10.244.2.127 · 10.244.2.189", 11, MUTED, MONO, "start")
-d.t(XL + WL - 26, Y0 + 142, "kube-proxy 3/3 · 미사용", 12, SOFT, KR, "end")
+d.arrow([(XL + 60, Y0 + 104), (XL + 60, Y0 + 126)], INFO, "info", 1.4)
+d.tone(XL + 14, Y0 + 128, WL - 28, 96, ACC, r=6, op="12", sw=1.4)
+d.t(XL + 26, Y0 + 150, "Cilium eBPF", 12, ACC, KR, "start", 600)
+d.t(XL + 26, Y0 + 176, "nginx-service · 10.96.242.74:80", 11, INK, MONO, "start", 600)
+d.t(XL + 26, Y0 + 200, "→ 10.244.2.127 · 10.244.2.189", 11, MUTED, MONO, "start")
+d.t(XL + WL - 14, Y0 + 24, "kube-proxy 3/3 · 미사용", 11, SOFT, KR, "end")
 # 오른쪽 노드
 XR, WR = 532, 364
 d.box(XR, Y0, WR, HN, PAPER2, RULE, sw=0.9, r=8)
 d.t(XR + 14, Y0 + 24, "kind-worker2", 12, OK, MONO, "start", 600)
-d.t(XR + WR - 14, Y0 + 24, "nginx-service", 11, MUTED, MONO, "end")
 for j, ip in enumerate(["10.244.2.127", "10.244.2.189"]):
     yy = Y0 + 40 + j * 92
     d.tone(XR + 36, yy, WR - 50, 80, OK, r=6, op="10", sw=1.0)

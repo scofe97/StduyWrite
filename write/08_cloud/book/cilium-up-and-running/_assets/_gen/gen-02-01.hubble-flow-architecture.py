@@ -1,13 +1,13 @@
 # 타입 스펙: type-data-flow — 노드별 Hubble 서버에서 중앙 Relay 및 CLI·UI 로 흐르는 관측 데이터 흐름.
-# 사실 출처: 《Cilium: Up and Running》 Ch.2 p.10-11 (Figure 2-5 "Hubble, the observability component of Cilium") 및 본문 §5 L195~198.
-# 값 근거: cilium_events perf 링 버퍼·gRPC :4244(본문 L195), Relay 컨테이너 :4245·Service 기본 :80(본문 L196), hubble observe(본문 L205).
+# 사실 출처: 《Cilium: Up and Running》 Ch.2 p.10-11 (Figure 2-5 "Hubble, the observability component of Cilium") 및 본문 §6 「Hubble 관측 파이프라인」.
+# 값 근거: cilium_events perf 링 버퍼·gRPC :4244(본문 §6 「Hubble 관측 파이프라인」 Hubble 서버 항목), Relay 컨테이너 :4245·Service 기본 :80(같은 소절 Relay 항목), hubble observe(같은 절 명령 예).
 # Hubble UI 포트는 본문·원서에 없어 그리지 않는다. 원서 그림의 /metrics → Grafana·Prometheus 는 본문에 없어 뺀다.
 import sys
 sys.path.insert(0, ".")
 from dd import D, ACC, OK, WARN, INFO, SOFT, MUTED, INK, PAPER, PAPER2, RULE, KR, MONO
 
 W, H = 920, 480
-d = D(W, H, "CILIUM UP AND RUNNING · 02-01 §5", "Hubble 관측 데이터 수집 및 집계 흐름",
+d = D(W, H, "CILIUM UP AND RUNNING · 02-01 §6", "Hubble 관측 데이터 수집 및 집계 흐름",
       "노드별 커널 이벤트 캡처부터 중앙 Relay 집계 및 UI/CLI 실시간 시각화까지",
       "노드 로컬 버퍼 수집과 Relay 의 단일 스트림 집계 및 클라이언트 연동 흐름")
 
@@ -57,7 +57,7 @@ d.t(X_RELAY + W_RELAY/2, Y_TOP + 116, "피어 탐색 및 스트림 병합", 11, 
 d.t(X_RELAY + W_RELAY/2, Y_TOP + 138, "노드별 gRPC 엔드포인트 연결", 11, MUTED, KR, "middle")
 d.t(X_RELAY + W_RELAY/2, Y_TOP + 160, "전체 노드 흐름 일괄 조회", 11, MUTED, KR, "middle")
 
-d.chip(X_RELAY + W_RELAY/2, Y_TOP + 210, "Service :80 (:4245)", INFO, size=10)
+d.chip(X_RELAY + W_RELAY/2, Y_TOP + 210, "Service :80 → :4245", INFO, size=10)
 
 # 노드 1 & 2 -> Relay 연결선
 d.arrow([(292, Y_TOP + 84), (320, Y_TOP + 84), (320, Y_TOP + 130), (X_RELAY, Y_TOP + 130)], INFO, "info", sw=1.3)

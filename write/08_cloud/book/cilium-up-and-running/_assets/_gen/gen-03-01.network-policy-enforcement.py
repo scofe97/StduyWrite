@@ -35,9 +35,9 @@ d = SeqKR(W, H, "CILIUM UP AND RUNNING · 03-01 §5", "정책 단계마다 요�
           "L3/L4 규칙은 조용히 버리고 L7 규칙은 HTTP 응답으로 거절한다",
           "라벨 없는 클라이언트는 타임아웃, 허용되지 않은 경로는 403")
 
-NAMES = [("unauthorized-client", "라벨 없음"), ("netshoot-client", "10.244.1.67"),
-         ("cilium-envoy", "L7 프록시"), ("nginx-deployment", "app: nginx · :80")]
-d.lanes(NAMES, y0=104, lane_w=176)
+NAMES = [("unauthorized-client", "라벨 없음"), ("netshoot-client", "라벨 있음 · 10.244.1.67"),
+         ("cilium-envoy", "L7 프록시"), ("nginx-deployment", "app.kubernetes.io/name: nginx")]
+d.lanes(NAMES, y0=104, lane_w=206)
 d.rails(ybot=592)
 
 def banner(y, txt, c):
@@ -50,7 +50,7 @@ d.msg(U, S, "SYN :80", 220, BAD)
 d.state(S, "INGRESS DENIED", 252, BAD)
 d.state(U, "exit 28", 252, BAD)
 d.msg(N, S, "SYN :80", 296, OK, lx=448)
-d.msg(S, N, "200", 332, OK, dash="4 4", lx=448)
+d.msg(S, N, "Welcome to nginx!", 332, OK, dash="4 4", lx=448)
 
 banner(356, "ch03-policy + L7 · GET /index.html", ACC)
 d.msg(N, E, "GET /50x.html", 420, WARN)

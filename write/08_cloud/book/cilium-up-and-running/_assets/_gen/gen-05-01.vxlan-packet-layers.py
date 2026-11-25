@@ -4,7 +4,7 @@ import sys
 sys.path.insert(0, ".")
 from dd import D, ACC, OK, INFO, SOFT, MUTED, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 920, 464
+W, H = 920, 496
 LX, LW, LH, Y0 = 88, 800, 64, 108
 d = D(W, H, "CILIUM UP AND RUNNING · 05-01 §3", "VXLAN 터널 패킷의 헤더 겹",
       "20 + 8 + 8 + 14 = 50바이트가 Pod 패킷 하나에 더 붙는다", "20 + 8 + 8 + 14 = 50바이트가 Pod 패킷 하나에 더 붙는다")
@@ -32,4 +32,5 @@ for i, (tag, name, sub, focal) in enumerate(layers):
 d.t(44, Y0 + 24, "바깥", 12, MUTED, KR)
 d.arrow([(44, Y0 + 40), (44, Y0 + 5 * LH - 44)], MUTED, "ar", 1.4)
 d.t(44, Y0 + 5 * LH - 20, "안쪽", 12, MUTED, KR)
+d.legend(448, [("출발 Pod 신원 전달", ACC)])
 d.save("05-01.vxlan-packet-layers.svg")

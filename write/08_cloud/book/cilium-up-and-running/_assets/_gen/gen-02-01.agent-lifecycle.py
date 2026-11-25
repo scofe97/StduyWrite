@@ -1,12 +1,12 @@
 # 타입 스펙: type-process — Cilium Agent 노드 생애주기 5대 핵심 책임.
-# 사실 출처: 《Cilium: Up and Running》 Ch.2 p.4-5 (Figure 2-2 및 "The Cilium Agent" 5대 책임) 및 본문 §2 L77~81.
-# 카드 순서는 본문 목록 순서. ConfigMap=클러스터 기본값·CRD=기능별 설정은 원서 p.5, cilium-dbg 1.15 이름 변경은 본문 L87.
+# 사실 출처: 《Cilium: Up and Running》 Ch.2 p.4-5 (Figure 2-2 및 "The Cilium Agent" 5대 책임) 및 본문 §3 「에이전트의 다섯 가지 핵심 책임」.
+# 카드 순서는 본문 목록 순서. ConfigMap=클러스터 기본값·CRD=기능별 설정은 원서 p.5, cilium-dbg 1.15 이름 변경은 본문 §3 「cilium-dbg 진단 도구」.
 import sys
 sys.path.insert(0, ".")
 from dd import D, ACC, OK, WARN, INFO, SOFT, MUTED, INK, PAPER, PAPER2, RULE, KR, MONO
 
 W, H = 920, 480
-d = D(W, H, "CILIUM UP AND RUNNING · 02-01 §2", "Cilium Agent 생애주기 5대 핵심 책임",
+d = D(W, H, "CILIUM UP AND RUNNING · 02-01 §3", "Cilium Agent 생애주기 5대 핵심 책임",
       "노드 데이터패스 확립과 쿠버네티스 상태 유지를 위한 에이전트의 역할 영역",
       "에이전트가 노드에서 독립적으로 수행하는 다섯 가지 핵심 생애주기 책임")
 
@@ -39,7 +39,7 @@ steps = [
     ], INFO, False),
     ("진단 인터페이스 노출", [
         ("cilium-dbg", "1.15 전 이름 cilium"),
-        ("cilium.sock", "로컬 진단 소켓"),
+        ("cilium.sock", "cilium-cni·dbg 가 호출"),
         ("cilium-dbg status", "Pod 안 진단 명령")
     ], OK, False),
 ]
