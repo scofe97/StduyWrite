@@ -6,7 +6,7 @@ related:
   - ../../README.md
   - ../net/README.md
   - ../../../book/lgo_learning-go/README.md
-updated: 2026-10-07
+updated: 2026-11-25
 ---
 
 # 01_language/docs/go/net-http — Go net/http 패키지 공식문서 정독
@@ -25,7 +25,10 @@ updated: 2026-10-07
 | 02 클라이언트 | 02-01 | [Client·Transport](02-01.Client%C2%B7Transport.md) | Client 오케스트레이션과 RoundTripper 계약, Transport 의 persistConn 커넥션 풀링과 TCP 연결 재사용, DefaultTransport 기본값 읽기(0·-1 의 뜻, 두 KeepAlive, 환경 변수 프록시) |
 | 02 클라이언트 | 02-02 | [Client.Timeout·Transport 타임아웃·httptrace](02-02.Client.Timeout%C2%B7Transport%20%ED%83%80%EC%9E%84%EC%95%84%EC%9B%83%C2%B7httptrace.md) | 전체 트랜잭션을 감싸는 Client.Timeout 과 네트워크 구간별 Transport 타임아웃, httptrace 계측 훅 |
 | 03 서버 | 03-01 | [Server·ServeMux·Handler](03-01.Server%C2%B7ServeMux%C2%B7Handler.md) | Server.Serve 연결 수락 루프, conn.serve 전용 고루틴 디스패치, Go 1.22 ServeMux 패턴 라우팅과 핸들러 격리 |
-| 03 서버 | 03-02 | [Server 타임아웃·Shutdown](03-02.Server%20%ED%83%80%EC%9E%84%EC%95%84%EC%9B%83%C2%B7Shutdown.md) | 헤더·본문·핸들러·유휴 소켓 데드라인 4대 타임아웃과 Graceful Shutdown 의 신규 차단 및 연결 회수 |
+| 03 서버 | 03-02 | [Server 타임아웃·Shutdown](03-02.Server%20%ED%83%80%EC%9E%84%EC%95%84%EC%9B%83%C2%B7Shutdown.md) | 헤더·본문·핸들러·유휴 소켓 데드라인 4대 타임아웃과 Graceful Shutdown 의 신규 차단 및 연결 회수, NotifyContext·BaseContext 신호 전파 |
+| 03 서버 | 03-03 | [MaxBytesReader·MaxBytesHandler](03-03.MaxBytesReader%C2%B7MaxBytesHandler.md) | MaxBytesReader 의 한도 초과 오류·연결 닫힘, LimitReader 와의 차이, MaxBytesHandler 와 겹쳐 쓰기 |
+| 03 서버 | 03-04 | [SSE·Flusher·ResponseController](03-04.SSE%C2%B7Flusher%C2%B7ResponseController.md) | SSE 응답의 Flush, SetWriteDeadline 로 쓰기 기한 풀기, 프록시 버퍼링과 ping |
+| 03 서버 | 03-05 | [Cookie·SameSite·HMAC 서명](03-05.Cookie%C2%B7SameSite%C2%B7HMAC%20%EC%84%9C%EB%AA%85.md) | Go 구현: hmac.New·Equal, http.Cookie 속성, 서명 쿠키 세션의 한계 |
 
 
 

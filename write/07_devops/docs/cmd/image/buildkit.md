@@ -29,7 +29,7 @@ updated: 2026-11-15
 
 이 시트는 OrbStack 의 Docker Engine 29.8.2(linux/arm64)에서 이 이미지로 실측했습니다. `buildctl` 바이너리는 macOS·Windows 용도 있습니다. `buildkitd` 는 Linux 와 Windows 에서만 돌아서 macOS 에서는 컨테이너 안의 데몬에 붙여 씁니다.[^buildkit-os]
 
-`docker build` 와 `docker buildx` 도 같은 BuildKit 을 빌더 백엔드로 쓰는 다른 앞단입니다.[^docker-buildkit] 이 시트는 buildx 를 다루지 않고 `buildctl` 만 다룹니다.
+`docker build` 와 `docker buildx` 도 같은 BuildKit 을 빌더 백엔드로 쓰는 다른 앞단입니다.[^docker-buildkit] 이 시트는 buildx 를 다루지 않고 `buildctl` 만 다룹니다. buildx 는 [buildx 시트](buildx.md)가 맡습니다.
 
 
 

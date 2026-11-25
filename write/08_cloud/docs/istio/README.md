@@ -6,7 +6,7 @@ related:
   - ../README.md
   - ../../README.md
   - ../../book/istio-in-action/README.md
-updated: 2026-11-17
+updated: 2026-11-25
 ---
 
 # 08_cloud/docs/istio — Istio 공식문서 정독
@@ -21,7 +21,7 @@ updated: 2026-11-17
 
 이 폴더의 문서는 처음부터 차례로 읽는 연재가 아닙니다. 궁금한 주제를 한 편씩 골라 읽으므로 파일명은 한글 문서 이름만으로 짓습니다. 다루는 대상이 둘 이상이면 `와/과` 대신 `·` 로 잇습니다. 제목에 ` — ` 로 붙은 부제는 파일명에서 뺍니다. 그래서 파일명과 H1 제목은 다를 수 있습니다.
 
-지금은 한 편뿐이라 묶음 폴더 없이 폴더 바로 아래에 둡니다. 도식과 생성기는 문서 옆의 `_assets/` 에 두고, 생성기는 `_assets/_gen/` 에서 그 폴더의 `_assets/dd.py` 를 씁니다. 도식 센서(`dd-verify-all.sh`)가 문서 옆의 `_assets/` 만 보기 때문입니다.
+아직 편 수가 적어 묶음 폴더 없이 폴더 바로 아래에 둡니다. 도식과 생성기는 문서 옆의 `_assets/` 에 두고, 생성기는 `_assets/_gen/` 에서 그 폴더의 `_assets/dd.py` 를 씁니다. 도식 센서(`dd-verify-all.sh`)가 문서 옆의 `_assets/` 만 보기 때문입니다.
 
 공식 문서의 어느 페이지를 읽었는지는 프론트매터 `source` 가 맡습니다. 첫 줄에 1차 근거 페이지를 두어 공식 명세와의 연결을 유지합니다. istio.io 문서 주소에는 읽은 판을 `/v1.32/` 처럼 박습니다. 판 없는 `/latest/` 주소는 새 판이 나오면 내용이 바뀌거나 사라지기 때문입니다. 블로그 글은 주소에 날짜가 들어가 있어 판을 박지 않습니다.
 
@@ -34,6 +34,8 @@ updated: 2026-11-17
 | 제목 | 한 줄 소개 |
 |------|-----------|
 | [Ambient 모드와 ztunnel·waypoint — 사이드카 없이 L4 와 L7 을 나눈 데이터 플레인](Ambient%20%EB%AA%A8%EB%93%9C%C2%B7ztunnel%C2%B7waypoint.md) | 사이드카 없이 L4 와 L7 을 두 층으로 나눈 데이터 플레인의 동작 원리와 ztunnel·waypoint 의 책임 경계를 봅니다. |
+| [VirtualService 라우팅 — delegate·매치 순서·rewrite·redirect](VirtualService%20%EB%9D%BC%EC%9A%B0%ED%8C%85.md) | 라우트를 넘기는 `delegate`, 이기는 라우트를 정하는 매치 순서, 경로를 바꾸는 `rewrite` 와 `redirect` 를 봅니다. |
+| [사이드카 시동·종료 순서 — holdApplicationUntilProxyStarts·네이티브 사이드카·terminationDrainDuration](%EC%82%AC%EC%9D%B4%EB%93%9C%EC%B9%B4%20%EC%8B%9C%EB%8F%99%C2%B7%EC%A2%85%EB%A3%8C%20%EC%88%9C%EC%84%9C.md) | 앱과 프록시의 시작 순서를 맞추는 두 방법과 종료 쪽 설정을 봅니다. |
 
 
 

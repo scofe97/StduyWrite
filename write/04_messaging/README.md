@@ -142,7 +142,7 @@ updated: 2026-11-18
 
 ### docs — 공식 문서 정독
 
-- [`docs/`](docs/README.md) — 제품 공식 문서를 1차 자료로 삼는 자리. 지금은 [`flink/`](docs/flink/README.md)의 Apache Flink 2.3 읽기 지도 한 편
+- [`docs/`](docs/README.md) — 제품 공식 문서를 1차 자료로 삼는 자리. 지금은 [`flink/`](docs/flink/README.md)의 Apache Flink 2.3 읽기 지도와 [`franz-go/`](docs/franz-go/README.md)의 `kgo`·`kadm` 한 편
 
 
 

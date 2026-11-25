@@ -572,8 +572,7 @@ spec:
                 name: {{ .Release.Name }}-app-config
 ```
 
-`include` 가 ConfigMap 템플릿을 렌더링해 문자열로 받고 `sha256sum` 이 해시로 줄입니다.
-
+`$.Template.BasePath` 는 `templates/` 디렉터리 경로입니다. `include` 가 ConfigMap 템플릿을 렌더링해 문자열로 받고 `sha256sum` 이 SHA256 해시를 계산합니다.[^checksum]
 먼저 주석이 없는 경우로 문제를 재현합니다. `configChecksum=false` 로 설치하고 `message` 만 바꿔 업그레이드합니다. Helm 4 의 `helm upgrade` 는 지난 값을 이어받지 않으므로 `configChecksum` 도 다시 적습니다.
 
 ```bash
@@ -630,7 +629,9 @@ hl-cht-demo-hl-cht-app-86b7899dbf-hrxwq   1/1     Running       0          1s
 updated-v2
 ```
 
-주석이 생겨 파드 템플릿이 바뀌면서 새 파드가 떴고 환경 변수가 `updated-v2` 로 갱신됐습니다. 이후에는 설정 값만 바꿔도 해시가 달라져 같은 롤링이 일어납니다. 이 절의 릴리스는 7절에서 이어 씁니다.
+주석이 생겨 파드 템플릿이 바뀌면서 새 파드가 떴고 환경 변수가 `updated-v2` 로 갱신됐습니다. ConfigMap 내용이 바뀔 때만 해시가 달라져 롤링됩니다. `replicaCount` 만 바꿀 때는 해시가 유지됩니다(Helm v4.1.4 실측). 이미지 태그도 ConfigMap 을 건드리지 않으니 같다고 보지만 돌려 보지는 않았습니다. 이 절의 릴리스는 7절에서 이어 씁니다.
+
+해시는 `include` 한 파일의 렌더 결과만 봅니다. ConfigMap 이나 Secret 이 둘 이상이면 각각 annotation 을 두거나 여러 파일 결과를 이어 붙여 해시해야 합니다. 라이브러리 차트에서는 `$.Template.BasePath` 로 파일에 접근할 수 없어 이 방식을 쓰지 못합니다.[^checksum] ConfigMap 파일 이름을 바꾸면 annotation 경로도 함께 고쳐야 렌더 오류가 나지 않습니다. volume 으로 마운트한 ConfigMap 은 환경 변수와 달리 파드 재시작 없이 파일이 갱신될 수 있습니다[^checksum]. 앱이 파일을 다시 읽어야 반영되는지는 확인하지 못했습니다.
 
 
 
@@ -813,6 +814,8 @@ kubectl delete ns hl-chtv-test --wait=true
 [^files]: 차트 템플릿 가이드의 파일 접근 절이 `.Files.Glob` 의 `AsConfig` 를 ConfigMap 에, `AsSecrets` 를 Secret 에 쓰는 예를 보입니다. <https://helm.sh/docs/chart_template_guide/accessing_files/>
 
 [^dryrun]: Helm 4.1.4 의 `helm install --help` 는 `--dry-run=server` 를 "simulates the operation on the server, requiring cluster connectivity" 라고 설명합니다. 이 옵션은 Helm 4 에서 생긴 것이 아닙니다. Helm 3.13.0 릴리스 노트가 "The `--dry-run` flag now has multiple options which can enable Helm to connect to a Kubernetes instance." 라고 적습니다. <https://github.com/helm/helm/releases/tag/v3.13.0>
+
+[^checksum]: Helm 공식 팁 문서가 `sha256sum` 으로 ConfigMap 변경 시 Deployment annotation 을 갱신하는 방법과, 라이브러리 차트에서는 `$.Template.BasePath` 파일에 접근할 수 없는 제약을 설명합니다. <https://raw.githubusercontent.com/helm/helm-www/60d4db89421147aec9fc3fcef9e2d49e2729f50b/versioned_docs/version-3/howto/charts_tips_and_tricks.md> · <https://raw.githubusercontent.com/helm/helm-www/60d4db89421147aec9fc3fcef9e2d49e2729f50b/versioned_docs/version-3/chart_template_guide/function_list.md> ConfigMap 마운트 갱신은 쿠버네티스 ConfigMap 문서의 "Mounted ConfigMaps are updated automatically" 절입니다. 마운트된 키는 eventually 갱신되고 환경 변수로 쓴 값은 파드 재시작이 필요합니다. <https://kubernetes.io/docs/concepts/configuration/configmap/>
 
 - [Helm 릴리스 운영](Helm%20%EB%A6%B4%EB%A6%AC%EC%8A%A4%20%EC%9A%B4%EC%98%81.md) — 릴리스 라이프사이클 관리와 배포 상태 추적
 - [Helm values와 렌더 검증](Helm%20values%EC%99%80%20%EB%A0%8C%EB%8D%94%20%EA%B2%80%EC%A6%9D.md) — values 오버라이드 계층과 스키마 유효성 검사

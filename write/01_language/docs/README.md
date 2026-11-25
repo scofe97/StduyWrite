@@ -5,7 +5,7 @@ status: draft
 related:
   - ../README.md
   - ../book/lgo_learning-go/README.md
-updated: 2026-10-07
+updated: 2026-11-25
 ---
 
 # 01_language/docs — 언어 공식문서 정독
@@ -22,6 +22,7 @@ updated: 2026-10-07
 |------|-------------------|
 | [go/net/](go/net/README.md) | `pkg.go.dev/net` |
 | [go/net-http/](go/net-http/README.md) | `pkg.go.dev/net/http` |
+| [go/concurrency/](go/concurrency/README.md) | 대응하는 공식문서 섹션 없음(패턴 정리) |
 
 새 주제를 쓸 때는 그 문서의 1차 근거가 가장 많이 나오는 섹션 폴더에 넣습니다. 한 문서가 여러 섹션을 가로지르는 일은 흔하므로, 나머지 섹션은 프론트매터 `source` 와 본문 각주로 남깁니다. 해당 섹션 폴더가 아직 없으면 그때 만들고 이 표에 한 줄을 더합니다.
 
@@ -49,6 +50,10 @@ updated: 2026-10-07
 | go/net-http | 02-02 | [Client.Timeout·Transport 타임아웃·httptrace](go/net-http/02-02.Client.Timeout%C2%B7Transport%20%ED%83%80%EC%9E%84%EC%95%84%EC%9B%83%C2%B7httptrace.md) |
 | go/net-http | 03-01 | [Server·ServeMux·Handler](go/net-http/03-01.Server%C2%B7ServeMux%C2%B7Handler.md) |
 | go/net-http | 03-02 | [Server 타임아웃·Shutdown](go/net-http/03-02.Server%20%ED%83%80%EC%9E%84%EC%95%84%EC%9B%83%C2%B7Shutdown.md) |
+| go/net-http | 03-03 | [MaxBytesReader·MaxBytesHandler](go/net-http/03-03.MaxBytesReader%C2%B7MaxBytesHandler.md) |
+| go/net-http | 03-04 | [SSE·Flusher·ResponseController](go/net-http/03-04.SSE%C2%B7Flusher%C2%B7ResponseController.md) |
+| go/net-http | 03-05 | [Cookie·SameSite·HMAC 서명](go/net-http/03-05.Cookie%C2%B7SameSite%C2%B7HMAC%20%EC%84%9C%EB%AA%85.md) |
+| go/concurrency | 01-01 | [최신값만 전달하는 채널·drop-oldest](go/concurrency/01-01.%EC%B5%9C%EC%8B%A0%EA%B0%92%EB%A7%8C%20%EC%A0%84%EB%8B%AC%ED%95%98%EB%8A%94%20%EC%B1%84%EB%84%90%C2%B7drop-oldest.md) |
 
 
 

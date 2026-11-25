@@ -5,7 +5,7 @@ status: final
 related:
   - ../../README.md
   - ../../../_archive/08_cloud/kubernetes/README.md
-updated: 2026-11-21
+updated: 2026-11-25
 ---
 
 # 07_devops/docs/iac — IaC 와 쿠버네티스 매니페스트 관리
@@ -33,13 +33,15 @@ Terraform 처럼 클라우드 자원(VPC·로드밸런서·DB)을 만드는 도�
 
 ## 문서 목록
 
-> 편 이름이 도구입니다. Helm 주제별 다섯 편으로 템플릿·values 를 잡은 뒤 Kustomize 를 읽으면 두 길의 차이가 잘 보입니다.
+> 편 이름이 도구입니다. Helm 주제별 일곱 편으로 템플릿·values 를 잡은 뒤 Kustomize 를 읽으면 두 길의 차이가 잘 보입니다.
 
 | 문서 | 1차 자료 | 한 줄 소개 |
 |------|----------|-----------|
 | [Helm 릴리스 운영](Helm%20%EB%A6%B4%EB%A6%AC%EC%8A%A4%20%EC%9A%B4%EC%98%81.md) | <https://helm.sh/docs/> | Helm 릴리스와 리비전이 클러스터에 남는 모양을 이해하고, 배포가 막히거나 충돌할 때 원인을 찾아 풀 수 있습니다. |
 | [Helm values와 렌더 검증](Helm%20values%EC%99%80%20%EB%A0%8C%EB%8D%94%20%EA%B2%80%EC%A6%9D.md) | <https://helm.sh/docs/chart_template_guide/values_files/> | 차트에 값을 넣는 규칙을 알아야 최종 값을 예측할 수 있고, 예측한 값을 배포 전에 렌더로 확인할 수 있습니다. |
 | [Helm 차트 작성](Helm%20%EC%B0%A8%ED%8A%B8%20%EC%9E%91%EC%84%B1.md) | <https://helm.sh/docs/chart_template_guide/> | 차트 폴더 구성부터 템플릿 언어, 헬퍼 재사용, ConfigMap 변경에 따른 파드 롤링, 변경 검증 순서까지 다룹니다. |
+| [Helm 템플릿 값 검증](Helm%20%ED%85%9C%ED%94%8C%EB%A6%BF%20%EA%B0%92%20%EA%B2%80%EC%A6%9D.md) | <https://helm.sh/docs/howto/charts_tips_and_tricks/> | 잘못된 값을 렌더 단계에서 막는 `required`·`fail`, 헬퍼에 값을 여럿 넘기는 `dict`, 차트 파일을 읽는 `.Files` 의 동작과 함정을 다룹니다. |
+| [Helm 렌더 테스트](Helm%20%EB%A0%8C%EB%8D%94%20%ED%85%8C%EC%8A%A4%ED%8A%B8.md) | <https://helm.sh/docs/helm/helm_template/> | 클러스터 없이 `helm template` 출력을 단언해 의도치 않은 매니페스트 변경을 막고, `helm lint`·`helm-unittest` 의 역할을 비교합니다. |
 | [Helm Hook](Helm%20Hook.md) | <https://helm.sh/docs/topics/charts_hooks/> | 배포 작업의 순서 의존성을 Helm Hook 으로 제어하고 장애 상황에서 안전하게 복구하는 역량을 갖춥니다. |
 | [Helm 차트 의존성과 저장소](Helm%20%EC%B0%A8%ED%8A%B8%20%EC%9D%98%EC%A1%B4%EC%84%B1%EA%B3%BC%20%EC%A0%80%EC%9E%A5%EC%86%8C.md) | <https://helm.sh/docs/topics/charts/> | 원격 저장소 관리와 폐쇄망 차트 반입, OCI 배포 및 서브차트 의존성 제어 전 과정을 다룹니다. |
 | [Kustomize](Kustomize.md) | <https://kubectl.docs.kubernetes.io/references/kustomize/> | Helm 없이 환경별 차이를 patch 로 선언적으로 관리하는 길을 봅니다. |

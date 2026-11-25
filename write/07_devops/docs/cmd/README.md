@@ -8,7 +8,7 @@ related:
   - ../iac/README.md
   - ../artifact/README.md
   - ../../../08_cloud/docs/cmd/README.md
-updated: 2026-11-21
+updated: 2026-11-25
 ---
 
 # DevOps 명령어 시트
@@ -21,7 +21,7 @@ updated: 2026-11-21
 
 > 도구 하나를 한 시트에 두고, 하는 일에 따라 아래 분류의 하위 폴더에 둡니다.
 
-이 폴더에 쓴 시트는 image 분류 다섯 편([buildkit](image/buildkit.md)·[buildah](image/buildah.md)·[crane](image/crane.md)·[trivy](image/trivy.md)·[cosign](image/cosign.md))입니다. 나머지는 분류와 후보 명령만 정해 두었습니다. 시트를 쓰면 해당 분류의 표에 한 행을 더합니다.
+이 폴더에 쓴 시트는 image 분류 여섯 편([buildkit](image/buildkit.md)·[buildx](image/buildx.md)·[buildah](image/buildah.md)·[crane](image/crane.md)·[trivy](image/trivy.md)·[cosign](image/cosign.md))입니다. 나머지는 분류와 후보 명령만 정해 두었습니다. 시트를 쓰면 해당 분류의 표에 한 행을 더합니다.
 
 - [image: 이미지 빌드와 레지스트리](#image--이미지-빌드와-레지스트리)
 - [gitops: 배포와 동기화](#gitops--배포와-동기화)
@@ -38,13 +38,14 @@ updated: 2026-11-21
 
 ## image — 이미지 빌드와 레지스트리
 
-> 이미지를 만들고, 레지스트리 사이로 옮기고, 내용과 취약점을 확인하는 도구입니다. 후보는 `docker build`·`docker buildx`·`skopeo`·`crane`·`trivy` 입니다.
+> 이미지를 만들고, 레지스트리 사이로 옮기고, 내용과 취약점을 확인하는 도구입니다. 후보는 `docker build`·`skopeo`·`crane`·`trivy` 입니다.
 
 빌더를 고르는 기준과 rootless 빌드의 조건은 [artifact](../artifact/README.md)의 개념 편이 맡습니다. `docker` 로 컨테이너를 실행하고 조회하는 명령은 클라우드 명령어 시트가 맡고, 여기는 빌드와 레지스트리 전송만 다룹니다.
 
 | 시트 | 다루는 명령 | 이런 때 찾습니다 |
 |------|------------|----------------|
 | [buildkit](image/buildkit.md) | `buildctl` · `buildkitd` | `buildctl` 로 빌드하고 결과를 registry·tar 로 내보내거나 캐시를 주고받을 때 |
+| [buildx](image/buildx.md) | `docker buildx` | amd64 와 arm64 이미지를 한 번에 만들 때 `--platform` 과 `BUILDPLATFORM`·`TARGETARCH` 를 Go 크로스 컴파일에 쓸 때 |
 | [buildah](image/buildah.md) | `buildah` | 데몬 없이 Dockerfile 이나 셸 명령으로 OCI 이미지를 빌드하고, 셸 없는 이미지를 만들고, 저장소·tar 로 내보내고, 캐시·격리 방식을 고를 때 |
 | [crane](image/crane.md) | `crane` | 데몬 없이 원격 저장소의 digest·manifest·config 를 읽거나, 저장소 사이 복사·태그·pull/push·mutate/append·삭제를 할 때 |
 | [trivy](image/trivy.md) | `trivy` | 이미지·디렉터리·설정 파일·SBOM 의 알려진 취약점과 설정 오류를 찾고, CI 에서 종료 코드로 빌드를 막거나 폐쇄망에서 DB 갱신 없이 스캔할 때 |

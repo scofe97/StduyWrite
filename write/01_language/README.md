@@ -3,7 +3,7 @@ title: 01_language MOC
 tags: [moc, language]
 status: final
 related: []
-updated: 2026-11-14
+updated: 2026-11-25
 ---
 
 # 01_language
@@ -62,4 +62,4 @@ Kotlin·Scala 문서가 5개 이상 쌓이는 시점에 `02_runtime/`을 다시 
   - [book/lgo_learning-go/](book/lgo_learning-go/README.md) — Go 문법 정독(Learning Go 2판) — 타입·slice·인터페이스·에러·제네릭·모듈·동시성·테스트
   - [book/waiig_writing-an-interpreter-in-go/](book/waiig_writing-an-interpreter-in-go/README.md) — Go 로 짜는 인터프리터(Writing An Interpreter In Go) — 렉서·Pratt 파서·AST·트리 워킹 평가기
   - [book/wacig_writing-a-compiler-in-go/](book/wacig_writing-a-compiler-in-go/README.md) — 후속작(Writing A Compiler In Go) — 바이트코드 컴파일러·스택 VM·심볼 테이블·클로저
-  - [docs/go/](docs/README.md) — Go 표준 라이브러리 공식문서 정독(pkg.go.dev + go1.25.1 소스) — net · net/http
+  - [docs/go/](docs/README.md) — Go 표준 라이브러리 공식문서 정독(pkg.go.dev + go1.25.1 소스) — net · net/http · 동시성 패턴

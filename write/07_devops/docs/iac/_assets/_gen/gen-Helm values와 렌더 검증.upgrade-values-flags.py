@@ -51,7 +51,7 @@ ROWS = [
     },
     {
         "flag_title": "--reset-values",
-        "flag_sub": "새 차트 기본값 초기화",
+        "flag_sub": "기본값 위에 명령행",
         "flag_c": WARN,
         "new_chart": ("newFeature: true", "replicas: 1 · INFO"),
         "new_status": ("적용", OK),
@@ -63,7 +63,7 @@ ROWS = [
     },
     {
         "flag_title": "--reset-then-reuse",
-        "flag_sub": "새 기본값 위 사용자 값 합성",
+        "flag_sub": "기본값·지난 값·명령행",
         "flag_c": ACC,
         "new_chart": ("newFeature: true", "timeoutSeconds: 30"),
         "new_status": ("보존", OK),

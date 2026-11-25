@@ -1,12 +1,13 @@
 ---
 title: 04_messaging/docs MOC — 공식 문서·제품 사이트 정독
-tags: [moc, messaging, official-docs, flink]
+tags: [moc, messaging, official-docs, flink, franz-go]
 status: draft
 related:
   - ../README.md
   - flink/README.md
+  - franz-go/README.md
   - ../../05_data/docs/README.md
-updated: 2026-11-18
+updated: 2026-11-25
 ---
 
 # 04_messaging/docs — 공식 문서·제품 사이트 정독
@@ -22,6 +23,7 @@ updated: 2026-11-18
 | 폴더 | 1차 자료 | 묶는 기준 |
 |------|----------|----------|
 | [flink/](flink/README.md) | Apache Flink 2.3 공식 문서 | 제품 |
+| [franz-go/](franz-go/README.md) | franz-go v1.22.2 `kgo`·`kadm` 패키지 문서 | 제품 |
 
 이 규약은 [05_data/docs](../../05_data/docs/README.md)와 같습니다.
 
@@ -36,6 +38,7 @@ Flink 를 05_data 가 아니라 여기에 두는 근거는 [05_data MOC](../../0
 | 폴더 | 상태 | 예정 편 |
 |------|------|--------|
 | [flink/](flink/README.md) | 지도만 있음 | 예정 13편, 쓴 편 없음. `table-sql` 5편, `deployment` 3편, `operations` 5편 |
+| [franz-go/](franz-go/README.md) | 한 편 있음 | `kgo·kadm` |
 
 
 

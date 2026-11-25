@@ -534,7 +534,7 @@ diff <(helm get manifest hl-valr-app -n hl-valr-ns) <(helm template hl-valr-app 
 
 ### 세 가지 플래그 비교
 
-`--reuse-values` 는 지난 릴리스의 값을 쓰고 이번 명령의 값만 얹습니다. `--reset-values` 는 사용자 값을 버리고 새 차트 기본값으로 초기화합니다. `--reset-then-reuse-values` 는 새 차트 기본값을 쓰고 그 위에 이전 사용자 값을 얹습니다. 세 번째는 비교하려고 리비전 2 로 되돌린(`rollback`, 새 리비전 5) 뒤 실행하므로 리비전 6 이 됩니다. 출력은 명령마다 `REVISION` 줄 뒤에 그 리비전의 매니페스트 줄이 이어지는 묶음입니다.
+`--reuse-values` 는 지난 릴리스의 값을 쓰고 이번 명령의 값만 얹습니다. `--reset-values` 는 사용자 값을 버리고 새 차트 기본값 위에 이번 명령의 `--set`·`-f` 만 얹습니다. `--reset-then-reuse-values` 는 새 차트 기본값, 이전 사용자 값, 이번 명령의 `--set`·`-f` 순으로 쌓습니다. 세 번째는 비교하려고 리비전 2 로 되돌린(`rollback`, 새 리비전 5) 뒤 실행하므로 리비전 6 이 됩니다. 출력은 명령마다 `REVISION` 줄 뒤에 그 리비전의 매니페스트 줄이 이어지는 묶음입니다.
 
 ```bash
 # 이전 릴리스의 값을 재사용해 v2 차트로 올립니다
@@ -583,15 +583,22 @@ REVISION: 6
   replicas: 4
 ```
 
-첫 묶음(리비전 3)이 `--reuse-values` 의 결과입니다. `NEW_FEATURE` 는 새 기본값 `true` 가 아니라 이전의 `false` 이고, 새로 추가한 `TIMEOUT_SECONDS` 는 값이 비었습니다. 소스를 보면 이유가 드러납니다. `--reuse-values` 는 이전 차트 기본값과 이전 사용자 값을 합친 값을 새 차트의 기본값 자리에 대신 넣습니다. 소스에서는 `chart.Values = oldVals` 입니다[^reuse]. 새 차트의 기본값은 바뀐 것이든 추가된 것이든 통째로 버려집니다. Helm 3.19.0 과 Helm 4.1.4 소스가 같은 코드입니다.
+첫 묶음(리비전 3)이 `--reuse-values` 결과입니다. `NEW_FEATURE` 는 `true` 대신 이전 `false` 이고 `TIMEOUT_SECONDS` 는 비었습니다. `pkg/action/upgrade.go` 의 `reuseValues` 가 네 분기를 차례로 검사한 결과입니다[^reuse]. 둘째 `ReuseValues` 는 `CoalesceValues` 로 `oldVals` 를 다시 만듭니다. 이어 `CoalesceTables` 로 이전 값을 합치고 `chart.Values = oldVals` 로 덮습니다. 새 차트 기본값이 빠져 새 키를 읽으면 `nil` 이 될 수 있습니다.
 
-리비전 4(`--reset-values`)에는 새 기본값이 모두 반영됐습니다. 대신 `replicas` 가 4에서 1로, `LOG_LEVEL` 이 `WARN` 에서 `INFO` 로 돌아갔습니다. 사용자 값이 지워졌기 때문입니다.
+리비전 4(`--reset-values`)에는 새 기본값이 모두 반영됐습니다. 대신 `replicas` 가 4에서 1로, `LOG_LEVEL` 이 `WARN` 에서 `INFO` 로 돌아갔습니다. 첫 분기인 `ResetValues` 가 `current.Config` 를 무시하고 `newVals` 만 돌려주기 때문입니다. 이 분기가 맨 앞이라 `--reuse-values` 와 함께 줘도 `--reset-values` 가 이깁니다(`helm upgrade --help`).
 
-`--reset-then-reuse-values`(리비전 6)는 새 기본값 `NEW_FEATURE: "true"` 와 `TIMEOUT_SECONDS: "30"` 을 남겼습니다. 이전 사용자 값 `WARN` 과 `replicas: 4` 도 남았습니다. 이 플래그는 Helm 3.14.0 소스에서 처음 나타납니다[^reset-reuse]. `--reset-values` 나 `--reuse-values` 와 함께 쓰면 이 플래그는 무시됩니다(`helm upgrade --help`).
+리비전 6은 `NEW_FEATURE: "true"`·`TIMEOUT_SECONDS: "30"` 과 이전 `WARN`·`4` 를 남겼습니다. `ResetThenReuseValues` 가 `chart.Values` 를 두고 `CoalesceTables` 로 `current.Config` 를 합칩니다. `--reset-then-reuse-values` 는 Helm 3.14.0 에 추가됐고 앞 두 플래그와 함께 쓰면 무시됩니다[^reset-reuse]. 3.14 이전 클라이언트에는 없으므로 CI 이미지의 Helm 버전을 먼저 확인합니다.
 
 ### 플래그 없이 올릴 때
 
-플래그를 하나도 주지 않을 때는 이번 명령에 값이 있는지가 갈립니다. 값이 하나도 없으면 이전 사용자 값을 그대로 가져갑니다. 값이 하나라도 있으면 이전 사용자 값은 쓰이지 않습니다.
+플래그를 하나도 주지 않을 때는 이번 명령에 값이 있는지가 갈립니다. 네 번째 분기가 `newVals` 가 비어 있고 `current.Config` 가 있으면 이전 사용자 값을 그대로 복사합니다. 값이 하나라도 있으면 `newVals` 만 돌려줍니다(로그 줄 생략)[^reuse].
+
+```go
+if len(newVals) == 0 && len(current.Config) > 0 {
+    newVals = current.Config
+}
+return newVals, nil
+```
 
 ```bash
 # 플래그도 값도 없이 올리면 이전 사용자 값이 유지되는지 봅니다
@@ -795,8 +802,8 @@ CI 에 `helm lint` 와 `helm template` 단계를 넣고, PR 에서는 이전 값
 
 [^set-order]: Helm 소스 `pkg/cli/values/options.go` 의 `MergeValues` — v3.19.0 과 v4.1.4 에서 `-f` 파일 다음에 `--set-json`, `--set`, `--set-string`, `--set-file`, `--set-literal` 순으로 합칩니다. <https://github.com/helm/helm/blob/v4.1.4/pkg/cli/values/options.go>, `helm install --help` 의 `-f`·`--set` 우선순위 설명.
 [^dry-run]: Helm v3.13.0 `cmd/helm/install.go` 175~176행에서 `--dry-run` 은 문자열 플래그이고 값이 없으면 `client`, `server` 는 클러스터 접속을 허용합니다. v3.12.3 `cmd/helm/install.go` 163행은 불리언입니다. <https://github.com/helm/helm/blob/v3.13.0/cmd/helm/install.go>
-[^reuse]: Helm `pkg/action/upgrade.go` 의 `reuseValues` — v3.19.0 559~574행(`chart.Values = oldVals` 는 571행), v4.1.4 611~626행(623행). <https://github.com/helm/helm/blob/v4.1.4/pkg/action/upgrade.go>
-[^reset-reuse]: `--reset-then-reuse-values` 는 v3.13.3 `cmd/helm/upgrade.go` 에 없고 v3.14.0 에 있습니다. 플래그 설명은 `helm upgrade --help` 와 <https://helm.sh/docs/helm/helm_upgrade/> 입니다.
+[^reuse]: Helm `pkg/action/upgrade.go` 의 `reuseValues` — v3.14.0 533~571행(`chart.Values = oldVals` 552행), v3.19.0 552~590행(571행), v4.1.4 604~642행(623행). v3 은 `chartutil`, v4 는 `util` 패키지의 `CoalesceValues`·`CoalesceTables` 를 부릅니다. 플래그 없음 분기(`len(newVals) == 0`)는 v3.14.0 566~568행입니다. <https://github.com/helm/helm/blob/v4.1.4/pkg/action/upgrade.go> · <https://raw.githubusercontent.com/helm/helm/v3.14.0/pkg/action/upgrade.go>
+[^reset-reuse]: `--reset-then-reuse-values` 는 v3.13.3 `cmd/helm/upgrade.go` 에 없고 v3.14.0 에 있습니다(두 태그 파일에서 플래그 이름을 찾아 확인). 3.x 문서(helm-www 커밋 60d4db8)의 `helm upgrade` 페이지에 이 플래그 설명과 "If '--reset-values' or '--reuse-values' is specified, this is ignored" 문장이 있습니다. 3.14.0 릴리스 노트에는 이 플래그가 변경 기록 한 줄로만 나오고 주요 변경(Notable Changes) 항목에는 없습니다. <https://github.com/helm/helm/releases/tag/v3.14.0> · <https://raw.githubusercontent.com/helm/helm-www/60d4db89421147aec9fc3fcef9e2d49e2729f50b/versioned_docs/version-3/helm/helm_upgrade.md>
 [^schema]: Helm 문서 Charts 의 Schema Files 절. <https://helm.sh/docs/topics/charts/#schema-files>
 [^bp-flat]: Helm 문서 Best Practices 의 Flat or Nested Values. <https://helm.sh/docs/chart_best_practices/values/>
 

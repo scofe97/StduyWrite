@@ -656,7 +656,32 @@ configmap/hl-rel-app-preserved-config   1      0s
 configmap/kube-root-ca.crt              1      19s
 ```
 
-차트가 템플릿으로 만든 PVC 는 릴리스와 함께 지워졌고, `"helm.sh/resource-policy": keep` 어노테이션을 단 ConfigMap 은 남았습니다. 설정 파일이나 암호화 키처럼 실수로 지우면 복구가 어려운 리소스에 이 어노테이션을 둡니다. Helm 이 릴리스 관리 목록에서만 빼고 실제 객체는 건드리지 않습니다.
+차트가 템플릿으로 만든 PVC 는 릴리스와 함께 지워졌습니다. `"helm.sh/resource-policy": keep` 어노테이션을 단 ConfigMap 은 남았습니다. 설정 파일이나 암호화 키처럼 실수로 지우면 복구가 어려운 리소스에 이 어노테이션을 둡니다.
+
+어노테이션은 지킬 리소스의 `metadata.annotations` 아래에 둡니다. 예제는 PVC 입니다.
+
+```yaml
+# templates/pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: demo-data
+  annotations:
+    helm.sh/resource-policy: keep
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 1Gi
+```
+
+삭제는 uninstall 에서만 일어나지 않습니다. upgrade 에서도 새 차트가 어떤 리소스를 더는 만들지 않으면 그 리소스가 삭제됩니다. 공식 문서는 이 어노테이션이 uninstall·upgrade·rollback 으로 삭제될 상황에서 삭제를 건너뛰게 한다고 설명합니다[^helm-keep]. uninstall 은 위에서 돌려 확인했지만 upgrade 와 rollback 은 돌려 보지 않았고 문서 문장만 근거입니다.
+
+대신 남은 리소스는 어느 릴리스에도 속하지 않는 고아(orphan)가 되어 Helm 이 더는 관리하지 않습니다. 정리 책임이 사람에게 넘어오므로 필요 없어지면 `kubectl delete` 로 직접 지웁니다. 테스트 환경에서는 `keep` 이 정리를 방해하므로 values 로 켜고 끄는 스위치를 두는 편이 편합니다. 위 실습의 `keepConfigMap` 이 그런 스위치입니다.
+
+같은 문서가 짚는 경고가 하나 더 있습니다. 이미 uninstall 했지만 리소스가 남은 릴리스에 `helm install --replace` 를 쓰면 문제가 생길 수 있다고 합니다[^helm-keep]. 이때 나는 오류 문구는 확인하지 못했습니다.
+
+지우려던 리소스가 남았다면 이 어노테이션을 의심합니다. 릴리스가 이미 사라졌다면 Helm 으로는 찾을 수 없으니 `kubectl get <종류> <이름> -o yaml` 로 어노테이션을 직접 봅니다. `keep` 을 단 리소스를 upgrade 가 어떻게 갱신하는지는 근거를 찾지 못했습니다.
 
 ### 지운 릴리스가 목록에 보이는가
 
@@ -780,6 +805,7 @@ CI 는 같은 명령을 여러 번 돌려도 결과가 같아야 합니다. `ins
 [^helm3-list]: Helm 3.17.0 소스 `cmd/helm/list.go`. <https://github.com/helm/helm/blob/v3.17.0/cmd/helm/list.go>. 원문: "By default, it lists only releases that are deployed or failed."
 [^helm4-list]: Helm Documentation. "helm list". <https://helm.sh/docs/helm/helm_list/>. 원문: "By default, it lists all releases in any status."
 [^helm3-rollback]: Helm 3.17.0 소스 `cmd/helm/rollback.go`. <https://github.com/helm/helm/blob/v3.17.0/cmd/helm/rollback.go>. 원문: "If this argument is omitted or set to 0, it will roll back to the previous release."
+[^helm-keep]: Helm Documentation(helm-www 커밋 60d4db8). "Chart Development Tips and Tricks". <https://github.com/helm/helm-www/blob/60d4db89421147aec9fc3fcef9e2d49e2729f50b/versioned_docs/version-3/howto/charts_tips_and_tricks.md>. 원문: "this resource becomes orphaned. Helm will no longer manage it in any way.", "This can lead to problems if using `helm install --replace` on a release that has already been uninstalled, but has kept resources."
 [^hip-0023]: Helm Improvement Proposal. "HIP 0023: Utilize Server Side Apply for installs/upgrades". <https://github.com/helm/community/blob/main/hips/hip-0023.md>. 원문: "Helm will default to `true` for installs, enabling SSA." "And `auto` for upgrade and rollbacks".
 
 - [Helm values와 렌더 검증](Helm%20values%EC%99%80%20%EB%A0%8C%EB%8D%94%20%EA%B2%80%EC%A6%9D.md) — 환경별 values 오버라이드 우선순위와 템플릿 정적 검증 방법
