@@ -1,60 +1,75 @@
-# a0-04 §4 Pilot 의 포트가 향하는 두 방향.
-# 본문(부록 D.2): 서비스용 넷 — 15010 은 평문이라 "Using this port is not recommended because
-#       the traffic can be sniffed", 15012 는 "the same information ... but makes it secure",
-#       15014 는 컨트롤 플레인 메트릭, 15017 은 웹훅 서버. 디버그용 둘 — 8080 · 9876.
-# 타입 스펙: type-architecture — 컴포넌트 하나가 어느 경계로 무엇을 여는지가 논점이다.
-#           존과 컴포넌트로 두 방향을 나란히 두고 같은 것을 여는 둘을 붙여 대조한다.
-#           축약: accent 는 저자가 권하지 않는 포트 하나에 걸어 대조가 보이게 한다.
+# a0-04 §4 Pilot(istiod) 포트의 경계와 보안 배치.
+# 본문(부록 D.2 & Istio 1.32 Application Requirements):
+#   서비스용 넷(15010 평문 비권장 · 15012 TLS/mTLS 권장 · 15014 메트릭 · 15017 웹훅, 443->15017)
+#   디버깅·인트로스펙션용 둘(8080 HTTP 디버그 deprecated · 9876 localhost ControlZ).
+# 타입 스펙: type-deployment — 외부 호출원(워크로드·API 서버·도구)과 istiod 파드 경계, 포트별 프로토콜·보안을 보인다.
 import sys; sys.path.insert(0, ".")
-from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, BAD, PAPER, PAPER2, RULE, KR, MONO
+from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, PAPER2, RULE, KR, MONO
 
-W, H = 1000, 596
+W, H = 960, 648
 d = D(W, H, "ISTIO IN ACTION · A0-04 §4",
-      "같은 것을 여는 포트가 둘인데 하나만 안전하다",
-      "istiod 도 서비스를 향한 넷과 사람을 향한 둘로 갈린다. 위의 둘은 같은 것을 노출하고 보안만 "
-      "다르므로 선택지가 아니라 권고 하나로 정리된다. 색이 붙은 것이 쓰지 말라고 적힌 쪽이다.",
-      "13 장에서 VM 이 동서 게이트웨이를 거쳐 붙던 곳이 15012 입니다")
+      "istiod 포트의 경계와 15010·15012 보안 분기",
+      "워크로드·API 서버·운영 도구가 istiod 파드의 여섯 포트에 붙는 경계와 역할을 보인다. "
+      "같은 xDS 를 여는 15010 과 15012 중 평문인 15010 은 권하지 않고 15012 를 쓴다.",
+      lead="15012 는 TLS 로 신원을 발급하고 이후 요청을 상호 인증합니다")
 
-def zone(x, y, w, h, label):
-    d.o.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="8" fill="{INK}05" '
-               f'stroke="{INK}33" stroke-width="1" stroke-dasharray="4 4"/>')
-    # 존 라벨이 한글이라 8px eyebrow 관례를 쓸 수 없다(계약 하한 11px). 마스크도 함께 키운다.
-    tw = int(sum(11 if '가' <= c <= '힣' else 6.9 for c in label)) + 20
-    d.o.append(f'<rect x="{x + 12}" y="{y - 9}" width="{tw}" height="18" fill="{PAPER}"/>')
-    d.t(x + 20, y + 4, label, 11, SOFT, KR, "start", 600)
+# 왼쪽 호출원 구역
+d.t(28, 122, "호출 주체", 13, SOFT, KR, "start", 600)
+d.o.append(f'<rect x="24" y="132" width="296" height="428" rx="8" fill="{INK}05" '
+           f'stroke="{INK}33" stroke-width="1" stroke-dasharray="4 4"/>')
 
-PW, PH = 400, 56
-def port(x, y, num, what, c=None, bad=False):
-    if bad:
-        d.o.append(f'<rect x="{x}" y="{y}" width="{PW}" height="{PH}" rx="6" '
-                   f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
-    elif c:
-        d.o.append(f'<rect x="{x}" y="{y}" width="{PW}" height="{PH}" rx="6" '
-                   f'fill="{c}12" stroke="{c}" stroke-width="1.2"/>')
+def caller(y, title, sub, c=None):
+    if c:
+        d.tone(40, y, 264, 68, c, 6, "12", 1.2)
     else:
-        d.box(x, y, PW, PH, PAPER2, RULE, 1.0, 6)
-    d.t(x + 16, y + 34, num, 14, ACC if bad else (c or INK), MONO, "start", 600)
-    d.t(x + 92, y + 34, what, 11, MUTED, KR, "start")
+        d.box(40, y, 264, 68, PAPER2, RULE, 1.0, 6)
+    d.t(56, y + 28, title, 13, c or INK, KR, "start", 600)
+    d.t(56, y + 50, sub, 13, MUTED, KR, "start")
 
-zone(28, 148, 440, 300, "서비스를 향한 넷")
-zone(532, 148, 440, 156, "사람을 향한 둘")
+caller(172, "사이드카", "xDS 설정 · 인증서 요청")
+caller(312, "Prometheus", "컨트롤 플레인 메트릭 수집")
+caller(392, "K8s API 서버", "사이드카 주입 · 리소스 검증", c=INFO)
+caller(476, "운영자 (port-forward)", "로컬 터널로 상태 · 로그 조회")
 
-port(48, 176, "15010", "xDS · 인증서 발급 — 평문", bad=True)
-port(48, 248, "15012", "같은 것을 안전하게", c=OK)
-port(48, 320, "15014", "컨트롤 플레인 메트릭")
-port(48, 380, "15017", "웹훅 서버 — 주입과 검증", c=INFO)
+# 오른쪽 istiod 파드 경계
+d.t(448, 122, "istiod 파드", 13, SOFT, KR, "start", 600)
+d.o.append(f'<rect x="444" y="132" width="492" height="428" rx="8" fill="{INK}05" '
+           f'stroke="{INK}44" stroke-width="1.2"/>')
+d.chip(896, 152, "POD", SOFT, 10)
 
-port(552, 176, "8080", "Pilot 디버그 엔드포인트")
-port(552, 236, "9876", "ControlZ 인터페이스")
+PW, PH = 456, 48
+def port_row(y, port, desc, c=None, focal=False):
+    if focal:
+        d.tone(462, y, PW, PH, ACC, 6, "12", 1.4)
+    elif c:
+        d.tone(462, y, PW, PH, c, 6, "12", 1.2)
+    else:
+        d.box(462, y, PW, PH, PAPER2, RULE, 1.0, 6)
+    d.t(478, y + 30, port, 14, ACC if focal else (c or INK), MONO, "start", 600)
+    d.t(550, y + 30, desc, 13, INK if (focal or c) else MUTED, KR, "start")
 
-d.path("M 460 204 L 500 204 L 500 276 L 452 276", MUTED, 1.3, m="ar", dash="4 3")
-d.t(504, 244, "같은 것을 준다", 11, SOFT, KR, "start", 600)
+port_row(172, "15010", "xDS · 인증서 (평문 · 비권장)", focal=True)
+port_row(232, "15012", "xDS · 인증서 (TLS / mTLS 권장)", c=OK)
+port_row(312, "15014", "컨트롤 플레인 메트릭", None)
+port_row(384, "15017", "웹훅 서버 (Service 443 전달)", c=INFO)
+port_row(444, "8080", "Pilot 디버그 (폐기 예정 · HTTP)", None)
+port_row(496, "9876", "ControlZ (localhost 인트로스펙션)", None)
 
-d.t(552, 340, "저자의 경고 — 8080 은 민감한 정보를 담아", 11, ACC, KR, "start", 600)
-d.t(552, 362, "운영에서 끄기를 권한다", 11, MUTED, KR, "start")
-d.t(552, 384, "ENABLE_DEBUG_ON_HTTP=false", 11, INK, MONO, "start")
+# 직각 연결선
+d.path("M 304 196 L 460 196", ACC, 1.3, m="acc", dash="4 3")
+d.t(382, 184, "평문 위험", 13, ACC, KR, "middle", 600)
 
-d.t(28, 488, "15012 는 신원 발급에 TLS 를 쓰고 이후 요청은 상호 인증된다 — 15010 은 트래픽이 스니핑될 수 있다", 11, SOFT, KR, "start")
-d.t(28, 512, "15017 은 부록 B 의 MutatingWebhookConfiguration 이 요청을 보내는 자리다", 11, MUTED, KR, "start")
-d.legend(536, [("저자가 권하지 않는 포트", ACC), ("그 대신 쓰는 포트", OK), ("주입 · 검증이 오는 자리", INFO)])
+d.arrow([(304, 220), (364, 220), (364, 256), (460, 256)], OK, "ok", 1.5)
+d.t(382, 276, "mTLS 권장", 13, OK, KR, "middle", 600)
+
+d.arrow([(304, 344), (364, 344), (364, 336), (460, 336)], MUTED, "ar", 1.3)
+
+d.arrow([(304, 412), (364, 412), (364, 408), (460, 408)], INFO, "info", 1.4)
+d.t(382, 434, "HTTPS:443", 11, INFO, MONO, "middle")
+
+d.arrow([(304, 496), (364, 496), (364, 468), (460, 468)], MUTED, "ar", 1.3)
+d.arrow([(304, 516), (364, 516), (364, 520), (460, 520)], MUTED, "ar", 1.3)
+
+d.legend(588, [("평문이라 권하지 않는 포트", ACC), ("운영 권장 mTLS 포트", OK), ("API 서버 웹훅 경로", INFO)])
 d.save("a0-04.pilot-ports.svg")
+print("ok a0-04.pilot-ports")

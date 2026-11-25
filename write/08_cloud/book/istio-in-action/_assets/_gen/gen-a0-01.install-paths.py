@@ -3,9 +3,10 @@
 #       possibilities of the Istio installation are powered by Helm templating" 이므로 셋은
 #       결국 같은 템플릿을 돌린다. istioctl 은 "Under the hood, it uses Helm to generate the
 #       Istio resources". kubectl 은 이미 만들어진 리소스를 받는 쪽이라 축이 다르다.
-# 타입 스펙: type-dependency — 무엇이 무엇에 기대는가. 랭크 행으로 놓고 팬인 배지를 단다.
+# 타입 스펙: type-dependency — 무엇이 무엇에 기대는가. 랭크 행으로 놓는다.
 #           Helm 템플릿이 다중 부모를 받는 수렴점이라 tree 가 아니라 이 타입이다.
 #           축약: 되돌아가는 의존이 없으므로 back-edge 를 그리지 않고, accent 는 수렴점 하나에 쓴다.
+#           틀이 남기는 `0 in`·`2 in` 같은 진입 차수 배지는 독자에게 뜻이 없어 찍지 않는다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, PAPER2, RULE, KR, MONO
 
@@ -17,7 +18,7 @@ d = D(W, H, "ISTIO IN ACTION · A0-01 §1",
       "kubectl 은 이미 만들어진 리소스를 받는 쪽이라 축이 다릅니다")
 
 NW, NH = 200, 60
-def node(x, y, name, sub, fanin, focal=False, ext=False):
+def node(x, y, name, sub, focal=False, ext=False):
     if focal:
         d.o.append(f'<rect x="{x}" y="{y}" width="{NW}" height="{NH}" rx="6" '
                    f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
@@ -28,20 +29,17 @@ def node(x, y, name, sub, fanin, focal=False, ext=False):
         d.box(x, y, NW, NH, PAPER2, RULE, 1.0, 6)
     d.t(x + 16, y + 26, name, 13, ACC if focal else (SOFT if ext else INK), MONO, "start", 600)
     d.t(x + 16, y + 46, sub, 11, MUTED, KR, "start")
-    bw = len(fanin) * 7 + 12
-    d.o.append(f'<rect x="{x + NW - bw - 10}" y="{y + 10}" width="{bw}" height="16" rx="2" fill="{INK}14"/>')
-    d.t(x + NW - bw / 2 - 10, y + 22, fanin, 10, INK, MONO, "middle", 600)
 
 R0, R1, R2 = 132, 252, 372
 XS = [40, 268, 496]
 
-node(XS[0], R0, "helm", "차트로 직접 만든다", "0 in")
-node(XS[1], R0, "istioctl", "CRD 로 감싼다", "0 in")
-node(XS[2], R0, "istio-operator", "클러스터 안에서 지켜본다", "0 in")
-node(724, R0, "kubectl", "만들어진 것을 올린다", "0 in", ext=True)
+node(XS[0], R0, "helm", "차트로 직접 만든다")
+node(XS[1], R0, "istioctl", "CRD 로 감싼다")
+node(XS[2], R0, "istio-operator", "클러스터 안에서 지켜본다")
+node(724, R0, "kubectl", "만들어진 것을 올린다", ext=True)
 
-node(268, R1, "IstioOperator API", "바라는 상태를 적는 스키마", "2 in")
-node(268, R2, "Helm 템플릿", "설정 가능성이 여기서 나온다", "2 in", focal=True)
+node(268, R1, "IstioOperator API", "바라는 상태를 적는 스키마")
+node(268, R2, "Helm 템플릿", "설정 항목이 여기서 나온다", focal=True)
 
 # istioctl · istio-operator 는 IstioOperator API 를 거친다
 for i in (1, 2):
@@ -56,10 +54,15 @@ d.arrow([(368, R1 + NH), (368, R2 - 2)], ACC, "acc", 1.5)
 d.path(f"M {XS[0] + NW / 2} {R0 + NH} L {XS[0] + NW / 2} {R2 + NH / 2} L {268 - 2} {R2 + NH / 2}",
        ACC, 1.3, m="acc")
 
-d.t(488, R1 + 34, "검증이 붙는 층", 11, INFO, KR, "start", 600)
-d.t(556, R2 + 26, "여기서 갈리지 않는다 — 셋 다 같은 템플릿", 11, SOFT, KR, "start")
+d.t(488, R1 + 34, "검증이 붙는 층", 11, MUTED, KR, "start", 600)
+d.t(XS[0] + NW / 2 + 10, R2 - 20, "검증 없이 바로", 11, ACC, KR, "start", 600)
+d.t(556, R2 + 26, "여기서 갈리지 않는다. 셋 다 같은 템플릿이다", 11, SOFT, KR, "start")
 d.t(556, R2 + 48, "갈리는 것은 값을 넣기 전의 검사다", 11, MUTED, KR, "start")
 
-d.t(28, 480, "kubectl · ArgoCD · Flux 는 이미 만들어진 리소스를 받아 적용하므로 이 사슬 밖에 선다", 11, SOFT, KR, "start")
-d.legend(504, [("모두가 수렴하는 바닥", ACC), ("사슬 밖에 서는 쪽", MUTED)])
+d.t(28, 480, "kubectl · ArgoCD · Flux 는 이 사슬 밖", 11, SOFT, KR, "start")
+d.legend(504, [("모두가 수렴하는 바닥", ACC)])
+# 범례의 둘째 항목은 kubectl 칸과 같은 점선 테두리로 그린다
+d.o.append(f'<rect x="{100 + 44 + len("모두가 수렴하는 바닥") * 13}" y="516" width="14" height="12" rx="2" '
+           f'fill="{INK}05" stroke="{INK}4D" stroke-width="1" stroke-dasharray="3 2"/>')
+d.t(100 + 44 + len("모두가 수렴하는 바닥") * 13 + 22, 526, "사슬 밖에 서는 쪽", 11, MUTED, KR, "start")
 d.save("a0-01.install-paths.svg")

@@ -8,12 +8,12 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, BAD, OK, PAPER2, RULE, KR, MONO
 
-W, H = 960, 588
+W, H = 960, 532
 d = D(W, H, "ISTIO IN ACTION · A0-01 §2",
       "층 하나가 끼어들면 실수가 설치 전에 걸린다",
       "왼쪽은 Helm 단독 경로이고 오른쪽은 IstioOperator API 를 거치는 경로다. 층 하나가 더 있고 없고에 "
-      "따라 오타와 들여쓰기가 어디서 드러나는지가 달라진다. 색이 붙은 층이 저자가 이득으로 꼽은 자리다.",
-      "저자는 이 검증에 \"이게 큽니다\" 라고 덧붙입니다")
+      "따라 오타와 들여쓰기가 어디서 드러나는지가 달라진다. 색이 붙은 층이 입력을 검증하는 자리다.",
+      "이 층 하나가 오타와 들여쓰기를 설치 전에 막습니다")
 
 LW, LH = 380, 64
 LX, RX = 40, 540
@@ -37,15 +37,15 @@ d.t(RX + LW / 2, 116, "ISTIOOPERATOR 경유", 11, SOFT, MONO, "middle", 600)
 
 Y0, STEP = 136, 88
 layer(LX, Y0, "사람이 값을 적는다", "values.yaml")
-layer(RX, Y0, "사람이 값을 적는다", "IstioOperator CR")
+layer(RX, Y0, "사람이 값을 적는다", "IstioOperator 리소스")
 
-layer(LX, Y0 + STEP, "검증하는 층이 없다", "통과", faint=True)
-layer(RX, Y0 + STEP, "스키마가 값을 검사한다", "user-input validation", focal=True)
+layer(LX, Y0 + STEP, "책이 쓰일 때는 검증하는 층이 없었다", "통과", faint=True)
+layer(RX, Y0 + STEP, "스키마가 값을 검사한다", "사용자 입력 검증", focal=True)
 
 layer(LX, Y0 + 2 * STEP, "Helm 템플릿", "리소스 생성")
 layer(RX, Y0 + 2 * STEP, "Helm 템플릿", "리소스 생성")
 
-layer(LX, Y0 + 3 * STEP, "운영에서 드러난다", "indentation error -> outage", BAD)
+layer(LX, Y0 + 3 * STEP, "운영에서 드러난다", "들여쓰기 한 칸 틀림 → 운영 장애", BAD)
 layer(RX, Y0 + 3 * STEP, "설치 전에 드러난다", "적용이 거부된다", OK)
 
 for x in (LX, RX):
@@ -56,7 +56,5 @@ for x in (LX, RX):
 d.t(452, Y0 + STEP + 20, "여기가", 11, ACC, KR, "middle", 600)
 d.t(452, Y0 + STEP + 40, "빈 자리", 11, ACC, KR, "middle", 600)
 
-d.t(28, 496, "저자가 적은 또 하나의 이득 — 잘 정의된 API 가 있으면 문서를 보고 설정 가능성을 발견할 수 있다", 11, SOFT, KR, "start")
-d.t(28, 518, "앞의 것은 틀린 설정을 막고 뒤의 것은 맞는 설정을 찾게 한다. 둘은 같은 스키마의 다른 얼굴이다", 11, MUTED, KR, "start")
-d.legend(540, [("저자가 이득으로 꼽은 층", ACC), ("운영에서 터지는 자리", BAD), ("설치 전에 걸리는 자리", OK)])
+d.legend(484, [("입력을 검증하는 층", ACC), ("운영에서 터지는 자리", BAD), ("설치 전에 걸리는 자리", OK)])
 d.save("a0-01.validation-layer.svg")

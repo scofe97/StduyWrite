@@ -1,56 +1,100 @@
-# 04-01 학습 목표 뒤 전체 지도 — 절 여섯을 읽는 순서로 잇는다.
-# 본문: "칸마다 절 번호와 그 절이 답하는 질문 하나", "색이 붙은 칸이 이 장의 논지가 서는 자리".
-# 타입 스펙: type-process — 절마다 같은 의미 슬롯(번호 · 이름 · 질문)이 반복되고 화살표가 읽는 순서를 나른다.
-#           축약: 주체(lane)가 없는 단계 지도라 §1 lanes·§2 공식 대신 카드 한 줄 stride 로 놓는다
-#           (visual-diagram-selection §알려진 공백 관례). 03-01 개요와 같은 stride·여백.
+# 04-01 학습 목표 뒤 개요 그림 — 클러스터 밖 요청 한 건이 서비스에 닿기까지의 줄기.
+# 본문 요구(04-01 「학습 목표」): 클라이언트 -> 인그레스 게이트웨이(Envoy) -> Gateway(받아들이는가: 포트·프로토콜·호스트·TLS 모드)
+#           -> VirtualService(어디로 보내는가: 호스트·경로 -> 목적지) -> 서비스. TLS 종료 갈래(§4)와 TCP·SNI 패스스루 갈래(§5) 포함.
+# 값 근거: 04-01 §1~§6 및 ch04.txt (80·443·31400, Envoy 8080, blackhole:80, SIMPLE·MUTUAL·PASSTHROUGH, Host·:authority·SNI).
+# 타입 스펙: type-architecture — 존으로 경계(클러스터 밖 · 인그레스 게이트웨이 · 클러스터 안)를 묶고 직교 화살표로 요청 흐름과 갈래를 잇는다.
 import sys; sys.path.insert(0, ".")
-from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
+from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, INFO, WARN, KR, MONO
 
-# 폭은 계약의 본문 삽입용 상한(880~1000) 안으로 두고, 4 열을 2 열로 접어 담는다.
-# 계약: "넓은 캔버스에 담기지 않으면 폭을 늘리지 말고 배치를 바꾼다."
-COLS, CW, CH, GAP, VGAP, X0, Y0 = 2, 396, 100, 16, 56, 36, 104
-cards = [
-    ("§1", "진입점 앞의 두 장치", "가상 IP · 가상 호스팅"),
-    ("§2", "문을 여는 일과 길을 내는 일", "Gateway · VirtualService · blackhole"),
-    ("§3", "Ingress · API 게이트웨이와 견주면", "L4·L5 와 L7 을 가른 이유"),
-    ("§4", "TLS 세 모드와 하나의 리다이렉트", "SIMPLE · MUTUAL · SNI"),
-    ("§5", "TCP와 SNI 패스스루", "종료하지 않고 통과시킨다"),
-    ("§6", "운영에서 내리는 네 가지 판단", "쪼개기 · 주입 · 로그 · 설정 크기"),
+W, H = 984, 608
+
+
+def kr(t):
+    return KR if any("가" <= c <= "힣" for c in t) else MONO
+
+
+d = D(W, H, "ARCHITECTURE · 04-01 OVERVIEW",
+      "밖의 요청이 인그레스 게이트웨이를 거쳐 서비스에 닿기까지",
+      "클러스터 밖 요청이 가상 IP·가상 호스팅을 거쳐 인그레스 게이트웨이(Envoy)에 닿는다. "
+      "Gateway가 포트·프로토콜·TLS 모드로 무엇을 받아들일지 정하고, VirtualService가 호스트·경로·SNI로 목적지 서비스를 고른다.",
+      lead="칩은 다루는 절, 색은 문제(파랑)·대응(초록)·핵심 분리(코랄)·갈래(노랑)·흐름 밖 판단(회색)이며 왼쪽에서 오른쪽으로 읽습니다.")
+
+
+def node(x, y, w, h, title, sub, c, sec, sub2=None, op="14"):
+    d.tone(x, y, w, h, c, 6, op, 1.2 if c == ACC else 1.1)
+    cw = len(sec) * 6.8 + 14
+    d.chip(x + cw / 2 + 8, y + 14, sec, c if c != MUTED else MUTED, 11)
+    d.t(x + w / 2, y + 40, title, 14, c if c != MUTED else INK, kr(title), "middle", 600)
+    d.t(x + w / 2, y + 58, sub, 13, MUTED, kr(sub), "middle")
+    if sub2:
+        d.t(x + w / 2, y + 76, sub2, 13, MUTED, kr(sub2), "middle")
+
+
+# 구역 경계 (z-order: zone -> arrows -> nodes; eyebrow 는 존 내부 상단에 16px 여유로 배치)
+zones = [
+    (16, 104, 184, 344, "OUTSIDE CLUSTER"),
+    (272, 104, 444, 424, "INGRESS GATEWAY · ENVOY 8080"),
+    (780, 104, 188, 344, "INSIDE MESH"),
 ]
-FOCAL = 2
-ROWS = -(-len(cards) // COLS)
-BOTTOM = Y0 + ROWS * (CH + VGAP) - VGAP
-LEGY = BOTTOM + 48
-W, H = 880, LEGY + 40
+for zx, zy, zw, zh, zlab in zones:
+    d.o.append(f'<rect x="{zx}" y="{zy}" width="{zw}" height="{zh}" rx="8" fill="rgba(245,245,245,0.02)" stroke="{RULE}" stroke-width="0.9"/>')
+    d.t(zx + 14, zy + 20, zlab, 8, SOFT, MONO, "start")
 
-d = D(W, H, "ISTIO IN ACTION · 04-01",
-      "문을 여는 일과 길을 내는 일을 가른다 — 읽는 순서",
-      "4장 노트의 절 여섯을 읽는 순서로 이은 지도. 앞 둘이 진입점과 두 리소스를 놓고, 셋째에서 L4·L5 와 L7 을 가른 이유가 서며, 뒤 셋이 TLS·TCP·운영 판단이다.",
-      "셋째 칸에서 이 장의 논지가 서고, 뒤 세 칸은 그 문에 무엇을 다는가입니다")
+# 구역 1: 클러스터 밖 (문제)
+node(28, 160, 160, 92, "클라이언트", "도메인 → 가상 IP", INFO, "§1", "단일 IP 장애 회피")
+node(28, 300, 160, 92, "가상 호스팅 단서", "Host · :authority", INFO, "§1", "TLS · SNI")
 
-def pos(i):
-    r, c = divmod(i, COLS)
-    return X0 + c * (CW + GAP), Y0 + r * (CH + VGAP)
+# 구역 2: 인그레스 게이트웨이 (핵심 분리 + 갈래)
+node(288, 148, 192, 92, "Gateway · 문 열기", "L4·L5 포트·프로토콜", ACC, "§2·§4", "받아들이는 규칙", op="1e")
+node(512, 148, 192, 92, "VirtualService", "L7 호스트·경로 → 목적지", OK, "§2·§5", "없으면 blackhole 404")
 
-for i in range(len(cards) - 1):
-    x1, y1 = pos(i); x2, y2 = pos(i + 1)
-    if y1 == y2:
-        d.arrow([(x1 + CW, y1 + CH / 2), (x2 - 2, y2 + CH / 2)], MUTED, "ar", 1.4)
-    else:
-        my = y1 + CH + VGAP / 2
-        d.path(f"M {x1 + CW / 2} {y1 + CH} L {x1 + CW / 2} {my} "
-               f"L {x2 + CW / 2} {my} L {x2 + CW / 2} {y2 - 2}", MUTED, 1.4, m="ar")
+node(288, 296, 192, 92, "TLS 종료·리다이렉트", "SIMPLE · MUTUAL", OK, "§4", "게이트웨이 인증서 종료")
+node(288, 424, 192, 88, "TCP·SNI 패스스루", "포트 · sniHosts", WARN, "§5", "미종료 통과")
+node(512, 424, 192, 88, "운영 판단 넷", "쪼개기·주입·로그", MUTED, "§6", "설정 크기 축소")
 
-for i, (num, title, q) in enumerate(cards):
-    x, y = pos(i); focal = (i == FOCAL)
-    if focal:
-        d.o.append(f'<rect x="{x}" y="{y}" width="{CW}" height="{CH}" rx="8" '
-                   f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
-    else:
-        d.box(x, y, CW, CH, PAPER2, RULE, 1.0, 8)
-    d.t(x + 20, y + 28, num, 11, ACC if focal else SOFT, MONO, "start", 600)
-    d.t(x + 20, y + 56, title, 14, ACC if focal else INK, KR, "start", 600)
-    d.t(x + 20, y + 82, q, 12, MUTED, KR, "start")
+# 구역 3: 클러스터 안
+node(792, 148, 164, 92, "사이드카 서비스", "webapp", OK, "§2·§4", "Auto mTLS 구간")
+node(792, 328, 164, 92, "TCP·TLS 백엔드", "tcp-echo-service", WARN, "§5", "simple-tls-service")
 
-d.legend(LEGY, [("이 장의 논지", ACC)])
+# 화살표 (직교 경로, 라벨은 구역 사이 통로에 배치)
+# 클라이언트 -> Gateway
+d.arrow([(188, 194), (286, 194)], INFO, "info", 1.4)
+d.t(236, 184, "진입", 13, MUTED, KR, "middle", 600)
+
+# 가상 호스팅 단서 -> Gateway 아래로 진입
+d.arrow([(188, 346), (236, 346), (236, 212), (286, 212)], INFO, "info", 1.3, "4 3")
+d.t(236, 366, "단서 판별", 13, MUTED, KR, "middle")
+
+# Gateway -> VirtualService (핵심 handoff)
+d.arrow([(480, 194), (510, 194)], ACC, "acc", 1.5)
+d.t(496, 182, "허용", 13, ACC, KR, "middle", 600)
+
+# Gateway -> TLS 종료 (하단)
+d.arrow([(384, 240), (384, 294)], OK, "ok", 1.3)
+d.t(394, 272, "HTTPS 종료", 13, MUTED, KR, "start")
+
+# TLS 종료 -> VirtualService
+d.arrow([(480, 342), (496, 342), (496, 224), (510, 224)], OK, "ok", 1.3)
+d.t(504, 290, "복호화 뒤", 13, MUTED, KR, "start")
+
+# Gateway -> TCP/SNI 패스스루 (왼쪽 통로)
+d.arrow([(288, 234), (278, 234), (278, 468), (286, 468)], WARN, "warn", 1.3)
+d.t(264, 468, "비-HTTP", 13, MUTED, KR, "end")
+
+# VirtualService -> 사이드카 서비스
+d.arrow([(704, 194), (790, 194)], OK, "ok", 1.5)
+d.t(746, 182, "라우트", 13, OK, KR, "middle", 600)
+
+# TCP/SNI 패스스루 -> TCP/TLS 백엔드
+d.arrow([(480, 468), (496, 468), (496, 374), (790, 374)], WARN, "warn", 1.4)
+d.t(638, 364, "SNI · 포트 매칭 전달", 13, WARN, KR, "middle")
+
+d.legend(H - 44, [
+    ("진입 문제", INFO),
+    ("문 열기(핵심)", ACC),
+    ("길 내기 · TLS 대응", OK),
+    ("비-HTTP 갈래", WARN),
+    ("흐름 밖 판단", MUTED),
+])
 d.save("04-01.chapter-overview.svg")
+print("ok 04-01 chapter-overview")

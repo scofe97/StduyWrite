@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 628" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">TCP와 SNI 패스스루 — 무엇을 보고 길을 고르는가</title><desc id="dd">31400 포트로 들어온 비-HTTP 연결이 Gateway 프로토콜 설정에 따라 두 갈래로 나뉜다. 평문 TCP는 포트로만 매칭하고, TLS PASSTHROUGH는 SNI만 읽어 암호화를 유지한 채 백엔드로 보낸다.</desc>
+<rect width="900" height="628" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">FLOWCHART · 04-01 §5</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">TCP와 SNI 패스스루 — 무엇을 보고 길을 고르는가</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">시작과 끝은 타원, 분기는 마름모, 처리는 사각형이며 코랄은 TLS를 종료하지 않고 넘기는 SNI 패스스루 경로입니다.</text>
+<rect x="302.0" y="100.0" width="296" height="56" rx="20" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="450" y="126" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#6A95D8">비-HTTP TCP 연결 도착</text>
+<text x="450" y="144" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">클러스터 밖 → 게이트웨이 :31400</text>
+<polygon points="450,188 586,232 450,276 314,232" fill="#161B22" stroke="#F5F5F3" stroke-width="1.2"/>
+<text x="450" y="228" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#F5F5F3">Gateway protocol</text>
+<text x="450" y="248" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">31400 포트 프로토콜 선언</text>
+<path d="M 450 156 L 450 186" fill="none" stroke="#6A95D8" stroke-width="1.4" marker-end="url(#info)"/>
+<rect x="80.0" y="304.0" width="296" height="64" rx="6" fill="#E3B34114" stroke="#E3B341" stroke-width="1.1"/>
+<text x="228" y="332" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#E3B341">호스트 단서 없음 · hosts: "*"</text>
+<text x="228" y="352" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">프로토콜 미인식 · 재시도·서킷 브레이킹 불가</text>
+<rect x="80.0" y="400.0" width="296" height="64" rx="6" fill="#E3B34114" stroke="#E3B341" stroke-width="1.1"/>
+<text x="228" y="428" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#E3B341">VirtualService tcp: 매칭</text>
+<text x="228" y="448" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">들어온 포트 31400으로만 목적지 결정</text>
+<rect x="80.0" y="496.0" width="296" height="56" rx="20" fill="#E3B34114" stroke="#E3B341" stroke-width="1.2"/>
+<text x="228" y="522" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#E3B341">tcp-echo-service:2701</text>
+<text x="228" y="540" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">평문 TCP 그대로 echo 응답</text>
+<rect x="524.0" y="304.0" width="296" height="64" rx="6" fill="#F08A591e" stroke="#F08A59" stroke-width="1.3"/>
+<text x="672" y="332" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#F08A59">Gateway · tls.mode: PASSTHROUGH</text>
+<text x="672" y="352" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">ClientHello SNI만 읽음 · 인증서 불필요</text>
+<rect x="524.0" y="400.0" width="296" height="64" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="672" y="428" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#3FB98C">VirtualService tls: 매칭</text>
+<text x="672" y="448" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">port: 31400 + sniHosts 호스트 비교</text>
+<rect x="524.0" y="496.0" width="296" height="56" rx="20" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="672" y="522" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#3FB98C">simple-tls-service-1 / 2</text>
+<text x="672" y="540" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">TLS 유지 통과 → 백엔드가 직접 종료</text>
+<path d="M 314 232 L 228 232 L 228 302" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#warn)"/>
+<text x="284" y="222" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#E3B341">protocol: TCP</text>
+<path d="M 586 232 L 672 232 L 672 302" fill="none" stroke="#F08A59" stroke-width="1.5" marker-end="url(#acc)"/>
+<text x="616" y="222" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">protocol: TLS</text>
+<path d="M 228 368 L 228 398" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#warn)"/>
+<path d="M 228 464 L 228 494" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#warn)"/>
+<path d="M 672 368 L 672 398" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<path d="M 672 464 L 672 494" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<line x1="12" y1="586" x2="852" y2="586" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="608" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="598" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="608" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">진입 연결</text>
+<rect x="209" y="598" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="231" y="608" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">평문 TCP(L7 포기)</text>
+<rect x="422" y="598" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="444" y="608" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">SNI 패스스루(핵심)</text>
+<rect x="622" y="598" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="644" y="608" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">백엔드 TLS 유지</text>
+</svg>

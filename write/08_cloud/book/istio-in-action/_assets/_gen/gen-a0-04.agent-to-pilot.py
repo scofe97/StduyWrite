@@ -2,30 +2,61 @@
 # 본문(부록 D.1.2): 15004 로 온 요청은 "forwarded securely to istiod as xDS events, which is a
 #       good way to verify connectivity to the control plane from the agent". 응답의
 #       genericXdsConfigs 안 configStatus 가 SYNCED 면 최신이다.
-# 타입 스펙: type-sequence — 참여자 사이 시간 순 주고받기가 논점이다. 레인 + 메시지, 상태는 칩으로.
-#           축약: 이 경로 자체가 연결 확인 수단이라는 것이 논점이라 응답이 온 자리에 상태 칩을 둔다.
+# 타입 스펙: type-sequence — 참여자 사이 시간 순 주고받기. 한글은 KR 스택, 응답은 점선 화살표.
 import sys; sys.path.insert(0, ".")
 from dd import Seq, ACC, MUTED, SOFT, INK, INFO, OK, KR, MONO
 
-W, H = 1000, 528
-d = Seq(W, H, "ISTIO IN ACTION · A0-04 §3",
-        "답이 온다는 것 자체가 연결이 살아 있다는 뜻이다",
-        "15004 로 던진 질의는 xDS 이벤트로 istiod 에 안전하게 전달된다. 그래서 이 왕복은 동기화 "
-        "상태를 묻는 일이면서 동시에 에이전트와 컨트롤 플레인 사이 연결을 확인하는 일이 된다.",
-        "여기서 보이는 것은 Pilot 디버그 엔드포인트가 내놓는 것의 부분집합입니다")
+def fam_of(txt):
+    return KR if any("가" <= ch <= "힣" for ch in str(txt)) else MONO
 
-d.lanes([("사람", "kubectl exec"),
-         ("파일럿 에이전트", "포트 15004"),
-         ("istiod", "debug endpoints")], y0=104, lane_w=240)
-d.rails(392)
+class KrSeq(Seq):
+    def lanes(s, names, y0=104, lane_w=228):
+        s.LX = {}
+        n = len(names)
+        span = (s.w - 48 - 24) - lane_w
+        for i, (nm, sub) in enumerate(names):
+            x = 24 + lane_w / 2 + (span * i / (n - 1) if n > 1 else 0)
+            s.LX[nm] = x
+            s.box(x - lane_w / 2, y0, lane_w, 48, "#161B22", "rgba(191,192,192,0.22)", 1.0)
+            s.t(x, y0 + 21, nm, 13, INK, KR, "middle", 600)
+            s.t(x, y0 + 39, sub, 11, MUTED, fam_of(sub))
+        s.lane_top = y0 + 48
+        return s.LX
 
-d.msg("사람", "파일럿 에이전트", "curl /debug/syncz", 196, MUTED, "ar", sub="프록시 안에서 친다")
-d.msg("파일럿 에이전트", "istiod", "xDS 이벤트로 전달", 260, ACC, "acc", sub="평문으로 나가지 않는다")
-d.msg("istiod", "파일럿 에이전트", "genericXdsConfigs", 324, MUTED, "ar", sub="xDS API 별 configStatus")
-d.msg("파일럿 에이전트", "사람", "SYNCED", 372, OK, "ok", sub="리스너 · 라우트 · 엔드포인트 · 클러스터")
+    def msg(s, a, b, label, y, c=MUTED, mk="ar", dash=None, sub=None):
+        x1, x2 = s.LX[a], s.LX[b]
+        d = 1 if x2 > x1 else -1
+        s.path(f"M {x1 + 10 * d} {y} L {x2 - 12 * d} {y}", c, 1.5, m=mk, dash=dash)
+        mx = (x1 + x2) / 2
+        s.t(mx, y - 10, label, 13, c, fam_of(label), "middle", 600)
+        if sub:
+            s.t(mx, y + 18, sub, 13, MUTED, fam_of(sub))
 
-d.state("파일럿 에이전트", "연결 확인됨", 428, INFO)
+    def state(s, a, txt, y, c):
+        x = s.LX[a]
+        w = sum(13 if "가" <= ch <= "힣" else 7.5 for ch in txt) + 24
+        s.o.append(f'<rect x="{x - w / 2}" y="{y - 12}" width="{w}" height="24" rx="4" fill="{c}22" stroke="{c}" stroke-width="1.1"/>')
+        s.t(x, y + 5, txt, 13, c, fam_of(txt), "middle", 600)
 
-d.t(24, 460, "같은 엔드포인트를 istioctl x internal-debug 로도 쓸 수 있다 — istioctl 에 새로 더해진 것이다", 11, SOFT, KR, "start")
-d.legend(480, [("안전하게 전달되는 구간", ACC), ("이 왕복이 함께 알려 주는 것", INFO), ("최신 상태", OK)])
+W, H = 960, 504
+d = KrSeq(W, H, "ISTIO IN ACTION · A0-04 §3",
+          "15004 응답이 컨트롤 플레인 연결 확인이 된다",
+          "15004 로 던진 질의는 xDS 이벤트로 istiod 에 안전하게 전달된다. 이 왕복은 동기화 상태를 "
+          "묻는 동시에 에이전트와 컨트롤 플레인 사이 연결이 살아 있는지 확인한다.",
+          lead="노출되는 정보는 Pilot 디버그 엔드포인트의 부분집합입니다")
+
+d.lanes([("운영자 · 도구", "kubectl exec"),
+         ("에이전트", "istio-agent · localhost:15004"),
+         ("istiod", "debug endpoints")], y0=104, lane_w=228)
+d.rails(388)
+
+d.msg("운영자 · 도구", "에이전트", "curl /debug/syncz", 192, MUTED, "ar", sub="프록시 안에서 호출")
+d.msg("에이전트", "istiod", "xDS 이벤트 전달", 256, ACC, "acc", sub="평문 HTTP 대신 xDS")
+d.msg("istiod", "에이전트", "genericXdsConfigs", 320, MUTED, "ar", dash="5 3", sub="xDS API 별 configStatus")
+d.msg("에이전트", "운영자 · 도구", "SYNCED", 372, OK, "ok", dash="5 3", sub="리스너 · 라우트 · 엔드포인트 · 클러스터")
+
+d.state("에이전트", "연결 확인됨", 416, INFO)
+
+d.legend(452, [("xDS 안전 전달 구간", ACC), ("왕복이 입증하는 연결", INFO), ("최신 동기화 응답", OK)])
 d.save("a0-04.agent-to-pilot.svg")
+print("ok a0-04.agent-to-pilot")

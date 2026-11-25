@@ -15,7 +15,7 @@ d = D(W, H, "ISTIO IN ACTION · A0-01 §5",
       "같은 YAML 이 이름 하나로 갱신이 되기도 새 설치가 되기도 한다",
       "오퍼레이터는 IstioOperator 리소스의 이벤트를 지켜보다가 설치를 그 정의에 맞춘다. 이때 "
       "metadata.name 이 갱신 대상을 정한다. 색이 붙은 상태가 이름이 맞았을 때 가는 자리다.",
-      "이름이 다르면 컨트롤 플레인이 하나 더 서는데 저자는 그것도 쓸모가 있다고 적습니다")
+      "이름이 다르면 컨트롤 플레인이 하나 더 서고 멀티테넌시와 카나리 업그레이드가 그 경우입니다")
 
 SW, SH = 232, 68
 def state(x, y, label, sub, c=None, focal=False):
@@ -56,11 +56,12 @@ d.o.append(f'<circle cx="700" cy="{TOP + SH / 2}" r="8" fill="none" stroke="{INK
 d.o.append(f'<circle cx="700" cy="{TOP + SH / 2}" r="5" fill="{INK}"/>')
 d.arrow([(672, TOP + SH / 2), (688, TOP + SH / 2)], MUTED, "ar", 1.3)
 
-d.t(740, TOP + SH / 2 - 6, "쓸모가 있는 갈래다", 11, INFO, KR, "start", 600)
-d.t(740, TOP + SH / 2 + 16, "멀티테넌시 · 카나리 업그레이드", 11, MUTED, KR, "start")
-d.path(f"M 736 {TOP + SH / 2 + 26} L 736 {BOT + SH / 2} L 676 {BOT + SH / 2}", INFO, 1.2, m="info", dash="4 3")
+d.o.append(f'<circle cx="700" cy="{BOT + SH / 2}" r="8" fill="none" stroke="{INK}" stroke-width="1.2"/>')
+d.o.append(f'<circle cx="700" cy="{BOT + SH / 2}" r="5" fill="{INK}"/>')
+d.arrow([(672, BOT + SH / 2), (688, BOT + SH / 2)], MUTED, "ar", 1.3)
+d.t(724, BOT + SH / 2 - 6, "컨트롤 플레인이 둘 서는 경우", 11, INFO, KR, "start", 600)
+d.t(724, BOT + SH / 2 + 16, "멀티테넌시 · 카나리 업그레이드", 11, MUTED, KR, "start")
 
-d.t(28, 424, "4 절에서는 이름이 겹치면 앞의 것을 지웠고 여기서는 겹쳐야 갱신된다 — 이름이 설치의 식별자라서 그렇다", 11, SOFT, KR, "start")
-d.t(28, 448, "설치는 istioctl operator init 한 줄이고 그다음부터는 같은 YAML 을 kubectl apply 로 올린다", 11, MUTED, MONO, "start")
-d.legend(472, [("이름이 맞았을 때 가는 자리", ACC), ("이름이 어긋났을 때 서는 것", INFO)])
+d.t(28, 424, "이름이 설치의 식별자라서 4 절에서는 겹치면 앞의 것을 지우고 여기서는 겹쳐야 갱신된다", 11, SOFT, KR, "start")
+d.legend(472, [("이름이 맞았을 때 가는 자리", ACC), ("이름이 다를 때 서는 것", INFO)])
 d.save("a0-01.operator-name.svg")

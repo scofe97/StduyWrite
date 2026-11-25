@@ -9,9 +9,9 @@ from dd import Seq, ACC, WARN, INFO, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, 
 W, H = 880, 572
 d = Seq(W, H, "ISTIO IN ACTION · 03-01 §5",
         "RDS와 CDS가 따로 올 때와 ADS로 묶일 때",
-        "위 구간: RDS 가 cluster foo 를 가리키는 라우트를 먼저 보내고 CDS 가 뒤늦게 foo 를 보내 그 사이 라우팅 오류가 난다. "
-        "아래 구간: ADS 스트림 하나가 CDS 를 먼저, RDS 를 뒤에 실어 오류 구간이 없다.",
-        "xDS는 최종 일관성 위에 있어 개별 스트림은 순서를 보장하지 않는다. Istio가 ADS를 고른 이유")
+        "위 구간: RDS 가 cluster foo 를 가리키는 라우트를 먼저 보내고 CDS 가 뒤늦게 foo 를 보내 그 사이 라우팅 오류가 납니다. "
+        "아래 구간: ADS 스트림 하나가 CDS 를 먼저, RDS 를 뒤에 실어 오류 구간이 없습니다.",
+        "xDS는 최종 일관성 위에 있어 개별 스트림은 순서를 보장하지 않습니다. Istio가 ADS를 고른 이유입니다")
 
 LX = d.lanes([("xDS 서버", "istiod · gRPC stream"), ("Envoy", "service proxy")], y0=104, lane_w=210)
 XS, XE = LX["xDS 서버"], LX["Envoy"]

@@ -34,16 +34,16 @@ def dot(x, y, name, sub, focal=False):
     d.t(x + 16, y - 2, name, 13, ACC if focal else INK, MONO, "start", 600)
     d.t(x + 16, y + 18, sub, 11, MUTED, KR, "start")
 
-dot(600, 200, "istio-operator", "GitOps 이념에 맞아 보이지만 유지 비용이 붙는다")
+dot(600, 200, "istio-operator (1.23 deprecated)", "GitOps 이념에 맞아 보임 · 유지 비용")
 dot(600, 412, "istioctl", "같은 검증을 받고 컴포넌트는 늘지 않는다", focal=True)
-dot(184, 412, "helm", "검증하는 층이 없다")
+dot(184, 412, "helm", "책이 쓰일 때는 검증하는 층이 없었다")
 
 d.t(184, 196, "여기는 비어 있다", 12, SOFT, KR, "start", 600)
 d.t(184, 218, "검증도 없이 컴포넌트만 늘릴 이유가 없다", 11, MUTED, KR, "start")
 
 BY = 500
-d.t(28, BY + 60, "저자의 권고는 오른쪽 절반 — 둘 다 IstioOperator API 를 쓰므로 입력 검증이 한 겹 더 붙는다", 11, ACC, KR, "start", 600)
-d.t(28, BY + 84, "기업이 위쪽으로 기우는 이유를 저자는 이념이라 적고 곧바로 뒤집는다. 오퍼레이터는 복잡성을 더하고 유지보수를 요구한다", 11, SOFT, KR, "start")
-d.t(28, BY + 108, "GitOps 는 서비스와 설정의 운영이 Git 저장소에서 나온다는 뜻일 뿐이고 무엇이 그 설정을 소비하는지는 상관없다", 11, MUTED, KR, "start")
-d.legend(BY + 128, [("저자가 기본으로 두는 자리", ACC), ("나머지 자리", MUTED)])
+d.t(28, BY + 60, "저자의 권고: 오른쪽 절반(IstioOperator API 의 입력 검증)", 11, ACC, KR, "start", 600)
+d.t(28, BY + 84, "위쪽으로 기우는 이유: GitOps 이념, 실제로는 복잡성과 유지보수", 11, SOFT, KR, "start")
+d.t(28, BY + 108, "GitOps: 설정의 운영이 Git 저장소에서 나옴(소비하는 도구는 무관)", 11, MUTED, KR, "start")
+d.legend(BY + 128, [("검증을 받고 컴포넌트가 늘지 않는 자리", ACC), ("나머지 자리", MUTED)])
 d.save("a0-01.tool-choice.svg")
