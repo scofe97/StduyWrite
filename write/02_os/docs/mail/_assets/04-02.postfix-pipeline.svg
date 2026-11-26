@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">Postfix 메일 수신·큐잉·배달 파이프라인</title><desc id="dd">인바운드 연결 수락부터 cleanup 전처리, 디스크 큐 저장, qmgr 스케줄링, 외부 전송 및 지연 재시도 격리 흐름</desc>
+<rect width="960" height="560" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">POSTFIX ARCHITECTURE · DATA PIPELINE</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">Postfix 메일 수신·큐잉·배달 파이프라인</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">프로세스별 실행 권한(root / postfix)과 디스크·메모리 큐 분리 구조</text>
+<rect x="32" y="92" width="160" height="28" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="52" y="110" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#8B98A9">01</text>
+<text x="122" y="110" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">수신 · 로컬 제출</text>
+<rect x="212" y="92" width="160" height="28" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="232" y="110" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#8B98A9">02</text>
+<text x="302" y="110" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">정규화 · 전처리</text>
+<rect x="392" y="92" width="160" height="28" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="412" y="110" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#8B98A9">03</text>
+<text x="482" y="110" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">디스크 큐 저장</text>
+<rect x="572" y="92" width="160" height="28" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="592" y="110" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F08A59">04</text>
+<text x="662" y="110" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">배달 스케줄링</text>
+<rect x="752" y="92" width="176" height="28" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="772" y="110" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#8B98A9">05</text>
+<text x="850" y="110" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">전송 · 로컬 배달</text>
+<rect x="36" y="136" width="152" height="98" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="112" y="160" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">smtpd(8)</text>
+<text x="112" y="180" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">외부 인바운드 접수</text>
+<rect x="39.0" y="202" width="146.0" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="112" y="216" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#3FB98C">postfix 비특권</text>
+<rect x="36" y="296" width="152" height="98" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="112" y="320" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">pickup(8)</text>
+<text x="112" y="340" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">maildrop 큐 감시</text>
+<rect x="39.0" y="362" width="146.0" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="112" y="376" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#3FB98C">postfix 비특권</text>
+<rect x="216" y="156" width="148" height="218" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="290" y="184" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#3FB98C">cleanup(8)</text>
+<text x="290" y="212" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">헤더 보완 · 주소 정규화</text>
+<text x="290" y="234" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">trivial-rewrite 연계</text>
+<text x="290" y="256" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">단일 큐 파일 생성</text>
+<text x="290" y="278" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">qmgr 신규 도착 통지</text>
+<rect x="217.0" y="336" width="146.0" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="290" y="350" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#3FB98C">postfix 비특권</text>
+<rect x="400" y="136" width="144" height="98" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="472" y="160" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">incoming 큐</text>
+<text x="472" y="180" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">신규 도착 메시지 대기</text>
+<rect x="417.0" y="202" width="110.0" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="472" y="216" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#6A95D8">디스크 큐 파일</text>
+<rect x="400" y="296" width="144" height="98" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="472" y="320" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">deferred 큐</text>
+<text x="472" y="340" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">일시 지연 메일 격리</text>
+<rect x="417.0" y="362" width="110.0" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="472" y="376" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#6A95D8">디스크 큐 파일</text>
+<rect x="580" y="146" width="148" height="238" rx="6" fill="#F08A5918" stroke="#F08A59" stroke-width="1.5"/>
+<text x="654" y="172" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#F08A59">qmgr(8)</text>
+<text x="654" y="192" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">메일 배달 스케줄러</text>
+<rect x="590" y="208" width="128" height="66" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.0"/>
+<text x="654" y="230" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">active 큐 (메모리)</text>
+<text x="654" y="252" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">메모리 OOM 방지</text>
+<text x="654" y="304" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">에이전트별 작업 분배</text>
+<rect x="581.0" y="346" width="146.0" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="654" y="360" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#3FB98C">postfix 비특권</text>
+<rect x="756" y="136" width="168" height="98" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="840" y="160" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">smtp(8)</text>
+<text x="840" y="180" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">원격 MX 발송 (25)</text>
+<rect x="767.0" y="202" width="146.0" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="840" y="216" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#3FB98C">postfix 비특권</text>
+<rect x="756" y="296" width="168" height="98" rx="6" fill="#161B22" stroke="#E3B341" stroke-width="1.2"/>
+<text x="840" y="320" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#E3B341">local(8)</text>
+<text x="840" y="340" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">사서함 배달 · 파이프</text>
+<rect x="773.0" y="362" width="134.0" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="840" y="376" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#E3B341">root 특권 전환</text>
+<path d="M 188 196 L 202 196 L 202 230 L 216 230" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<path d="M 188 344 L 202 344 L 202 290 L 216 290" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<path d="M 364 230 L 382 230 L 382 184 L 400 184" fill="none" stroke="#6A95D8" stroke-width="1.4" marker-end="url(#info)"/>
+<text x="382" y="166" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#6A95D8">적재</text>
+<path d="M 544 184 L 562 184 L 562 230 L 580 230" fill="none" stroke="#F08A59" stroke-width="1.6" marker-end="url(#acc)"/>
+<text x="562" y="166" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">진입</text>
+<path d="M 728 230 L 742 230 L 742 184 L 756 184" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<path d="M 728 290 L 742 290 L 742 344 L 756 344" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#warn)"/>
+<path d="M 924 184 L 938 184 L 938 416 L 472 416 L 472 394" fill="none" stroke="#F0616D" stroke-width="1.4" marker-end="url(#bad)" stroke-dasharray="4 3"/>
+<text x="705" y="434" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F0616D">임시 실패 (4xx) 시 deferred 격리</text>
+<path d="M 472 296 L 472 270 L 580 270" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="524" y="262" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">재시도 회수</text>
+<line x1="12" y1="496" x2="912" y2="496" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="518" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="508" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="518" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">비특권 데몬</text>
+<rect x="222" y="508" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="244" y="518" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">특권 필요</text>
+<rect x="331" y="508" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="353" y="518" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">스케줄러</text>
+<rect x="427" y="508" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="449" y="518" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">디스크 큐</text>
+<rect x="536" y="508" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="558" y="518" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">지연 격리</text>
+</svg>

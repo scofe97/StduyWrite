@@ -95,6 +95,7 @@ updated: 2026-11-14
 | [docs/cmd/](./docs/cmd/README.md) | 리눅스 명령 사용법을 명령별로 모은 조회용 시트 — 지금은 텍스트 처리(`sed`·`grep`·`awk` 등). 책 노트가 원리를, 이 폴더가 옵션과 실행 예를 맡아 다른 리눅스 노트가 링크로 가져다 쓴다 (공식 매뉴얼 기반) |
 | [docs/kernel/](./docs/kernel/README.md) | cgroup v2, 마운트 propagation, OverlayFS 사례 (공통 개념 2편 + 사례 1편) |
 | [docs/filesystem/](./docs/filesystem/README.md) | 디렉터리 배치(FHS 두 축·`/opt` 번들·OSTree 불변 OS)와 파일시스템 구현(예정) — OverlayFS·mount propagation 은 `docs/kernel/` 이 정본 |
+| [docs/mail/](./docs/mail/README.md) | 인터넷 메일이 지금 모양이 된 이유를 RFC 로 따라가는 9편(역사·역할·배달·메일함·전송 보안·발신자 인증·대형 서비스·MTA·앱 발송) |
 | [learning-modern-linux/](./book/learning-modern-linux/README.md) | 클라우드 네이티브 환경을 전제로 리눅스를 한 바퀴 도는 개론 — 커널·셸·접근 제어·파일시스템·네트워크·관측 (책 기반) |
 | [tlpi_the-linux-programming-interface/](./book/tlpi_the-linux-programming-interface/README.md) | 명령 아래의 시스템 콜 층 — 파일 I/O·파일 속성·ACL·시그널·세션·자원 제한·데몬·IPC·소켓을 시스템 콜과 glibc 함수로. `learning-modern-linux/` 가 명령, `linux-kernel-programming/` 이 커널 구현을 맡는다 (책 기반) |
 | [linux-kernel-programming/](./book/linux-kernel-programming/README.md) | 커널 개발자 관점의 리눅스 내부 — LKM 모듈 개발, 커널 빌드, 메모리 관리, CPU 스케줄러, 동기화 (책 기반) |
