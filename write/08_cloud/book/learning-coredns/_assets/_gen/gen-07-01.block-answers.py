@@ -1,5 +1,5 @@
 # 07-01 §9 — 필터링 DNS 가 차단 대상 이름에 답하는 두 방식과 브라우저가 보는 결과.
-# 본문 근거: 이 노트 §9 「막는 방법은 1절과 8절에 이미 있습니다」 — NXDOMAIN 은 이유 없이 오류, 안내 페이지 유도는 HTTPS 면 인증서 경고.
+# 본문 근거: 이 노트 §9 「1절·8절과 겹치는 차단 응답」 — NXDOMAIN 은 이유 없이 오류, 안내 페이지 유도는 HTTPS 면 인증서 경고.
 # 타입 스펙: type-dp-security-matrix — 응답 방식(행) × DNS 응답·브라우저 결과(열).
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, OK, BAD, KR, MONO

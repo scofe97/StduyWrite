@@ -13,7 +13,7 @@ W, H = 880, 610
 d = D(W, H, "LEARNING COREDNS · 07-01 §2",
       "외부 이름으로 부르면 트래픽이 나갔다 온다",
       "같은 클러스터 안의 서비스를 api.example.com 으로 부르면 요청이 클러스터를 나가 "
-      "로드밸런서와 NodePort 를 돌아 들어온다. 클러스터 이름으로 부르면 그대로 간다.",
+      "로드밸런서와 NodePort 를 돌아 들어온다. rewrite 가 답의 IP 만 안쪽 주소로 바꾸면 이름은 그대로 두고 클러스터 안에서 끝난다.",
       "빨강이 헤어핀, 초록이 rewrite 로 바꿔 놓은 경로입니다")
 
 # 존 — 클러스터 경계 (먼저 그려 뒤에 깔린다)
@@ -38,6 +38,7 @@ d.t(390, 320, "홉이 하나 더", 11, BAD, KR, "start")
 
 # 직행: 파드 아래로 ClusterIP 를 거쳐 대상 파드로
 d.path("M 125 256 L 125 376", OK, 1.6, m="ok")
+d.t(140, 320, "답의 IP 만 안쪽으로", 11, OK, KR, "start")
 d.path("M 200 408 L 296 408", OK, 1.6, m="ok")
 
 # 노드
@@ -64,9 +65,9 @@ d.t(720, 243, "인증서가 가리키는 이름", 11, BAD, KR)
 # 아래 대조 밴드
 d.box(20, 472, 840, 56, PAPER, RULE, 0.8)
 d.t(36, 496, "api.example.com 으로 부르면", 11, BAD, KR, "start", 600)
-d.t(36, 518, "api.example.svc.cluster.local 로 부르면", 11, OK, MONO, "start", 600)
+d.t(36, 518, "rewrite 가 IP 만 바꾸면", 11, OK, KR, "start", 600)
 d.t(320, 496, "경계를 두 번 넘고 홉이 하나 더 붙는다 — 지연이 크게 늘어난다", 11, MUTED, KR, "start")
-d.t(320, 518, "클러스터 안에서 끝난다 — 다만 TLS 인증서 이름이 안 맞는다", 11, MUTED, KR, "start")
+d.t(320, 518, "클러스터 안에서 끝난다 — 이름은 그대로라 TLS 인증서 이름이 맞는다", 11, MUTED, KR, "start")
 
-d.legend(548, [("헤어핀 경로", BAD), ("클러스터 안 직행", OK)])
+d.legend(548, [("헤어핀 경로", BAD), ("rewrite 로 안쪽 직행", OK)])
 d.save("07-01.hairpin.svg")
