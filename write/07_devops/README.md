@@ -46,4 +46,9 @@ Jenkins 파이프라인 그루비 작성법은 여기로 배치합니다. 반면
   - [`jenkins/`](docs/jenkins/README.md) — Jenkins 구조·엔진·Pipeline·Groovy 확장·보안·운영·REST API 를 원리 중심으로 다룬 20편
   - [`sonarqube/`](docs/sonarqube/) — 정적 분석, Quality Gate, CI 연계, Web API (2026.1 LTA 기준 19편)
   - [`iac/`](docs/iac/README.md) — IaC 개념 폴더. Helm 다섯 편(차트 작성·values와 렌더 검증·릴리스 운영·Hook·의존성과 저장소), Kustomize (4단계 패키징·7단계 인프라를 코드로)
+  - [`gitops/`](docs/gitops/README.md) — GitOps·Argo Rollouts 배포 전략·검증·롤백 정책 시리즈 네 편
+    - [01-01. 배포 전략 비교 — Rolling·Recreate·Blue-Green·Canary·A-B·Shadow](docs/gitops/01-01.%EB%B0%B0%ED%8F%AC%20%EC%A0%84%EB%9E%B5%20%EB%B9%84%EA%B5%90%20%E2%80%94%20Rolling%C2%B7Recreate%C2%B7Blue-Green%C2%B7Canary%C2%B7A-B%C2%B7Shadow.md)
+    - [01-02. Argo CD 와 Argo Rollouts — 동기화와 점진적 배포의 역할 나눔](docs/gitops/01-02.Argo%20CD%20%EC%99%80%20Argo%20Rollouts%20%E2%80%94%20%EB%8F%99%EA%B8%B0%ED%99%94%EC%99%80%20%EC%A0%90%EC%A7%84%EC%A0%81%20%EB%B0%B0%ED%8F%AC%EC%9D%98%20%EC%97%AD%ED%95%A0%20%EB%82%98%EB%88%94.md)
+    - [01-03. 배포 검증과 자동 롤백 — Health Check 와 Analysis](docs/gitops/01-03.%EB%B0%B0%ED%8F%AC%20%EA%B2%80%EC%A6%9D%EA%B3%BC%20%EC%9E%90%EB%8F%99%20%EB%A1%A4%EB%B0%B1%20%E2%80%94%20Health%20Check%20%EC%99%80%20Analysis.md)
+    - [01-04. 배포 롤백 정책과 메커니즘](docs/gitops/01-04.%EB%B0%B0%ED%8F%AC%20%EB%A1%A4%EB%B0%B1%20%EC%A0%95%EC%B1%85%EA%B3%BC%20%EB%A9%94%EC%BB%A4%EB%8B%88%EC%A6%98.md)
   - [`cmd/`](docs/cmd/README.md) — DevOps 명령어 시트. 도구별 분류와 후보 명령 (시트는 아직 없음). 컨테이너·쿠버네티스 명령은 [08_cloud 의 시트](../08_cloud/docs/cmd/README.md)

@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 516" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">Canary 단계별 가중치 확대와 pause · analysis 관문</title><desc id="dd">트래픽 라우터가 v1/v2 가중치를 90/10, 70/30, 50/50, 0/100 으로 단계 진행하며 단계마다 pause 와 analysis 관문을 거친다. 관문 실패 시 abort 점선으로 100/0 으로 즉시 복귀하며, 정확한 가중치 분할에는 NGINX 나 Istio 같은 trafficRouting 이 필요하다.</desc>
+<rect width="960" height="516" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">PROCESS · CANARY WEIGHT STEPS</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">Canary 단계별 가중치 확대와 pause · analysis 관문</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">단계마다 v1/v2 가중치를 높이며 pause · analysis 관문을 통과하고, 실패하면 abort 로 100/0 에 즉시 복귀합니다</text>
+<rect x="136" y="160" width="800" height="100" fill="#161B22" opacity="0.45"/>
+<rect x="136" y="356" width="800" height="100" fill="#161B22" opacity="0.45"/>
+<line x1="16" y1="160" x2="936" y2="160" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<line x1="16" y1="260" x2="936" y2="260" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<line x1="16" y1="356" x2="936" y2="356" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<line x1="16" y1="456" x2="936" y2="456" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<line x1="136" y1="160" x2="136" y2="456" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="76" y="214" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">트래픽 라우터</text>
+<text x="76" y="312" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">관문 검증</text>
+<text x="76" y="410" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">롤백 복구</text>
+<rect x="548" y="92" width="380" height="26" rx="4" fill="#6A95D818" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="738" y="110" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">정밀 가중치 필수 · trafficRouting (NGINX · Istio)</text>
+<text x="232" y="144" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F08A59">STEP 1</text>
+<text x="432" y="144" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#8B98A9">STEP 2</text>
+<text x="632" y="144" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#8B98A9">STEP 3</text>
+<text x="832" y="144" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">STEP 4</text>
+<path d="M 232 248 L 232 276" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<path d="M 432 248 L 432 276" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 632 248 L 632 276" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 308 308 L 320 308 L 320 210 L 356 210" fill="none" stroke="#F08A59" stroke-width="1.5" marker-end="url(#acc)"/>
+<text x="326" y="246" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">통과</text>
+<path d="M 508 308 L 520 308 L 520 210 L 556 210" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<text x="526" y="246" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">통과</text>
+<path d="M 708 308 L 720 308 L 720 210 L 756 210" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<text x="726" y="246" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">통과</text>
+<path d="M 232 340 L 232 372" fill="none" stroke="#F0616D" stroke-width="1.5" marker-end="url(#bad)" stroke-dasharray="5 4"/>
+<path d="M 632 340 L 632 408 L 308 408" fill="none" stroke="#F0616D" stroke-width="1.5" marker-end="url(#bad)" stroke-dasharray="5 4"/>
+<line x1="432" y1="340" x2="432" y2="408" stroke="#F0616D" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="532" y="396" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">실패 · abort</text>
+<rect x="156" y="172" width="152" height="76" rx="6" fill="#E3B34110" stroke="#E3B341" stroke-width="1.2"/>
+<text x="232" y="194" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">v1 90 / v2 10</text>
+<rect x="168" y="204" width="113" height="12" rx="3" fill="#6A95D8"/>
+<rect x="283" y="204" width="13" height="12" rx="3" fill="#E3B341"/>
+<text x="232" y="236" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">소량 노출</text>
+<rect x="356" y="172" width="152" height="76" rx="6" fill="#E3B34110" stroke="#E3B341" stroke-width="1.2"/>
+<text x="432" y="194" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">v1 70 / v2 30</text>
+<rect x="368" y="204" width="88" height="12" rx="3" fill="#6A95D8"/>
+<rect x="458" y="204" width="38" height="12" rx="3" fill="#E3B341"/>
+<text x="432" y="236" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">비율 확대</text>
+<rect x="556" y="172" width="152" height="76" rx="6" fill="#E3B34110" stroke="#E3B341" stroke-width="1.2"/>
+<text x="632" y="194" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">v1 50 / v2 50</text>
+<rect x="568" y="204" width="63" height="12" rx="3" fill="#6A95D8"/>
+<rect x="633" y="204" width="63" height="12" rx="3" fill="#E3B341"/>
+<text x="632" y="236" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">절반 전환</text>
+<rect x="756" y="172" width="152" height="76" rx="6" fill="#3FB98C10" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="832" y="194" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">v1 0 / v2 100</text>
+<rect x="768" y="204" width="128" height="12" rx="3" fill="#3FB98C"/>
+<text x="832" y="236" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">v2 승격</text>
+<rect x="156" y="276" width="152" height="64" rx="6" fill="#F08A5912" stroke="#F08A59" stroke-width="1.4"/>
+<text x="232" y="300" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">pause · analysis</text>
+<text x="232" y="324" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">오류율 · 지연</text>
+<rect x="356" y="276" width="152" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="432" y="300" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">pause · analysis</text>
+<text x="432" y="324" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">오류율 · 지연</text>
+<rect x="556" y="276" width="152" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="632" y="300" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">pause · analysis</text>
+<text x="632" y="324" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">오류율 · 지연</text>
+<rect x="156" y="372" width="152" height="72" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.2"/>
+<text x="232" y="394" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F0616D">abort · 100 / 0</text>
+<rect x="168" y="404" width="128" height="12" rx="3" fill="#6A95D8"/>
+<text x="232" y="434" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">v1 즉시 복구</text>
+<line x1="12" y1="472" x2="912" y2="472" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="494" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="484" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="494" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">v1 트래픽</text>
+<rect x="222" y="484" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="244" y="494" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">v2 카나리</text>
+<rect x="344" y="484" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="366" y="494" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">관문 검증</text>
+<rect x="453" y="484" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="475" y="494" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">통과 · 승격</text>
+<rect x="588" y="484" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="610" y="494" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">abort 복구</text>
+</svg>
