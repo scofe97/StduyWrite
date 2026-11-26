@@ -69,6 +69,7 @@ updated: 2026-11-14
 | [05_aop/](05_aop/) | 4편 | 횡단 관심사·필터/인터셉터·JDK 동적 프록시·프록시 팩토리·빈 후처리기·@Aspect · 템플릿·콜백·ThreadLocal — AOP 등장 직전 · 스프링 스케줄링/Quartz · @Async·@Cacheable·@Retryable |
 | [06_events/](06_events/) | 4편 | 스프링 이벤트 — @EventListener vs @TransactionalEventListener·트랜잭션 Phase·전파 조합·내부 동작·동기/비동기(@Async) |
 | [07_autoconfig/](07_autoconfig/) | 7편 | 스프링 부트 자동 구성·외부 설정 — 스타터/BOM·@AutoConfiguration·@Conditional·커스텀 스타터·외부 설정·@ConfigurationProperties·프로필 |
+| [docs/spring-security/](docs/spring-security/README.md) | 5편 | Spring Security · Tomcat 요청 흐름 · HttpSession/SessionRegistry · CSRF · 동시 세션 만료 · 로그인 실패/X-Forwarded-For |
 
 
 

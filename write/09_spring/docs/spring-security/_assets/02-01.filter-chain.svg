@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 760" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">요청 하나가 보안 필터를 지나는 길</title><desc id="dd">요청이 CSRF 검사, CSRF 쿠키 발급, 개발 환경 임시 인증 주입, URL 인가 규칙을 거쳐 컨트롤러·401·403 중 하나로 가는 흐름</desc>
+<rect width="960" height="760" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">FLOWCHART · SECURITY FILTER CHAIN</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">요청 하나가 보안 필터를 지나는 길</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">예제 앱 기준 · 개발 환경 전용 임시 인증 필터 예시 포함</text>
+<rect x="305.0" y="100" width="150" height="36" rx="18" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="380" y="122" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">요청 도착</text>
+<path d="M 380 136 L 380 169.0" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<rect x="250.0" y="171.0" width="260" height="50" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="380" y="192" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">CsrfFilter</text>
+<text x="380" y="210" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">GET·HEAD는 검사 생략</text>
+<path d="M 380 221.0 L 380 246" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<polygon points="380,248 464,282 380,316 296,282" fill="#161B22" stroke="#E3B341" stroke-width="1.2"/>
+<text x="380" y="286" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">토큰 일치?</text>
+<path d="M 464 282 L 598 282" fill="none" stroke="#F0616D" stroke-width="1.3" marker-end="url(#bad)"/>
+<text x="532.0" y="274" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">아니오</text>
+<rect x="600.0" y="257.0" width="200" height="50" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.2"/>
+<text x="700" y="278" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">403</text>
+<text x="700" y="296" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">CSRF 거부</text>
+<path d="M 380 316 L 380 341.0" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<text x="390" y="333.5" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">예</text>
+<rect x="250.0" y="343.0" width="260" height="50" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="380" y="364" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">CsrfCookieFilter</text>
+<text x="380" y="382" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">XSRF-TOKEN 쿠키 발급</text>
+<path d="M 380 393.0 L 380 418" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<polygon points="380,420 464,454 380,488 296,454" fill="#161B22" stroke="#F08A59" stroke-width="1.2"/>
+<text x="380" y="458" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">임시 필터 활성?</text>
+<path d="M 464 454 L 568 454" fill="none" stroke="#F08A59" stroke-width="1.3" marker-end="url(#acc)"/>
+<text x="517.0" y="446" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">예</text>
+<rect x="570.0" y="429.0" width="260" height="50" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.1"/>
+<text x="700" y="450" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">개발 환경 전용 임시 인증 필터</text>
+<text x="700" y="468" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">고정 관리자 권한 주입</text>
+<path d="M 700 479.0 L 700 532 L 386 532" fill="none" stroke="#F08A59" stroke-width="1.3" marker-end="url(#acc)"/>
+<path d="M 380 488 L 380 526" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<text x="390" y="512.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">아니오</text>
+<circle cx="380" cy="532" r="4" fill="#F5F5F3"/>
+<path d="M 380 536 L 380 576" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<polygon points="380,578 464,612 380,646 296,612" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="380" y="616" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">URL 규칙</text>
+<path d="M 464 612 L 598 612" fill="none" stroke="#F0616D" stroke-width="1.3" marker-end="url(#bad)"/>
+<text x="532.0" y="604" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">인증 없음</text>
+<rect x="600.0" y="587.0" width="200" height="50" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.2"/>
+<text x="700" y="608" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">401</text>
+<text x="700" y="626" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">HttpStatusEntryPoint</text>
+<path d="M 296 612 L 202 612" fill="none" stroke="#E3B341" stroke-width="1.3" marker-end="url(#warn)"/>
+<text x="248.0" y="604" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">역할 부족</text>
+<rect x="20.0" y="587.0" width="180" height="50" rx="6" fill="#E3B34114" stroke="#E3B341" stroke-width="1.2"/>
+<text x="110" y="608" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#E3B341">403</text>
+<text x="110" y="626" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">관리자 API</text>
+<path d="M 380 646 L 380 680" fill="none" stroke="#3FB98C" stroke-width="1.3" marker-end="url(#ar)"/>
+<text x="390" y="668.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">통과</text>
+<rect x="305.0" y="682" width="150" height="36" rx="18" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="380" y="704" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">컨트롤러</text>
+<line x1="12" y1="720" x2="912" y2="720" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="742" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="732" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="742" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">임시 인증 분기</text>
+<rect x="248" y="732" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="270" y="742" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">통과</text>
+<rect x="318" y="732" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="340" y="742" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">거부</text>
+<rect x="388" y="732" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="410" y="742" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">권한 부족</text>
+</svg>

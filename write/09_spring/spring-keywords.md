@@ -176,21 +176,21 @@ updated: 2026-11-03
 
 | 개념 | 우선순위 | 노트 | 책 |
 |---|:---:|---|---|
-| 필터 체인이 먼저다 | 필수 | | Spring Security 5장 |
-| 인증과 사용자 · 비밀번호 | 필수 | | Spring Security 3·4·6장 |
-| 엔드포인트 인가 | 필수 | | Spring Security 7·8장 |
+| 필터 체인이 먼저다 | 필수 | [FilterChainProxy](../09_spring/docs/spring-security/01-01.Tomcat%20NIO·FilterChainProxy·DispatcherServlet.md) · [필터 순서](../09_spring/docs/spring-security/02-02.SessionInformation·ConcurrentSessionFilter·LogoutFilter.md) | Spring Security 5장 |
+| 인증과 사용자 · 비밀번호 | 필수 | [인증 유지·역할](../09_spring/docs/spring-security/02-01.CsrfFilter·CookieCsrfTokenRepository·SecurityContextRepository.md) · [실패 응답·BCrypt](../09_spring/docs/spring-security/03-01.userNotFoundEncodedPassword·RemoteIpValve·X-Forwarded-For.md) | Spring Security 3·4·6장 |
+| 엔드포인트 인가 | 필수 | [URL 인가 규칙](../09_spring/docs/spring-security/02-01.CsrfFilter·CookieCsrfTokenRepository·SecurityContextRepository.md) | Spring Security 7·8장 |
 | 인가를 어디서 하는가 — 게이트웨이의 거친 인가와 도메인 인가 · PEP · PDP · RBAC · ABAC | 추천 | | |
-| CSRF 와 CORS | 추천 | | Spring Security 9·10장 |
+| CSRF 와 CORS | 추천 | [CSRF 방어](../09_spring/docs/spring-security/02-01.CsrfFilter·CookieCsrfTokenRepository·SecurityContextRepository.md) | Spring Security 9·10장 |
 | 메서드 수준 보안 | 추천 | | Spring Security 11·12장 |
 | OAuth 2 와 OIDC | 추천 | [OAuth2와 OIDC](../99_ETC/security/01_concepts/2026-05-29_OAuth2%EC%99%80%20OIDC%20%E2%80%94%20%EC%9C%84%EC%9E%84%20%EC%9D%B8%EA%B0%80%EC%99%80%20%EA%B7%B8%20%EC%9C%84%EC%9D%98%20%EC%9D%B8%EC%A6%9D.md) | Spring Security 13~16장 |
 | 액츄에이터 엔드포인트 | 필수 | | Spring in Action 15장 |
 | Micrometer 와 메트릭 | 필수 | | Spring in Action 16·17장 |
 | Prometheus 연동 | 추천 | | Cloud Native Spring 13장 |
-| 세션 관리 · MFA | 선택 | | |
+| 세션 관리 · MFA | 선택 | [세션 저장소](../09_spring/docs/spring-security/01-02.HttpSession·SessionRegistry·SecurityContextHolder.md) · [세션 끊기](../09_spring/docs/spring-security/02-02.SessionInformation·ConcurrentSessionFilter·LogoutFilter.md) | |
 | 리프레시 토큰 · 토큰 로테이션 | 선택 |  | |
 | OpenID Connect · 인가 코드 그랜트 · 클라이언트 자격 증명 그랜트 · 디바이스 코드 플로우 | 선택 | [OpenID Connect](../07_devops/book/argocd-up-and-running/06-02.SSO%20%EC%97%B0%EA%B2%B0%EA%B3%BC%20RBAC%20%E2%80%94%20Dex%C2%B7%EC%A7%81%EC%A0%91%20OIDC%C2%B7%EC%97%AD%ED%95%A0%EA%B3%BC%20%EC%A0%95%EC%B1%85.md) · [인가 코드 그랜트](../99_ETC/security/01_concepts/2026-05-29_OAuth2%EC%99%80%20OIDC%20%E2%80%94%20%EC%9C%84%EC%9E%84%20%EC%9D%B8%EA%B0%80%EC%99%80%20%EA%B7%B8%20%EC%9C%84%EC%9D%98%20%EC%9D%B8%EC%A6%9D.md) | |
 | 비밀번호 해싱 · bcrypt · scrypt · Argon2 · PBKDF2 · 비밀번호 스트레칭 · 솔트·솔팅 · 페퍼 · 레인보우 테이블 | 선택 | [비밀번호 해싱](../02_os/book/ostep_operating-systems-three-easy-pieces/45-01.%EC%9B%90%EA%B2%A9%20%EA%B8%B0%EA%B3%84%EB%8A%94%20%EB%AC%B4%EC%97%87%EC%9C%BC%EB%A1%9C%20%EB%AF%BF%EB%8A%94%EA%B0%80%20%E2%80%94%20%EC%9D%B8%EC%A6%9D%EC%84%9C%EC%9D%98%20%EC%84%9C%EB%AA%85%EA%B3%BC%20%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%20%ED%95%B4%EC%8B%9C.md) · [솔트·솔팅](../02_os/book/ostep_operating-systems-three-easy-pieces/45-01.%EC%9B%90%EA%B2%A9%20%EA%B8%B0%EA%B3%84%EB%8A%94%20%EB%AC%B4%EC%97%87%EC%9C%BC%EB%A1%9C%20%EB%AF%BF%EB%8A%94%EA%B0%80%20%E2%80%94%20%EC%9D%B8%EC%A6%9D%EC%84%9C%EC%9D%98%20%EC%84%9C%EB%AA%85%EA%B3%BC%20%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%20%ED%95%B4%EC%8B%9C.md) | |
-| 입력 유효성 검사 · SQL 인젝션 방지 · 준비된 문장 · XSS 방지 · CSRF 방지 | 선택 | [준비된 문장](../01_language/book/jpf_java-performance/11-01.JDBC%20%EA%B8%B0%EC%B4%88%20%E2%80%94%20%EB%93%9C%EB%9D%BC%EC%9D%B4%EB%B2%84%C2%B7connection%20pool%C2%B7prepared%20statement.md) · [XSS 방지](../07_devops/docs/jenkins/06-02.%EB%B9%8C%EB%93%9C%20%EA%B2%A9%EB%A6%AC%EC%99%80%20%EA%B3%B5%EA%B2%A9%20%ED%91%9C%EB%A9%B4.md#4-%EC%9B%B9-%EA%B3%84%EC%B8%B5%EC%9D%98-crumb-%ED%86%A0%ED%81%B0%EA%B3%BC-csp) · [CSRF 방지](../07_devops/docs/jenkins/06-02.%EB%B9%8C%EB%93%9C%20%EA%B2%A9%EB%A6%AC%EC%99%80%20%EA%B3%B5%EA%B2%A9%20%ED%91%9C%EB%A9%B4.md#4-%EC%9B%B9-%EA%B3%84%EC%B8%B5%EC%9D%98-crumb-%ED%86%A0%ED%81%B0%EA%B3%BC-csp) | |
+| 입력 유효성 검사 · SQL 인젝션 방지 · 준비된 문장 · XSS 방지 · CSRF 방지 | 선택 | [준비된 문장](../01_language/book/jpf_java-performance/11-01.JDBC%20%EA%B8%B0%EC%B4%88%20%E2%80%94%20%EB%93%9C%EB%9D%BC%EC%9D%B4%EB%B2%84%C2%B7connection%20pool%C2%B7prepared%20statement.md) · [XSS 방지](../07_devops/docs/jenkins/06-02.%EB%B9%8C%EB%93%9C%20%EA%B2%A9%EB%A6%AC%EC%99%80%20%EA%B3%B5%EA%B2%A9%20%ED%91%9C%EB%A9%B4.md#4-%EC%9B%B9-%EA%B3%84%EC%B8%B5%EC%9D%98-crumb-%ED%86%A0%ED%81%B0%EA%B3%BC-csp) · [CSRF 방지](../07_devops/docs/jenkins/06-02.%EB%B9%8C%EB%93%9C%20%EA%B2%A9%EB%A6%AC%EC%99%80%20%EA%B3%B5%EA%B2%A9%20%ED%91%9C%EB%A9%B4.md#4-%EC%9B%B9-%EA%B3%84%EC%B8%B5%EC%9D%98-crumb-%ED%86%A0%ED%81%B0%EA%B3%BC-csp) · [CSRF 방지(Spring)](../09_spring/docs/spring-security/02-01.CsrfFilter·CookieCsrfTokenRepository·SecurityContextRepository.md) | |
 | API 게이트웨이 보안 · 레이트 리밋 바이패스 | 선택 | | |
 | 요청 필터링 | 선택 | | |
 | 봇 탐지 · 캡차 · 디바이스 핑거프린팅 · 행동 분석 · 이상 탐지 | 선택 | | |

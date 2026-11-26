@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 772 468" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">비밀번호 변경 뒤 장부와 Tomcat 맵이 바뀌는 순서</title><desc id="dd">A 는 invalidate() 한 번 안에서 ① 장부 A 제거 ② Tomcat 맵 A 제거 순으로 빠지고 B 는 다음 요청까지 만료 표시 상태로 남는다</desc>
+<rect width="772" height="468" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">MATRIX · REGISTRY LIFE AFTER PASSWORD CHANGE</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">비밀번호 변경 뒤 장부와 Tomcat 맵이 바뀌는 순서</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">사용자 1의 세션 A(변경 요청)와 B(다른 브라우저)</text>
+<rect x="200" y="100" width="128" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="264.0" y="122" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">1. 로그인</text>
+<text x="264.0" y="140" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">A, B 둘 다</text>
+<rect x="340" y="100" width="128" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="404.0" y="122" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">2. expireAll</text>
+<text x="404.0" y="140" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">표시만</text>
+<rect x="480" y="100" width="128" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="544.0" y="122" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">3. A 무효화</text>
+<text x="544.0" y="140" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">①장부 ②Tomcat</text>
+<rect x="620" y="100" width="128" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="684.0" y="122" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">4. B 다음 요청</text>
+<text x="684.0" y="140" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">B 무효화 뒤</text>
+<rect x="12" y="168" width="176" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="24" y="188" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">principals[1]</text>
+<text x="24" y="206" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">사용자 1의 ID 집합</text>
+<rect x="200" y="168" width="128" height="48" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="264.0" y="188" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">{A, B}</text>
+<text x="264.0" y="206" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">등록</text>
+<rect x="340" y="168" width="128" height="48" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="404.0" y="188" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">{A, B}</text>
+<text x="404.0" y="206" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">그대로</text>
+<rect x="480" y="168" width="128" height="48" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.2"/>
+<text x="544.0" y="188" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">{B}</text>
+<text x="544.0" y="206" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">A 빠짐</text>
+<rect x="620" y="168" width="128" height="48" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.2"/>
+<text x="684.0" y="188" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">(없음)</text>
+<text x="684.0" y="206" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">항목 삭제</text>
+<rect x="12" y="224" width="176" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="24" y="244" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">sessionIds[A]</text>
+<text x="24" y="262" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">A 의 장부 항목</text>
+<rect x="200" y="224" width="128" height="48" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="264.0" y="244" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">expired=false</text>
+<text x="264.0" y="262" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">등록</text>
+<rect x="340" y="224" width="128" height="48" rx="6" fill="#E3B34114" stroke="#E3B341" stroke-width="1.2"/>
+<text x="404.0" y="244" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">expired=true</text>
+<text x="404.0" y="262" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">표시</text>
+<rect x="480" y="224" width="128" height="48" rx="6" fill="#F08A5912" stroke="#F08A59" stroke-width="1.4"/>
+<text x="544.0" y="244" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">삭제</text>
+<text x="544.0" y="262" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">① 장부 먼저</text>
+<rect x="620" y="224" width="128" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="684.0" y="244" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">(없음)</text>
+<text x="684.0" y="262" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9"></text>
+<rect x="12" y="280" width="176" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="24" y="300" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">sessionIds[B]</text>
+<text x="24" y="318" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">B 의 장부 항목</text>
+<rect x="200" y="280" width="128" height="48" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="264.0" y="300" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">expired=false</text>
+<text x="264.0" y="318" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">등록</text>
+<rect x="340" y="280" width="128" height="48" rx="6" fill="#E3B34114" stroke="#E3B341" stroke-width="1.2"/>
+<text x="404.0" y="300" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">expired=true</text>
+<text x="404.0" y="318" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">표시</text>
+<rect x="480" y="280" width="128" height="48" rx="6" fill="#E3B34114" stroke="#E3B341" stroke-width="1.2"/>
+<text x="544.0" y="300" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">expired=true</text>
+<text x="544.0" y="318" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">그대로</text>
+<rect x="620" y="280" width="128" height="48" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.2"/>
+<text x="684.0" y="300" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">삭제</text>
+<text x="684.0" y="318" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">이벤트로</text>
+<rect x="12" y="336" width="176" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="24" y="356" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">Tomcat sessions</text>
+<text x="24" y="374" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">세션 맵</text>
+<rect x="200" y="336" width="128" height="48" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="264.0" y="356" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">{A, B}</text>
+<text x="264.0" y="374" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">세션 둘</text>
+<rect x="340" y="336" width="128" height="48" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="404.0" y="356" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">{A, B}</text>
+<text x="404.0" y="374" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">그대로</text>
+<rect x="480" y="336" width="128" height="48" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.2"/>
+<text x="544.0" y="356" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">{B}</text>
+<text x="544.0" y="374" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">② 맵에서 제거</text>
+<rect x="620" y="336" width="128" height="48" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.2"/>
+<text x="684.0" y="356" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">{ }</text>
+<text x="684.0" y="374" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">B 제거</text>
+<line x1="12" y1="412" x2="724" y2="412" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="434" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="424" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="434" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">① 장부 먼저 제거 (핵심)</text>
+<rect x="339" y="424" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="361" y="434" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">등록</text>
+<rect x="409" y="424" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="431" y="434" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">그대로</text>
+<rect x="492" y="424" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="514" y="434" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">표시</text>
+<rect x="562" y="424" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="584" y="434" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">삭제</text>
+</svg>
