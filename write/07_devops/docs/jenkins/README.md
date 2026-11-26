@@ -29,7 +29,8 @@ Jenkins 를 이루는 부품과 상태가 놓이는 자리입니다. 뒤의 모�
 | 문서 | 언제 |
 |------|------|
 | [01-01 Controller·Agent·Executor 와 JENKINS_HOME](01-01.Controller%C2%B7Agent%C2%B7Executor%20%EC%99%80%20JENKINS_HOME.md) | Controller 와 Agent 가 왜 나뉘는지, `JENKINS_HOME` 의 어떤 파일을 잃으면 안 되는지 알고 싶을 때 |
-| [01-02 정적 Agent 와 동적 Agent](01-02.%EC%A0%95%EC%A0%81%20Agent%20%EC%99%80%20%EB%8F%99%EC%A0%81%20Agent.md) | 상시 노드와 빌드마다 띄우는 Agent 가운데 무엇을 쓸지, Label 이 빌드를 어디로 보내는지 볼 때 |
+| [01-02 정적 Agent 와 동적 Agent](01-02.%EC%A0%95%EC%A0%81%20Agent%20%EC%99%80%20%EB%8F%99%EC%A0%81%20Agent.md) | Launch method·Availability, SSH 기동 순서와 JVM 두 겹, 상시 노드와 동적 Agent 의 맞교환, Label 배정 기준을 볼 때 |
+| [01-03 Executor 와 Agent JVM 의 일 나누기](01-03.Executor%20%EC%99%80%20Agent%20JVM%20%EC%9D%98%20%EC%9D%BC%20%EB%82%98%EB%88%84%EA%B8%B0.md) | executor 슬롯이 어느 JVM 에 있는지, step 이 채널을 거쳐 에이전트에서 실행되는 흐름, 재연결 때 돌던 빌드가 어떻게 되는지 볼 때 |
 
 
 ### 2장 엔진
