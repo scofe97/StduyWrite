@@ -25,7 +25,6 @@
 | — | [`tools/`](write/tools/) | tmux, vim, Git, Claude Code |
 | 09 | [`09_spring/`](write/09_spring/) | Spring Framework·Boot·Cloud (전 카테고리 집계는 하위 README) |
 | 10 | [`10_AI/`](write/10_AI/) | 생성형 AI·에이전트 활용 |
-| 11 | [`11_career/`](write/11_career/) | 커리어·성장 기록 |
 | 99 | [`99_ETC/`](write/99_ETC/) | 분류 보류 — 일정 기간 체류 후 재배치 |
 
 실습 프로젝트는 [`project/`](project/)에 둔다. 프론트엔드 연습, 개인 도구, QueryDSL 실습 같은 코드가 여기 모인다.

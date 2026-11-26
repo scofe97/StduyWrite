@@ -19,7 +19,6 @@
 | — | [`write/tools/`](write/tools/) | tmux, vim, Claude Code, Git |
 | 09 | [`write/09_spring/`](write/09_spring/) | Spring Framework, Spring Boot, Spring Cloud |
 | 10 | [`write/10_AI/`](write/10_AI/) | 생성형 AI·에이전트 활용 |
-| 11 | [`write/11_career/`](write/11_career/) | 커리어·업계 인터뷰·성장론 |
 | 99 | [`write/99_ETC/`](write/99_ETC/) | 분류 보류 — 3개월 체류 후 재배치 또는 아카이브. 보안 문서는 [`security/`](write/99_ETC/security/)에 임시 보관 |
 
 ## Spring 학습 진입점
