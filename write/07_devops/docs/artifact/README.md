@@ -14,6 +14,8 @@ updated: 2026-11-24
 
 > CI 가 소스를 받아 무엇을 만들어 내는지, 그 산출물을 어디서 어떤 도구로 굽는지를 다루는 자리입니다. 언어별 빌드 설정의 깊은 내용은 언어 폴더가 맡고, 여기서는 CI 파이프라인에서 보이는 모습만 봅니다.
 
+먼저 읽기: [01-04 데몬 없는 이미지 빌드의 등장 배경](container/01-04.데몬%20없는%20이미지%20빌드의%20등장%20배경.md) — 프로세스 격리 계보와 OCI 표준 분리를 따라 데몬 없는 빌더의 등장 흐름을 보는 큰 그림
+
 ## 폴더 규칙
 
 > 산출물 종류마다 폴더를 하나 두고, 개념 편은 번호로 둡니다. 도구별 명령어 시트는 [명령어 시트](../cmd/README.md)에 둡니다.
@@ -73,8 +75,8 @@ JDK 를 담은 이미지가 왜 제각각인지, JDK 배포판이 왜 여럿인�
 
 - `container/` 도구 시트([cmd/image/](../cmd/README.md#image--이미지-빌드와-레지스트리)): `kaniko.md`(2025-06-03 보관 상태와 이전 경로 포함), `jib.md`, `buildpacks.md`
   - `buildkit` 은 [buildkit](../cmd/image/buildkit.md), `buildah` 는 [buildah](../cmd/image/buildah.md) 시트로 썼습니다
-- `container/01-04.레이어 캐시와 multi-stage.md`
-- `container/01-05.멀티 플랫폼 이미지 빌드.md`
+- `container/01-05.레이어 캐시와 multi-stage.md`
+- `container/01-06.멀티 플랫폼 이미지 빌드.md`
 - `package/01-01.빌드 산출물과 CI 빌드의 조건.md`
 
 
