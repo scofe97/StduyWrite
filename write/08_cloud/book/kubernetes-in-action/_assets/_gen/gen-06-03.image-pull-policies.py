@@ -10,7 +10,7 @@
 #           행은 정책 셋, 열은 조회 시점·재시작·이미지가 없을 때인 격자다. focal 열이 조회 시점이라
 #           셋이 실제로 갈리는 유일한 축이 판정 축으로 선다.
 import sys; sys.path.insert(0, ".")
-from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
+from dd import D, INK, MUTED, SOFT, RULE, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx
 
 W, H = 1000, 628

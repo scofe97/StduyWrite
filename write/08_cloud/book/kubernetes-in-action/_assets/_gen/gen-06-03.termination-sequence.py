@@ -44,7 +44,7 @@ def seg(a, b, cy, c, label, dash=False, label_cx=None):
 # 진입 화살표가 x=260~292 를 쓴다 — 레인 이름은 250 에서 끝내 비켜 준다
 for cy, name, tail in LANES:
     d.t(250, cy - 6, name, 12, INK, MONO, "end", 600)
-    d.t(250, cy + 12, tail, 10, SOFT, KR, "end")
+    d.t(250, cy + 12, tail, 11, SOFT, KR, "end")
 
 seg(X0, 560, LANES[0][0], INFO, "preStop 실행 중 프로세스 종료")
 seg(560, XEND, LANES[0][0], MUTED, "SIGTERM 을 보내지 않았다", dash=True, label_cx=670)

@@ -25,7 +25,7 @@ def x_of(sec_offset):
 UP, DOWN = 274, 452             # 두 축의 기준선
 LINK_Y = 364
 
-ddx.band(d, 104, 576, "일반 containers 에 둔 사이드카는 주 컨테이너와 동급이라 이 순서를 보장받지 못한다")
+ddx.band(d, 104, 576, "일반 containers 사이드카 — 주 컨테이너와 동급 · 순서 보장 없음")
 
 def track(base_y, label, events, span):
     d.t(40, base_y - 62, label, 12, SOFT, KR, "start", 600)
@@ -56,10 +56,8 @@ d.path(f"M {x_of(0)} {UP+16} L {x_of(0)} {LINK_Y} L {x_of(3)} {LINK_Y} L {x_of(3
        ACC, 1.5, m="acc", dash="6 5")
 d.chip((x_of(0) + x_of(3)) // 2, LINK_Y, "같은 사이드카 — 맨 앞에서 맨 뒤로", ACC, 11)
 
-d.t(36, 528, "main-a 의 preStop 이 SIGTERM 을 2초 미뤘고(45 → 47), 그 뒤에야 사이드카가 "
-             "SIGTERM 을 받았다.", 12, MUTED, KR, "start")
-d.t(36, 548, "사이드카는 주 컨테이너가 다 죽을 때까지 곁을 지킨다 — 로깅·프록시가 그래야 하는 "
-             "부가 기능이기 때문이다.", 12, MUTED, KR, "start")
+d.t(36, 528, "main-a preStop 2초 지연(05:22:45 → 47) · 이후 sidecar SIGTERM(05:22:48)", 12, MUTED, KR, "start")
+d.t(36, 548, "로깅 · 프록시 보호 — 주 컨테이너 전부 종료 뒤 sidecar 종료", 12, MUTED, KR, "start")
 d.legend(592, [("사이드카 — 순서가 보장되는 자리", ACC)])
 d.save("06-03-start-stop-reverse-order.svg")
 print("ok start-stop-reverse-order")
