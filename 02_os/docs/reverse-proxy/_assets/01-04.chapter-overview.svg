@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">TLS 인증서 체인 결합 순서와 신뢰 사슬 검증 경로</title><desc id="dd">서버 인증서와 중간 체인의 결합 순서, Nginx·HAProxy 설정 규칙, 그리고 역순·누락 시의 오류 판정 메커니즘</desc>
+<rect width="960" height="520" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">02_OS / REVERSE-PROXY · 01-04</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">TLS 인증서 체인 결합 순서와 신뢰 사슬 검증 경로</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">RFC 8446 규약(서버 인증서 맨 앞→중간 CA, 루트는 생략 가능), 프록시 결합(Nginx chained crt·HAProxy pem), openssl s_client 검증</text>
+<rect x="28" y="100" width="436" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="246.0" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">정상 체인 구성과 TLS 신뢰 사슬 검증</text>
+<text x="246.0" y="136" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">RFC 8446 규약 준수 및 프록시 결합 순서</text>
+<rect x="496" y="100" width="436" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="714.0" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">체인 결합 오류와 장애 감지 경로</text>
+<text x="714.0" y="136" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">역순 배치 mismatch 와 중간 인증서 누락 장애</text>
+<rect x="28" y="160" width="436" height="84" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="42" y="180" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">1. 올바른 인증서 결합 구조 (RFC 8446 규약)</text>
+<text x="42" y="198" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">cat server.crt intermediate.crt &gt; chained.crt</text>
+<rect x="40" y="206" width="412" height="28" rx="4" fill="#161B22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="50" y="224" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">서버(Leaf) 인증서 맨 앞 배치 → 중간 CA 체인 후속 연결 (루트 생략)</text>
+<rect x="28" y="256" width="436" height="96" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="42" y="276" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">2. 프록시 로드 및 개인키 매칭 성공</text>
+<text x="42" y="294" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">Nginx: ssl_certificate | HAProxy: crt site.pem</text>
+<rect x="40" y="302" width="198" height="40" rx="4" fill="#161B22" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="50" y="318" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#6A95D8">Nginx 정상 로드:</text>
+<text x="50" y="334" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">첫 인증서 공개키 == 개인키 짝</text>
+<rect x="254" y="302" width="198" height="40" rx="4" fill="#161B22" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="264" y="318" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#6A95D8">HAProxy 단일 PEM:</text>
+<text x="264" y="334" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">서버 + 중간 체인 + 비밀키</text>
+<rect x="28" y="364" width="436" height="84" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="42" y="384" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">3. 클라이언트 신뢰 사슬 검증 성공 (Verify return code: 0)</text>
+<text x="42" y="402" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">openssl s_client -showcerts -servername example.com</text>
+<text x="42" y="420" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">서버가 보낸 중간 CA 로 로컬 루트 CA 신뢰 앵커까지 체인 완성</text>
+<rect x="496" y="160" width="436" height="84" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="510" y="180" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">1. 결합 순서 전도: intermediate.crt + server.crt</text>
+<text x="510" y="198" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">cat intermediate.crt server.crt &gt; wrong.crt</text>
+<rect x="508" y="206" width="412" height="28" rx="4" fill="#161B22" stroke="#F0616D" stroke-width="1.0"/>
+<text x="518" y="224" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F0616D">Nginx 기동 실패: key values mismatch (개인키와 중간CA 불일치)</text>
+<rect x="496" y="256" width="436" height="96" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="510" y="276" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">2. 중간 체인 누락 (기동은 정상, 접속에서 실패)</text>
+<text x="510" y="294" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">ssl_certificate server.crt; (중간 CA 번들 누락)</text>
+<rect x="508" y="302" width="198" height="40" rx="4" fill="#161B22" stroke="#E3B341" stroke-width="1.0"/>
+<text x="518" y="318" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#E3B341">프록시 데몬 상태:</text>
+<text x="518" y="334" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 기동 (첫 인증서 일치)</text>
+<rect x="722" y="302" width="198" height="40" rx="4" fill="#161B22" stroke="#F0616D" stroke-width="1.0"/>
+<text x="732" y="318" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F0616D">클라이언트 검증:</text>
+<text x="732" y="334" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">체인 단절 (핸드셰이크 거부)</text>
+<rect x="496" y="364" width="436" height="84" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="510" y="384" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">3. 검증 실패: 발급자 인증서를 찾지 못함</text>
+<text x="510" y="402" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F0616D">openssl verify error 20 · 21 (Verify return code ≠ 0)</text>
+<text x="510" y="420" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">중간 인증서를 저장해 둔 브라우저만 통과할 수 있음</text>
+<line x1="480" y1="100" x2="480" y2="448" stroke="rgba(191,192,192,0.22)" stroke-width="0.8" stroke-dasharray="4 4"/>
+<line x1="12" y1="476" x2="912" y2="476" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="498" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="488" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="498" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 결합 / 신뢰 사슬 완성</text>
+<rect x="352" y="488" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="374" y="498" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">규약 준수 / 프록시 구성</text>
+<rect x="578" y="488" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="600" y="498" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">설정 오류 / 핸드셰이크 실패</text>
+</svg>

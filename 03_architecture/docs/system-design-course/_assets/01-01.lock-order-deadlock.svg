@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">날짜 순서를 어기면 교착, 지키면 줄 서기</title><desc id="dd">순서를 어긴 두 트랜잭션은 상호 행 잠금으로 순환 대기에 빠져 40P01 에러를 내지만, 날짜 오름차순으로 정렬하면 앞선 날짜에서 순차 대기하여 교착이 방지됩니다.</desc>
+<rect width="1000" height="640" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">SYSTEM DESIGN COURSE · 01-01 §5</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">날짜 순서를 어기면 교착, 지키면 줄 서기</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">복수 날짜 행을 다룰 때는 ORDER BY inventory_date ASC 로 잠금 순서를 고정합니다.</text>
+<line x1="500" y1="96" x2="500" y2="564" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="4 4"/>
+<rect x="24" y="104" width="452" height="48" rx="6" fill="#161B22" stroke="#F0616D" stroke-width="1.2"/>
+<text x="250" y="123" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">순서 미준수: 상호 대기 교착 발생</text>
+<text x="250" y="140" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">Tx1(24일→25일) ↔ Tx2(25일→24일)</text>
+<rect x="100" y="160" width="80" height="24" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="140" y="176" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">Tx1</text>
+<rect x="320" y="160" width="80" height="24" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="360" y="176" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">Tx2</text>
+<line x1="140" y1="184" x2="140" y2="516" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="360" y1="184" x2="360" y2="516" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<rect x="52" y="196" width="176" height="28" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="140" y="214" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">1 · 12-24 행 잠금 획득</text>
+<rect x="272" y="236" width="176" height="28" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="360" y="254" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">2 · 12-25 행 잠금 획득</text>
+<path d="M 152 296 L 348 296" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#warn)"/>
+<text x="250" y="287" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">3 · 12-25 잠금 대기 (Tx2 점유)</text>
+<path d="M 348 344 L 152 344" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#warn)"/>
+<text x="250" y="335" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">4 · 12-24 잠금 대기 (Tx1 점유)</text>
+<rect x="132" y="372" width="236" height="40" rx="6" fill="#161B22" stroke="none" stroke-width="0.9"/>
+<rect x="132" y="372" width="236" height="40" rx="6" fill="#F0616D18" stroke="#F0616D" stroke-width="1.2"/>
+<text x="250" y="389" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">순환 대기 발생 (Circular Wait)</text>
+<text x="250" y="404" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">Tx1 ↔ Tx2 상호 잠금 해제 대기</text>
+<rect x="52" y="440" width="396" height="68" rx="6" fill="#161B22" stroke="none" stroke-width="0.9"/>
+<rect x="52" y="440" width="396" height="68" rx="6" fill="#F08A5918" stroke="#F08A59" stroke-width="1.4"/>
+<text x="250" y="461" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">PostgreSQL 교착 감지기 동작</text>
+<text x="250" y="480" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">SQLSTATE 40P01 (deadlock_detected)</text>
+<text x="250" y="497" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">Tx2 강제 중단 및 롤백 (교착 해소)</text>
+<rect x="524" y="104" width="452" height="48" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="750" y="123" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">날짜 오름차순 고정: 순환 대기 예방</text>
+<text x="750" y="140" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">ORDER BY inventory_date ASC</text>
+<rect x="600" y="160" width="80" height="24" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="640" y="176" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">Tx1</text>
+<rect x="820" y="160" width="80" height="24" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="860" y="176" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">Tx2</text>
+<line x1="640" y1="184" x2="640" y2="516" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="860" y1="184" x2="860" y2="516" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<rect x="552" y="196" width="176" height="28" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="640" y="214" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">1 · 12-24 행 선점 획득</text>
+<path d="M 848 252 L 652 252" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#warn)"/>
+<text x="750" y="243" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">2 · 12-24 잠금 시도 (대기)</text>
+<rect x="852" y="264" width="16" height="120" rx="3" fill="#161B22" stroke="none" stroke-width="0.9"/>
+<rect x="852" y="264" width="16" height="120" rx="3" fill="#E3B34122" stroke="#E3B341" stroke-width="1.2"/>
+<text x="878" y="316" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">12-24 순차 대기</text>
+<text x="878" y="334" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">(줄 서기 완료)</text>
+<rect x="552" y="316" width="176" height="28" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="640" y="334" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">3 · 12-25 행 잠금 획득</text>
+<rect x="552" y="376" width="176" height="36" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="640" y="393" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">4 · Tx1 커밋 및 잠금 해제</text>
+<text x="640" y="406" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">12-24 · 12-25 갱신 완료</text>
+<path d="M 652 448 L 848 448" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)" stroke-dasharray="4 4"/>
+<text x="750" y="439" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">5 · 대기 해제 · 12-24 잠금 획득</text>
+<rect x="684" y="468" width="296" height="48" rx="6" fill="#161B22" stroke="none" stroke-width="0.9"/>
+<rect x="684" y="468" width="296" height="48" rx="6" fill="#3FB98C18" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="832" y="487" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">순환 대기 없음 (교착 방지)</text>
+<text x="832" y="503" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">12-25 순차 진행 후 정상 완료</text>
+<line x1="12" y1="588" x2="952" y2="588" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="610" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="600" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="610" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 잠금 획득 및 진행</text>
+<rect x="313" y="600" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="335" y="610" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">단방향 대기 (줄 서기)</text>
+<rect x="526" y="600" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="548" y="610" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">순환 대기 교착 (Deadlock)</text>
+<rect x="817" y="600" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="839" y="610" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">교착 감지 40P01 (focal)</text>
+</svg>

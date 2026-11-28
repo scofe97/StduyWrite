@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400" role="img" aria-labelledby="tf df">
+<title id="tf">대상과 조건의 조합별 대기 성립 여부</title>
+<desc id="df">셸·명령 단독·zsh 백그라운드·zsh 순차 네 조합에 대해 대기 조건이 성립했는지와 경과 시간을 비교한 행렬입니다. 원서 표기를 그대로 쓴 zsh 백그라운드 행만 강조돼 있습니다.</desc>
+<style>
+svg{--paper:#0D1117;--paper2:#161B22;--ink:#F5F5F3;--muted:#8B98A9;--soft:#5E6B7E;--rule:rgba(191,192,192,0.22);--accent:#F08A59;--accent12:rgba(240,138,89,0.12);--ok:#3FB98C;--bad:#F0616D;--warn:#E3B341}
+.kr{font-family:'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif}
+.mn{font-family:'Geist Mono','Noto Sans Mono CJK KR',monospace}
+.eyebrow{fill:var(--soft);font-size:9px;letter-spacing:.14em}
+.h1{fill:var(--ink);font-size:20px;font-weight:600}
+.sub{fill:var(--muted);font-size:11px}
+.col{fill:var(--soft);font-size:10px;letter-spacing:.08em}
+.tgt{fill:var(--ink);font-size:12px}
+.mn11{font-size:11px;fill:var(--muted)}
+.ok{fill:var(--ok);font-size:12px}
+.bad{fill:var(--bad);font-size:12px}
+.warn{fill:var(--warn);font-size:12px}
+.note{fill:var(--muted);font-size:10px}
+.hair{stroke:var(--rule);stroke-width:1}
+</style>
+<rect width="1000" height="400" fill="var(--paper)"/>
+<text class="mn eyebrow" x="64" y="44">WAIT MATRIX · v1.4.188 · macOS</text>
+<text class="kr h1" x="64" y="76">어느 조건이 언제 성립하는가</text>
+<text class="kr sub" x="64" y="98">조합을 직접 돌려 확인한 결과입니다. 네 줄 중 성립한 것은 마지막 하나뿐입니다.</text>
+
+<line class="hair" x1="64" y1="128" x2="936" y2="128"/>
+<text class="kr col" x="64" y="148">대상</text>
+<text class="kr col" x="520" y="148">조건</text>
+<text class="kr col" x="656" y="148">결과</text>
+<text class="kr col" x="836" y="148">경과</text>
+<line class="hair" x1="64" y1="164" x2="936" y2="164"/>
+
+<text class="kr tgt" x="64" y="196">일반 셸</text>
+<text class="mn mn11" x="520" y="196">tui-idle</text>
+<text class="kr bad" x="656" y="196">timeout</text>
+<text class="mn mn11" x="836" y="196">12s</text>
+<text class="kr note" x="64" y="214">셸은 TUI 가 아니라 조건 자체가 성립하지 않습니다</text>
+
+<text class="mn tgt" x="64" y="252">--command "명령"</text>
+<text class="mn mn11" x="520" y="252">exit</text>
+<text class="kr bad" x="656" y="252">timeout</text>
+<text class="mn mn11" x="836" y="252">12s</text>
+<text class="kr note" x="64" y="270">명령이 끝나도 셸은 살아 있습니다</text>
+
+<rect x="56" y="284" width="888" height="44" rx="4" fill="var(--accent12)" stroke="var(--accent)" stroke-width="1.4"/>
+<text class="mn tgt" x="64" y="306">--command "명령 &amp; exit"</text>
+<text class="mn mn11" x="520" y="306">exit</text>
+<text class="kr bad" x="656" y="306">timeout</text>
+<text class="mn mn11" x="836" y="306">20s</text>
+<text class="kr note" x="64" y="322">원서의 Windows 표기. zsh 는 you have running jobs 로 첫 exit 를 거부합니다</text>
+
+<text class="mn tgt" x="64" y="360">--command "명령; exit"</text>
+<text class="mn mn11" x="520" y="360">exit</text>
+<text class="kr ok" x="656" y="360">satisfied · exitCode 0</text>
+<text class="mn mn11" x="836" y="360">5s</text>
+<text class="kr note" x="64" y="378">sleep 4 와 경과가 일치합니다. macOS 의 정답</text>
+</svg>

@@ -1,0 +1,81 @@
+<svg viewBox="0 0 880 470" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>라벨에서 샘플까지 — 인덱스 두 섹션이 이어 주는 길</title>
+  <desc>질의는 라벨에서 출발한다. 포스팅 섹션이 라벨을 받아 그 라벨을 가진 시리즈 ID 집합을 돌려주고, 매처가 여럿이면 교집합으로 후보를 좁힌다. 그 시리즈 ID 로 시리즈 섹션을 찾으면 라벨 정보와 함께 chunk 참조 8 바이트, 그리고 chunk 마다의 최소 최대 시각이 나온다. 시각을 먼저 보고 질의 범위와 겹치지 않는 chunk 는 읽지 않는다. 남은 chunk 만 참조 8 바이트를 따라가 세그먼트 파일과 오프셋을 찾아 읽고, 통째로 디코딩한 뒤 범위 밖 샘플을 버려 최종 샘플을 돌려준다. 인덱스는 라벨에서 ID 로 좁히는 단과 ID 에서 위치로 옮기는 단, 두 단으로 나뉜다.</desc>
+
+  <defs>
+    <marker id="if-amber" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="if-gray" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="880" height="470" fill="#0d0d0d"/>
+  <text x="24" y="34" fill="#e8e4df" font-size="15">라벨에서 샘플까지 — 인덱스 두 섹션이 이어 주는 길</text>
+
+  <!-- ===== 단 구분 배경 ===== -->
+  <rect x="24" y="58" width="404" height="230" fill="#0d0d0d" stroke="rgb(92,84,74)" stroke-dasharray="5 4"/>
+  <text x="40" y="78" fill="#b8b3ad" font-size="10">1단 · 포스팅 — 라벨로 후보를 좁힙니다</text>
+
+  <rect x="452" y="58" width="404" height="230" fill="#0d0d0d" stroke="rgb(92,84,74)" stroke-dasharray="5 4"/>
+  <text x="468" y="78" fill="#b8b3ad" font-size="10">2단 · 시리즈 — ID 로 위치를 찾습니다</text>
+
+  <!-- ===== 1단 ===== -->
+  <rect x="44" y="96" width="180" height="52" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="60" y="118" fill="#e8e4df" font-size="10.5">질의의 라벨 매처</text>
+  <text x="60" y="137" fill="#b8b3ad" font-size="9" font-family="'JetBrains Mono', monospace">job=kubelet</text>
+
+  <line x1="134" y1="148" x2="134" y2="178" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#if-amber)"/>
+
+  <rect x="44" y="182" width="180" height="44" fill="rgba(212,168,83,0.22)" stroke="rgb(212,168,83)"/>
+  <text x="134" y="209" fill="#e8e4df" font-size="10.5" text-anchor="middle">포스팅 섹션</text>
+
+  <line x1="224" y1="204" x2="252" y2="204" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#if-amber)"/>
+
+  <rect x="256" y="182" width="152" height="44" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="332" y="200" fill="#e8e4df" font-size="9.5" text-anchor="middle">시리즈 ID 집합</text>
+  <text x="332" y="216" fill="rgb(212,168,83)" font-size="9" text-anchor="middle" font-family="'JetBrains Mono', monospace">10 · 11 · 17</text>
+
+  <text x="44" y="256" fill="#b8b3ad" font-size="9">매처가 여럿이면 교집합으로 더 좁힙니다</text>
+  <text x="44" y="273" fill="#b8b3ad" font-size="9" font-family="'JetBrains Mono', monospace">env=production → 7·9·11·13·17  ∩  →  11·17</text>
+
+  <!-- 1단 → 2단 -->
+  <line x1="408" y1="204" x2="472" y2="204" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#if-amber)"/>
+  <text x="440" y="196" fill="rgb(212,168,83)" font-size="9" text-anchor="middle">ID 로</text>
+
+  <!-- ===== 2단 ===== -->
+  <rect x="476" y="96" width="360" height="44" fill="rgba(212,168,83,0.22)" stroke="rgb(212,168,83)"/>
+  <text x="656" y="123" fill="#e8e4df" font-size="10.5" text-anchor="middle">시리즈 섹션 — ID 마다 항목 하나</text>
+
+  <line x1="656" y1="140" x2="656" y2="178" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#if-amber)"/>
+
+  <rect x="476" y="182" width="174" height="60" fill="rgba(102,187,106,0.20)" stroke="rgb(102,187,106)"/>
+  <text x="563" y="203" fill="#e8e4df" font-size="9.5" text-anchor="middle">최소·최대 시각</text>
+  <text x="563" y="221" fill="#b8b3ad" font-size="8.5" text-anchor="middle">chunk 마다</text>
+  <text x="563" y="236" fill="rgb(102,187,106)" font-size="8.5" text-anchor="middle" font-weight="700">먼저 걸러냅니다</text>
+
+  <rect x="662" y="182" width="174" height="60" fill="rgba(224,108,108,0.22)" stroke="rgb(224,108,108)"/>
+  <text x="749" y="203" fill="#e8e4df" font-size="9.5" text-anchor="middle">chunk 참조 8B</text>
+  <text x="749" y="221" fill="#b8b3ad" font-size="8.5" text-anchor="middle">상위 4B 파일</text>
+  <text x="749" y="236" fill="#b8b3ad" font-size="8.5" text-anchor="middle">하위 4B 오프셋</text>
+
+  <text x="476" y="266" fill="#b8b3ad" font-size="9">겹치는 chunk 만 따라갑니다</text>
+
+  <!-- ===== 디스크 ===== -->
+  <line x1="749" y1="242" x2="749" y2="312" stroke="rgb(224,108,108)" stroke-width="2" marker-end="url(#if-amber)"/>
+
+  <text x="24" y="330" fill="#b8b3ad" font-size="10">디스크 — 여기서 처음 chunk 를 읽습니다</text>
+
+  <rect x="24" y="342" width="812" height="56" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="44" y="366" fill="#e8e4df" font-size="10" font-family="'JetBrains Mono', monospace">chunks/000001</text>
+  <text x="44" y="386" fill="#b8b3ad" font-size="9">오프셋 455 로 점프 · 길이만큼 잘라내면 chunk 하나</text>
+
+  <rect x="640" y="354" width="180" height="32" fill="rgba(212,168,83,0.25)" stroke="rgb(212,168,83)"/>
+  <text x="730" y="375" fill="#e8e4df" font-size="9.5" text-anchor="middle">통째로 디코딩</text>
+
+  <!-- 마무리 -->
+  <line x1="24" y1="414" x2="836" y2="414" stroke="rgb(92,84,74)"/>
+  <text x="24" y="438" fill="#b8b3ad" font-size="10">디코딩 뒤 범위 밖 샘플을 버리고 돌려줍니다 — 시간 범위는 인덱스에서 한 번, 여기서 또 한 번</text>
+  <text x="24" y="458" fill="#b8b3ad" font-size="9.5">라벨 → ID 는 포스팅 · ID → 위치는 시리즈</text>
+</svg>

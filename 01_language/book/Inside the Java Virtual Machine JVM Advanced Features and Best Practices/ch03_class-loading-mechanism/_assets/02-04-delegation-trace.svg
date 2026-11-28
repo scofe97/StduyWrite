@@ -1,0 +1,102 @@
+<svg viewBox="0 0 980 540" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>부모 위임 전체 추적 — Internal.class 로딩 요청이 위로 위임되고 실패는 아래로 내려온다</title>
+  <desc>ClassLoaderRunner가 Internal.class 로딩을 요청하면 Application → Extension → Bootstrap 순으로 loadClass 위임이 위로 올라간다(① ② ③). 각 로더는 자기 경로(classpath, ext, rt.jar)에서 클래스를 찾는다. 찾지 못하면(N) 요청이 다시 아래로 내려와 ④ ⑤ ⑥ 순으로 탐색하고, 모두 실패하면 ⑦ ClassNotFoundException이 발생한다. 어느 단계든 클래스를 찾으면(Y) 그 로더가 직접 Internal.class를 로딩한다(4.1, 5.1, 6.1). 셋 중 한 로더만 로딩하며, 위임은 위로, 탐색 실패는 아래로 흐른다.</desc>
+  <defs>
+    <style>
+      .title{font-size:16px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:11px;fill:rgb(150,145,140)}
+      .ldrhead{font-size:12.5px;font-weight:800;fill:rgb(212,168,83)}
+      .step{font-size:11px;font-weight:800;fill:#66bb6a}
+      .stepy{font-size:10.5px;font-weight:800;fill:#e58a9a}
+      .diamond{font-size:10px;font-weight:700;fill:#0d0d0d}
+      .yn{font-size:12px;font-weight:800;fill:#e8e4df}
+      .note{font-size:10px;fill:rgb(150,145,140)}
+    </style>
+    <marker id="up" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7,3 L0,6 z" fill="#66bb6a"/></marker>
+    <marker id="n" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7,3 L0,6 z" fill="rgb(212,168,83)"/></marker>
+    <marker id="y" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7,3 L0,6 z" fill="#e58a9a"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="980" height="540" fill="#0d0d0d"/>
+  <text x="28" y="34" class="title">부모 위임 전체 추적 — 위임은 위로(녹색), 탐색 실패는 아래로(앰버), 로딩은 찾은 로더 하나가(분홍)</text>
+  <text x="28" y="55" class="sub">Internal.class 요청이 Application → Extension → Bootstrap 으로 위임되고, 모두 못 찾으면 ClassNotFoundException</text>
+
+  <!-- column x-centers: Runner 105, App 330, Ext 560, Boot 800 ; columns are narrow, gaps wide -->
+  <!-- ===== Loader columns (narrow, gap ~70px) ===== -->
+  <rect x="40"  y="78" width="130" height="215" rx="10" fill="#0d0d0d" stroke="rgb(90,85,80)" stroke-width="1.4"/>
+  <text x="105" y="100" class="ldrhead" text-anchor="middle">ClassLoader</text>
+  <text x="105" y="116" class="ldrhead" text-anchor="middle">Runner</text>
+
+  <rect x="265" y="78" width="130" height="215" rx="10" fill="#0d0d0d" stroke="rgb(150,90,200)" stroke-width="1.6"/>
+  <text x="330" y="100" class="ldrhead" text-anchor="middle">Application</text>
+  <text x="330" y="116" class="ldrhead" text-anchor="middle">ClassLoader</text>
+
+  <rect x="495" y="78" width="130" height="215" rx="10" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.6"/>
+  <text x="560" y="100" class="ldrhead" text-anchor="middle">Extension</text>
+  <text x="560" y="116" class="ldrhead" text-anchor="middle">ClassLoader</text>
+
+  <rect x="735" y="78" width="130" height="215" rx="10" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.6"/>
+  <text x="800" y="100" class="ldrhead" text-anchor="middle">Bootstrap</text>
+  <text x="800" y="116" class="ldrhead" text-anchor="middle">ClassLoader</text>
+
+  <!-- ===== delegation arrows (up, green) — long, spanning the wide gaps, row y=165 ===== -->
+  <text x="217" y="150" class="step" text-anchor="middle">① loadClass(Internal)</text>
+  <line x1="172" y1="165" x2="263" y2="165" stroke="#66bb6a" stroke-width="3" marker-end="url(#up)"/>
+  <text x="447" y="150" class="step" text-anchor="middle">② loadClass(Internal)</text>
+  <line x1="397" y1="165" x2="493" y2="165" stroke="#66bb6a" stroke-width="3" marker-end="url(#up)"/>
+  <text x="680" y="150" class="step" text-anchor="middle">③ loadClass(Internal)</text>
+  <line x1="627" y1="165" x2="733" y2="165" stroke="#66bb6a" stroke-width="3" marker-end="url(#up)"/>
+
+  <!-- ===== decision diamonds (light fill, dark text) center y=215 ===== -->
+  <polygon points="330,185 372,215 330,245 288,215" fill="#ddd0f0" stroke="rgb(150,90,200)" stroke-width="1.4"/>
+  <text x="330" y="211" class="diamond" text-anchor="middle">⑥ Found in</text>
+  <text x="330" y="224" class="diamond" text-anchor="middle">classpath?</text>
+
+  <polygon points="560,185 602,215 560,245 518,215" fill="#cdeccf" stroke="#66bb6a" stroke-width="1.4"/>
+  <text x="560" y="211" class="diamond" text-anchor="middle">⑤ Found in</text>
+  <text x="560" y="224" class="diamond" text-anchor="middle">ext?</text>
+
+  <polygon points="800,185 842,215 800,245 758,215" fill="#dceaf7" stroke="#5b9bd5" stroke-width="1.4"/>
+  <text x="800" y="211" class="diamond" text-anchor="middle">④ Found in</text>
+  <text x="800" y="224" class="diamond" text-anchor="middle">rt.jar?</text>
+
+  <!-- ===== return arrows (N, amber) — long, in the gaps, row y=215 ===== -->
+  <text x="688" y="208" class="yn" text-anchor="middle">N</text>
+  <line x1="756" y1="215" x2="606" y2="215" stroke="rgb(212,168,83)" stroke-width="2.6" marker-end="url(#n)"/>
+  <text x="458" y="208" class="yn" text-anchor="middle">N</text>
+  <line x1="516" y1="215" x2="376" y2="215" stroke="rgb(212,168,83)" stroke-width="2.6" marker-end="url(#n)"/>
+  <text x="240" y="208" class="yn" text-anchor="middle">N</text>
+  <line x1="286" y1="215" x2="196" y2="215" stroke="rgb(212,168,83)" stroke-width="2.6" marker-end="url(#n)"/>
+
+  <!-- ClassNotFoundException burst (centered in Runner column, below the N landing) -->
+  <polygon points="105,278 120,308 152,300 137,330 168,344 137,358 152,390 120,382 105,412 90,382 58,390 73,358 42,344 73,330 58,300 90,308"
+           fill="#f44336" stroke="#ef9a9a" stroke-width="1"/>
+  <text x="105" y="340" font-size="10" font-weight="800" fill="#0d0d0d" text-anchor="middle">⑦ ClassNot</text>
+  <text x="105" y="354" font-size="10" font-weight="800" fill="#0d0d0d" text-anchor="middle">FoundException</text>
+
+  <!-- ===== Y load arrows (down, magenta) — each drops straight then turns to Internal.class. -->
+  <!-- staggered horizontal levels so the three lines never overlap: App=430, Ext=450, Boot=470 -->
+  <!-- Internal.class box -->
+  <rect x="245" y="404" width="130" height="60" rx="6" fill="rgb(58,58,58)" stroke="rgb(120,115,110)"/>
+  <text x="310" y="430" font-size="13" font-weight="700" fill="#e8e4df" text-anchor="middle">Internal</text>
+  <text x="310" y="450" font-size="13" font-weight="700" fill="#e8e4df" text-anchor="middle">.class</text>
+
+  <!-- Application Y -> Internal.class (6.1), top level -->
+  <text x="343" y="268" class="stepy" text-anchor="start">Y</text>
+  <text x="200" y="380" class="stepy" text-anchor="start">6.1 load class</text>
+  <path d="M330,245 L330,404" fill="none" stroke="#e05a87" stroke-width="2.4" marker-end="url(#y)"/>
+
+  <!-- Extension Y -> Internal.class (5.1), middle level -->
+  <text x="573" y="268" class="stepy" text-anchor="start">Y</text>
+  <text x="573" y="424" class="stepy" text-anchor="start">5.1 load class</text>
+  <path d="M560,245 L560,434 L379,434" fill="none" stroke="#e05a87" stroke-width="2.4" marker-end="url(#y)"/>
+
+  <!-- Bootstrap Y -> Internal.class (4.1), bottom level -->
+  <text x="813" y="268" class="stepy" text-anchor="start">Y</text>
+  <text x="813" y="446" class="stepy" text-anchor="start">4.1 load class</text>
+  <path d="M800,245 L800,456 L379,456" fill="none" stroke="#e05a87" stroke-width="2.4" marker-end="url(#y)"/>
+
+  <!-- legend -->
+  <text x="28" y="502" class="note">녹색 = loadClass 위임(위로 ① ② ③) · 앰버 = 탐색 실패 복귀(아래 N → ⑦ ClassNotFoundException) · 분홍 = 찾은 로더 하나가 직접 로딩(4.1 / 5.1 / 6.1, 셋 중 택일)</text>
+  <text x="28" y="522" class="note">위임 ① ② ③ 위로 올라간 뒤, 각 로더가 자기 경로를 ④ ⑤ ⑥ 으로 탐색 → 못 찾으면 ⑦, 가장 먼저 찾은 로더가 Y 로 Internal.class 로딩.</text>
+</svg>

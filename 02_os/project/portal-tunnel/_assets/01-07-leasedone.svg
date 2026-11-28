@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 680" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">LeaseDone 토큰 생명주기 — 재연결 보존과 교체 격리</title><desc id="dd">단순 재연결은 LeaseDone 토큰을 유지해 세션을 잇고, 임대 교체 시 토큰을 무효화해 지연 패킷의 혼입을 원천 차단합니다.</desc>
+<rect width="960" height="680" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">PORTAL-TUNNEL · LEASE DONE BOUNDARY SEQUENCE</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">LeaseDone 토큰 생명주기 — 재연결 보존과 교체 격리</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">임대 교체 경계를 기준으로 이전 패킷과 소켓을 즉시 정리합니다</text>
+<rect x="26" y="100" width="168" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="110" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">Relay 백홀</text>
+<text x="110" y="136" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">QUIC 송수신단</text>
+<rect x="286" y="100" width="168" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="370" y="120" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">DatagramSession</text>
+<text x="370" y="136" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">터널 세션 관리자</text>
+<rect x="546" y="100" width="168" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="630" y="120" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">udpFlowManager</text>
+<text x="630" y="136" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">로컬 소켓 격리</text>
+<rect x="766" y="100" width="168" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="850" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">로컬 서비스</text>
+<text x="850" y="136" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">대상 UDP 앱</text>
+<line x1="110" y1="150" x2="110" y2="616" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="370" y1="150" x2="370" y2="616" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="630" y1="150" x2="630" y2="616" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="850" y1="150" x2="850" y2="616" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<path d="M 120 180 L 358 180" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)"/>
+<rect x="158.98" y="162" width="162.04000000000002" height="15" fill="#0D1117"/>
+<text x="240.0" y="173" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#6A95D8">QUIC DATAGRAM (Flow 1)</text>
+<path d="M 380 204 L 416 204 L 416 220 L 383 220" fill="none" stroke="#6A95D8" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="424" y="210" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#6A95D8">frame.LeaseDone = T1 주입</text>
+<path d="M 380 244 L 618 244" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)"/>
+<rect x="432.4" y="226" width="135.2" height="15" fill="#0D1117"/>
+<text x="500.0" y="237" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#6A95D8">Accept() 프레임 인출</text>
+<path d="M 640 276 L 838 276" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<rect x="631.48" y="258" width="217.04000000000002" height="15" fill="#0D1117"/>
+<text x="740.0" y="269" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">DialUDP 소켓 전송 (키: Flow1+T1)</text>
+<path d="M 120 326 L 358 326" fill="none" stroke="#E3B341" stroke-width="1.5" marker-end="url(#warn)" stroke-dasharray="4 3"/>
+<rect x="151.94" y="308" width="176.12" height="15" fill="#0D1117"/>
+<text x="240.0" y="319" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#E3B341">일시 단절 후 Bind(newConn)</text>
+<path d="M 380 350 L 416 350 L 416 366 L 383 366" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="424" y="356" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">동일 Lease: T1 토큰 보존</text>
+<path d="M 840 390 L 642 390" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<rect x="694.95" y="372" width="90.1" height="15" fill="#0D1117"/>
+<text x="740.0" y="383" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">UDP 응답 수신</text>
+<path d="M 620 422 L 382 422" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<rect x="449.67" y="404" width="100.66" height="15" fill="#0D1117"/>
+<text x="500.0" y="415" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">SendFrame(T1)</text>
+<rect x="442.3" y="426" width="115.4" height="14" fill="#0D1117"/>
+<text x="500.0" y="436" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">T1 일치 → 전송 성공</text>
+<path d="M 380 466 L 416 466 L 416 482 L 383 482" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="424" y="472" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">Clear() 호출: close(T1) 및 T2 발급</text>
+<path d="M 640 500 L 676 500 L 676 516 L 643 516" fill="none" stroke="#F0616D" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="684" y="506" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F0616D">watcher: close(T1) 감지 → 소켓 종료</text>
+<path d="M 620 548 L 382 548" fill="none" stroke="#F0616D" stroke-width="1.5" marker-end="url(#bad)" stroke-dasharray="4 3"/>
+<rect x="401.71" y="530" width="196.58" height="15" fill="#0D1117"/>
+<text x="500.0" y="541" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F0616D">지연된 T1 응답: SendFrame(T1)</text>
+<rect x="428.9" y="552" width="142.20000000000002" height="14" fill="#0D1117"/>
+<text x="500.0" y="562" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">frame.LeaseDone != T2</text>
+<path d="M 380 572 L 416 572 L 416 588 L 383 588" fill="none" stroke="#F0616D" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="424" y="578" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F0616D">datagram lease ended 에러 (폐기)</text>
+<line x1="12" y1="636" x2="912" y2="636" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="658" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="648" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="658" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 전달·보존</text>
+<rect x="248" y="648" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="270" y="658" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">임대 1 패킷 수신</text>
+<rect x="422" y="648" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="444" y="658" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">일시 단절·재연결</text>
+<rect x="583" y="648" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="605" y="658" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">토큰 교체</text>
+<rect x="692" y="648" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="714" y="658" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">소켓 종료·패킷 폐기</text>
+</svg>

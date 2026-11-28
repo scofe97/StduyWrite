@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 440" width="100%" role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>수집기 배포 모드 셋과 각 모드에 맞는 프리셋</title>
+  <desc>deployment 는 고정된 수의 Pod 로 배포되고 daemonset 은 모든 노드마다 하나씩 배포되며 statefulset 은 고유한 네트워크 인터페이스를 가집니다. 노드마다 있어야 하는 로그 수집과 kubelet 메트릭과 호스트 메트릭은 daemonset 에서 켜고, 클러스터 이벤트와 클러스터 메트릭은 중복을 막기 위해 deployment 나 statefulset 에서 켭니다. kubernetesAttributes 는 모든 모드에서 안전합니다.</desc>
+
+  <style>
+    .code { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 10.5px; }
+  </style>
+
+  <rect width="880" height="440" fill="#0d0d0d"/>
+
+  <text x="30" y="34" fill="#e8e4df" font-size="17" font-weight="700">모드가 프리셋을 정한다</text>
+  <text x="30" y="55" fill="#b8b3ad" font-size="12">틀리면 비거나 중복된다</text>
+
+  <!-- three modes -->
+  <rect x="30" y="76" width="265" height="80" rx="8" fill="#66bb6a"/>
+  <text class="code" x="48" y="102" fill="#0d0d0d" font-weight="700">daemonset</text>
+  <text x="48" y="124" fill="#1a1a1a" font-size="11.5">모든 노드마다 하나</text>
+  <text x="48" y="144" fill="#1a1a1a" font-size="11">노드에 붙어야 보이는 것</text>
+
+  <rect x="308" y="76" width="265" height="80" rx="8" fill="rgb(212,168,83)"/>
+  <text class="code" x="326" y="102" fill="#0d0d0d" font-weight="700">deployment</text>
+  <text x="326" y="124" fill="#1a1a1a" font-size="11.5">고정된 수의 Pod</text>
+  <text class="code" x="326" y="144" fill="#5c4410">replicaCount</text>
+
+  <rect x="586" y="76" width="264" height="80" rx="8" fill="#5b9bd5"/>
+  <text class="code" x="604" y="102" fill="#e8e4df" font-weight="700">statefulset</text>
+  <text x="604" y="124" fill="#e8e4df" font-size="11.5">고유한 네트워크 인터페이스</text>
+  <text x="604" y="144" fill="#e8e4df" font-size="11">일관된 배포</text>
+
+  <!-- presets mapped -->
+  <text x="30" y="188" fill="#e8e4df" font-size="13" font-weight="700">프리셋을 어디에 켜는가</text>
+
+  <!-- daemonset column -->
+  <rect x="30" y="200" width="265" height="150" rx="8" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.8"/>
+  <rect x="48" y="216" width="229" height="24" rx="4" fill="#e6f7e7"/>
+  <text class="code" x="58" y="233" fill="#14521d">logsCollection</text>
+  <rect x="48" y="248" width="229" height="24" rx="4" fill="#e6f7e7"/>
+  <text class="code" x="58" y="265" fill="#14521d">kubeletMetrics</text>
+  <rect x="48" y="280" width="229" height="24" rx="4" fill="#e6f7e7"/>
+  <text class="code" x="58" y="297" fill="#14521d">hostMetrics</text>
+  <text x="48" y="326" fill="#b8b3ad" font-size="11">노드마다 있어야 모인다</text>
+
+  <!-- deployment/statefulset column -->
+  <rect x="308" y="200" width="542" height="150" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.8"/>
+  <rect x="326" y="216" width="240" height="24" rx="4" fill="#fdf3df"/>
+  <text class="code" x="336" y="233" fill="#5c4410">kubernetesEvents</text>
+  <rect x="326" y="248" width="240" height="24" rx="4" fill="#fdf3df"/>
+  <text class="code" x="336" y="265" fill="#5c4410">clusterMetrics</text>
+  <text x="326" y="298" fill="#b8b3ad" font-size="11">클러스터에 하나만 봐야 한다</text>
+  <rect x="326" y="310" width="240" height="26" rx="4" fill="#f2d4d4"/>
+  <text x="336" y="328" fill="#7a1f1f" font-size="11" font-weight="700">여러 개면 이벤트가 중복</text>
+
+  <!-- safe anywhere -->
+  <rect x="590" y="216" width="240" height="120" rx="6" fill="#e6f7e7"/>
+  <text class="code" x="602" y="238" fill="#14521d" font-weight="700">kubernetesAttributes</text>
+  <text x="602" y="260" fill="#14521d" font-size="11.5" font-weight="700">모든 모드에서 안전</text>
+  <text class="code" x="602" y="284" fill="#14521d">k8s.pod.name</text>
+  <text class="code" x="602" y="302" fill="#14521d">k8s.namespace.name</text>
+  <text class="code" x="602" y="320" fill="#14521d">k8s.node.name</text>
+
+  <!-- cascade warning -->
+  <rect x="30" y="362" width="820" height="56" rx="8" fill="#0d0d0d" stroke="#f44336" stroke-width="1.5"/>
+  <text x="50" y="384" fill="#f44336" font-size="12.5" font-weight="700">로깅 캐스케이드</text>
+  <text class="code" x="160" y="384" fill="#e8e4df">includeCollectorLogs: false</text>
+  <text x="50" y="406" fill="#b8b3ad" font-size="11">자기 로그를 다시 읽는 순환을 막는다</text>
+</svg>

@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">승인 객체 수명주기 5대 상태 전이 모델</title><desc id="dd">requestFrozen 요청에서 원자적 점유, 동결 값 재검증, 적용 완료 및 stale 거절까지</desc>
+<rect width="1000" height="560" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">APPROVAL LIFECYCLE · STATE MACHINE</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">승인 객체 수명주기 5대 상태 전이 모델</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">운영자 승인 결정 시점에 동결된 환경을 재확인하여 드리프트와 경합을 차단합니다</text>
+<circle cx="28" cy="200" r="5" fill="#5E6B7E"/>
+<path d="M 34 200 L 70 200" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="37.0" y="173" width="30.0" height="16" fill="#0D1117"/>
+<text x="52" y="185" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">요청</text>
+<rect x="70" y="150" width="190" height="100" rx="8" fill="#161B22" stroke="#E3B341" stroke-width="1.3"/>
+<text x="165" y="178" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#E3B341">pending</text>
+<text x="165" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">파라미터 동결 · DB 저장</text>
+<text x="165" y="220" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">idempotency_key 중복 방지</text>
+<text x="165" y="238" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#8B98A9">lifecycle.go:148</text>
+<path d="M 165 250 L 165 360" fill="none" stroke="#F0616D" stroke-width="1.4" marker-end="url(#bad)"/>
+<rect x="122.1" y="293" width="85.8" height="16" fill="#0D1117"/>
+<text x="165" y="305" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="600" fill="#F0616D">거절 (Reject)</text>
+<rect x="70" y="360" width="190" height="100" rx="8" fill="#161B22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="165" y="388" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#F0616D">rejected</text>
+<text x="165" y="410" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">운영자 거절 종결</text>
+<text x="165" y="430" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">decided_by · 감사 기록</text>
+<text x="165" y="448" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#8B98A9">store/lifecycle.go:525</text>
+<path d="M 260 200 L 410 200" fill="none" stroke="#6A95D8" stroke-width="1.4" marker-end="url(#info)"/>
+<rect x="277.1" y="173" width="115.8" height="16" fill="#0D1117"/>
+<text x="335" y="185" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="600" fill="#6A95D8">원자적 점유 (Claim)</text>
+<rect x="297.42" y="204" width="75.16" height="15" fill="#0D1117"/>
+<text x="335" y="215" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#8B98A9">단일 결정 보장</text>
+<rect x="410" y="150" width="200" height="100" rx="8" fill="#161B22" stroke="#6A95D8" stroke-width="1.3"/>
+<text x="510" y="178" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#6A95D8">applying</text>
+<text x="510" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">동결 파라미터 재검증</text>
+<text x="510" y="220" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">crash 시 재개 대상</text>
+<text x="510" y="238" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#8B98A9">lifecycle.go:570</text>
+<path d="M 460 150 C 460 90, 560 90, 560 150" fill="none" stroke="#5E6B7E" stroke-width="1.1" marker-end="url(#soft)" stroke-dasharray="3 3"/>
+<rect x="411.03999999999996" y="94" width="197.92000000000002" height="15" fill="#0D1117"/>
+<text x="510" y="105" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#5E6B7E">호스트 재기동: resumeApplying (:553)</text>
+<path d="M 610 200 L 740 200" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<rect x="609.5" y="173" width="131.0" height="16" fill="#0D1117"/>
+<text x="675" y="185" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="600" fill="#3FB98C">재검증 통과 &amp; 적용 완료</text>
+<rect x="632.92" y="204" width="84.16" height="15" fill="#0D1117"/>
+<text x="675" y="215" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#8B98A9">영속 영수증 기록</text>
+<rect x="740" y="150" width="200" height="100" rx="8" fill="#161B22" stroke="#3FB98C" stroke-width="1.3"/>
+<text x="840" y="178" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#3FB98C">approved</text>
+<text x="840" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">배포 확정 · 트래픽 전환</text>
+<text x="840" y="220" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">result_data 상태 영속</text>
+<text x="840" y="238" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#8B98A9">lifecycle.go:614</text>
+<path d="M 510 250 L 510 410 L 740 410" fill="none" stroke="#F0616D" stroke-width="1.4" marker-end="url(#bad)"/>
+<rect x="519.9" y="398" width="210.20000000000002" height="16" fill="#0D1117"/>
+<text x="625" y="410" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="600" fill="#F0616D">stale_approval (불일치) / 실행 실패</text>
+<rect x="740" y="360" width="200" height="100" rx="8" fill="#161B22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="840" y="388" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#F0616D">failed</text>
+<text x="840" y="410" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">동결 불일치 또는 에러</text>
+<text x="840" y="430" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">failure_code 기록 종결</text>
+<text x="840" y="448" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#8B98A9">lifecycle.go:616</text>
+<line x1="12" y1="490" x2="952" y2="490" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="512" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="60" y="502" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="82" y="512" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">요청 대기 (pending)</text>
+<rect x="221" y="502" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="243" y="512" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">실행 중 (applying)</text>
+<rect x="377" y="502" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="399" y="512" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 완료 (approved)</text>
+<rect x="544" y="502" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="566" y="512" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">거절 및 실패 (rejected/failed)</text>
+<rect x="777" y="502" width="14" height="12" rx="2" fill="#5E6B7E22" stroke="#5E6B7E" stroke-width="1.1"/>
+<text x="799" y="512" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">비정상 종료 복구 흐름</text>
+</svg>

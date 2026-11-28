@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 520" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">예약 실행의 두 경로 — cron 과 systemd timer</title><desc id="dd">주기 실행 스크립트가 실행 환경과 로깅을 다루는 두 방식 비교. cron 은 최소 환경과 침묵 위험이 따르고, systemd timer 는 저널 로깅과 상태 가시성을 제공한다.</desc>
+<rect width="880" height="520" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING MODERN LINUX · 03-03 §8</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">예약 실행의 두 경로 — cron 과 systemd timer</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">핵심 대비: 최소 환경·수동 로깅(cron) vs 통합 저널·중복 방지(systemd timer)</text>
+<rect x="16" y="116" width="172" height="136" rx="6" fill="#161B22" stroke="#E3B341" stroke-width="1.0"/>
+<text x="32" y="164" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="15" font-weight="600" fill="#E3B341">cron</text>
+<text x="32" y="190" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">기존 주기 실행</text>
+<rect x="16" y="268" width="172" height="136" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="32" y="316" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="15" font-weight="600" fill="#3FB98C">systemd timer</text>
+<text x="32" y="342" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">현대적 스케줄링</text>
+<rect x="200" y="130" width="154" height="108" rx="6" fill="#0D1117" stroke="#E3B341" stroke-width="1.0"/>
+<text x="277.0" y="154" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">스케줄 정의</text>
+<text x="277.0" y="172" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">crontab 5자리</text>
+<text x="277.0" y="196" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">30 2 * * *</text>
+<text x="277.0" y="214" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">분 시 일 월 요일</text>
+<rect x="366" y="130" width="154" height="108" rx="6" fill="#0D1117" stroke="#F0616D" stroke-width="1.0"/>
+<text x="443.0" y="154" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">실행 환경</text>
+<text x="443.0" y="172" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">최소 PATH 환경</text>
+<text x="443.0" y="196" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">PATH=/usr/bin:/bin</text>
+<text x="443.0" y="214" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">절대 경로 필수</text>
+<rect x="532" y="130" width="154" height="108" rx="6" fill="#0D1117" stroke="#E3B341" stroke-width="1.0"/>
+<text x="609.0" y="154" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">동시성 제어</text>
+<text x="609.0" y="172" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">도구 직접 연동</text>
+<text x="609.0" y="196" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">flock -n 필요</text>
+<text x="609.0" y="214" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">미적용 시 중복 실행</text>
+<rect x="698" y="130" width="154" height="108" rx="6" fill="#0D1117" stroke="#F0616D" stroke-width="1.0"/>
+<text x="775.0" y="154" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">로깅·확인</text>
+<text x="775.0" y="172" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">명시적 리다이렉션</text>
+<text x="775.0" y="196" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">&gt;&gt; backup.log 2&gt;&amp;1</text>
+<text x="775.0" y="214" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">누락 시 침묵 실패</text>
+<rect x="200" y="282" width="154" height="108" rx="6" fill="#0D1117" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="277.0" y="306" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">스케줄 정의</text>
+<text x="277.0" y="324" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">*.timer 유닛</text>
+<text x="277.0" y="348" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">OnCalendar=*-*-*</text>
+<text x="277.0" y="366" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">Persistent=true</text>
+<rect x="366" y="282" width="154" height="108" rx="6" fill="#0D1117" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="443.0" y="306" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">실행 환경</text>
+<text x="443.0" y="324" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">*.service 유닛</text>
+<text x="443.0" y="348" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">Type=oneshot</text>
+<text x="443.0" y="366" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">환경 변수 명시 제어</text>
+<rect x="532" y="282" width="154" height="108" rx="6" fill="#0D1117" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="609.0" y="306" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">동시성 제어</text>
+<text x="609.0" y="324" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">유닛 자체 억제</text>
+<text x="609.0" y="348" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">중복 실행 방지 내장</text>
+<text x="609.0" y="366" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">의존성(After=) 관리</text>
+<rect x="698" y="282" width="154" height="108" rx="6" fill="#0D1117" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="775.0" y="306" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">로깅·확인</text>
+<text x="775.0" y="324" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">journald &amp; 상태</text>
+<text x="775.0" y="348" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">systemctl list-timers</text>
+<text x="775.0" y="366" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">journalctl -u 조회</text>
+<path d="M 356 184.0 L 360 184.0" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<path d="M 522 184.0 L 526 184.0" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<path d="M 688 184.0 L 692 184.0" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<path d="M 356 336.0 L 360 336.0" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ok)"/>
+<path d="M 522 336.0 L 526 336.0" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ok)"/>
+<path d="M 688 336.0 L 692 336.0" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ok)"/>
+<text x="20" y="442" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">cron: 최소 PATH 와 로그 누락 주의 — systemd timer: 통합 로깅과 중복 실행 방지 보장</text>
+<line x1="12" y1="464" x2="832" y2="464" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="486" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="476" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="486" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">안전 / 통합 관리</text>
+<rect x="274" y="476" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="296" y="486" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">주의 / 수동 설정</text>
+<rect x="448" y="476" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="470" y="486" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">조용한 실패 위험 지점</text>
+</svg>

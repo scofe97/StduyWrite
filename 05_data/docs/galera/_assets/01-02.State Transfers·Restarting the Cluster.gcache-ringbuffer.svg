@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">GCache 링 버퍼 구조와 노드 이탈 시간에 따른 전송 분기</title><desc id="dd">고정 크기 캐시의 순환 덮어쓰기와, Joiner 가 필요한 이력이 밀려났을 때의 SST 전환</desc>
+<rect width="960" height="480" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">GALERA CACHE · WRITE-SET RING BUFFER</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">GCache 링 버퍼 구조와 노드 이탈 시간에 따른 전송 분기</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">GCache 에 남은 seqno 범위와 노드 이탈 허용 시간의 관계</text>
+<rect x="36" y="104" width="888" height="148" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="56" y="132" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">Donor 노드의 GCache 링 버퍼 (galera.cache)</text>
+<rect x="416" y="118" width="168" height="22" rx="4" fill="#6A95D814" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="500" y="133" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">gcache.size = 고정 용량</text>
+<rect x="60" y="156" width="228" height="56" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.4"/>
+<text x="174" y="180" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F0616D">덮어써진 유실 구간</text>
+<text x="174" y="198" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">seqno 1000 이하</text>
+<rect x="304" y="156" width="468" height="56" rx="6" fill="#F08A5916" stroke="#F08A59" stroke-width="1.4"/>
+<text x="328" y="178" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F08A59">가장 오래된 seqno: 1001</text>
+<text x="538" y="192" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">현재 GCache 유효 보존 범위 (IST 공급 가능)</text>
+<text x="748" y="178" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">최신 seqno: 2500</text>
+<text x="304" y="232" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">▲ 캐시 유효 시작점</text>
+<text x="772" y="232" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">▲ 최신 트랜잭션</text>
+<rect x="788" y="156" width="120" height="56" rx="6" fill="#3FB98C10" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="848" y="180" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">신규 트랜잭션</text>
+<text x="848" y="198" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">순환 덮어쓰기 유입</text>
+<rect x="36" y="272" width="888" height="136" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="52" y="286" width="416" height="108" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="72" y="310" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">케이스 A: 단기 이탈 노드 (Joiner A)</text>
+<text x="72" y="332" text-anchor="start" font-family="#F5F5F3" font-size="11" font-weight="400" fill="'Geist Mono','Noto Sans Mono CJK KR',monospace">마지막 seqno: 1200 (다음 1201 이 캐시에 있음)</text>
+<text x="72" y="352" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">판정: GCache 범위 내 존재 → IST (증분 전송) 수행</text>
+<text x="72" y="370" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">결과: Donor 잠금 없이 빠진 쓰기 집합만 받아 동기화</text>
+<rect x="492" y="286" width="416" height="108" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.2"/>
+<text x="512" y="310" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">케이스 B: 장기 이탈 노드 (Joiner B)</text>
+<text x="512" y="332" text-anchor="start" font-family="#F5F5F3" font-size="11" font-weight="400" fill="'Geist Mono','Noto Sans Mono CJK KR',monospace">마지막 seqno: 850 (다음 851 이 이미 밀려남)</text>
+<text x="512" y="352" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F0616D">판정: 필요 write-set 유실 → SST (스냅샷 전송) 강제</text>
+<text x="512" y="370" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">결과: 전체 데이터 복사 발생 및 Donor 리소스 부하</text>
+<line x1="12" y1="428" x2="912" y2="428" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="450" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="440" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">유효 캐시 범위 (IST)</text>
+<rect x="326" y="440" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="348" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 판정 및 유입</text>
+<rect x="500" y="440" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="522" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">이력 유실 및 SST 전환</text>
+<rect x="726" y="440" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="748" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">시스템 설정</text>
+</svg>

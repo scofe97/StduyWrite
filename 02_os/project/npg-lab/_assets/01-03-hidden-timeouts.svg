@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 688" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">net/http 가 기한 초과를 숨기는 세 자리와 대처</title><desc id="dd">Go net/http 표준 서버가 읽기 기한 초과를 연결 취소로 숨겨 DC 로 왜곡하는 함정, EOF 뒤 추가 읽기 함정, keep-alive 쓰기 기한 잔존 함정을 마디에서 대처하는 순서</desc>
+<rect width="960" height="688" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">SEQUENCE · NET/HTTP HIDDEN TIMEOUTS &amp; REMEDIES</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">net/http 가 기한 초과를 숨기는 세 자리와 대처</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">표준 서버의 연결 취소는 기한 초과를 손님 이탈(DC)로 왜곡하므로, 마디가 첫 오류를 적어 408 CT 로 바로잡습니다.</text>
+<rect x="70" y="104" width="180" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="160" y="126" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">손님</text>
+<text x="160" y="142" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">npgload</text>
+<rect x="390" y="104" width="180" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="480" y="126" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">net/http 서버</text>
+<text x="480" y="142" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">server.go connReader</text>
+<rect x="710" y="104" width="180" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="800" y="126" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">프록시 몸통 마디</text>
+<text x="800" y="142" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">r.Body 래퍼</text>
+<line x1="160" y1="156" x2="160" y2="616" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="480" y1="156" x2="480" y2="616" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="800" y1="156" x2="800" y2="616" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<rect x="24" y="172" width="176" height="26" rx="4" fill="#161B22" stroke="#E3B341" stroke-width="1.0"/>
+<text x="112" y="190" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">함정 1: 읽기 기한 왜곡</text>
+<path d="M 160 216 L 480 216" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="320.0" y="204" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">느린 POST 몸통 전송 (2s/1B)</text>
+<rect x="395" y="232" width="170" height="26" rx="4" fill="#E3B34118" stroke="#E3B341" stroke-width="1.0"/>
+<text x="480" y="250" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">ReadTimeout 10s 초과</text>
+<path d="M 480 284 L 800 284" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#warn)" stroke-dasharray="3 3"/>
+<text x="670" y="272" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">연결 context 취소 (cancelCtx)</text>
+<rect x="340" y="304" width="220" height="32" rx="6" fill="#1F1612" stroke="#F08A59" stroke-width="1.4"/>
+<text x="450" y="324" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">기록: 499 DC (손님 이탈 착시)</text>
+<rect x="690" y="304" width="220" height="32" rx="6" fill="#3FB98C18" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="800" y="324" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">첫 오류 확인 → 408 CT 분류</text>
+<line x1="24" y1="352" x2="936" y2="352" stroke="rgba(191,192,192,0.22)" stroke-width="0.8" stroke-dasharray="4 4"/>
+<rect x="24" y="368" width="204" height="26" rx="4" fill="#161B22" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="126" y="386" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">함정 2: 몸통 뒤 추가 읽기</text>
+<path d="M 160 408 L 480 408" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="320.0" y="396" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#F5F5F3">몸통 읽기 완료 (io.EOF)</text>
+<path d="M 480 408 L 800 408" fill="none" stroke="#6A95D8" stroke-width="1.4" marker-end="url(#info)"/>
+<text x="640.0" y="396" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#6A95D8">io.EOF 전달</text>
+<rect x="650" y="428" width="300" height="28" rx="4" fill="#3FB98C18" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="800" y="446" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">SetReadDeadline(time.Time{}) 기한 해제</text>
+<rect x="350" y="464" width="260" height="28" rx="4" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="480" y="482" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">서버 뒤 읽기 정상 통과 · 연결 유지</text>
+<line x1="24" y1="506" x2="936" y2="506" stroke="rgba(191,192,192,0.22)" stroke-width="0.8" stroke-dasharray="4 4"/>
+<rect x="24" y="520" width="204" height="26" rx="4" fill="#161B22" stroke="#E3B341" stroke-width="1.0"/>
+<text x="126" y="538" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">함정 3: 앞 쓰기 기한 잔존</text>
+<path d="M 160 556 L 480 556" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="320.0" y="544" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#F5F5F3">keep-alive 다음 요청 도착</text>
+<path d="M 480 556 L 800 556" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#warn)"/>
+<text x="640.0" y="544" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#E3B341">앞선 쓰기 기한 잔존 위험</text>
+<rect x="650" y="578" width="300" height="32" rx="4" fill="#3FB98C18" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="800" y="598" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">SetWriteDeadline(time.Time{}) 초기화</text>
+<rect x="360" y="578" width="240" height="32" rx="4" fill="#161B22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="480" y="598" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">새 요청 응답 쓰기 정상 진행</text>
+<line x1="12" y1="636" x2="912" y2="636" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="658" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="648" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="658" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">손님 이탈 착시</text>
+<rect x="248" y="648" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="270" y="658" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상·해법</text>
+<rect x="357" y="648" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="379" y="658" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">초과·위험</text>
+<rect x="466" y="648" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="488" y="658" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">중립·전달</text>
+</svg>

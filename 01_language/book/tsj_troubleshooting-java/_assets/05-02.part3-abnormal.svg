@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="340" viewBox="0 0 900 340" font-family="-apple-system, 'Helvetica Neue', 'Noto Sans KR', sans-serif">
+  <rect x="0" y="0" width="900" height="340" fill="#0d0d0d"/>
+
+  <text x="30" y="40" font-size="19" font-weight="700" style="fill:#e8e4df">③ 비정상 앱 진단 — 세 신호를 함께 읽는다</text>
+  <text x="30" y="64" font-size="13" style="fill:#8a8580">CPU는 쓰는데 + GC가 안 돎 + Heap에 깎인 톱니 없음 → 자원은 태우면서 일은 안 함 = 좀비</text>
+
+  <!-- 신호 3개 -->
+  <rect x="30" y="92" width="270" height="92" rx="10" fill="#f5c6c0" stroke="#a04038" stroke-width="1.5"/>
+  <text x="50" y="120" font-size="15" font-weight="700" style="fill:#5a1410">CPU 약 50%</text>
+  <text x="50" y="146" font-size="12.5" style="fill:#1a1a1a">살아는 있음 — 스레드가</text>
+  <text x="50" y="166" font-size="12.5" style="fill:#1a1a1a">while 루프를 계속 돈다</text>
+
+  <rect x="315" y="92" width="270" height="92" rx="10" fill="#f5c6c0" stroke="#a04038" stroke-width="1.5"/>
+  <text x="335" y="120" font-size="15" font-weight="700" style="fill:#5a1410">GC activity 0%</text>
+  <text x="335" y="146" font-size="12.5" style="fill:#1a1a1a">GC가 CPU를 안 쓴다</text>
+  <text x="335" y="166" font-size="12.5" style="fill:#1a1a1a">(정상 앱도 0%일 수 있음)</text>
+
+  <rect x="600" y="92" width="270" height="92" rx="10" fill="#f5c6c0" stroke="#a04038" stroke-width="1.5"/>
+  <text x="620" y="120" font-size="15" font-weight="700" style="fill:#5a1410">Heap에 톱니 없음</text>
+  <text x="620" y="146" font-size="12.5" style="fill:#1a1a1a">차오르는데 GC가 안 깎음</text>
+  <text x="620" y="166" font-size="12.5" style="fill:#1a1a1a">= 청소할 일이 없음</text>
+
+  <!-- 화살표 모으기 -->
+  <line x1="165" y1="184" x2="430" y2="214" stroke="#8a8580" stroke-width="1.5" marker-end="url(#a3)"/>
+  <line x1="450" y1="184" x2="450" y2="214" stroke="#8a8580" stroke-width="1.5" marker-end="url(#a3)"/>
+  <line x1="735" y1="184" x2="470" y2="214" stroke="#8a8580" stroke-width="1.5" marker-end="url(#a3)"/>
+
+  <!-- 결론 -->
+  <rect x="230" y="218" width="440" height="58" rx="10" fill="#fce0b8" stroke="#9a7320" stroke-width="1.5"/>
+  <text x="450" y="244" text-anchor="middle" font-size="15" font-weight="700" style="fill:#5a3d0a">→ 좀비 스레드 (동시성 문제의 흔한 결과)</text>
+  <text x="450" y="266" text-anchor="middle" font-size="12.5" style="fill:#1a1a1a">Threads 탭: 일부는 예외로 사망해 사라지고, 남은 건 RUNNABLE로 헛돎</text>
+
+  <!-- 진단 순서 -->
+  <text x="30" y="308" font-size="13" font-weight="700" style="fill:#e8e4df">진단 순서</text>
+  <text x="120" y="308" font-size="12.5" style="fill:#8a8580">① CPU 사용률 → ② 메모리 사용량 → ③ Threads 탭 시각 조사</text>
+  <text x="30" y="330" font-size="12" style="fill:#8a8580">정확한 원인은 스레드 덤프(8장)로 — 이 편은 리소스 소비 문제를 *발견*하는 데 집중한다.</text>
+
+  <defs>
+    <marker id="a3" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#8a8580"/>
+    </marker>
+  </defs>
+</svg>

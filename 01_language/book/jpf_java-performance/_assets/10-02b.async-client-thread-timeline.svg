@@ -1,0 +1,73 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>async HTTP client 스레드 사용 타임라인 (Figure 10-3 재현)</title>
+  <desc>원문 Figure 10-3의 재현이다. aggregator가 3개 REST를 비동기 호출할 때의 스레드 사용 타임라인이다. T1에 요청이 Helidon request 스레드에서 실행을 시작해 3 원격 호출을 셋업하고, async client 풀 스레드가 실제로 보낸다. 3 socket이 NIO polling 스레드의 event queue에 등록된다. request 스레드는 T2에 끝난다. T3에 NIO polling 스레드가 한 socket에 데이터 이벤트를 받아 HTTP client 스레드 1이 읽고 처리하며 T5까지 간다. T4에 다른 socket이 준비돼 HTTP client 스레드 2가 T7까지 처리한다. T5에 세 번째 socket이 준비되고 client 스레드 1이 idle이라 그것을 읽어 T8에 끝나며 resume이 호출된다. NIO면 처리가 빠르고 응답이 잘 분산되면 한 스레드로 다 처리할 수 있다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">async client 스레드 타임라인 (Figure 10-3 재현, NIO)</text>
+  <text x="20" y="54" fill="rgb(138,133,128)" font-size="11">aggregator가 3 REST를 비동기 호출 — 시간이 →로 흐름</text>
+
+  <!-- time axis -->
+  <line x1="170" y1="78" x2="650" y2="78" stroke="rgb(138,133,128)" stroke-width="1"/>
+  <text x="180" y="72" fill="rgb(138,133,128)" font-size="10">T1</text>
+  <text x="240" y="72" fill="rgb(138,133,128)" font-size="10">T2</text>
+  <text x="310" y="72" fill="rgb(138,133,128)" font-size="10">T3</text>
+  <text x="370" y="72" fill="rgb(138,133,128)" font-size="10">T4</text>
+  <text x="430" y="72" fill="rgb(138,133,128)" font-size="10">T5</text>
+  <text x="520" y="72" fill="rgb(138,133,128)" font-size="10">T7</text>
+  <text x="600" y="72" fill="rgb(138,133,128)" font-size="10">T8</text>
+
+  <!-- row: request thread -->
+  <text x="20" y="104" fill="#9cc3df" font-size="11">request</text>
+  <line x1="170" y1="88" x2="170" y2="540" stroke="rgb(42,37,32)" stroke-width="0.5" stroke-dasharray="3,3"/>
+  <rect x="180" y="92" width="60" height="22" fill="rgba(127,168,201,0.18)" stroke="#7fa8c9"/>
+  <text x="210" y="107" fill="#9cc3df" font-size="9" text-anchor="middle">셋업</text>
+  <text x="246" y="107" fill="rgb(138,133,128)" font-size="9">T1~T2: 3 호출 셋업 후 종료</text>
+
+  <!-- row: async client pool (보냄) -->
+  <text x="20" y="140" fill="rgb(212,168,83)" font-size="11">async send</text>
+  <rect x="180" y="128" width="40" height="22" fill="rgba(212,168,83,0.18)" stroke="rgb(212,168,83)"/>
+  <text x="200" y="143" fill="rgb(212,168,83)" font-size="9" text-anchor="middle">3 req</text>
+  <text x="246" y="143" fill="rgb(138,133,128)" font-size="9">async client 풀이 요청 전송 + socket을 event queue에 등록</text>
+
+  <!-- row: NIO polling -->
+  <text x="20" y="176" fill="#66bb6a" font-size="11">NIO poll</text>
+  <line x1="310" y1="88" x2="310" y2="540" stroke="rgb(42,37,32)" stroke-width="0.5" stroke-dasharray="3,3"/>
+  <line x1="370" y1="88" x2="370" y2="540" stroke="rgb(42,37,32)" stroke-width="0.5" stroke-dasharray="3,3"/>
+  <line x1="430" y1="88" x2="430" y2="540" stroke="rgb(42,37,32)" stroke-width="0.5" stroke-dasharray="3,3"/>
+  <circle cx="310" cy="170" r="5" fill="#66bb6a"/>
+  <circle cx="370" cy="170" r="5" fill="#66bb6a"/>
+  <circle cx="430" cy="170" r="5" fill="#66bb6a"/>
+  <text x="246" y="174" fill="rgb(138,133,128)" font-size="9">T3·T4·T5에 socket 데이터 이벤트 수신 → client 스레드에 위임</text>
+
+  <!-- row: HTTP client thread 1 -->
+  <text x="20" y="216" fill="#9cc3df" font-size="11">client #1</text>
+  <rect x="310" y="200" width="120" height="24" fill="rgba(127,168,201,0.2)" stroke="#7fa8c9"/>
+  <text x="370" y="216" fill="#9cc3df" font-size="9" text-anchor="middle">socket A 처리</text>
+  <text x="436" y="216" fill="rgb(138,133,128)" font-size="9">T3~T5</text>
+  <rect x="430" y="200" width="180" height="24" fill="rgba(127,168,201,0.2)" stroke="#7fa8c9"/>
+  <text x="520" y="216" fill="#9cc3df" font-size="9" text-anchor="middle">socket C 처리 (idle이라 재사용)</text>
+  <text x="600" y="240" fill="#66bb6a" font-size="9" text-anchor="middle">T8: resume()</text>
+
+  <!-- row: HTTP client thread 2 -->
+  <text x="20" y="280" fill="rgb(212,168,83)" font-size="11">client #2</text>
+  <rect x="370" y="264" width="150" height="24" fill="rgba(212,168,83,0.2)" stroke="rgb(212,168,83)"/>
+  <text x="445" y="280" fill="rgb(212,168,83)" font-size="9" text-anchor="middle">socket B 처리</text>
+  <text x="526" y="280" fill="rgb(138,133,128)" font-size="9">T4~T7</text>
+
+  <!-- 설명 -->
+  <rect x="20" y="310" width="640" height="120" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="334" fill="#e8e4df" font-size="13" font-weight="bold">NIO 모델 흐름</text>
+  <text x="38" y="358" fill="rgb(138,133,128)" font-size="11">T1 요청 도착 → request 스레드가 3 원격 호출 셋업, T2에 종료(스레드 반납)</text>
+  <text x="38" y="380" fill="rgb(138,133,128)" font-size="11">T3 socket A 준비 → client #1이 처리(T5까지) · T4 socket B → client #2(T7까지)</text>
+  <text x="38" y="402" fill="rgb(138,133,128)" font-size="11">T5 socket C 준비 → client #1이 idle이라 재사용해 처리(T8까지) → resume()</text>
+  <text x="38" y="424" fill="#66bb6a" font-size="11">처리가 빠르고 응답이 잘 분산되면 한 스레드로 다 처리 가능</text>
+
+  <!-- blocking 대비 -->
+  <rect x="20" y="438" width="640" height="144" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="38" y="462" fill="#f47f72" font-size="13" font-weight="bold">blocking client(Figure 10-4)와의 차이</text>
+  <text x="38" y="486" fill="rgb(138,133,128)" font-size="11">blocking이면 첫 async client 호출이 T7까지 지속 → 둘째 호출은 새 스레드 필요(T8까지)</text>
+  <text x="38" y="508" fill="rgb(138,133,128)" font-size="11">셋째 async client 스레드는 T5까지(시작 순서대로 끝나지 않음)</text>
+  <text x="38" y="530" fill="rgb(138,133,128)" font-size="11">→ 동시 요청마다 한 스레드를 전담 (NIO보다 스레드 많이 사용)</text>
+  <text x="38" y="554" fill="#e8e4df" font-size="11">사용자 결과는 동일(3 요청 병렬, 성능 이득)하나 스레드 사용·시스템 효율이 다름</text>
+  <text x="38" y="576" fill="rgb(212,168,83)" font-size="10">REST 서버는 완전 async여도 business logic CPU 때문에 꽤 많은 스레드가 필요(nginx 정적과 다름)</text>
+</svg>

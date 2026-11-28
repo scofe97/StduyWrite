@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 560" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">다중 릴레이 통합 및 로컬 전달</title><desc id="dd">릴레이 리스너 스트림이 Exposure 버퍼로 수렴해 Accept로 전달</desc>
+<rect width="1040" height="560" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">DATA FLOW · MULTI-RELAY EXPOSURE</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">다중 릴레이 통합 및 로컬 전달</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">Relay A·B·C → listener → accepted 채널(명시 3개 시 12) → Accept() → RunHTTP / Proxy</text>
+<rect x="16" y="96" width="170" height="366" rx="8" fill="rgba(245,245,245,0.02)" stroke="rgba(191,192,192,0.22)" stroke-width="0.9" stroke-dasharray="4 4"/>
+<text x="30" y="116" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">외부 릴레이</text>
+<rect x="202" y="96" width="276" height="366" rx="8" fill="rgba(245,245,245,0.02)" stroke="rgba(191,192,192,0.22)" stroke-width="0.9" stroke-dasharray="4 4"/>
+<text x="216" y="116" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">SDK 리스너 (listener.go)</text>
+<rect x="494" y="96" width="230" height="366" rx="8" fill="rgba(245,245,245,0.02)" stroke="rgba(191,192,192,0.22)" stroke-width="0.9" stroke-dasharray="4 4"/>
+<text x="508" y="116" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">통합 계층 (expose.go)</text>
+<rect x="740" y="96" width="284" height="366" rx="8" fill="rgba(245,245,245,0.02)" stroke="rgba(191,192,192,0.22)" stroke-width="0.9" stroke-dasharray="4 4"/>
+<text x="754" y="116" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">앱 및 로컬 프록시</text>
+<rect x="28" y="140" width="146" height="72" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="38" y="166" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">Relay A</text>
+<text x="38" y="186" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">relay-a.net</text>
+<text x="38" y="202" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9.5" font-weight="400" fill="#8B98A9">0x02 바인딩</text>
+<rect x="28" y="260" width="146" height="72" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="38" y="286" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">Relay B</text>
+<text x="38" y="306" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">relay-b.net</text>
+<text x="38" y="322" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9.5" font-weight="400" fill="#8B98A9">0x02 바인딩</text>
+<rect x="28" y="380" width="146" height="72" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="38" y="406" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">Relay C</text>
+<text x="38" y="426" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">relay-c.net</text>
+<text x="38" y="442" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9.5" font-weight="400" fill="#8B98A9">0x02 바인딩</text>
+<rect x="214" y="140" width="252" height="72" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="226" y="162" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">listener A</text>
+<text x="370" y="162" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9.5" font-weight="400" fill="#8B98A9">TTL 120s (-30s)</text>
+<rect x="226" y="176" width="110" height="26" rx="4" fill="#3FB98C18" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="281" y="192" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9.5" font-weight="400" fill="#3FB98C">슬롯 1 (ready)</text>
+<rect x="344" y="176" width="110" height="26" rx="4" fill="#3FB98C18" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="399" y="192" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9.5" font-weight="400" fill="#3FB98C">슬롯 2 (ready)</text>
+<path d="M 174 176 L 214 176" fill="none" stroke="#6A95D8" stroke-width="1.2" marker-end="url(#info)"/>
+<rect x="214" y="260" width="252" height="72" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="226" y="282" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">listener B</text>
+<text x="370" y="282" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9.5" font-weight="400" fill="#8B98A9">TTL 120s (-30s)</text>
+<rect x="226" y="296" width="110" height="26" rx="4" fill="#3FB98C18" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="281" y="312" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9.5" font-weight="400" fill="#3FB98C">슬롯 1 (ready)</text>
+<rect x="344" y="296" width="110" height="26" rx="4" fill="#3FB98C18" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="399" y="312" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9.5" font-weight="400" fill="#3FB98C">슬롯 2 (ready)</text>
+<path d="M 174 296 L 214 296" fill="none" stroke="#6A95D8" stroke-width="1.2" marker-end="url(#info)"/>
+<rect x="214" y="380" width="252" height="72" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="226" y="402" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">listener C</text>
+<text x="370" y="402" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9.5" font-weight="400" fill="#8B98A9">TTL 120s (-30s)</text>
+<rect x="226" y="416" width="110" height="26" rx="4" fill="#3FB98C18" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="281" y="432" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9.5" font-weight="400" fill="#3FB98C">슬롯 1 (ready)</text>
+<rect x="344" y="416" width="110" height="26" rx="4" fill="#3FB98C18" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="399" y="432" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9.5" font-weight="400" fill="#3FB98C">슬롯 2 (ready)</text>
+<path d="M 174 416 L 214 416" fill="none" stroke="#6A95D8" stroke-width="1.2" marker-end="url(#info)"/>
+<rect x="508" y="140" width="202" height="192" rx="6" fill="#F08A5910" stroke="#F08A59" stroke-width="1.2"/>
+<text x="524" y="168" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">accepted 채널 (:285)</text>
+<text x="524" y="188" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10.5" font-weight="400" fill="#F5F5F3">chan net.Conn (버퍼 12)</text>
+<text x="524" y="206" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9.5" font-weight="400" fill="#8B98A9">명시 릴레이 3개 기준</text>
+<rect x="524" y="224" width="36" height="28" rx="3" fill="#F08A5924" stroke="#F08A59" stroke-width="1.0"/>
+<text x="542" y="242" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9.5" font-weight="400" fill="#F5F5F3">C1</text>
+<rect x="566" y="224" width="36" height="28" rx="3" fill="#F08A5924" stroke="#F08A59" stroke-width="1.0"/>
+<text x="584" y="242" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9.5" font-weight="400" fill="#F5F5F3">C2</text>
+<rect x="608" y="224" width="36" height="28" rx="3" fill="#F08A5924" stroke="#F08A59" stroke-width="1.0"/>
+<text x="626" y="242" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9.5" font-weight="400" fill="#F5F5F3">C3</text>
+<rect x="650" y="224" width="36" height="28" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="668" y="242" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9.5" font-weight="400" fill="#8B98A9">...</text>
+<text x="524" y="274" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9.5" font-weight="400" fill="#F5F5F3">runListenerAcceptLoop</text>
+<text x="524" y="292" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9.5" font-weight="400" fill="#8B98A9">listener 연결 수집</text>
+<text x="524" y="312" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9.5" font-weight="400" fill="#5E6B7E">stateChanged 대기</text>
+<path d="M 466 176 L 508 176" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ok)"/>
+<path d="M 466 296 L 488 296 L 488 236 L 508 236" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ok)"/>
+<path d="M 466 416 L 488 416 L 488 266 L 508 266" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ok)"/>
+<rect x="508" y="364" width="202" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="524" y="392" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#F5F5F3">Exposure.Accept() (:999)</text>
+<text x="524" y="414" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">wrapAccepted</text>
+<text x="524" y="434" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9.5" font-weight="400" fill="#3FB98C">net.Listener 반환</text>
+<path d="M 609 332 L 609 364" fill="none" stroke="#F08A59" stroke-width="1.2" marker-end="url(#acc)"/>
+<rect x="756" y="140" width="252" height="130" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="772" y="166" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">인프로세스 HTTP</text>
+<text x="772" y="188" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10.5" font-weight="400" fill="#F5F5F3">sdk.RunHTTP (:34)</text>
+<text x="772" y="208" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9.5" font-weight="400" fill="#8B98A9">X-Forwarded-Proto: https</text>
+<text x="772" y="228" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9.5" font-weight="400" fill="#8B98A9">http.HandlerFunc 처리</text>
+<text x="772" y="248" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9.5" font-weight="400" fill="#6A95D8">TLS 종단 평문 스트림</text>
+<rect x="756" y="300" width="252" height="152" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="772" y="326" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">로컬 포트 프록시</text>
+<text x="772" y="348" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10.5" font-weight="400" fill="#F5F5F3">sdk.Proxy (:30)</text>
+<text x="772" y="370" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9.5" font-weight="400" fill="#E3B341">maxTCPConnections=128</text>
+<text x="772" y="392" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9.5" font-weight="400" fill="#F0616D">초과 시 즉시 Close</text>
+<rect x="772" y="408" width="220" height="30" rx="4" fill="#6A95D816" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="882" y="428" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#6A95D8">127.0.0.1:3000</text>
+<path d="M 710 388 L 756 205" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ok)"/>
+<path d="M 710 412 L 756 365" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<line x1="12" y1="480" x2="992" y2="480" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="502" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="492" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="502" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">인그레스</text>
+<rect x="196" y="492" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="218" y="502" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">리버스 슬롯</text>
+<rect x="318" y="492" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="340" y="502" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">통합 큐</text>
+<rect x="414" y="492" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="436" y="502" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">워커 제한</text>
+</svg>

@@ -1,0 +1,126 @@
+<svg viewBox="0 0 940 520" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Agent Pod 생명주기와 반납 실패, 그리고 Garbage Collection</title>
+  <desc>Pod 프로비저닝부터 종료 분기, 네 가지 반납 실패 조건과 Garbage Collection의 TTL 기반 정리 경로</desc>
+  <defs>
+    <marker id="arrow-gold" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#66bb6a"/>
+    </marker>
+    <marker id="arrow-red" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#f44336"/>
+    </marker>
+    <marker id="arrow-blue" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#42a5f5"/>
+    </marker>
+  </defs>
+
+  <!-- 배경 -->
+  <rect x="0" y="0" width="940" height="520" fill="#0d0d0d"/>
+  <text x="24" y="32" fill="#e8e4df" font-size="13" font-weight="bold">Agent Pod 생명주기 · 반납 실패 네 조건 · Garbage Collection</text>
+
+  <!-- 1구역: 정상 생명주기와 종료 분기 -->
+  <rect x="24" y="48" width="892" height="204" fill="none" stroke="rgb(42,37,32)" stroke-dasharray="6 4" rx="4"/>
+  <text x="40" y="70" fill="rgb(138,133,128)" font-size="11">1구역: Pod 프로비저닝 · 실행 · 종료 분기 (KubernetesSlave._terminate)</text>
+
+  <!-- 단계 1: 프로비저닝 -->
+  <rect x="44" y="88" width="148" height="68" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="4"/>
+  <text x="118" y="112" fill="#e8e4df" font-size="12" text-anchor="middle">Pod 프로비저닝</text>
+  <text x="118" y="132" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10" text-anchor="middle">KubernetesCloud</text>
+  <text x="118" y="146" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">jnlp 컨테이너 기동</text>
+
+  <line x1="192" y1="122" x2="224" y2="122" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#arrow-gold)"/>
+
+  <!-- 단계 2: 연결 및 빌드 -->
+  <rect x="228" y="88" width="156" height="68" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="4"/>
+  <text x="306" y="112" fill="#e8e4df" font-size="12" text-anchor="middle">인바운드 연결 · 빌드</text>
+  <text x="306" y="132" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10" text-anchor="middle">WebSocket / TCP</text>
+  <text x="306" y="146" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">Executor 배정 후 작업</text>
+
+  <line x1="384" y1="122" x2="416" y2="122" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#arrow-gold)"/>
+
+  <!-- 단계 3: 종료 진입 -->
+  <rect x="420" y="88" width="164" height="68" fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)" rx="4"/>
+  <text x="502" y="112" fill="#e8e4df" font-size="12" text-anchor="middle">_terminate() 진입</text>
+  <text x="502" y="132" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="10" text-anchor="middle">shouldDeletePod</text>
+  <text x="502" y="146" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">보존 정책 먼저 판정</text>
+
+  <line x1="584" y1="122" x2="620" y2="122" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#arrow-gold)"/>
+
+  <!-- 단계 4: shouldDeletePod 판정 -->
+  <rect x="624" y="88" width="120" height="68" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="4"/>
+  <text x="684" y="112" fill="#e8e4df" font-size="11" text-anchor="middle">SlaveDisconnector</text>
+  <text x="684" y="132" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10" text-anchor="middle">재접속 중단</text>
+  <text x="684" y="146" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">판정 결과로 분기</text>
+
+  <!-- 분기: 삭제(성공) -->
+  <line x1="744" y1="108" x2="776" y2="96" stroke="#66bb6a" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+  <rect x="780" y="72" width="120" height="52" fill="rgba(102,187,106,0.12)" stroke="#66bb6a" rx="4"/>
+  <text x="840" y="94" fill="#66bb6a" font-size="11" text-anchor="middle">true: Pod 삭제</text>
+  <text x="840" y="112" fill="rgb(138,133,128)" font-size="9.5" text-anchor="middle">Never · 정상 phase</text>
+
+  <!-- 분기: 유지(잔존) -->
+  <line x1="744" y1="136" x2="776" y2="148" stroke="#f44336" stroke-width="1.5" marker-end="url(#arrow-red)"/>
+  <rect x="780" y="132" width="120" height="52" fill="rgba(244,67,54,0.12)" stroke="#f44336" rx="4"/>
+  <text x="840" y="154" fill="#f44336" font-size="11" text-anchor="middle">false: Pod 유지</text>
+  <text x="840" y="172" fill="rgb(138,133,128)" font-size="9.5" text-anchor="middle">Always · Failed phase</text>
+
+  <!-- idleMinutes 안내선 -->
+  <path d="M 306 156 L 306 186 L 490 186" fill="none" stroke="rgb(42,37,32)" stroke-width="1.2" stroke-dasharray="3 3"/>
+  <text x="496" y="190" fill="rgb(138,133,128)" font-size="10">idleMinutes &gt; 0 이면 유휴 대기 뒤 종료 · 끝에 노드 삭제(finally)</text>
+
+  <!-- 2구역 좌측: 반납 실패 네 조건 -->
+  <rect x="24" y="264" width="436" height="236" fill="none" stroke="rgb(42,37,32)" stroke-dasharray="6 4" rx="4"/>
+  <text x="40" y="286" fill="rgb(138,133,128)" font-size="11">2구역: Pod 반납 실패와 자원 고착 네 조건</text>
+
+  <!-- 조건 1 -->
+  <rect x="44" y="298" width="196" height="86" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="4"/>
+  <text x="56" y="318" fill="#e8e4df" font-size="11" font-weight="bold">① 설정에 의한 유지</text>
+  <text x="56" y="338" fill="rgb(138,133,128)" font-size="10">podRetention Always</text>
+  <text x="56" y="354" fill="rgb(138,133,128)" font-size="10">OnFailure 는 Failed Pod 잔존</text>
+  <text x="56" y="370" fill="rgb(212,168,83)" font-size="9.5">대응: 운영은 Never</text>
+
+  <!-- 조건 2 -->
+  <rect x="248" y="298" width="196" height="86" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="4"/>
+  <text x="260" y="318" fill="#e8e4df" font-size="11" font-weight="bold">② 고아 Pod (Orphan)</text>
+  <text x="260" y="338" fill="rgb(138,133,128)" font-size="10">Pod 삭제 실패 · 연결 실패</text>
+  <text x="260" y="354" fill="rgb(138,133,128)" font-size="10">노드만 지워지고 Pod 는 재접속</text>
+  <text x="260" y="370" fill="rgb(212,168,83)" font-size="9.5">해결: Garbage Collection</text>
+
+  <!-- 조건 3 -->
+  <rect x="44" y="396" width="196" height="88" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="4"/>
+  <text x="56" y="416" fill="#e8e4df" font-size="11" font-weight="bold">③ Terminating 고착</text>
+  <text x="56" y="436" fill="rgb(138,133,128)" font-size="10">finalizers 미해제</text>
+  <text x="56" y="452" fill="rgb(138,133,128)" font-size="10">노드·kubelet 응답 없음</text>
+  <text x="56" y="468" fill="#f44336" font-size="9.5">원인: 삭제를 끝낼 주체 부재</text>
+
+  <!-- 조건 4 -->
+  <rect x="248" y="396" width="196" height="88" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="4"/>
+  <text x="260" y="416" fill="#e8e4df" font-size="11" font-weight="bold">④ 빌드 큐 고착</text>
+  <text x="260" y="436" fill="rgb(138,133,128)" font-size="10">containerCap: 남은 노드 수</text>
+  <text x="260" y="452" fill="rgb(138,133,128)" font-size="10">남은 Pod: 쿼터·노드 자원 점유</text>
+  <text x="260" y="468" fill="#f44336" font-size="9.5">결과: buildables 대기 지속</text>
+
+  <!-- 3구역 우측: Garbage Collection -->
+  <rect x="476" y="264" width="440" height="236" fill="none" stroke="rgb(42,37,32)" stroke-dasharray="6 4" rx="4"/>
+  <text x="492" y="286" fill="rgb(138,133,128)" font-size="11">3구역: 주기적 가비지 컬렉션 (PeriodicGarbageCollection)</text>
+
+  <!-- 1분 주기 박스 -->
+  <rect x="496" y="298" width="400" height="44" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="4"/>
+  <text x="508" y="318" fill="#42a5f5" font-size="11" font-weight="bold">1단계: annotateLiveAgents (1분 주기, GC 켠 클라우드만)</text>
+  <text x="508" y="334" fill="rgb(138,133,128)" font-size="10">활성 Computer 대상 kubernetes.jenkins.io/last-refresh 어노테이션 갱신</text>
+
+  <line x1="696" y1="342" x2="696" y2="360" stroke="#42a5f5" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+
+  <!-- 가비지 컬렉트 박스 -->
+  <rect x="496" y="364" width="400" height="68" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="4"/>
+  <text x="508" y="384" fill="#42a5f5" font-size="11" font-weight="bold">2단계: garbageCollect (타임아웃 비교)</text>
+  <text x="508" y="402" fill="rgb(138,133,128)" font-size="10">현재시각 - last-refresh &gt; timeout (설정값, 최소 120초)</text>
+  <text x="508" y="418" fill="rgb(138,133,128)" font-size="10">어노테이션이 갱신되지 않은 고아 Pod를 API로 delete()</text>
+
+  <!-- 기본 비활성화 주의 박스 -->
+  <rect x="496" y="440" width="400" height="44" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)" stroke-width="1" rx="4"/>
+  <text x="508" y="458" fill="rgb(212,168,83)" font-size="10.5" font-weight="bold">기본 비활성화 (disabled by default) 이유</text>
+  <text x="508" y="474" fill="rgb(138,133,128)" font-size="10">켜면 매분 에이전트마다 PATCH, 네임스페이스마다 LIST → API 서버 부하</text>
+</svg>

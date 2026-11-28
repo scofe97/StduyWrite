@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 560" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">Website · Page 수명주기 상태 전이 모델</title><desc id="dd">Draft 초안에서 불변 Version 생성, 배포 활성화, 롤백 및 임시 미리보기까지의 상태 머신</desc>
+<rect width="980" height="560" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LIFECYCLE · STATE TRANSITIONS</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">Website · Page 수명주기 상태 전이 모델</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">버전 보관과 배포 승인을 분리해 불변 산출물 확정과 실시간 트래픽 영향을 독립 통제</text>
+<circle cx="30" cy="180" r="6" fill="#F5F5F3"/>
+<path d="M 36 180 L 60 180" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="60" y="140" width="180" height="80" rx="8" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="150" y="166" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">Draft (초안)</text>
+<text x="150" y="184" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">draft-revs/&lt;rev&gt;</text>
+<text x="150" y="202" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#6A95D8">Private · 작업 복사본</text>
+<path d="M 110 140 C 110 80, 190 80, 190 140" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="89.19999999999999" y="84" width="121.60000000000001" height="16" fill="#0D1117"/>
+<text x="150" y="96" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">save-draft (rev++)</text>
+<path d="M 240 180 L 360 180" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#warn)"/>
+<rect x="247.26" y="155" width="105.48" height="17" fill="#0D1117"/>
+<text x="300" y="168" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#E3B341">create_version</text>
+<rect x="254.0" y="184" width="92.0" height="16" fill="#0D1117"/>
+<text x="300" y="196" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">[승인 apr-...]</text>
+<rect x="360" y="140" width="180" height="80" rx="8" fill="#161B22" stroke="#8B98A9" stroke-width="1.0"/>
+<text x="450" y="166" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">Version v1 (저장)</text>
+<text x="450" y="184" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">versions/1/ (불변)</text>
+<text x="450" y="202" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">live_version = 0 (비활성)</text>
+<path d="M 540 180 L 670 180" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<rect x="579.54" y="155" width="50.92" height="17" fill="#0D1117"/>
+<text x="605" y="168" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">deploy</text>
+<rect x="559.0" y="184" width="92.0" height="16" fill="#0D1117"/>
+<text x="605" y="196" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">[승인 apr-...]</text>
+<rect x="670" y="140" width="190" height="80" rx="8" fill="#161B22" stroke="#3FB98C" stroke-width="1.5"/>
+<text x="765" y="166" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">Live v1 (활성)</text>
+<text x="765" y="184" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">live_version = 1</text>
+<text x="765" y="202" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">&lt;slug&gt;.localhost:7879</text>
+<rect x="60" y="340" width="200" height="80" rx="8" fill="#161B22" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="160" y="366" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">Preview (임시 엔드포인트)</text>
+<text x="160" y="384" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">&lt;slug&gt;-&lt;rand&gt;.localhost</text>
+<text x="160" y="402" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">격리 데이터 · TTL 24h</text>
+<path d="M 110 220 L 110 340" fill="none" stroke="#6A95D8" stroke-width="1.4" marker-end="url(#info)" stroke-dasharray="3 3"/>
+<rect x="68.72999999999999" y="269" width="82.54" height="15" fill="#0D1117"/>
+<text x="110" y="280" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#6A95D8">preview (n=0)</text>
+<path d="M 380 220 C 340 280, 230 280, 230 340" fill="none" stroke="#6A95D8" stroke-width="1.0" marker-end="url(#info)" stroke-dasharray="3 3"/>
+<rect x="248.73" y="269" width="82.54" height="15" fill="#0D1117"/>
+<text x="290" y="280" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#6A95D8">preview (n=1)</text>
+<path d="M 720 220 C 720 280, 480 280, 480 340" fill="none" stroke="#E3B341" stroke-width="1.2" marker-end="url(#warn)"/>
+<rect x="494.9" y="268" width="190.20000000000002" height="16" fill="#0D1117"/>
+<text x="590" y="280" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#E3B341">새 초안 → create_version [승인]</text>
+<rect x="360" y="340" width="180" height="80" rx="8" fill="#161B22" stroke="#8B98A9" stroke-width="1.0"/>
+<text x="450" y="366" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">Version v2 (저장)</text>
+<text x="450" y="384" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">versions/2/ (불변)</text>
+<text x="450" y="402" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">신규 스냅샷 대기</text>
+<path d="M 540 380 L 670 380" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<rect x="569.31" y="355" width="71.38" height="17" fill="#0D1117"/>
+<text x="605" y="368" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F08A59">deploy v2</text>
+<rect x="559.0" y="384" width="92.0" height="16" fill="#0D1117"/>
+<text x="605" y="396" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">[승인 apr-...]</text>
+<rect x="670" y="340" width="190" height="80" rx="8" fill="#161B22" stroke="#F08A59" stroke-width="1.5"/>
+<text x="765" y="366" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">Live v2 (활성)</text>
+<text x="765" y="384" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">live_version = 2</text>
+<text x="765" y="402" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">사본 헬스 → DB 스냅샷</text>
+<path d="M 860 370 C 930 370, 930 190, 860 190" fill="none" stroke="#F0616D" stroke-width="1.4" marker-end="url(#bad)"/>
+<rect x="865.9" y="256" width="98.2" height="16" fill="#0D1117"/>
+<text x="915" y="268" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="600" fill="#F0616D">rollback [승인]</text>
+<rect x="873.55" y="275" width="82.9" height="15" fill="#0D1117"/>
+<text x="915" y="286" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#8B98A9">CAS 포인터 복구</text>
+<line x1="12" y1="475" x2="932" y2="475" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="497" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="487" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="497" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">초안 / 미리보기 (격리)</text>
+<rect x="326" y="487" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="348" y="497" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">승인 대기 / 전이</text>
+<rect x="500" y="487" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="522" y="497" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">활성 서비스 (Live)</text>
+<rect x="713" y="487" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="735" y="497" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">신규 배포 승격</text>
+<rect x="861" y="487" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="883" y="497" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">롤백 복구 (CAS)</text>
+</svg>

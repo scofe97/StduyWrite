@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>USE 메서드 매트릭스 — 자원 × 사용률·포화·에러</title>
+  <desc>USE 메서드 체크리스트를 자원(CPU·메모리·네트워크·디스크·소프트웨어)별로 사용률·포화·에러 세 유형의 대표 Linux 도구로 매핑한 표. sar가 어느 옵션으로 보는지를 짝으로 둔다.</desc>
+  <rect width="800" height="440" fill="#0d0d0d"/>
+  <text x="30" y="40" fill="#e8e4df" font-size="20" font-weight="700">USE 메서드 매트릭스</text>
+  <text x="30" y="64" fill="rgb(138,133,128)" font-size="13">자원마다 사용률·포화·에러를 각각 다른 도구로 — 한 도구가 셋을 다 주지 않는다</text>
+
+  <!-- header row -->
+  <text x="120" y="100" fill="rgb(212,168,83)" font-size="13" font-weight="700" text-anchor="middle">자원</text>
+  <text x="320" y="100" fill="rgb(212,168,83)" font-size="13" font-weight="700" text-anchor="middle">사용률(U)</text>
+  <text x="520" y="100" fill="rgb(212,168,83)" font-size="13" font-weight="700" text-anchor="middle">포화(S)</text>
+  <text x="700" y="100" fill="rgb(212,168,83)" font-size="13" font-weight="700" text-anchor="middle">에러(E)</text>
+  <line x1="40" y1="110" x2="780" y2="110" stroke="rgb(42,37,32)" stroke-width="1.2"/>
+
+  <!-- CPU -->
+  <text x="50" y="138" fill="#e8e4df" font-size="12" font-weight="600">CPU</text>
+  <text x="240" y="138" fill="rgb(138,133,128)" font-size="11">mpstat·vmstat(us+sy)</text>
+  <text x="440" y="138" fill="rgb(138,133,128)" font-size="11">vmstat r·runqlat</text>
+  <text x="620" y="138" fill="rgb(138,133,128)" font-size="11">MCE(dmesg)·PMC</text>
+
+  <!-- Memory -->
+  <text x="50" y="168" fill="#e8e4df" font-size="12" font-weight="600">메모리</text>
+  <text x="240" y="168" fill="rgb(138,133,128)" font-size="11">free·sar -r(%memused)</text>
+  <text x="440" y="168" fill="rgb(138,133,128)" font-size="11">vmstat si/so·sar -B</text>
+  <text x="620" y="168" fill="rgb(138,133,128)" font-size="11">dmesg·rasdaemon</text>
+
+  <!-- Network -->
+  <text x="50" y="198" fill="#e8e4df" font-size="12" font-weight="600">네트워크</text>
+  <text x="240" y="198" fill="rgb(138,133,128)" font-size="11">ip -s link·sar -n DEV</text>
+  <text x="440" y="198" fill="rgb(138,133,128)" font-size="11">nstat·sar -n EDEV(drop)</text>
+  <text x="620" y="198" fill="rgb(138,133,128)" font-size="11">ip -s link(errors)</text>
+
+  <!-- Disk -->
+  <text x="50" y="228" fill="#e8e4df" font-size="12" font-weight="600">디스크 I/O</text>
+  <text x="240" y="228" fill="rgb(138,133,128)" font-size="11">iostat·sar -d(%util)</text>
+  <text x="440" y="228" fill="rgb(138,133,128)" font-size="11">iostat aqu-sz·biolatency</text>
+  <text x="620" y="228" fill="rgb(138,133,128)" font-size="11">smartctl·ioerr_cnt</text>
+
+  <!-- Software -->
+  <text x="50" y="258" fill="#e8e4df" font-size="12" font-weight="600">소프트웨어</text>
+  <text x="240" y="258" fill="rgb(138,133,128)" font-size="11">lock_stat·file-nr·Tasks</text>
+  <text x="440" y="258" fill="rgb(138,133,128)" font-size="11">valgrind·fork 블록</text>
+  <text x="620" y="258" fill="rgb(138,133,128)" font-size="11">EMFILE·EAGAIN·can't fork</text>
+  <line x1="40" y1="272" x2="780" y2="272" stroke="rgb(42,37,32)" stroke-width="1.2"/>
+
+  <!-- column dividers -->
+  <line x1="220" y1="84" x2="220" y2="272" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <line x1="420" y1="84" x2="420" y2="272" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <line x1="600" y1="84" x2="600" y2="272" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- note 1 -->
+  <rect x="40" y="288" width="720" height="60" rx="8" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="60" y="314" fill="#e8e4df" font-size="13" font-weight="600">포화 지표가 100% 사용률 너머의 고통을 보여 준다</text>
+  <text x="60" y="336" fill="rgb(138,133,128)" font-size="12">CPU의 run queue, 메모리의 스캔·스와핑, 디스크의 큐 — 사용률만으로는 안 보이는 대기를 드러낸다.</text>
+
+  <!-- note 2 -->
+  <rect x="40" y="362" width="720" height="62" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.2"/>
+  <text x="60" y="388" fill="#e8e4df" font-size="13" font-weight="600">함정 — load average는 CPU 메트릭에 안 쓴다 · 드롭은 포화+에러 양쪽</text>
+  <text x="60" y="408" fill="rgb(138,133,128)" font-size="12">Linux load average는 I/O 대기 task도 포함. 클라우드 자원 제어도 각각 USE로 점검(하드웨어 전에 닿는 한계).</text>
+</svg>

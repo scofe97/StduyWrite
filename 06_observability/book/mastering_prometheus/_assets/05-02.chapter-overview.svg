@@ -1,0 +1,103 @@
+<svg viewBox="0 0 900 560" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif">
+  <title>견고한 알림 전체 지도 — 조건을 좁히고, 시간으로 거르고, 결측을 견디고, 테스트로 못 박기까지</title>
+  <desc>이 절 전체를 알림 룰 하나를 견고하게 만드는 네 단계로 이은 지도다. 첫째 단계는 조건 좁히기로, and 와 or 와 unless 로 여러 조건을 함께 보아 메모리 사용률이 높으면서 동시에 메이저 페이지 폴트 비율도 높을 때만 울리게 만들고, unless on instance changes node_boot_time_seconds 로 재부팅 직후 오탐을 걷어낸다. 둘째 단계는 for 기간으로, 시끄러운 알림과 좋은 알림의 차이는 대개 이 값 하나이며 warning 은 15분보다 짧지 않게 critical 은 15분보다 길지 않게 두되 룰 평가 주기보다 길어야 의미가 있다. 셋째 단계는 결측 견디기로, 긴 for 가 새로 만드는 함정이다. 스크레이프가 한 번 실패하면 결측에 stale 마커가 찍혀 5분 lookback 이 막히고 조회가 빈 결과를 내며 비교 연산자는 조건에 맞지 않는 시계열을 떨어뜨리므로 빈 결과가 곧 거짓이 되어 pending 이 풀린다. last_over_time 으로 범위 안 마지막 값을 쓰면 결측 한 번이 상태를 지우지 못한다. 다만 max_over_time 을 쓰면 창 내내 0 이어야 참이 되므로 같은 입력에서 발화가 4분 늦는다. 넷째 단계는 단위 테스트로, promtool check rules 가 문법만 보고 promtool test rules 가 입력 시계열을 지어 넣어 특정 시점에 어떤 알림이 어떤 라벨과 애노테이션으로 발화하는지 단언하며 템플릿 렌더 결과까지 검증한다.</desc>
+  <rect width="900" height="560" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="ov1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text x="450" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#e8e4df">알림 룰 하나를 견고하게 만들기까지</text>
+  <text x="450" y="52" text-anchor="middle" font-size="12" fill="#b8b3ad">앞의 셋이 소음을 줄입니다</text>
+
+  <!-- 단계 1 조건 좁히기 -->
+  <rect x="30" y="72" width="840" height="76" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="54" y="94" font-size="12" font-weight="700" fill="rgb(212,168,83)">1 단계 · 조건 좁히기 §1</text>
+  <text x="228" y="94" font-size="10" fill="#b8b3ad">실제 영향이 있을 때만</text>
+
+  <rect x="54" y="106" width="256" height="30" rx="4" fill="#fdf3df"/>
+  <text x="182" y="119" text-anchor="middle" font-size="10" font-weight="700" fill="#3a2f10">and · 두 증상이 겹칠 때만</text>
+  <text x="182" y="131" text-anchor="middle" font-size="9" font-weight="700" fill="#3a2f10">메모리 + 페이지 폴트</text>
+
+  <rect x="322" y="106" width="256" height="30" rx="4" fill="#fdf3df"/>
+  <text x="450" y="119" text-anchor="middle" font-size="10" font-weight="700" fill="#3a2f10">unless · 예외를 빼기</text>
+  <text x="450" y="131" text-anchor="middle" font-size="9" font-weight="700" fill="#3a2f10">재부팅 직후 30분</text>
+
+  <rect x="590" y="106" width="256" height="30" rx="4" fill="#dceaf7"/>
+  <text x="718" y="119" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">증상에 알리고</text>
+  <text x="718" y="131" text-anchor="middle" font-size="9" font-weight="700" fill="#10243a">원인에는 알리지 않기</text>
+
+  <line x1="450" y1="154" x2="450" y2="174" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#ov1)"/>
+
+  <!-- 단계 2 for 기간 -->
+  <rect x="30" y="182" width="840" height="76" rx="8" fill="rgb(212,168,83)"/>
+  <text x="54" y="204" font-size="12" font-weight="700" fill="#0d0d0d">2 단계 · for 기간 §2</text>
+  <text x="212" y="204" font-size="10" font-weight="700" fill="#1a1a1a">차이는 대개 이 값 하나</text>
+
+  <rect x="54" y="216" width="256" height="30" rx="4" fill="#fdf3df"/>
+  <text x="182" y="229" text-anchor="middle" font-size="10" font-weight="700" fill="#3a2f10">warning · 15분 이상</text>
+  <text x="182" y="241" text-anchor="middle" font-size="9" font-weight="700" fill="#3a2f10">1h · 2h 도 겁내지 않기</text>
+
+  <rect x="322" y="216" width="256" height="30" rx="4" fill="#fdf3df"/>
+  <text x="450" y="229" text-anchor="middle" font-size="10" font-weight="700" fill="#3a2f10">critical · 15분 이하</text>
+  <text x="450" y="241" text-anchor="middle" font-size="9" font-weight="700" fill="#3a2f10">0m · 5m 는 여기에만</text>
+
+  <rect x="590" y="216" width="256" height="30" rx="4" fill="#f2d4d4"/>
+  <text x="718" y="229" text-anchor="middle" font-size="10" font-weight="700" fill="#7a1f1f">평가 주기보다 길어야</text>
+  <text x="718" y="241" text-anchor="middle" font-size="9" font-weight="700" fill="#7a1f1f">짧으면 조용히 무력해짐</text>
+
+  <line x1="450" y1="264" x2="450" y2="284" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#ov1)"/>
+
+  <!-- 단계 3 결측 견디기 -->
+  <rect x="30" y="292" width="840" height="106" rx="8" fill="#0d0d0d" stroke="#f44336" stroke-width="1.5"/>
+  <text x="54" y="314" font-size="12" font-weight="700" fill="#ef8880">3 단계 · 결측 견디기 §3</text>
+  <text x="238" y="314" font-size="10" fill="#b8b3ad">긴 for 가 새로 만드는 함정입니다</text>
+
+  <rect x="54" y="326" width="166" height="30" rx="4" fill="#f2d4d4"/>
+  <text x="137" y="339" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7a1f1f">스크레이프 1회 실패</text>
+  <text x="137" y="351" text-anchor="middle" font-size="9" font-weight="700" fill="#7a1f1f">stale 마커</text>
+
+  <rect x="232" y="326" width="166" height="30" rx="4" fill="#f2d4d4"/>
+  <text x="315" y="339" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7a1f1f">5분 lookback 차단</text>
+  <text x="315" y="351" text-anchor="middle" font-size="9" font-weight="700" fill="#7a1f1f">빈 결과</text>
+
+  <rect x="410" y="326" width="166" height="30" rx="4" fill="#f2d4d4"/>
+  <text x="493" y="339" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7a1f1f">빈 결과 = 거짓</text>
+  <text x="493" y="351" text-anchor="middle" font-size="9" font-weight="700" fill="#7a1f1f">비교는 시계열을 떨굼</text>
+
+  <rect x="588" y="326" width="258" height="30" rx="4" fill="#f2d4d4"/>
+  <text x="717" y="339" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7a1f1f">pending 초기화</text>
+  <text x="717" y="351" text-anchor="middle" font-size="9" font-weight="700" fill="#7a1f1f">쌓아 온 시간이 사라짐</text>
+
+  <rect x="54" y="364" width="396" height="24" rx="4" fill="#e6f7e7"/>
+  <text x="252" y="380" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14521d">last_over_time · 즉시</text>
+
+  <rect x="462" y="364" width="384" height="24" rx="4" fill="#fdf3df"/>
+  <text x="654" y="380" text-anchor="middle" font-size="9.5" font-weight="700" fill="#3a2f10">max_over_time · 4분 뒤</text>
+
+  <line x1="450" y1="404" x2="450" y2="424" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#ov1)"/>
+
+  <!-- 단계 4 단위 테스트 -->
+  <rect x="30" y="432" width="840" height="76" rx="8" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="54" y="454" font-size="12" font-weight="700" fill="#8fd694">4 단계 · 단위 테스트 §4</text>
+  <text x="240" y="454" font-size="10" fill="#b8b3ad">amtool 아닌 promtool</text>
+
+  <rect x="54" y="466" width="256" height="30" rx="4" fill="#e6f7e7"/>
+  <text x="182" y="479" text-anchor="middle" font-size="10" font-weight="700" fill="#14521d">promtool check rules</text>
+  <text x="182" y="491" text-anchor="middle" font-size="9" font-weight="700" fill="#14521d">문법만 검사</text>
+
+  <rect x="322" y="466" width="256" height="30" rx="4" fill="#e6f7e7"/>
+  <text x="450" y="479" text-anchor="middle" font-size="10" font-weight="700" fill="#14521d">promtool test rules</text>
+  <text x="450" y="491" text-anchor="middle" font-size="9" font-weight="700" fill="#14521d">시점별 발화를 단언</text>
+
+  <rect x="590" y="466" width="256" height="30" rx="4" fill="#dceaf7"/>
+  <text x="718" y="479" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">exp_labels 단언</text>
+  <text x="718" y="491" text-anchor="middle" font-size="9" font-weight="700" fill="#10243a">템플릿 렌더까지 검증</text>
+
+  <text x="450" y="532" text-anchor="middle" font-size="10" fill="#b8b3ad">CI 로 잇는 이야기는 12장</text>
+</svg>

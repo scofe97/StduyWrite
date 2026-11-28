@@ -1,0 +1,92 @@
+<svg viewBox="0 0 680 420" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>OpenSearch 마이그레이션 지도 — 소스·단계·무중단 패턴</title>
+  <desc>Solr·Algolia·Splunk·Elasticsearch 소스에서 Planning·POC·Deploy 3단계를 거쳐 dual-write·shadow read·blue-green·canary·cold replay 무중단 패턴으로 점진 전환하는 마이그레이션 구조.</desc>
+
+  <rect x="0" y="0" width="680" height="420" fill="#0d0d0d"/>
+  <text x="24" y="32" fill="#e8e4df" font-size="15" font-weight="600">마이그레이션 — 빅뱅이 아니라 병렬 검증 후 점진 전환</text>
+
+  <defs>
+    <marker id="mg" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
+      <path d="M0,0 L8,3.5 L0,7 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <!-- 소스 -->
+  <text x="24" y="58" fill="#e8e4df" font-size="12" font-weight="600">① 소스 — 어디서 오는가</text>
+  <rect x="24" y="68" width="150" height="112" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="88" fill="rgb(138,133,128)" font-size="9.5">Solr — 확장성</text>
+  <text x="34" y="106" fill="rgb(138,133,128)" font-size="9.5">Algolia — 비용·통제</text>
+  <text x="34" y="124" fill="rgb(212,168,83)" font-size="9.5" font-weight="600">Elasticsearch — 7.10</text>
+  <text x="42" y="138" fill="rgb(138,133,128)" font-size="8.5">포크라 가장 매끄러움</text>
+  <text x="34" y="156" fill="rgb(138,133,128)" font-size="9.5">Splunk — 라이선스</text>
+  <text x="34" y="174" fill="rgb(138,133,128)" font-size="9.5">CloudSearch — 유연성</text>
+  <line x1="174" y1="124" x2="198" y2="124" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#mg)"/>
+
+  <!-- 3단계 -->
+  <text x="206" y="58" fill="#e8e4df" font-size="12" font-weight="600">② 3단계</text>
+  <rect x="206" y="68" width="150" height="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="281" y="83" fill="#e8e4df" font-size="10" text-anchor="middle" font-weight="600">Planning</text>
+  <text x="281" y="96" fill="rgb(138,133,128)" font-size="8" text-anchor="middle">평가·정렬·목표</text>
+
+  <rect x="206" y="107" width="150" height="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="281" y="122" fill="#e8e4df" font-size="10" text-anchor="middle" font-weight="600">POC</text>
+  <text x="281" y="135" fill="rgb(138,133,128)" font-size="8" text-anchor="middle">호환·성능 검증</text>
+
+  <rect x="206" y="146" width="150" height="34" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="281" y="161" fill="rgb(212,168,83)" font-size="10" text-anchor="middle" font-weight="600">Deploy</text>
+  <text x="281" y="174" fill="rgb(138,133,128)" font-size="8" text-anchor="middle">단계적 cutover</text>
+  <line x1="356" y1="124" x2="380" y2="124" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#mg)"/>
+
+  <!-- Migration Assistant -->
+  <text x="388" y="58" fill="#e8e4df" font-size="12" font-weight="600">③ Migration Assistant</text>
+  <rect x="388" y="68" width="268" height="112" fill="rgba(212,168,83,0.06)" stroke="rgb(42,37,32)"/>
+  <text x="402" y="90" fill="rgb(138,133,128)" font-size="9">· 메타데이터 검사 (index template·매핑 호환)</text>
+  <text x="402" y="112" fill="rgb(138,133,128)" font-size="9">· traffic replay (proxy→Kafka→OpenSearch)</text>
+  <text x="402" y="134" fill="rgb(138,133,128)" font-size="9">· historical (Snapshot restore, ES 6.8~7.17→2.19)</text>
+  <text x="402" y="160" fill="rgb(138,133,128)" font-size="9">Fargate/ECS 콘솔 · CloudFormation · MSK·S3</text>
+
+  <!-- 무중단 5패턴 -->
+  <text x="24" y="206" fill="#e8e4df" font-size="12" font-weight="600">④ 무중단 5패턴 — 소스·제약에 맞춰 고르고, 실전은 섞는다</text>
+
+  <rect x="24" y="218" width="125" height="70" fill="rgba(102,187,106,0.10)" stroke="rgb(102,187,106)"/>
+  <text x="86" y="236" fill="rgb(102,187,106)" font-size="9.5" text-anchor="middle" font-weight="600">dual-write</text>
+  <text x="86" y="252" fill="rgb(138,133,128)" font-size="8" text-anchor="middle">양쪽 동시 쓰기</text>
+  <text x="86" y="264" fill="rgb(138,133,128)" font-size="8" text-anchor="middle">Kafka 이벤트</text>
+  <text x="86" y="279" fill="rgb(138,133,128)" font-size="7.5" text-anchor="middle">e-commerce</text>
+
+  <rect x="155" y="218" width="125" height="70" fill="rgba(102,187,106,0.10)" stroke="rgb(102,187,106)"/>
+  <text x="217" y="236" fill="rgb(102,187,106)" font-size="9.5" text-anchor="middle" font-weight="600">shadow read</text>
+  <text x="217" y="252" fill="rgb(138,133,128)" font-size="8" text-anchor="middle">백그라운드 미러</text>
+  <text x="217" y="264" fill="rgb(138,133,128)" font-size="8" text-anchor="middle">관련도 비교</text>
+  <text x="217" y="279" fill="rgb(138,133,128)" font-size="7.5" text-anchor="middle">travel</text>
+
+  <rect x="286" y="218" width="125" height="70" fill="rgba(102,187,106,0.10)" stroke="rgb(102,187,106)"/>
+  <text x="348" y="236" fill="rgb(102,187,106)" font-size="9.5" text-anchor="middle" font-weight="600">blue-green</text>
+  <text x="348" y="252" fill="rgb(138,133,128)" font-size="8" text-anchor="middle">라우팅 한 번 전환</text>
+  <text x="348" y="264" fill="rgb(138,133,128)" font-size="8" text-anchor="middle">즉시 롤백</text>
+  <text x="348" y="279" fill="rgb(138,133,128)" font-size="7.5" text-anchor="middle">Splunk 로그</text>
+
+  <rect x="417" y="218" width="125" height="70" fill="rgba(102,187,106,0.10)" stroke="rgb(102,187,106)"/>
+  <text x="479" y="236" fill="rgb(102,187,106)" font-size="9.5" text-anchor="middle" font-weight="600">canary</text>
+  <text x="479" y="252" fill="rgb(138,133,128)" font-size="8" text-anchor="middle">5%→25%→100%</text>
+  <text x="479" y="264" fill="rgb(138,133,128)" font-size="8" text-anchor="middle">점진 검증</text>
+  <text x="479" y="279" fill="rgb(138,133,128)" font-size="7.5" text-anchor="middle">news site</text>
+
+  <rect x="548" y="218" width="108" height="70" fill="rgba(102,187,106,0.10)" stroke="rgb(102,187,106)"/>
+  <text x="602" y="236" fill="rgb(102,187,106)" font-size="9.5" text-anchor="middle" font-weight="600">cold replay</text>
+  <text x="602" y="252" fill="rgb(138,133,128)" font-size="8" text-anchor="middle">과거 배치 이관</text>
+  <text x="602" y="264" fill="rgb(138,133,128)" font-size="8" text-anchor="middle">Data Prepper·ISM</text>
+  <text x="602" y="279" fill="rgb(138,133,128)" font-size="7.5" text-anchor="middle">fintech 100TB</text>
+
+  <!-- 실전 사례 -->
+  <rect x="24" y="302" width="632" height="42" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="40" y="320" fill="#e8e4df" font-size="10" font-weight="600">실전 5단계:</text>
+  <text x="120" y="320" fill="rgb(138,133,128)" font-size="9">AnyMovie(검색) — POC→스키마 재설계→dual-write→gateway 라우팅→롤아웃</text>
+  <text x="40" y="336" fill="rgb(138,133,128)" font-size="9">AnyLog(로그) — Kafka 버퍼 + shadow + silent alert replay → 80TB/day 무중단</text>
+
+  <!-- 통찰 띠 -->
+  <rect x="24" y="352" width="632" height="30" fill="rgba(212,168,83,0.06)" stroke="rgb(42,37,32)"/>
+  <text x="40" y="371" fill="rgb(138,133,128)" font-size="9.5">열쇠: Kafka 버퍼로 소스-엔진 디커플링 → 엔진 교체해도 소스 무변경 · replay·reconciliation 으로 무손실</text>
+
+  <text x="24" y="404" fill="rgb(138,133,128)" font-size="10">주의: dual-write 는 부분 실패로 데이터 갈라짐 → 큐 기반 + 문서 수·해시 reconciliation 필수</text>
+</svg>

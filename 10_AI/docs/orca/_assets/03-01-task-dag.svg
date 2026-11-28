@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340" role="img" aria-labelledby="tk dk">
+<title id="tk">의존 관계에 따라 ready와 pending으로 갈리는 태스크 그래프</title>
+<desc id="dk">구현 태스크에서 리뷰와 테스트가 갈라지고 둘이 문서화로 모이는 방향 그래프이며, 시작할 수 있는 태스크만 ready로 표시돼 있습니다. 구현 태스크만 강조돼 있습니다.</desc>
+<style>
+svg{--paper:#0D1117;--paper2:#161B22;--ink:#F5F5F3;--muted:#8B98A9;--soft:#5E6B7E;--rule:rgba(191,192,192,0.22);--accent:#F08A59;--accent12:rgba(240,138,89,0.12);--ok:#3FB98C;--warn:#E3B341}
+.kr{font-family:'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif}
+.mn{font-family:'Geist Mono','Noto Sans Mono CJK KR',monospace}
+.eyebrow{fill:var(--soft);font-size:9px;letter-spacing:.14em}
+.h1{fill:var(--ink);font-size:20px;font-weight:600}
+.sub{fill:var(--muted);font-size:11px}
+.box{fill:var(--paper2);stroke:var(--rule);stroke-width:1}
+.lbl{fill:var(--ink);font-size:13px;font-weight:600}
+.ok{fill:var(--ok);font-size:10px}
+.warn{fill:var(--warn);font-size:10px}
+.arrow{stroke:var(--soft);stroke-width:1;fill:none}
+.legend{fill:var(--soft);font-size:10px}
+</style>
+<rect width="1000" height="340" fill="var(--paper)"/>
+<text class="mn eyebrow" x="64" y="44">TASK DAG</text>
+<text class="kr h1" x="64" y="76">지금 시작할 수 있는 것만 골라 줍니다</text>
+<text class="kr sub" x="64" y="98">--ready 목록에는 의존이 다 풀린 태스크만 나옵니다.</text>
+
+<rect x="64" y="176" width="176" height="60" rx="4" fill="var(--accent12)" stroke="var(--accent)" stroke-width="1.4"/>
+<text class="kr lbl" x="88" y="202">구현</text>
+<text class="kr ok" x="88" y="220">ready · deps []</text>
+
+<path class="arrow" d="M240 194 L344 152"/><path class="arrow" d="M336 148 L344 152 L340 160"/>
+<path class="arrow" d="M240 218 L344 262"/><path class="arrow" d="M336 255 L344 262 L334 262"/>
+
+<rect class="box" x="344" y="124" width="176" height="60" rx="4"/>
+<text class="kr lbl" x="368" y="150">리뷰</text>
+<text class="kr warn" x="368" y="168">pending · deps [구현]</text>
+
+<rect class="box" x="344" y="236" width="176" height="60" rx="4"/>
+<text class="kr lbl" x="368" y="262">테스트</text>
+<text class="kr warn" x="368" y="280">pending · deps [구현]</text>
+
+<path class="arrow" d="M520 154 L624 194"/><path class="arrow" d="M616 187 L624 194 L614 194"/>
+<path class="arrow" d="M520 266 L624 226"/><path class="arrow" d="M616 220 L624 226 L622 216"/>
+
+<rect class="box" x="624" y="180" width="200" height="60" rx="4"/>
+<text class="kr lbl" x="648" y="206">문서화</text>
+<text class="kr warn" x="648" y="224">pending · deps [리뷰, 테스트]</text>
+
+<line x1="64" y1="308" x2="936" y2="308" stroke="var(--rule)" stroke-width="1"/>
+<text class="kr legend" x="64" y="328">고리가 없어야 합니다. 구현이 끝나면 리뷰와 테스트가 동시에 시작될 수 있고, 둘 다 끝나야 문서화가 열립니다.</text>
+</svg>

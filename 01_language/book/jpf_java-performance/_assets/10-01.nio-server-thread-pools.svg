@@ -1,0 +1,49 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>NIO와 서버 스레드 풀 — selector·worker·async REST</title>
+  <desc>서버 확장은 스레드의 효과적 사용이고, 그것은 event-driven nonblocking I/O를 요구한다. blocking I/O는 client 연결과 server 스레드가 1대1이라, 100 client에 think time 30초여도 100 스레드가 필요해 비효율적이다. NIO는 socket을 selector에 등록하고, 데이터가 오면 OS가 selector에 이벤트를 줘 worker 스레드 풀의 스레드에 알린다. N client를 M 스레드로 처리한다. worker 수는 동시 연결이 아니라 동시 요청 수에 맞춘다. CPU-bound면 CPU 수면 되고, blocking outbound 호출이면 동시 호출마다 한 스레드가 필요하다. 2 CPU에 DB가 900ms 걸리면 20 스레드가 필요하지만, outbound도 nonblocking이면 2 스레드로 돌아간다. selector도 한 개로 부족해 보통 3개를 둔다. JAX-RS async response는 @Suspended로 business logic을 다른 풀에 미룬다. 세 이유는 병렬성 추가, 활성 스레드 제한, throttle이다. active count로 503을 즉시 반환해 과부하를 던다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">NIO와 서버 스레드 풀</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">서버 확장 = event-driven nonblocking I/O로 적은 스레드가 많은 연결을 처리</text>
+
+  <!-- blocking vs NIO -->
+  <rect x="20" y="74" width="320" height="100" fill="rgba(244,127,114,0.08)" stroke="#f47f72" stroke-width="2"/>
+  <text x="38" y="96" fill="#f47f72" font-size="12" font-weight="bold">blocking I/O — 1:1</text>
+  <text x="38" y="116" fill="rgb(138,133,128)" font-size="10">client 연결 ↔ server 스레드 1대1</text>
+  <text x="38" y="134" fill="rgb(138,133,128)" font-size="10">읽기 전엔 데이터 유무 모름 → block</text>
+  <text x="38" y="152" fill="#f47f72" font-size="10">100 client(think 30초) → 100 스레드</text>
+  <text x="38" y="170" fill="rgb(138,133,128)" font-size="9">동시 진행은 2개 미만인데도 비효율</text>
+
+  <rect x="350" y="74" width="312" height="100" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="368" y="96" fill="#66bb6a" font-size="12" font-weight="bold">NIO — selector 이벤트</text>
+  <text x="368" y="116" fill="rgb(138,133,128)" font-size="10">socket을 Selector에 등록</text>
+  <text x="368" y="134" fill="rgb(138,133,128)" font-size="10">OS가 이벤트 → worker 스레드에 알림</text>
+  <text x="368" y="152" fill="#66bb6a" font-size="10">N client를 M 스레드로 처리</text>
+  <text x="368" y="170" fill="rgb(138,133,128)" font-size="9">100 client → 2~6 스레드면 충분</text>
+
+  <!-- worker 수 결정 -->
+  <rect x="20" y="182" width="642" height="128" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="204" fill="#e8e4df" font-size="13" font-weight="bold">worker 수 = 동시 요청 수 (동시 연결 아님)</text>
+  <text x="38" y="226" fill="rgb(138,133,128)" font-size="11">CPU-bound → 가상 CPU 수면 충분(그 이상 못 돌림)</text>
+  <text x="38" y="248" fill="rgb(212,168,83)" font-size="11">blocking outbound 호출 → 동시 호출마다 한 스레드 (1:1 모델로 회귀 위험)</text>
+  <text x="38" y="268" fill="#f47f72" font-size="11">예: 2 CPU·DB 900ms+처리 100ms → 20 req/s, 600 client → 20 스레드 필요</text>
+  <text x="38" y="288" fill="#66bb6a" font-size="11">outbound도 nonblocking → 다시 2 스레드 (900ms 동안 다른 요청 처리)</text>
+  <text x="38" y="304" fill="rgb(138,133,128)" font-size="10">selector도 1개로 부족 → select() 처리 중 다른 스레드가 select() 호출. 보통 3개</text>
+
+  <!-- async REST -->
+  <rect x="20" y="318" width="642" height="156" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="340" fill="#9cc3df" font-size="13" font-weight="bold">JAX-RS async response — @Suspended로 다른 풀에 미룸</text>
+  <text x="38" y="362" fill="rgb(138,133,128)" font-size="11">요청이 default 풀로 와서 business logic을 async 풀에 넘기고 즉시 반환</text>
+  <text x="38" y="382" fill="rgb(138,133,128)" font-size="11">async response가 완료를 기다렸다 resume()으로 응답</text>
+  <text x="38" y="404" fill="#9cc3df" font-size="11">쓰는 세 이유:</text>
+  <text x="56" y="424" fill="rgb(138,133,128)" font-size="10">① business logic에 병렬성 추가 (예: 3개 JDBC 호출 병렬)</text>
+  <text x="56" y="442" fill="rgb(138,133,128)" font-size="10">② 활성 스레드 수 제한   ③ 서버를 적절히 throttle</text>
+  <text x="38" y="464" fill="#f47f72" font-size="11">과부하 시 active count == 풀 크기면 ar.cancel() → 즉시 HTTP 503 반환</text>
+
+  <!-- 핵심 -->
+  <rect x="20" y="482" width="642" height="100" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="504" fill="rgb(212,168,83)" font-size="13" font-weight="bold">핵심</text>
+  <text x="38" y="526" fill="#e8e4df" font-size="11">nonblocking I/O로 client 수보다 훨씬 적은 스레드 사용 — 큰 효율 이득</text>
+  <text x="38" y="548" fill="#e8e4df" font-size="11">worker 풀은 동시 요청 최대치로 튜닝 + selector용 몇 개 추가</text>
+  <text x="38" y="570" fill="rgb(138,133,128)" font-size="11">긴 요청은 다른 풀에 미뤄(async) main 풀을 더 견고하게 처리</text>
+</svg>

@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 810" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">ESP의 비동기 반송·컴플레인 피드백 루프</title><desc id="dd">메일 발송 위임 후 수신 MX의 5xx 거부 또는 사용자 스팸 신고가 발생했을 때 웹훅 이벤트를 통해 앱 DB에 반영되는 흐름</desc>
+<rect width="960" height="810" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">SEQUENCE · ESP EVENT FEEDBACK LOOP</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">ESP의 비동기 반송·컴플레인 피드백 루프</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">동기 발송 접수(202/250)와 실제 배달 실패를 분리해 발신 평판을 지키는 피드백 구조</text>
+<defs><marker id="ar-open" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><polyline points="1 1, 7 4, 1 7" fill="none" stroke="#8B98A9" stroke-width="1.3"/></marker></defs>
+<rect x="65.0" y="100" width="230" height="44" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="180" y="119" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13.5" font-weight="600" fill="#F5F5F3">애플리케이션 (앱 서버)</text>
+<text x="180" y="136" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">MailService · Webhook</text>
+<rect x="375.0" y="100" width="230" height="44" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.2"/>
+<text x="490" y="119" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13.5" font-weight="600" fill="#F5F5F3">클라우드 ESP 인프라</text>
+<text x="490" y="136" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Amazon SES · SendGrid</text>
+<rect x="685.0" y="100" width="230" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="800" y="119" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13.5" font-weight="600" fill="#F5F5F3">수신 메일 인프라</text>
+<text x="800" y="136" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="400" fill="#8B98A9">수신 도메인 MX · 사서함</text>
+<line x1="180" y1="144" x2="180" y2="730" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="490" y1="144" x2="490" y2="730" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="800" y1="144" x2="800" y2="730" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<path d="M 188 168 L 482 168" fill="none" stroke="#6A95D8" stroke-width="1.4" marker-end="url(#info)"/>
+<text x="335.0" y="159" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">POST /v3/mail/send (SendGrid)</text>
+<text x="335.0" y="185" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="400" fill="#8B98A9">발송 요청 위임 (또는 SMTP 587)</text>
+<path d="M 482 216 L 188 216" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)" stroke-dasharray="5 4"/>
+<text x="335.0" y="207" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">202 Accepted (SendGrid) / 250 Ok</text>
+<text x="335.0" y="233" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="400" fill="#8B98A9">접수 완료 (ESP 내부 큐 적재)</text>
+<path d="M 498 264 L 792 264" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="645.0" y="255" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">SMTP DATA (TCP 25)</text>
+<text x="645.0" y="281" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="400" fill="#8B98A9">외부 인터넷 발송 시도</text>
+<rect x="60" y="300" width="840" height="420" rx="4" fill="rgba(245,245,245,0.03)" stroke="rgba(191,192,192,0.22)" stroke-width="1"/>
+<rect x="60" y="300" width="40" height="18" rx="2" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1"/>
+<text x="80" y="313" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="600" fill="#5E6B7E">ALT</text>
+<text x="114" y="314" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">[수신 거부 — 없는 계정 또는 영구 실패]</text>
+<path d="M 792 348 L 498 348" fill="none" stroke="#F0616D" stroke-width="1.4" marker-end="url(#bad)" stroke-dasharray="5 4"/>
+<text x="645.0" y="339" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">550 5.1.1 User unknown</text>
+<text x="645.0" y="365" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="400" fill="#8B98A9">영구 배달 실패 (DSN)</text>
+<path d="M 496 382 L 536 382 L 536 402 L 498 402" fill="none" stroke="#F0616D" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="544" y="388" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="600" fill="#F0616D">서프레션 목록 자동 등록</text>
+<text x="544" y="407" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">SendGrid: suppression list</text>
+<path d="M 482 436 L 188 436" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar-open)" stroke-dasharray="5 4"/>
+<text x="335.0" y="427" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">POST /webhook (event: bounce)</text>
+<text x="335.0" y="453" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="400" fill="#8B98A9">AWS SES: Bounce 알림</text>
+<path d="M 186 470 L 226 470 L 226 490 L 188 490" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="234" y="476" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="600" fill="#E3B341">수신 주소 비활성화</text>
+<text x="234" y="495" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">발송 대상 제외 플래그 갱신</text>
+<line x1="68" y1="514" x2="892" y2="514" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="4 3"/>
+<text x="76" y="530" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">[사용자 스팸 신고 — 피드백 루프(FBL) 제공처 (Gmail 제외)]</text>
+<path d="M 792 558 L 498 558" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#warn)" stroke-dasharray="5 4"/>
+<text x="645.0" y="549" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#E3B341">피드백 루프 (FBL) 통보</text>
+<text x="645.0" y="575" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="400" fill="#8B98A9">수신자 스팸 차단 (FBL 제공 포털)</text>
+<path d="M 496 592 L 536 592 L 536 612 L 498 612" fill="none" stroke="#F0616D" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="544" y="598" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="600" fill="#F0616D">서프레션 목록 자동 등록</text>
+<text x="544" y="617" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">동일 주소 추가 발송 차단</text>
+<path d="M 482 646 L 188 646" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar-open)" stroke-dasharray="5 4"/>
+<text x="335.0" y="637" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">POST /webhook (event: spamreport)</text>
+<text x="335.0" y="663" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="400" fill="#8B98A9">AWS SES: Complaint 알림</text>
+<path d="M 186 680 L 226 680 L 226 700 L 188 700" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="234" y="686" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="600" fill="#E3B341">수신 거부 목록에 추가</text>
+<text x="234" y="705" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">마케팅 발송 대상 제외</text>
+<line x1="12" y1="764" x2="912" y2="764" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="786" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="776" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="786" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">위임 접수 성공 (2xx)</text>
+<rect x="326" y="776" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="348" y="786" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">배달 실패 (5xx 바운스)</text>
+<rect x="565" y="776" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="587" y="786" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">스팸 신고 (컴플레인)</text>
+<rect x="765" y="776" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="787" y="786" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">동기 요청 / 정보 전달</text>
+</svg>

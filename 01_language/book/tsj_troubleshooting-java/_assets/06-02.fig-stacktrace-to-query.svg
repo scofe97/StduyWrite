@@ -1,0 +1,35 @@
+<svg viewBox="0 0 680 340" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>쿼리별 스택 트레이스로 호출 지점 역추적 — 그 쿼리를 보낸 앱 코드의 첫 메서드를 찾는다 (원문 Figure 6.14 개념도)</title>
+  <desc>원문 Figure 6.14 의 개념을 도식으로 옮긴 것입니다. 프로파일러는 가로챈 각 SQL 쿼리마다 실행 스택 트레이스도 함께 제공합니다. 스택 트레이스의 아래쪽은 JDBC 드라이버 같은 인프라 메서드이고, 위로 펼쳐 올라가면 그 쿼리를 보낸 앱 코드베이스의 첫 메서드를 찾을 수 있습니다. da-ch6-ex2 에서는 그 첫 메서드가 PurchaseService 의 getProductNamesForPurchases 안에서 호출하는 findProduct 입니다. 이렇게 어느 코드가 문제 쿼리를 보냈는지 역추적해 어디를 최적화할지 정합니다.</desc>
+  <rect x="0" y="0" width="680" height="340" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">스택 트레이스로 쿼리의 출처를 역추적한다</text>
+  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">원문 Figure 6.14 개념도 — 각 쿼리마다 호출 지점이 따라온다 (da-ch6-ex2)</text>
+
+  <!-- 쿼리 박스 -->
+  <rect x="20" y="80" width="300" height="50" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="34" y="102" fill="rgb(212,168,83)" font-size="12" font-weight="bold">가로챈 쿼리</text>
+  <text x="34" y="121" fill="#e8e4df" font-size="10" font-family="monospace">SELECT * FROM product WHERE id = ?  ×10</text>
+
+  <!-- 스택 트레이스 (아래→위) -->
+  <text x="360" y="98" fill="#e8e4df" font-size="12" font-weight="bold">스택 트레이스 (위로 펼침)</text>
+
+  <rect x="360" y="108" width="300" height="26" fill="rgba(102,187,106,0.10)" stroke="#66bb6a"/>
+  <text x="372" y="125" fill="#66bb6a" font-size="10" font-weight="bold">↑ getProductNamesForPurchases() ← 앱 첫 메서드</text>
+  <rect x="360" y="138" width="300" height="26" fill="rgb(20,20,20)" stroke="rgb(60,55,50)"/>
+  <text x="372" y="155" fill="#e8e4df" font-size="10">ProductRepository.findProduct()</text>
+  <rect x="360" y="168" width="300" height="26" fill="rgb(20,20,20)" stroke="rgb(60,55,50)"/>
+  <text x="372" y="185" fill="rgb(138,133,128)" font-size="10">JdbcTemplate.queryForObject()</text>
+  <rect x="360" y="198" width="300" height="26" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="372" y="215" fill="rgb(138,133,128)" font-size="10">JDBC 드라이버 (인프라) ← 아래쪽</text>
+
+  <!-- 연결 화살표 -->
+  <line x1="320" y1="105" x2="355" y2="121" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <polygon points="355,121 347,118 349,112" fill="rgb(212,168,83)"/>
+
+  <!-- 해석 -->
+  <rect x="20" y="248" width="640" height="72" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="270" fill="#e8e4df" font-size="12" font-weight="bold">쓰임</text>
+  <text x="34" y="293" fill="#e8e4df" font-size="11">스택을 위로 펼쳐 앱 코드의 첫 메서드를 찾으면 → 어느 코드가 그 쿼리를 보냈는지 안다</text>
+  <text x="34" y="313" fill="rgb(138,133,128)" font-size="10">원인 지점을 짚은 뒤 코드를 읽어 한 쿼리로 합치는 최적화를 적용한다</text>
+</svg>

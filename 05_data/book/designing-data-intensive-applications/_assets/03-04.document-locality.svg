@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 510" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">문서 저장 locality와 부분 갱신의 전체 재작성</title><desc id="dd">문서는 연속 바이트열로 저장되어 전체 로드 시 locality 이점이 있지만, 일부 필드만 수정해도 문서 전체를 디스크에 다시 써야 한다.</desc>
+<rect width="880" height="510" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">03-04 · DATA LOCALITY</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">문서 저장 locality와 부분 갱신의 전체 재작성</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">전체 읽기(연속 저장 로드) vs 부분 갱신(전체 로드 → 메모리 수정 → 전체 재작성)</text>
+<rect x="24" y="104" width="832" height="120" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="40" y="128" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">전체 문서 읽기 — 웹 페이지 렌더링</text>
+<rect x="259.5" y="116" width="201.0" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="360" y="130" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">연속 저장 locality 이점</text>
+<rect x="40" y="148" width="240" height="60" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="160.0" y="172" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">프로필 조회 요청</text>
+<text x="160.0" y="192" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">user_id 251 전체 데이터 필요</text>
+<rect x="310" y="148" width="240" height="60" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="430.0" y="172" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">디스크 연속 읽기</text>
+<text x="430.0" y="192" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">연속 바이트열(BSON) 로드</text>
+<rect x="580" y="148" width="240" height="60" rx="6" fill="#3FB98C16" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="700.0" y="172" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">단일 문서 로드 완료</text>
+<text x="700.0" y="192" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">다중 인덱스 탐색 회피</text>
+<path d="M 284 178 L 304 178" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<path d="M 554 178 L 574 178" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ok)"/>
+<rect x="24" y="242" width="832" height="138" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="40" y="266" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">소규모 필드 갱신 — 전체 재작성 오버헤드</text>
+<rect x="316.0" y="254" width="168.0" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="400" y="268" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">작은 갱신에도 전체 재작성</text>
+<rect x="40" y="286" width="190" height="74" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="135.0" y="310" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">일부 필드 갱신 요청</text>
+<text x="135.0" y="330" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">first_name 변경 요청</text>
+<text x="135.0" y="346" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">단일 속성만 대상</text>
+<rect x="246" y="286" width="190" height="74" rx="6" fill="#161B22" stroke="#E3B341" stroke-width="1.1"/>
+<text x="341.0" y="310" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">디스크 전체 로드</text>
+<text x="341.0" y="330" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">문서 전체를 메모리로 로드</text>
+<text x="341.0" y="346" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">불필요한 필드 포함</text>
+<rect x="452" y="286" width="190" height="74" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="547.0" y="310" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">메모리 내 필드 수정</text>
+<text x="547.0" y="330" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">버퍼 내 값 교체</text>
+<text x="547.0" y="346" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">작은 일부만 바뀜</text>
+<rect x="658" y="286" width="190" height="74" rx="6" fill="#F08A5916" stroke="#F08A59" stroke-width="1.4"/>
+<text x="753.0" y="310" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">디스크 전체 재작성</text>
+<text x="753.0" y="330" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">문서 전체를 다시 기록</text>
+<text x="753.0" y="346" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">잦은 소규모 갱신 회피 권고</text>
+<path d="M 234 323 L 240 323" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<path d="M 440 323 L 446 323" fill="none" stroke="#E3B341" stroke-width="1.2" marker-end="url(#warn)"/>
+<path d="M 646 323 L 652 323" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<rect x="24" y="394" width="832" height="34" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="36" y="416" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">관계형 locality 대안</text>
+<text x="190" y="416" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">Google Spanner 부모-자식 행 interleave  ·  Oracle 다중 테이블 클러스터  ·  Bigtable 컬럼 패밀리</text>
+<line x1="12" y1="454" x2="832" y2="454" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="476" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="466" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="476" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">전체 로드 이점</text>
+<rect x="248" y="466" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="270" y="476" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">전체 재작성 오버헤드</text>
+<rect x="435" y="466" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="457" y="476" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">비효율 로드 단계</text>
+<rect x="596" y="466" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="618" y="476" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">일반 단계</text>
+</svg>

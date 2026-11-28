@@ -1,0 +1,62 @@
+<svg viewBox="0 0 680 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>코드 읽기의 본질과 디버거 기초 (Ch.2 §2.1~§2.2)</title>
+  <desc>코드 읽기는 시 읽기와 다릅니다. 시는 한 줄씩 선형으로 읽지만 코드는 명령 안팎을 넘나드는 비선형 2차원 활동이며, 한 차원은 위에서 아래로 읽기이고 다른 차원은 명령 안으로 들어가 상세를 보는 것입니다. 메서드 안으로 들어갈 때마다 새로운 조사 평면 plan이 열리고, 평면을 많이 열수록 인지 복잡도가 커지므로 적게 열수록 조사가 단순해집니다. LLM은 코드 목적을 잘 직관하지만 제공받지 않은 부분은 가정으로 메우므로 그 가정 목록을 받아 다음 평면 정보를 더해 갑니다. 디버거가 하는 일은 네 가지입니다. 실행을 멈추고 한 줄씩 수동 실행하게 하고, 어디서 왔는지 지도처럼 보여 주고, 변수 값을 드러내고, watcher와 식 평가로 즉석 실험을 허용합니다. breakpoint는 이해되는 줄이 아니라 모르거나 예외 직전인 줄에만 찍습니다. breakpoint가 듣게 하려면 Run이 아니라 Debug로 실행해야 하며, 디버거를 붙인다는 것은 IDE가 JDWP로 JVM에 연결해 멈추고 들여다보는 것입니다. 멈추면 IDE는 스코프 변수 값과 실행 스택 트레이스를 보여 줍니다.</desc>
+  <rect x="0" y="0" width="680" height="560" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">코드 읽기의 본질과 디버거 기초</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">읽기는 비선형 2차원 — 디버거로 인지 부담을 덜고 모르는 줄만 멈춘다 (Ch.2 §2.1~§2.2)</text>
+
+  <!-- 시 vs 코드 -->
+  <rect x="20" y="74" width="315" height="92" fill="rgba(127,168,201,0.10)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="96" fill="#9cc3df" font-size="13" font-weight="bold">시(詩) 읽기 — 선형</text>
+  <text x="38" y="118" fill="#e8e4df" font-size="11">한 줄씩 한 경로로</text>
+  <text x="38" y="138" fill="rgb(138,133,128)" font-size="10">읽을 때마다 다른 뜻일 수도</text>
+  <text x="38" y="158" fill="rgb(138,133,128)" font-size="10">머릿속에서 의미 조립</text>
+
+  <rect x="345" y="74" width="315" height="92" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="363" y="96" fill="rgb(212,168,83)" font-size="13" font-weight="bold">코드 읽기 — 비선형 2차원</text>
+  <text x="363" y="118" fill="#e8e4df" font-size="11">명령 안팎을 넘나드는 미로</text>
+  <text x="363" y="138" fill="rgb(138,133,128)" font-size="10">누구에게나 같은 뜻 = 조사 목표</text>
+  <text x="363" y="158" fill="rgb(138,133,128)" font-size="10">위→아래 + 명령 안으로 (2축)</text>
+
+  <!-- cognitive plan -->
+  <rect x="20" y="178" width="640" height="68" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="200" fill="#e8e4df" font-size="13" font-weight="bold">인지 평면 (cognitive plan) — 적게 열수록 단순</text>
+  <text x="38" y="220" fill="rgb(138,133,128)" font-size="10">메서드 안으로 들어갈 때마다 새 평면이 열리고, 이전 평면은 뒤에 남는다</text>
+  <text x="38" y="238" fill="rgb(212,168,83)" font-size="10">→ step into를 줄이고 step over를 우선하는 전략의 근거</text>
+
+  <!-- 디버거 4가지 -->
+  <text x="20" y="272" fill="#e8e4df" font-size="13" font-weight="bold">디버거가 하는 일 — 인지 부담을 더는 네 가지</text>
+  <rect x="20" y="284" width="158" height="58" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="30" y="306" fill="#e8e4df" font-size="11" font-weight="bold">① 멈추고</text>
+  <text x="30" y="326" fill="rgb(138,133,128)" font-size="10">한 줄씩 수동 실행</text>
+  <rect x="186" y="284" width="158" height="58" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="196" y="306" fill="#e8e4df" font-size="11" font-weight="bold">② 지도</text>
+  <text x="196" y="326" fill="rgb(138,133,128)" font-size="10">어디서 왔는지 표시</text>
+  <rect x="352" y="284" width="158" height="58" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="362" y="306" fill="#e8e4df" font-size="11" font-weight="bold">③ 변수 값</text>
+  <text x="362" y="326" fill="rgb(138,133,128)" font-size="10">데이터 상태 시각화</text>
+  <rect x="518" y="284" width="142" height="58" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="528" y="306" fill="#e8e4df" font-size="11" font-weight="bold">④ 즉석 실험</text>
+  <text x="528" y="326" fill="rgb(138,133,128)" font-size="10">watcher·식 평가</text>
+
+  <!-- breakpoint -->
+  <rect x="20" y="354" width="315" height="92" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="376" fill="#66bb6a" font-size="13" font-weight="bold">breakpoint — 모르는 줄에만</text>
+  <text x="38" y="396" fill="#e8e4df" font-size="11">이해되는 줄은 멈추지 않는다</text>
+  <text x="38" y="416" fill="rgb(138,133,128)" font-size="10">어려워지는 지점부터 / 예외 직전에</text>
+  <text x="38" y="434" fill="rgb(138,133,128)" font-size="10">먼저 디버거 없이 읽기 (AI 보조 가능)</text>
+
+  <!-- Run vs Debug + JDWP -->
+  <rect x="345" y="354" width="315" height="92" fill="rgba(244,127,114,0.07)" stroke="#f47f72" stroke-width="2"/>
+  <text x="363" y="376" fill="#f47f72" font-size="13" font-weight="bold">Run ❌ → Debug ✅</text>
+  <text x="363" y="396" fill="#e8e4df" font-size="11">Run은 디버거를 안 붙여 breakpoint 무시</text>
+  <text x="363" y="416" fill="rgb(138,133,128)" font-size="10">Debug = JVM이 디버그 포트로 시작</text>
+  <text x="363" y="434" fill="rgb(212,168,83)" font-size="10">attach = IDE가 JDWP로 JVM에 연결</text>
+
+  <!-- 멈추면 보이는 것 -->
+  <rect x="20" y="458" width="640" height="86" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="480" fill="#e8e4df" font-size="13" font-weight="bold">breakpoint에서 멈추면 IDE가 보여 주는 두 가지</text>
+  <text x="38" y="502" fill="rgb(138,133,128)" font-size="11">① 스코프 안 모든 변수의 값 (그 줄 실행 직전 상태이므로 데이터는 그대로)</text>
+  <text x="38" y="522" fill="rgb(138,133,128)" font-size="11">② 실행 스택 트레이스 (다음 편에서 — 숨은 로직 찾기·네비게이션의 핵심)</text>
+</svg>

@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">클라이언트 패키징부터 초안 리비전 확정까지의 검증 파이프라인</title><desc id="dd">클라이언트와 서버가 중복 검증을 수행해 심볼릭 링크·압축 폭탄·루트 탈출을 단계별로 차단합니다</desc>
+<rect width="960" height="520" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">PROCESS · UPLOAD PIPELINE</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">클라이언트 패키징부터 초안 리비전 확정까지의 검증 파이프라인</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">CLI packDir ── HTTP POST ──&gt; bundle.FromArchive ──&gt; ParseManifest ──&gt; os.Root 쓰기 ──&gt; Draft 확정</text>
+<rect x="28" y="104" width="184" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="120.0" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">1. 클라이언트 패키징</text>
+<text x="120.0" y="139" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">pack.go · packDir</text>
+<rect x="268" y="104" width="184" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="360.0" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">2. 전송 및 압축 해제</text>
+<text x="360.0" y="139" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">bundle.go · FromArchive</text>
+<rect x="508" y="104" width="184" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="600.0" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">3. 규약 및 매니페스트 검증</text>
+<text x="600.0" y="139" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">ParseManifest · checkHealth</text>
+<rect x="748" y="104" width="184" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="840.0" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">4. 격리 쓰기 및 확정</text>
+<text x="840.0" y="139" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">writeBundleFiles · Draft</text>
+<rect x="28" y="164" width="184" height="72" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="42" y="186" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">디렉터리 순회 및 필터</text>
+<text x="42" y="206" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#6A95D8">os.OpenRoot · fs.WalkDir</text>
+<text x="42" y="222" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">skip: .git · node_modules</text>
+<path d="M 120.0 236 L 120.0 248" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="28" y="248" width="184" height="72" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.1"/>
+<text x="42" y="270" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F0616D">위험 파일 즉시 거부</text>
+<text x="42" y="290" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">ModeSymlink 링크 차단</text>
+<text x="42" y="306" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#8B98A9">소켓·디바이스 특수 파일 거부</text>
+<path d="M 120.0 320 L 120.0 332" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="28" y="332" width="184" height="72" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="42" y="354" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">인메모리 tar.gz 압축</text>
+<text x="42" y="374" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">FormatPAX 정규 스트림</text>
+<text x="42" y="390" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8.5" font-weight="400" fill="#6A95D8">POST /api/flats/{slug}/draft</text>
+<path d="M 212 368 L 240.0 368 L 240.0 200 L 268 200" fill="none" stroke="#6A95D8" stroke-width="1.4" marker-end="url(#info)"/>
+<rect x="214.4" y="274" width="51.2" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="240.0" y="288" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#6A95D8">tar.gz</text>
+<rect x="268" y="164" width="184" height="72" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="282" y="186" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">용량 상한 검사</text>
+<text x="282" y="206" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9.5" font-weight="400" fill="#6A95D8">upload_max_bytes: 20 MiB</text>
+<text x="282" y="222" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">MaxFiles: 최대 20 000 개</text>
+<path d="M 360.0 236 L 360.0 248" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="268" y="248" width="184" height="72" rx="6" fill="#E3B34114" stroke="#E3B341" stroke-width="1.1"/>
+<text x="282" y="270" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">압축 폭탄 방어</text>
+<text x="282" y="290" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">maxTarEntries: 60 000</text>
+<text x="282" y="306" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">해제 예산: 용량 + 235 MiB</text>
+<path d="M 360.0 320 L 360.0 332" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="268" y="332" width="184" height="72" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="282" y="354" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">경로 정규화 및 스트리핑</text>
+<text x="282" y="374" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">cleanPath: 루트 탈출 거부</text>
+<text x="282" y="390" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9.5" font-weight="400" fill="#6A95D8">stripCommonRoot: dist/ 제거</text>
+<path d="M 452 368 L 480.0 368 L 480.0 200 L 508 200" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="457.5" y="274" width="45.0" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="480.0" y="288" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">files</text>
+<rect x="508" y="164" width="184" height="72" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="522" y="186" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">매니페스트 디코딩</text>
+<text x="522" y="206" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#6A95D8">flats.json 필드 파싱</text>
+<text x="522" y="222" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">미등록 필드 에러 거부</text>
+<path d="M 600.0 236 L 600.0 248" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="508" y="248" width="184" height="72" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="522" y="270" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">유형 및 기본값 결정</text>
+<text x="522" y="290" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">type: flat · docs · page</text>
+<text x="522" y="306" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9.5" font-weight="400" fill="#8B98A9">kind: static 기본값 적용</text>
+<path d="M 600.0 320 L 600.0 332" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="508" y="332" width="184" height="72" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="0.9"/>
+<text x="522" y="354" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">진입점 및 헬스 검증</text>
+<text x="522" y="374" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9.5" font-weight="400" fill="#8B98A9">entry · index.html 존재 확인</text>
+<text x="522" y="390" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9.5" font-weight="400" fill="#6A95D8">checkHealth: / 절대경로 검사</text>
+<path d="M 692 368 L 720.0 368 L 720.0 200 L 748 200" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<rect x="697.5" y="274" width="45.0" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="720.0" y="288" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#3FB98C">valid</text>
+<rect x="748" y="164" width="184" height="72" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="762" y="186" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">Go 1.24 os.Root 격리</text>
+<text x="762" y="206" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">임시 스테이징 디렉터리</text>
+<text x="762" y="222" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">심볼릭 레이스 탈출 차단</text>
+<path d="M 840.0 236 L 840.0 248" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="748" y="248" width="184" height="72" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="762" y="270" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">원자적 디렉터리 교체</text>
+<text x="762" y="290" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#6A95D8">os.Rename(tmp, dst)</text>
+<text x="762" y="306" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">bundle.Hash 지문 산출</text>
+<path d="M 840.0 320 L 840.0 332" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="748" y="332" width="184" height="72" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.2"/>
+<text x="762" y="354" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">초안 확정 (Draft revision)</text>
+<text x="762" y="374" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">flats.db 메타데이터 저장</text>
+<text x="762" y="390" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">HTTP 201 Created 반환</text>
+<rect x="28" y="424" width="904" height="52" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="44" y="446" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">모든 검증 오류에 fix 힌트 제공 (ValidationError)</text>
+<text x="44" y="464" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9.5" font-weight="400" fill="#8B98A9">예: path escapes the bundle root or is absolute (fix: use relative paths inside the build directory)</text>
+</svg>

@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 524" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">고정 샤드 수 방식의 노드 추가와 샤드 이전</title><desc id="dd">클러스터에 새 노드가 추가될 때 키-샤드 매핑은 유지한 채 기존 노드에서 샤드 일부만 새 노드로 통째로 이전한다.</desc>
+<rect width="880" height="524" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">07-02 · §3 ARCHITECTURE</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">고정 샤드 수 방식의 노드 추가와 샤드 이전</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">노드 4개 클러스터(20개 샤드) · 노드 4 추가 시 노드당 1개 샤드 이전 · 키 매핑 불변</text>
+<rect x="28" y="104" width="824" height="34" rx="4" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="440.0" y="126" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">원칙: 키-샤드 매핑(hash(key)%20)은 고정하고, 샤드-노드 매핑만 변경해 샤드를 통째로 이전</text>
+<text x="28" y="156" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">재배치 전: 4개 노드 클러스터 (노드당 5개 샤드 할당 · 총 20개 샤드)</text>
+<rect x="28" y="170" width="196" height="92" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="96.68" y="178" width="58.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="126.0" y="192" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Node 0</text>
+<line x1="38" y1="200" x2="214" y2="200" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="42" y="212" width="30" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="57" y="234" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">s0</text>
+<rect x="76" y="212" width="30" height="36" rx="4" fill="#F08A5920" stroke="#F08A59" stroke-width="1.2"/>
+<text x="91" y="234" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">s4</text>
+<rect x="110" y="212" width="30" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="125" y="234" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">s8</text>
+<rect x="144" y="212" width="30" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="159" y="234" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">s12</text>
+<rect x="178" y="212" width="30" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="193" y="234" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">s16</text>
+<rect x="240" y="170" width="196" height="92" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="308.68" y="178" width="58.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="338.0" y="192" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Node 1</text>
+<line x1="250" y1="200" x2="426" y2="200" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="254" y="212" width="30" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="269" y="234" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">s1</text>
+<rect x="288" y="212" width="30" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="303" y="234" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">s5</text>
+<rect x="322" y="212" width="30" height="36" rx="4" fill="#F08A5920" stroke="#F08A59" stroke-width="1.2"/>
+<text x="337" y="234" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">s9</text>
+<rect x="356" y="212" width="30" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="371" y="234" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">s13</text>
+<rect x="390" y="212" width="30" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="405" y="234" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">s17</text>
+<rect x="452" y="170" width="196" height="92" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="520.68" y="178" width="58.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="550.0" y="192" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Node 2</text>
+<line x1="462" y1="200" x2="638" y2="200" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="466" y="212" width="30" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="481" y="234" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">s2</text>
+<rect x="500" y="212" width="30" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="515" y="234" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">s6</text>
+<rect x="534" y="212" width="30" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="549" y="234" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">s10</text>
+<rect x="568" y="212" width="30" height="36" rx="4" fill="#F08A5920" stroke="#F08A59" stroke-width="1.2"/>
+<text x="583" y="234" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">s14</text>
+<rect x="602" y="212" width="30" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="617" y="234" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">s18</text>
+<rect x="664" y="170" width="196" height="92" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="732.68" y="178" width="58.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="762.0" y="192" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Node 3</text>
+<line x1="674" y1="200" x2="850" y2="200" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="678" y="212" width="30" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="693" y="234" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">s3</text>
+<rect x="712" y="212" width="30" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="727" y="234" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">s7</text>
+<rect x="746" y="212" width="30" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="761" y="234" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">s11</text>
+<rect x="780" y="212" width="30" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="795" y="234" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">s15</text>
+<rect x="814" y="212" width="30" height="36" rx="4" fill="#F08A5920" stroke="#F08A59" stroke-width="1.2"/>
+<text x="829" y="234" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">s19</text>
+<text x="28" y="334" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">재배치 후: 5개 노드 클러스터 (노드당 4개 샤드 균등 분산) — Node 4 신규 추가</text>
+<rect x="28" y="348" width="154" height="92" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="75.68" y="356" width="58.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="105.0" y="370" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Node 0</text>
+<line x1="38" y1="378" x2="172" y2="378" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="42" y="390" width="28" height="36" rx="4" fill="#3FB98C16" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="56" y="412" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#3FB98C">s0</text>
+<rect x="74" y="390" width="28" height="36" rx="4" fill="#3FB98C16" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="88" y="412" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#3FB98C">s8</text>
+<rect x="106" y="390" width="28" height="36" rx="4" fill="#3FB98C16" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="120" y="412" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#3FB98C">s12</text>
+<rect x="138" y="390" width="28" height="36" rx="4" fill="#3FB98C16" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="152" y="412" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#3FB98C">s16</text>
+<rect x="198" y="348" width="154" height="92" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="245.68" y="356" width="58.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="275.0" y="370" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Node 1</text>
+<line x1="208" y1="378" x2="342" y2="378" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="212" y="390" width="28" height="36" rx="4" fill="#3FB98C16" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="226" y="412" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#3FB98C">s1</text>
+<rect x="244" y="390" width="28" height="36" rx="4" fill="#3FB98C16" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="258" y="412" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#3FB98C">s5</text>
+<rect x="276" y="390" width="28" height="36" rx="4" fill="#3FB98C16" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="290" y="412" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#3FB98C">s13</text>
+<rect x="308" y="390" width="28" height="36" rx="4" fill="#3FB98C16" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="322" y="412" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#3FB98C">s17</text>
+<rect x="368" y="348" width="154" height="92" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="415.68" y="356" width="58.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="445.0" y="370" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Node 2</text>
+<line x1="378" y1="378" x2="512" y2="378" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="382" y="390" width="28" height="36" rx="4" fill="#3FB98C16" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="396" y="412" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#3FB98C">s2</text>
+<rect x="414" y="390" width="28" height="36" rx="4" fill="#3FB98C16" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="428" y="412" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#3FB98C">s6</text>
+<rect x="446" y="390" width="28" height="36" rx="4" fill="#3FB98C16" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="460" y="412" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#3FB98C">s10</text>
+<rect x="478" y="390" width="28" height="36" rx="4" fill="#3FB98C16" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="492" y="412" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#3FB98C">s18</text>
+<rect x="538" y="348" width="154" height="92" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="585.68" y="356" width="58.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="615.0" y="370" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Node 3</text>
+<line x1="548" y1="378" x2="682" y2="378" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="552" y="390" width="28" height="36" rx="4" fill="#3FB98C16" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="566" y="412" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#3FB98C">s3</text>
+<rect x="584" y="390" width="28" height="36" rx="4" fill="#3FB98C16" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="598" y="412" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#3FB98C">s7</text>
+<rect x="616" y="390" width="28" height="36" rx="4" fill="#3FB98C16" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="630" y="412" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#3FB98C">s11</text>
+<rect x="648" y="390" width="28" height="36" rx="4" fill="#3FB98C16" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="662" y="412" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#3FB98C">s15</text>
+<rect x="708" y="348" width="154" height="92" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.4"/>
+<rect x="712.0" y="356" width="146.0" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="785.0" y="370" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#6A95D8">Node 4 (신규)</text>
+<line x1="718" y1="378" x2="852" y2="378" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="722" y="390" width="28" height="36" rx="4" fill="#F08A5920" stroke="#F08A59" stroke-width="1.2"/>
+<text x="736" y="412" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">s4</text>
+<rect x="754" y="390" width="28" height="36" rx="4" fill="#F08A5920" stroke="#F08A59" stroke-width="1.2"/>
+<text x="768" y="412" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">s9</text>
+<rect x="786" y="390" width="28" height="36" rx="4" fill="#F08A5920" stroke="#F08A59" stroke-width="1.2"/>
+<text x="800" y="412" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">s14</text>
+<rect x="818" y="390" width="28" height="36" rx="4" fill="#F08A5920" stroke="#F08A59" stroke-width="1.2"/>
+<text x="832" y="412" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">s19</text>
+<path d="M 91 264 L 91 276 L 736 276 L 736 346" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<path d="M 337 264 L 337 290 L 768 290 L 768 346" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<path d="M 583 264 L 583 304 L 800 304 L 800 346" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<path d="M 832 264 L 832 346" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<line x1="12" y1="468" x2="832" y2="468" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="490" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="480" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="490" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">이전 샤드</text>
+<rect x="209" y="480" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="231" y="490" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">유지 샤드</text>
+<rect x="318" y="480" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="340" y="490" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">신규 노드 4</text>
+<rect x="453" y="480" width="14" height="12" rx="2" fill="#8B98A922" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="475" y="490" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">기존 노드</text>
+</svg>

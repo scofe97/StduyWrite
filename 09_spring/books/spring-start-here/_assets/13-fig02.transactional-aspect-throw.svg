@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif" role="img" aria-label="@Transactional aspect는 던져진 예외만 본다 — catch로 삼키면 commit">
+  <rect x="0" y="0" width="720" height="340" fill="#0d0d0d"/>
+  <text x="24" y="32" fill="#e8e4df" font-size="15" font-weight="bold">@Transactional aspect — 던져진 예외만 본다</text>
+
+  <!-- aspect box -->
+  <rect x="200" y="56" width="200" height="130" rx="6" fill="rgba(91,155,213,0.10)" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="300" y="78" fill="#5b9bd5" font-size="11" font-weight="bold" text-anchor="middle">Spring 트랜잭션 aspect</text>
+  <text x="216" y="100" fill="#e8e4df" font-size="9">try {</text>
+  <text x="228" y="116" fill="rgb(138,133,128)" font-size="9">// 트랜잭션 시작</text>
+  <text x="228" y="132" fill="rgb(138,133,128)" font-size="9">// 메서드 호출</text>
+  <text x="228" y="148" fill="#66bb6a" font-size="9">// 정상 종료 → commit</text>
+  <text x="216" y="164" fill="#e8e4df" font-size="9">} catch(RuntimeException) {</text>
+  <text x="228" y="178" fill="#f44336" font-size="9">// rollback</text>
+
+  <!-- controller -->
+  <rect x="24" y="86" width="140" height="56" rx="6" fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="94" y="110" fill="#e8e4df" font-size="10" font-weight="bold" text-anchor="middle">Controller</text>
+  <text x="94" y="128" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">service.transferMoney()</text>
+  <line x1="164" y1="114" x2="196" y2="114" stroke="rgb(212,168,83)" stroke-width="1.4" marker-end="url(#x13)"/>
+
+  <!-- service method (intercepted) -->
+  <rect x="436" y="86" width="260" height="90" rx="6" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="566" y="106" fill="#66bb6a" font-size="10" font-weight="bold" text-anchor="middle">@Transactional 메서드</text>
+  <text x="450" y="126" fill="#e8e4df" font-size="9">출금 → 입금 (변경 연산)</text>
+  <text x="450" y="146" fill="#e8e4df" font-size="9">문제 발생 시 RuntimeException</text>
+  <line x1="400" y1="120" x2="432" y2="120" stroke="#66bb6a" stroke-width="1.4" marker-end="url(#x13g)"/>
+
+  <!-- two cases -->
+  <text x="24" y="220" fill="#66bb6a" font-size="12" font-weight="bold">① 예외를 던지면(throw) → aspect가 봄 → rollback ✓</text>
+  <text x="44" y="242" fill="rgb(138,133,128)" font-size="10">메서드가 예외를 호출자에게 전파 → aspect의 catch가 받음 → 변경 되돌림</text>
+
+  <text x="24" y="278" fill="#f44336" font-size="12" font-weight="bold">② 메서드 안에서 catch로 삼키면 → aspect가 못 봄 → commit ✗</text>
+  <text x="44" y="300" fill="rgb(138,133,128)" font-size="10">try-catch로 예외를 처리하고 다시 안 던지면, aspect는 예외를 모른 채 commit해 버림</text>
+  <text x="44" y="318" fill="#f44336" font-size="10">⚠️ "예외가 났다"가 아니라 "예외가 메서드 밖으로 던져졌다"가 rollback 조건</text>
+
+  <defs>
+    <marker id="x13" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="x13g" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#66bb6a"/></marker>
+  </defs>
+</svg>

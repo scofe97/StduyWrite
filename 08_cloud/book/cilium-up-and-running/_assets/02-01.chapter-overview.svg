@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 656" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">Pod 하나가 뜨고 통신하기까지 누가 무엇을 하는가</title><desc id="dd">가로는 노드 합류에서 관측까지 다섯 단계이고 세로는 일을 맡는 주체 세 줄이다. 클러스터에 하나 도는 오퍼레이터는 노드가 합류할 때 CiliumNode 로 PodCIDR 를 넘기고, 그 뒤 Pod 생성과 통신은 노드마다 도는 에이전트와 CNI 플러그인과 프록시가 노드 안에서 끝낸다. 관측은 노드의 Hubble 서버에서 클러스터의 Relay 를 거쳐 사람의 CLI 와 UI 로 올라간다.</desc>
+<rect width="1000" height="656" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">CILIUM UP AND RUNNING · 02-01 OVERVIEW</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">Pod 하나가 뜨고 통신하기까지 누가 무엇을 하는가</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">가로는 단계 1~5, 세로는 일을 맡는 주체이고, 칩은 그 카드를 다루는 절입니다.</text>
+<rect x="150.5" y="108" width="91.0" height="20" rx="4" fill="#0D1117" stroke="#F5F5F3" stroke-width="0.8"/>
+<text x="196.0" y="122" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">1 노드 합류</text>
+<rect x="315.5" y="108" width="113.0" height="20" rx="4" fill="#0D1117" stroke="#F5F5F3" stroke-width="0.8"/>
+<text x="372.0" y="122" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">2 에이전트 기동</text>
+<rect x="497.0" y="108" width="102.0" height="20" rx="4" fill="#0D1117" stroke="#F5F5F3" stroke-width="0.8"/>
+<text x="548.0" y="122" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">3 Pod 생성</text>
+<rect x="673.0" y="108" width="102.0" height="20" rx="4" fill="#0D1117" stroke="#F5F5F3" stroke-width="0.8"/>
+<text x="724.0" y="122" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">4 Pod 통신</text>
+<rect x="871.0" y="108" width="58.0" height="20" rx="4" fill="#0D1117" stroke="#F5F5F3" stroke-width="0.8"/>
+<text x="900.0" y="122" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">5 관측</text>
+<rect x="24" y="136" width="88" height="76" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="116" y="136" width="868" height="76" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="68" y="172.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">사람이</text>
+<text x="68" y="190.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">보는 길</text>
+<rect x="24" y="236" width="88" height="100" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="116" y="236" width="868" height="100" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="68" y="280.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">클러스터에</text>
+<text x="68" y="298.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">하나만</text>
+<text x="68" y="316.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#8B98A9">Deployment</text>
+<rect x="24" y="360" width="88" height="226" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="116" y="360" width="868" height="226" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="68" y="471.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">노드마다</text>
+<text x="68" y="489.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">하나씩</text>
+<rect x="300" y="146" width="144" height="56" rx="5" fill="#0D1117" stroke="#5E6B7E" stroke-width="1.0"/>
+<text x="310" y="165" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">Cilium CLI</text>
+<rect x="415.42" y="149" width="25.16" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="428" y="163" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#8B98A9">§6</text>
+<text x="310" y="182" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">cilium status</text>
+<text x="310" y="196" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">API 서버로 상태 조회</text>
+<rect x="828" y="146" width="144" height="56" rx="5" fill="#0D1117" stroke="#5E6B7E" stroke-width="1.0"/>
+<text x="838" y="165" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">Hubble CLI · UI</text>
+<rect x="943.42" y="149" width="25.16" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="956" y="163" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#8B98A9">§6</text>
+<text x="838" y="182" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">hubble observe</text>
+<text x="838" y="196" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">전체 노드 흐름 조회</text>
+<rect x="124" y="250" width="144" height="72" rx="5" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="134" y="269" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">cilium-operator</text>
+<rect x="239.42" y="253" width="25.16" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="252" y="267" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#6A95D8">§2</text>
+<text x="134" y="286" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">CiliumNode 생성</text>
+<text x="134" y="300" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">podCIDRs 10.1.1.0/24</text>
+<text x="134" y="314" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">활성 인스턴스는 하나</text>
+<rect x="828" y="250" width="144" height="72" rx="5" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="838" y="269" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">Hubble Relay</text>
+<rect x="943.42" y="253" width="25.16" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="956" y="267" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#6A95D8">§6</text>
+<text x="838" y="286" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">피어 연결 · 스트림 병합</text>
+<text x="838" y="300" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">Service :80 → :4245</text>
+<text x="838" y="314" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">클러스터에 하나</text>
+<rect x="476" y="250" width="320" height="72" rx="5" fill="none" stroke="#5E6B7E" stroke-width="1" stroke-dasharray="4 4"/>
+<text x="636.0" y="281" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">3·4 단계는 노드 안에서 끝남</text>
+<text x="636.0" y="301" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">오퍼레이터를 거치지 않음</text>
+<rect x="124" y="374" width="144" height="56" rx="5" fill="#F08A5914" stroke="#F08A59" stroke-width="1.1"/>
+<text x="134" y="393" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">cilium-agent</text>
+<rect x="239.42" y="377" width="25.16" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="252" y="391" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#F08A59">§2</text>
+<text x="134" y="410" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">CiliumNode 를 감시</text>
+<text x="134" y="424" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">10.1.1.0/24 수신</text>
+<rect x="300" y="374" width="144" height="56" rx="5" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="310" y="393" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">cilium-agent</text>
+<rect x="415.42" y="377" width="25.16" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="428" y="391" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#3FB98C">§3</text>
+<text x="310" y="410" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">CNI 플러그인 설치</text>
+<text x="310" y="424" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">05-cilium.conflist</text>
+<rect x="300" y="446" width="144" height="56" rx="5" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="310" y="465" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">cilium-agent</text>
+<rect x="415.42" y="449" width="25.16" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="428" y="463" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#3FB98C">§3</text>
+<text x="310" y="482" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">eBPF 적재 · 맵 고정</text>
+<text x="310" y="496" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">/sys/fs/bpf</text>
+<rect x="476" y="374" width="144" height="56" rx="5" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="486" y="393" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">cilium-cni</text>
+<rect x="591.42" y="377" width="25.16" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="604" y="391" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#3FB98C">§4</text>
+<text x="486" y="410" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">런타임이 ADD 로 실행</text>
+<text x="486" y="424" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">cilium.sock REST</text>
+<rect x="476" y="446" width="144" height="56" rx="5" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="486" y="465" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">cilium-agent</text>
+<rect x="591.42" y="449" width="25.16" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="604" y="463" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#3FB98C">§4</text>
+<text x="486" y="482" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">EndpointCreate 처리</text>
+<text x="486" y="496" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">cilium_lxc 등록</text>
+<rect x="652" y="374" width="144" height="56" rx="5" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="662" y="393" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">eBPF 프로그램</text>
+<rect x="767.42" y="377" width="25.16" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="780" y="391" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#3FB98C">§5</text>
+<text x="662" y="410" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">후크에서 패킷을 판정</text>
+<text x="662" y="424" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">tc · 6.6+ tcx</text>
+<rect x="652" y="446" width="144" height="56" rx="5" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="662" y="465" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">cilium-envoy</text>
+<rect x="767.42" y="449" width="25.16" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="780" y="463" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#3FB98C">§5</text>
+<text x="662" y="482" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">L7 규칙이 걸린 패킷</text>
+<text x="662" y="496" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">DaemonSet</text>
+<rect x="652" y="518" width="144" height="56" rx="5" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="662" y="537" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">DNS 프록시</text>
+<rect x="767.42" y="521" width="25.16" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="780" y="535" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#3FB98C">§5</text>
+<text x="662" y="554" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">UDP/TCP 53 질의</text>
+<text x="662" y="568" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">cilium_ipcache_v2</text>
+<rect x="828" y="374" width="144" height="56" rx="5" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="838" y="393" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">Hubble Server</text>
+<rect x="943.42" y="377" width="25.16" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="956" y="391" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#3FB98C">§6</text>
+<text x="838" y="410" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">이벤트에 정보 보강</text>
+<text x="838" y="424" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">cilium_events</text>
+<path d="M 196.0 322 L 196.0 374" fill="none" stroke="#F08A59" stroke-width="1.6" marker-end="url(#acc)"/>
+<text x="208.0" y="352" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F08A59">CiliumNode</text>
+<path d="M 268 402 L 300 402" fill="none" stroke="#3FB98C" stroke-width="1.3" marker-end="url(#ok)"/>
+<path d="M 372.0 430 L 372.0 446" fill="none" stroke="#3FB98C" stroke-width="1.3" marker-end="url(#ok)"/>
+<path d="M 444 402 L 476 402" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)" stroke-dasharray="3 3"/>
+<path d="M 548.0 430 L 548.0 446" fill="none" stroke="#3FB98C" stroke-width="1.3" marker-end="url(#ok)"/>
+<path d="M 620 474 L 636 474 L 636 402 L 652 402" fill="none" stroke="#3FB98C" stroke-width="1.3" marker-end="url(#ok)"/>
+<path d="M 724.0 430 L 724.0 446" fill="none" stroke="#3FB98C" stroke-width="1.3" marker-end="url(#ok)"/>
+<path d="M 796 416 L 812 416 L 812 546 L 796 546" fill="none" stroke="#3FB98C" stroke-width="1.3" marker-end="url(#ok)"/>
+<path d="M 796 402 L 828 402" fill="none" stroke="#3FB98C" stroke-width="1.3" marker-end="url(#ok)"/>
+<path d="M 900.0 374 L 900.0 322" fill="none" stroke="#6A95D8" stroke-width="1.4" marker-end="url(#info)"/>
+<text x="912.0" y="352" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#6A95D8">gRPC :4244</text>
+<path d="M 900.0 250 L 900.0 202" fill="none" stroke="#6A95D8" stroke-width="1.4" marker-end="url(#info)"/>
+<text x="912.0" y="228" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">흐름 제공</text>
+<line x1="12" y1="606" x2="952" y2="606" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="628" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="618" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="628" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">클러스터에 하나</text>
+<rect x="248" y="618" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="270" y="628" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">노드마다</text>
+<rect x="344" y="618" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="366" y="628" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">두 층을 잇는 한 줄</text>
+<rect x="531" y="618" width="14" height="12" rx="2" fill="#8B98A922" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="553" y="628" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">사람이 보는 길</text>
+</svg>

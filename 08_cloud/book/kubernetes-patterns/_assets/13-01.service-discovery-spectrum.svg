@@ -1,0 +1,70 @@
+<svg viewBox="0 0 880 460" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>client-side 디스커버리와 server-side 디스커버리의 차이</title>
+  <desc>Kubernetes Patterns 그림 13-1과 13-2를 나란히 놓은 것입니다. 위쪽 client-side 방식에서는 서비스 제공자가 스스로 서비스 레지스트리에 자기를 등록하고, 소비자 안에 내장된 discovery agent가 레지스트리를 조회해 인스턴스 하나를 고른 뒤 직접 호출합니다. ZooKeeper 클라이언트나 Consul 클라이언트, Ribbon이 그런 agent였습니다. 아래쪽 Kubernetes의 server-side 방식에서는 Pod가 레지스트리에 등록되고 프록시가 레지스트리에서 Pod를 선택합니다. 소비자는 고정된 가상 Service 엔드포인트인 프록시만 부르면 되고, 등록과 조회와 로드밸런싱은 모두 플랫폼이 뒤에서 처리합니다. 소비자 쪽에 discovery agent가 사라진 것이 핵심 차이입니다.</desc>
+
+  <defs>
+    <marker id="sa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="sg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#66bb6a"/>
+    </marker>
+  </defs>
+
+  <rect width="880" height="460" fill="#0d0d0d"/>
+
+  <!-- upper: client-side -->
+  <text x="24" y="30" fill="#e8e4df" font-size="13">client-side 방식</text>
+
+  <rect x="340" y="48" width="200" height="48" fill="#dceaf7"/>
+  <text x="440" y="78" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">서비스 레지스트리</text>
+
+  <rect x="40" y="140" width="220" height="60" fill="#dceaf7"/>
+  <text x="150" y="164" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">서비스 제공자</text>
+  <text x="150" y="184" text-anchor="middle" fill="#10243a" font-size="9">agent 내장</text>
+
+  <rect x="620" y="140" width="220" height="60" fill="#f2d4d4"/>
+  <text x="730" y="164" text-anchor="middle" fill="#7a1f1f" font-size="11" font-weight="700">서비스 소비자</text>
+  <text x="730" y="184" text-anchor="middle" fill="#7a1f1f" font-size="9">agent 내장</text>
+
+  <path d="M180 140 L370 96" fill="none" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#sa)"/>
+  <text x="254" y="104" text-anchor="middle" fill="rgb(212,168,83)" font-size="9">1. 인스턴스 등록</text>
+
+  <path d="M700 140 L510 96" fill="none" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#sa)"/>
+  <text x="626" y="104" text-anchor="middle" fill="rgb(212,168,83)" font-size="9">2. 서비스 조회</text>
+
+  <path d="M614 176 L266 176" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#sg)"/>
+  <text x="440" y="168" text-anchor="middle" fill="#66bb6a" font-size="9">3. 직접 호출</text>
+
+  <line x1="24" y1="226" x2="856" y2="226" stroke="#b8b3ad" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- lower: server-side -->
+  <text x="24" y="254" fill="#e8e4df" font-size="13">server-side 방식</text>
+
+  <rect x="340" y="272" width="200" height="48" fill="#dceaf7"/>
+  <text x="440" y="302" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">서비스 레지스트리</text>
+
+  <rect x="40" y="364" width="200" height="66" fill="#dceaf7"/>
+  <text x="140" y="388" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">제공자 Pod</text>
+  <text x="140" y="408" text-anchor="middle" fill="#10243a" font-size="9">agent 없음</text>
+
+  <rect x="330" y="364" width="180" height="66" fill="#f5edda"/>
+  <text x="420" y="388" text-anchor="middle" fill="#0d0d0d" font-size="11" font-weight="700">프록시</text>
+  <text x="420" y="408" text-anchor="middle" fill="#0d0d0d" font-size="9">고정 가상 엔드포인트</text>
+
+  <rect x="620" y="364" width="220" height="66" fill="#cdeccf"/>
+  <text x="730" y="388" text-anchor="middle" fill="#14521d" font-size="11" font-weight="700">소비자</text>
+  <text x="730" y="408" text-anchor="middle" fill="#14521d" font-size="9">agent 없음</text>
+
+  <path d="M170 364 L370 320" fill="none" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#sa)"/>
+  <text x="186" y="344" fill="rgb(212,168,83)" font-size="9">1. Pod 등록</text>
+
+  <path d="M470 320 L470 358" fill="none" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#sa)"/>
+  <text x="480" y="344" fill="rgb(212,168,83)" font-size="9">2. Pod 선택</text>
+
+  <path d="M614 397 L516 397" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#sg)"/>
+  <text x="565" y="389" text-anchor="middle" fill="#66bb6a" font-size="9">3. 프록시 호출</text>
+
+  <path d="M324 397 L246 397" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#sg)"/>
+  <text x="285" y="389" text-anchor="middle" fill="#66bb6a" font-size="9">4. 전달</text>
+</svg>

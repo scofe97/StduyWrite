@@ -1,0 +1,72 @@
+<svg viewBox="0 0 880 400" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>OLM이 비특권 사용자 대신 CRD를 등록하는 흐름</title>
+  <desc>CRD는 클러스터 전역으로만 등록할 수 있어 cluster-admin 권한을 요구합니다. 그래서 일반 사용자는 직접 등록할 수 없고, 그 경로가 막혀 있습니다. 대신 사용자는 ClusterServiceVersion을 생성합니다. CSV에는 Operator의 Deployment와 그 Operator가 의존하는 CRD 정의 참조가 함께 담깁니다. CRD 설치 권한을 가진 서비스 계정으로 상주하는 OLM이 이 CSV를 감지하고, 의존 CRD가 모두 등록되기를 기다린 뒤 CSV에 명시된 Operator를 배포하고, 비특권 사용자를 대신해 CRD를 등록합니다. 결과적으로 일반 사용자도 클러스터 관리자의 개입 없이 자기 Operator를 설치할 수 있게 됩니다.</desc>
+
+  <defs>
+    <marker id="oa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="og" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#66bb6a"/>
+    </marker>
+    <marker id="or" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#f44336"/>
+    </marker>
+  </defs>
+
+  <rect width="880" height="400" fill="#0d0d0d"/>
+  <text x="24" y="32" fill="#e8e4df" font-size="15">OLM의 권한 위임 경로</text>
+
+  <!-- user -->
+  <rect x="24" y="150" width="140" height="60" fill="#dceaf7"/>
+  <text x="94" y="174" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">비특권 사용자</text>
+  <text x="94" y="192" text-anchor="middle" fill="#10243a" font-size="9">namespace 권한만</text>
+
+  <!-- blocked direct path: 사용자가 CRD를 직접 등록하려는 경로가 막힘 -->
+  <rect x="700" y="52" width="156" height="52" fill="#f2d4d4"/>
+  <text x="778" y="74" text-anchor="middle" fill="#7a1f1f" font-size="10" font-weight="700">CRD 직접 등록</text>
+  <text x="778" y="92" text-anchor="middle" fill="#7a1f1f" font-size="9">클러스터 전역 자원</text>
+
+  <path d="M94 150 L94 78 L694 78" fill="none" stroke="#f44336" stroke-width="2" stroke-dasharray="6,4"/>
+  <line x1="380" y1="64" x2="410" y2="92" stroke="#f44336" stroke-width="3"/>
+  <line x1="410" y1="64" x2="380" y2="92" stroke="#f44336" stroke-width="3"/>
+  <text x="430" y="72" fill="#f44336" font-size="10" font-weight="700">권한 부족으로 차단</text>
+  <text x="430" y="88" fill="#f44336" font-size="9">cluster-admin 필요</text>
+
+  <!-- CSV -->
+  <rect x="234" y="146" width="170" height="68" fill="#f5edda"/>
+  <text x="319" y="169" text-anchor="middle" fill="#0d0d0d" font-size="11" font-weight="700">CSV 생성</text>
+  <text x="319" y="187" text-anchor="middle" fill="#0d0d0d" font-size="9">Operator Deployment</text>
+  <text x="319" y="203" text-anchor="middle" fill="#0d0d0d" font-size="9">의존 CRD 참조</text>
+
+  <line x1="164" y1="180" x2="228" y2="180" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#oa)"/>
+  <text x="196" y="172" text-anchor="middle" fill="rgb(212,168,83)" font-size="9">1</text>
+
+  <!-- OLM -->
+  <rect x="474" y="138" width="170" height="84" fill="#cdeccf"/>
+  <text x="559" y="162" text-anchor="middle" fill="#14521d" font-size="11" font-weight="700">OLM</text>
+  <text x="559" y="180" text-anchor="middle" fill="#14521d" font-size="9">클러스터 서비스</text>
+  <text x="559" y="196" text-anchor="middle" fill="#14521d" font-size="9">CRD 설치 권한 보유</text>
+  <text x="559" y="212" text-anchor="middle" fill="#14521d" font-size="9">2. CSV 감지·대기</text>
+
+  <line x1="404" y1="180" x2="468" y2="180" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#oa)"/>
+
+  <!-- outputs -->
+  <rect x="714" y="112" width="150" height="56" fill="#dceaf7"/>
+  <text x="789" y="134" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">3. Operator 배포</text>
+  <text x="789" y="152" text-anchor="middle" fill="#10243a" font-size="9">CSV 명세대로</text>
+
+  <rect x="714" y="192" width="150" height="56" fill="#dceaf7"/>
+  <text x="789" y="214" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">4. CRD 등록</text>
+  <text x="789" y="232" text-anchor="middle" fill="#10243a" font-size="9">사용자를 대신해</text>
+
+  <path d="M644 168 L680 168 L680 140 L708 140" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#og)"/>
+  <path d="M644 192 L680 192 L680 220 L708 220" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#og)"/>
+
+  <!-- result -->
+  <rect x="234" y="290" width="410" height="56" fill="#f5edda"/>
+  <text x="439" y="313" text-anchor="middle" fill="#0d0d0d" font-size="11" font-weight="700">5. 관리자 개입 없이 설치</text>
+  <text x="439" y="331" text-anchor="middle" fill="#0d0d0d" font-size="9">채널 구독으로 자동 갱신</text>
+
+  <path d="M789 248 L789 318 L650 318" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#og)"/>
+</svg>

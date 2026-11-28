@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 336" role="img" aria-labelledby="tp dp">
+<title id="tp">구현·리뷰 2단 파이프라인의 태스크 상태 전이</title>
+<desc id="dp">구현 태스크가 ready에서 completed로 바뀌면 잠겨 있던 리뷰 태스크가 pending에서 ready로 열리는 상태 전이를 시간 순으로 보인 그림입니다. 리뷰가 열리는 순간만 강조돼 있습니다.</desc>
+<style>
+svg{--paper:#0D1117;--paper2:#161B22;--ink:#F5F5F3;--muted:#8B98A9;--soft:#5E6B7E;--rule:rgba(191,192,192,0.22);--accent:#F08A59;--accent12:rgba(240,138,89,0.12);--ok:#3FB98C;--warn:#E3B341}
+.kr{font-family:'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif}
+.mn{font-family:'Geist Mono','Noto Sans Mono CJK KR',monospace}
+.eyebrow{fill:var(--soft);font-size:9px;letter-spacing:.14em}
+.h1{fill:var(--ink);font-size:20px;font-weight:600}
+.sub{fill:var(--muted);font-size:11px}
+.col{fill:var(--soft);font-size:10px;letter-spacing:.08em}
+.lane{fill:var(--ink);font-size:13px;font-weight:600}
+.ok{fill:var(--ok);font-size:11px}
+.warn{fill:var(--warn);font-size:11px}
+.mut{fill:var(--muted);font-size:11px}
+.hair{stroke:var(--rule);stroke-width:1}
+.note{fill:var(--muted);font-size:10px}
+</style>
+<rect width="1000" height="336" fill="var(--paper)"/>
+<text class="mn eyebrow" x="64" y="44">STATE TRANSITION</text>
+<text class="kr h1" x="64" y="76">순서를 데이터가 강제합니다</text>
+<text class="kr sub" x="64" y="98">--deps 를 걸어 두면 아직 시키면 안 된다는 것을 사람이 기억할 필요가 없습니다.</text>
+
+<line class="hair" x1="64" y1="128" x2="936" y2="128"/>
+<text class="kr col" x="64" y="148">태스크</text>
+<text class="kr col" x="312" y="148">만든 직후</text>
+<text class="kr col" x="536" y="148">구현 배분 중</text>
+<text class="kr col" x="760" y="148">구현 완료 후</text>
+<line class="hair" x1="64" y1="164" x2="936" y2="164"/>
+
+<text class="kr lane" x="64" y="200">구현</text>
+<text class="kr note" x="64" y="218">deps []</text>
+<text class="kr ok" x="312" y="200">ready</text>
+<text class="kr warn" x="536" y="200">in-progress</text>
+<text class="kr mut" x="760" y="200">completed</text>
+
+<rect x="56" y="240" width="888" height="56" rx="4" fill="var(--accent12)" stroke="var(--accent)" stroke-width="1.4"/>
+<text class="kr lane" x="64" y="268">리뷰</text>
+<text class="kr note" x="64" y="286">deps [구현]</text>
+<text class="kr warn" x="312" y="268">pending</text>
+<text class="kr warn" x="536" y="268">pending</text>
+<text class="kr ok" x="760" y="268">ready</text>
+<text class="kr note" x="760" y="286">여기서 열립니다</text>
+
+<text class="kr note" x="64" y="324">task-list --ready 는 왼쪽 두 시점에서 구현만 돌려줍니다. 리뷰는 목록에 나오지 않습니다.</text>
+</svg>

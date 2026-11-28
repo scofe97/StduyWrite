@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 652" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">드라이브에서 아이노드까지 한 줄로 내려간다</title><desc id="dd">드라이브 sda 223.6G 는 파티션 sda1 512M 과 sda2 223.1G 로 나뉜다. sda1 은 vfat 으로 /boot/efi 에 붙고, sda2 위에는 LVM 볼륨 elementary--vg-root 222.1G 와 swap_1 976M 이 놓인다. ext4 로 포맷된 볼륨 안은 앞머리의 슈퍼블록, 아이노드, 데이터 블록으로 이루어진다. stat myfile 의 아이노드 555036 은 크기 · 링크 수 · 권한 · 소유자를 갖지만 이름은 디렉터리 항목이, 내용은 데이터 블록이 갖는다.</desc>
+<rect width="920" height="652" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING MODERN LINUX · 05-01 §2</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">드라이브에서 아이노드까지 한 줄로 내려간다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">아이노드는 파일 이름과 실제 데이터를 저장하지 않는다</text>
+<text x="24" y="122.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">드라이브</text>
+<text x="24" y="140.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">disk</text>
+<text x="24" y="198.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">파티션</text>
+<text x="24" y="216.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">part</text>
+<text x="24" y="278.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">볼륨</text>
+<text x="24" y="296.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">lvm · fs</text>
+<text x="24" y="374.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">파일시스템</text>
+<text x="24" y="392.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">포맷된 볼륨 안</text>
+<text x="24" y="492.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">메타데이터</text>
+<text x="24" y="510.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">슈퍼블록 · 아이노드</text>
+<line x1="244.0" y1="150" x2="244.0" y2="174" stroke="#6A95D8" stroke-width="1.2"/>
+<line x1="618.0" y1="150" x2="618.0" y2="174" stroke="#6A95D8" stroke-width="1.2"/>
+<line x1="244.0" y1="226" x2="244.0" y2="250" stroke="#8B98A9" stroke-width="1.2"/>
+<line x1="546.0" y1="226" x2="546.0" y2="250" stroke="#3FB98C" stroke-width="1.2"/>
+<line x1="832.0" y1="226" x2="832.0" y2="250" stroke="#3FB98C" stroke-width="1.2"/>
+<path d="M 340 308 L 752 308 L 896 352 L 164 352 Z" fill="#6A95D814" stroke="none"/>
+<text x="546.0" y="338" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">ext4 볼륨 하나를 열면 (개략)</text>
+<line x1="240" y1="402" x2="240" y2="438" stroke="#6A95D8" stroke-width="1.2"/>
+<line x1="478.2" y1="402" x2="478.2" y2="438" stroke="#F08A59" stroke-width="1.2" stroke-dasharray="3 3"/>
+<text x="490.2" y="426" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">한 칸</text>
+<path d="M 640 438 L 640 403" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<text x="652" y="426" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">저장 위치</text>
+<path d="M 710 494 L 667 494" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<rect x="164" y="100" width="732" height="48" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="178" y="129" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#F5F5F3">/dev/sda</text>
+<text x="882" y="129" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">223.6G · 8:0 · disk</text>
+<rect x="164" y="176" width="160" height="48" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="176" y="205" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">sda1</text>
+<text x="312" y="205" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">512M · 8:1</text>
+<rect x="340" y="176" width="556" height="48" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="352" y="205" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">sda2</text>
+<text x="884" y="205" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">223.1G · 8:2</text>
+<rect x="164" y="252" width="160" height="56" rx="6" fill="none" stroke="#5E6B7E" stroke-width="1" stroke-dasharray="4 3"/>
+<text x="176" y="274" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">vfat</text>
+<text x="176" y="294" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">/boot/efi</text>
+<rect x="340" y="252" width="412" height="56" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="352" y="274" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">elementary--vg-root</text>
+<text x="740" y="274" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">222.1G · 253:0</text>
+<text x="352" y="294" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#3FB98C">ext4 · 217.6G → /</text>
+<rect x="768" y="252" width="128" height="56" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="780" y="274" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">swap_1</text>
+<text x="780" y="294" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">976M [SWAP]</text>
+<rect x="164" y="352" width="160" height="48" rx="4" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="176" y="381" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">슈퍼블록</text>
+<text x="312" y="381" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">앞머리</text>
+<rect x="332" y="352" width="268" height="48" rx="4" fill="#161B22" stroke="#F08A59" stroke-width="1.1"/>
+<rect x="345.0" y="382" width="22.4" height="10" rx="2" fill="#F08A5914" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="369.4" y="382" width="22.4" height="10" rx="2" fill="#F08A5914" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="393.8" y="382" width="22.4" height="10" rx="2" fill="#F08A5914" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="418.2" y="382" width="22.4" height="10" rx="2" fill="#F08A5914" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="442.6" y="382" width="22.4" height="10" rx="2" fill="#F08A5914" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="467.0" y="382" width="22.4" height="10" rx="2" fill="#F08A5966" stroke="#F08A59" stroke-width="0.8"/>
+<rect x="491.4" y="382" width="22.4" height="10" rx="2" fill="#F08A5914" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="515.8" y="382" width="22.4" height="10" rx="2" fill="#F08A5914" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="540.2" y="382" width="22.4" height="10" rx="2" fill="#F08A5914" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="564.6" y="382" width="22.4" height="10" rx="2" fill="#F08A5914" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="344" y="373" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">아이노드들</text>
+<rect x="608" y="352" width="288" height="48" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="620" y="381" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">데이터 블록</text>
+<text x="884" y="381" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">파일 내용 · 디렉터리 내용</text>
+<rect x="164" y="440" width="228" height="108" rx="8" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="178" y="464" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">슈퍼블록</text>
+<text x="178" y="490" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">파일시스템 종류</text>
+<text x="178" y="510" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">전체 블록 수 · 블록 크기</text>
+<text x="178" y="530" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">블록 그룹당 아이노드 수</text>
+<rect x="416" y="440" width="248" height="108" rx="8" fill="#F08A591F" stroke="#F08A59" stroke-width="1.4"/>
+<text x="430" y="464" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#F08A59">Inode: 555036</text>
+<text x="430" y="490" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">Size: 0 · Links: 1</text>
+<text x="430" y="510" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">0664 · Uid 1000 · Gid 1001</text>
+<text x="430" y="534" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">이름 없음 · 데이터 없음</text>
+<rect x="712" y="440" width="184" height="108" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="726" y="464" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">디렉터리 항목</text>
+<text x="726" y="498" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">myfile → 555036</text>
+<text x="726" y="522" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">이름은 여기에</text>
+<text x="24" y="576" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">lsblk · findmnt · stat 출력 값 · sda1·swap_1 칸은 키움 · stat myfile 은 장치 fc01h 의 예라 root(253:0) 와 다른 볼륨</text>
+<line x1="12" y1="600" x2="872" y2="600" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="622" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="612" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="622" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">장치 · 슈퍼블록</text>
+<rect x="261" y="612" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="283" y="622" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">LVM 볼륨</text>
+<rect x="383" y="612" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="405" y="622" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">아이노드</text>
+</svg>

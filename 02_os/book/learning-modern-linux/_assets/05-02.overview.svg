@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 808" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">새 디스크가 부팅 때 다시 붙기까지 쌓이는 층</title><desc id="dd">재스캔으로 커널이 새 디스크를 잡으면 parted 가 GPT 파티션을 나누고 growpart 가 마지막 파티션을 끝까지 늘린다. PV 는 볼륨 그룹 vg0 에 모이고 LV /dev/vg0/data 는 lvextend -r 로 50 익스텐트에서 75 익스텐트가 된다. mkfs.ext4 가 라벨 datalv 와 UUID 를 새기고, 파일시스템은 /mnt/lv 에 붙으며, 같은 UUID 를 적은 fstab 줄을 systemd-fstab-generator 가 부팅 때 .mount 유닛으로 바꾼다.</desc>
+<rect width="920" height="808" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING MODERN LINUX · 05-02 OVERVIEW</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">새 디스크가 부팅 때 다시 붙기까지 쌓이는 층</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">키울 때는 아래 층부터 — 위 층은 아래 층이 이미 확보한 공간만 쓴다</text>
+<path d="M 546.0 158 L 546.0 177" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<path d="M 546.0 274 L 546.0 293" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<path d="M 546.0 362 L 546.0 381" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<path d="M 546.0 466 L 546.0 485" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<path d="M 546.0 546 L 546.0 565" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<path d="M 546.0 626 L 546.0 645" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<text x="24" y="120" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#5E6B7E">1  재스캔</text>
+<text x="24" y="140" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">디스크</text>
+<text x="24" y="200" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#5E6B7E">2  parted</text>
+<text x="24" y="220" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">파티션</text>
+<text x="24" y="316" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#5E6B7E">3  LVM</text>
+<text x="24" y="336" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">PV · VG</text>
+<text x="24" y="404" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#5E6B7E">3  LVM</text>
+<text x="24" y="424" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">LV</text>
+<text x="24" y="508" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#5E6B7E">4  mkfs</text>
+<text x="24" y="528" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">파일시스템</text>
+<text x="24" y="588" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#5E6B7E">5  mount</text>
+<text x="24" y="608" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">마운트 지점</text>
+<text x="24" y="668" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#5E6B7E">6  fstab</text>
+<text x="24" y="688" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">부팅 때 다시</text>
+<rect x="196" y="100" width="700" height="56" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="210" y="122" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#F5F5F3">/dev/sdX</text>
+<text x="882" y="122" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#6A95D8">dmesg · [sdX] Attached SCSI disk</text>
+<text x="210" y="144" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">echo "- - -" &gt; /sys/class/scsi_host/host0/scan</text>
+<rect x="196" y="180" width="700" height="92" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="210" y="202" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#F5F5F3">/dev/loop10</text>
+<text x="882" y="202" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#6A95D8">Partition Table: gpt</text>
+<rect x="211" y="214" width="150" height="26" rx="3" fill="#6A95D826" stroke="#6A95D8" stroke-width="1"/>
+<text x="220" y="232" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">p1 · 1049kB–52.4MB</text>
+<rect x="363" y="214" width="150" height="26" rx="3" fill="#6A95D826" stroke="#6A95D8" stroke-width="1"/>
+<text x="372" y="232" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">p2 · 52.4MB–105MB</text>
+<rect x="515" y="214" width="366" height="26" rx="3" fill="none" stroke="#5E6B7E" stroke-width="1" stroke-dasharray="4 3"/>
+<text x="526" y="232" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#6A95D8">growpart /dev/loop10 2 · p2 를 끝까지</text>
+<path d="M 774 227 L 872 227" fill="none" stroke="#6A95D8" stroke-width="1.2" marker-end="url(#info)" stroke-dasharray="4 3"/>
+<text x="210" y="260" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">parted -s /dev/loop10 mklabel gpt mkpart p1 … mkpart p2 …</text>
+<rect x="196" y="296" width="700" height="64" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="210" y="318" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#3FB98C">VG vg0</text>
+<rect x="324" y="306" width="272" height="44" rx="4" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1"/>
+<text x="336" y="324" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">PV /dev/loop2</text>
+<text x="336" y="342" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">pvresize</text>
+<rect x="612" y="306" width="270" height="44" rx="4" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1"/>
+<text x="624" y="324" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">PV /dev/loop1</text>
+<text x="624" y="342" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">pvcreate → vgextend vg0</text>
+<rect x="196" y="384" width="700" height="80" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.1"/>
+<text x="210" y="406" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#F5F5F3">/dev/vg0/data</text>
+<text x="882" y="406" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">200.00 MiB (50 extents) → 300.00 MiB (75 extents)</text>
+<rect x="210.6" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="219.6" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="228.5" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="237.5" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="246.4" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="255.4" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="264.4" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="273.3" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="282.3" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="291.2" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="300.2" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="309.2" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="318.1" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="327.1" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="336.0" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="345.0" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="354.0" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="362.9" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="371.9" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="380.8" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="389.8" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="398.8" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="407.7" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="416.7" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="425.6" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="434.6" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="443.6" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="452.5" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="461.5" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="470.4" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="479.4" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="488.4" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="497.3" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="506.3" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="515.2" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="524.2" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="533.2" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="542.1" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="551.1" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="560.0" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="569.0" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="578.0" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="586.9" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="595.9" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="604.8" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="613.8" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="622.8" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="631.7" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="640.7" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="649.6" y="418" width="7.8" height="14" rx="1" fill="#3FB98C33" stroke="#3FB98C" stroke-width="0.6"/>
+<rect x="658.6" y="418" width="7.8" height="14" rx="1" fill="#F08A5966" stroke="#F08A59" stroke-width="0.6"/>
+<rect x="667.6" y="418" width="7.8" height="14" rx="1" fill="#F08A5966" stroke="#F08A59" stroke-width="0.6"/>
+<rect x="676.5" y="418" width="7.8" height="14" rx="1" fill="#F08A5966" stroke="#F08A59" stroke-width="0.6"/>
+<rect x="685.5" y="418" width="7.8" height="14" rx="1" fill="#F08A5966" stroke="#F08A59" stroke-width="0.6"/>
+<rect x="694.4" y="418" width="7.8" height="14" rx="1" fill="#F08A5966" stroke="#F08A59" stroke-width="0.6"/>
+<rect x="703.4" y="418" width="7.8" height="14" rx="1" fill="#F08A5966" stroke="#F08A59" stroke-width="0.6"/>
+<rect x="712.4" y="418" width="7.8" height="14" rx="1" fill="#F08A5966" stroke="#F08A59" stroke-width="0.6"/>
+<rect x="721.3" y="418" width="7.8" height="14" rx="1" fill="#F08A5966" stroke="#F08A59" stroke-width="0.6"/>
+<rect x="730.3" y="418" width="7.8" height="14" rx="1" fill="#F08A5966" stroke="#F08A59" stroke-width="0.6"/>
+<rect x="739.2" y="418" width="7.8" height="14" rx="1" fill="#F08A5966" stroke="#F08A59" stroke-width="0.6"/>
+<rect x="748.2" y="418" width="7.8" height="14" rx="1" fill="#F08A5966" stroke="#F08A59" stroke-width="0.6"/>
+<rect x="757.2" y="418" width="7.8" height="14" rx="1" fill="#F08A5966" stroke="#F08A59" stroke-width="0.6"/>
+<rect x="766.1" y="418" width="7.8" height="14" rx="1" fill="#F08A5966" stroke="#F08A59" stroke-width="0.6"/>
+<rect x="775.1" y="418" width="7.8" height="14" rx="1" fill="#F08A5966" stroke="#F08A59" stroke-width="0.6"/>
+<rect x="784.0" y="418" width="7.8" height="14" rx="1" fill="#F08A5966" stroke="#F08A59" stroke-width="0.6"/>
+<rect x="793.0" y="418" width="7.8" height="14" rx="1" fill="#F08A5966" stroke="#F08A59" stroke-width="0.6"/>
+<rect x="802.0" y="418" width="7.8" height="14" rx="1" fill="#F08A5966" stroke="#F08A59" stroke-width="0.6"/>
+<rect x="810.9" y="418" width="7.8" height="14" rx="1" fill="#F08A5966" stroke="#F08A59" stroke-width="0.6"/>
+<rect x="819.9" y="418" width="7.8" height="14" rx="1" fill="#F08A5966" stroke="#F08A59" stroke-width="0.6"/>
+<rect x="828.8" y="418" width="7.8" height="14" rx="1" fill="#F08A5966" stroke="#F08A59" stroke-width="0.6"/>
+<rect x="837.8" y="418" width="7.8" height="14" rx="1" fill="#F08A5966" stroke="#F08A59" stroke-width="0.6"/>
+<rect x="846.8" y="418" width="7.8" height="14" rx="1" fill="#F08A5966" stroke="#F08A59" stroke-width="0.6"/>
+<rect x="855.7" y="418" width="7.8" height="14" rx="1" fill="#F08A5966" stroke="#F08A59" stroke-width="0.6"/>
+<rect x="864.7" y="418" width="7.8" height="14" rx="1" fill="#F08A5966" stroke="#F08A59" stroke-width="0.6"/>
+<rect x="873.6" y="418" width="7.8" height="14" rx="1" fill="#F08A5966" stroke="#F08A59" stroke-width="0.6"/>
+<text x="210" y="452" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">lvextend -r -L +100M /dev/vg0/data</text>
+<text x="662.0" y="452" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">+25 extents · resize2fs 까지 한 번에</text>
+<rect x="196" y="488" width="700" height="56" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="210" y="510" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#F5F5F3">ext4 · LABEL="datalv"</text>
+<text x="882" y="510" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#E3B341">UUID="be9ae4e4-a6c3-…"</text>
+<text x="210" y="532" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">mkfs.ext4 -L datalv /dev/vg0/data</text>
+<rect x="196" y="568" width="700" height="56" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="210" y="590" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#F5F5F3">/mnt/lv</text>
+<text x="882" y="590" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">/dev/mapper/vg0-data is mounted on /mnt/lv</text>
+<text x="210" y="612" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">mount -o remount,ro /mnt/lv</text>
+<rect x="196" y="648" width="700" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="210" y="670" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#F5F5F3">/etc/fstab</text>
+<text x="312" y="670" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#E3B341">UUID=be9ae4e4-a6c3-…</text>
+<text x="474" y="670" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F5F5F3">/mnt/lv  ext4  defaults,nofail  0  2</text>
+<text x="210" y="694" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">systemd-fstab-generator</text>
+<text x="392" y="694" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">→ 부팅 때 .mount 유닛으로</text>
+<text x="24" y="740" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">실습 장치는 층마다 다름 (loop10 · vg0) · 파티션 띠 비율은 개략 · LV 띠 한 칸 = 익스텐트 하나</text>
+<line x1="12" y1="760" x2="872" y2="760" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="782" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="772" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="782" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">디스크 · 파티션</text>
+<rect x="261" y="772" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="283" y="782" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">LVM</text>
+<rect x="344" y="772" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="366" y="782" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">lvextend 로 늘어난 몫</text>
+<rect x="596" y="772" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="618" y="782" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">같은 UUID</text>
+</svg>

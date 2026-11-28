@@ -1,0 +1,51 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>비동기 outbound 호출 — HTTP client와 DB</title>
+  <desc>outbound 호출이 nonblocking이면 호출마다 스레드를 전담하지 않아 풀 크기를 줄인다. HTTP client는 static 공유 객체로 쓴다. 모두 thread-safe하고 생성이 비싸 제한된 수만 둔다. connection pool과 keepalive로 연결을 재사용해야 한다. socket 열기는 비싸고 HTTPS는 SSL handshake까지 든다. HttpURLConnection은 server당 5 connection을 풀하지만 throttle하지 않아 6번째는 임시 생성된다. maxConnections로 크기를 바꾼다. JDK11 HttpClient는 기본 무제한이고 connectionPoolSize로 설정하며 HttpClient 객체별 풀이라 재사용 안 하면 풀링이 없다. JAX-RS는 4 connector가 있다. Default와 Apache는 blocking이고 Grizzly와 Jetty는 async다. NIO async client는 적은 스레드를, blocking은 요청마다 한 스레드를 쓴다. aggregator 예제는 3 REST를 병렬 호출한다. DB의 진짜 async는 어려워 R2DBC를 쓰거나 Project Loom fibers를 기다린다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">비동기 outbound 호출 — HTTP·DB</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">outbound가 nonblocking이면 호출마다 스레드를 전담하지 않아 풀을 줄입니다</text>
+
+  <!-- client 재사용 + pool -->
+  <rect x="20" y="74" width="642" height="98" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="96" fill="#66bb6a" font-size="13" font-weight="bold">HTTP client 두 핵심</text>
+  <text x="38" y="118" fill="rgb(138,133,128)" font-size="11">① static 공유 객체로 — 모두 thread-safe·생성 비쌈 → 제한된 수(예: 1개)만</text>
+  <text x="38" y="138" fill="rgb(138,133,128)" font-size="11">② connection pool + keepalive로 재사용 — socket 열기 비쌈(HTTPS는 SSL handshake)</text>
+  <text x="38" y="158" fill="#f47f72" font-size="10">HttpURLConnection은 재사용 불가(예외). JDBC 연결처럼 HTTP(S) 연결도 재사용</text>
+
+  <!-- pool 비교 -->
+  <rect x="20" y="180" width="320" height="110" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="202" fill="#9cc3df" font-size="12" font-weight="bold">HttpURLConnection (Java 8)</text>
+  <text x="38" y="222" fill="rgb(138,133,128)" font-size="10">server당 5 connection 풀</text>
+  <text x="38" y="240" fill="#f47f72" font-size="10">throttle 안 함 → 6번째는 임시 생성·파괴</text>
+  <text x="38" y="258" fill="rgb(138,133,128)" font-size="10">-Dhttp.maxConnections=N (기본 5)</text>
+  <text x="38" y="278" fill="rgb(138,133,128)" font-size="9">HTTPS에도 적용 · Javadoc에 풀링 언급 없음</text>
+
+  <rect x="350" y="180" width="312" height="110" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="368" y="202" fill="#9cc3df" font-size="12" font-weight="bold">HttpClient (JDK 11)</text>
+  <text x="368" y="222" fill="rgb(138,133,128)" font-size="10">기본 풀 크기 무제한</text>
+  <text x="368" y="240" fill="rgb(138,133,128)" font-size="10">-Djdk.httpclient.connectionPoolSize=N</text>
+  <text x="368" y="258" fill="#f47f72" font-size="10">throttle 안 함 · 객체별 풀</text>
+  <text x="368" y="278" fill="#f47f72" font-size="9">→ 객체 재사용 안 하면 풀링 없음</text>
+
+  <!-- 4 connector -->
+  <rect x="20" y="298" width="642" height="110" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="320" fill="#e8e4df" font-size="13" font-weight="bold">JAX-RS connector 4종 — ASYNC_THREADPOOL_SIZE로 튜닝</text>
+  <text x="38" y="342" fill="#f47f72" font-size="11">Default (HttpURLConnection) — blocking I/O, 요청마다 1 스레드 (무제한)</text>
+  <text x="38" y="362" fill="#f47f72" font-size="11">Apache — true async 있으나 Jersey는 blocking client 사용 (Default와 동일)</text>
+  <text x="38" y="382" fill="#66bb6a" font-size="11">Grizzly (Netty AsyncHttpClient) — async, pool-N이 응답 처리(튜닝 대상)</text>
+  <text x="38" y="402" fill="#66bb6a" font-size="11">Jetty — async, 송수신 한 풀. 미설정 시 HttpClient 풀 200</text>
+
+  <!-- async NIO vs blocking -->
+  <rect x="20" y="416" width="642" height="74" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="438" fill="rgb(212,168,83)" font-size="13" font-weight="bold">async client 스레드 사용 — NIO vs blocking</text>
+  <text x="38" y="460" fill="rgb(138,133,128)" font-size="11">NIO: NIO key selection 몇 + 응답 처리 몇 → 전체적으로 적은 스레드</text>
+  <text x="38" y="480" fill="#f47f72" font-size="11">blocking: 동시 요청마다 한 스레드 (API만 async처럼 보임, 진짜 비동기 아님)</text>
+
+  <!-- DB -->
+  <rect x="20" y="498" width="642" height="84" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="38" y="520" fill="#f47f72" font-size="13" font-weight="bold">DB의 진짜 async는 어렵다</text>
+  <text x="38" y="542" fill="rgb(138,133,128)" font-size="11">표준 JDBC API는 nonblocking I/O에 안 맞음 → async JDBC wrapper도 background에서 block</text>
+  <text x="38" y="562" fill="rgb(138,133,128)" font-size="11">Spring Data R2DBC가 현재 최선(다른 API·일부 DB만). NoSQL은 reactive Spring 프로젝트</text>
+  <text x="38" y="578" fill="#9cc3df" font-size="10">Project Loom의 fibers가 동기 API를 잘 확장하게 할 희망(릴리스 미정)</text>
+</svg>
