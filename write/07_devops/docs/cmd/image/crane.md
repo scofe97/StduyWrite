@@ -11,7 +11,7 @@ source:
 related:
   - "../README.md"
   - "../../artifact/container/03-01.%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EA%B5%AC%EC%A1%B0%EC%99%80%20digest.md"
-  - "../../artifact/container/03-02.%EB%A0%88%EC%A7%80%EC%8A%A4%ED%8A%B8%EB%A6%AC%20%ED%86%B5%EC%8B%A0%EA%B3%BC%20%EC%98%A4%ED%94%84%EB%9D%BC%EC%9D%B8%20%EB%B0%98%EC%9E%85.md"
+  - "../../artifact/container/03-03.%EB%A0%88%EC%A7%80%EC%8A%A4%ED%8A%B8%EB%A6%AC%20%ED%86%B5%EC%8B%A0%EA%B3%BC%20%EC%98%A4%ED%94%84%EB%9D%BC%EC%9D%B8%20%EB%B0%98%EC%9E%85.md"
   - "../../../../08_cloud/docs/cmd/container/docker.md"
   - "../../../../02_os/docs/cmd/isolate/nerdctl.md"
 updated: "2026-11-23"
@@ -344,7 +344,7 @@ docker load -i alpine-oci 2>&1; echo $?
 # 1
 ```
 
-`tarball` 과 `legacy` 는 `docker load` 로 읽혔습니다. 반면 `oci` 디렉터리는 `is a directory` 오류로 실패했습니다. tar 로 반입하는 전체 절차는 [레지스트리 통신과 오프라인 반입](../../artifact/container/03-02.%EB%A0%88%EC%A7%80%EC%8A%A4%ED%8A%B8%EB%A6%AC%20%ED%86%B5%EC%8B%A0%EA%B3%BC%20%EC%98%A4%ED%94%84%EB%9D%BC%EC%9D%B8%20%EB%B0%98%EC%9E%85.md) 편과 [docker 참조 시트](../../../../08_cloud/docs/cmd/container/docker.md) 가 다룹니다.
+`tarball` 과 `legacy` 는 `docker load` 로 읽혔습니다. 반면 `oci` 디렉터리는 `is a directory` 오류로 실패했습니다. tar 로 반입하는 전체 절차는 [레지스트리 통신과 오프라인 반입](../../artifact/container/03-03.%EB%A0%88%EC%A7%80%EC%8A%A4%ED%8A%B8%EB%A6%AC%20%ED%86%B5%EC%8B%A0%EA%B3%BC%20%EC%98%A4%ED%94%84%EB%9D%BC%EC%9D%B8%20%EB%B0%98%EC%9E%85.md) 편과 [docker 참조 시트](../../../../08_cloud/docs/cmd/container/docker.md) 가 다룹니다.
 
 ```bash
 # 두 번째 저장소(5111)로 tarball 파일과 oci 디렉터리를 각각 push 한다
@@ -676,7 +676,7 @@ rm -rf /root/sheet-crane
 
 - [DevOps 명령어 시트](../README.md) — 빌드·배포 도구 시트 목록
 - [이미지 구조와 digest](../../artifact/container/03-01.%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EA%B5%AC%EC%A1%B0%EC%99%80%20digest.md) — index·manifest·config·layer 가 digest 로 이어지는 구조
-- [레지스트리 통신과 오프라인 반입](../../artifact/container/03-02.%EB%A0%88%EC%A7%80%EC%8A%A4%ED%8A%B8%EB%A6%AC%20%ED%86%B5%EC%8B%A0%EA%B3%BC%20%EC%98%A4%ED%94%84%EB%9D%BC%EC%9D%B8%20%EB%B0%98%EC%9E%85.md) — 토큰 인증·HTTP 저장소·폐쇄망 반입 절차
+- [레지스트리 통신과 오프라인 반입](../../artifact/container/03-03.%EB%A0%88%EC%A7%80%EC%8A%A4%ED%8A%B8%EB%A6%AC%20%ED%86%B5%EC%8B%A0%EA%B3%BC%20%EC%98%A4%ED%94%84%EB%9D%BC%EC%9D%B8%20%EB%B0%98%EC%9E%85.md) — 토큰 인증·HTTP 저장소·폐쇄망 반입 절차
 - [docker 참조 시트](../../../../08_cloud/docs/cmd/container/docker.md) — `docker save`·`docker load`·`docker export` 명령과 형식 차이
 - [nerdctl 참조 시트](../../../../02_os/docs/cmd/isolate/nerdctl.md) — containerd 환경에서 `nerdctl load`·`tag`·`push` 로 반입하는 방법
 

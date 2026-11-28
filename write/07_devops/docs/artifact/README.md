@@ -12,19 +12,20 @@ updated: 2026-11-24
 
 ---
 
-> CI 가 소스를 받아 무엇을 만들어 내는지, 그 산출물을 어디서 어떤 도구로 굽는지를 다루는 자리입니다. 언어별 빌드 설정의 깊은 내용은 언어 폴더가 맡고, 여기서는 CI 파이프라인에서 보이는 모습만 봅니다.
+> CI 가 소스를 받아 무엇을 만들어 내는지, 그 산출물을 어디서 어떤 도구로 굽고 저장·유통하는지를 다루는 자리입니다. 언어별 빌드 설정의 깊은 내용은 언어 폴더가 맡고, 여기서는 CI/CD 파이프라인과 레지스트리에서 보이는 모습만 봅니다.
 
 먼저 읽기: [01-04 데몬 없는 이미지 빌드의 등장 배경](container/01-04.데몬%20없는%20이미지%20빌드의%20등장%20배경.md) — 프로세스 격리 계보와 OCI 표준 분리를 따라 데몬 없는 빌더의 등장 흐름을 보는 큰 그림
 
 ## 폴더 규칙
 
-> 산출물 종류마다 폴더를 하나 두고, 개념 편은 번호로 둡니다. 도구별 명령어 시트는 [명령어 시트](../cmd/README.md)에 둡니다.
+> 산출물 종류와 저장소 운영마다 폴더를 두고, 개념 편은 번호 또는 단독 편으로 둡니다. 도구별 명령어 시트는 [명령어 시트](../cmd/README.md)에 둡니다.
 
 | 폴더 | 산출물 | 지금 상태 |
 |------|--------|-----------|
 | `container/` | 컨테이너 이미지 | 개념 편 여덟 |
 | `package/` | JAR·바이너리 같은 실행 패키지 | 아직 없음. 정본은 아래 「다른 폴더가 맡는 것」 |
 | `vm/` | VM 이미지 | 폴더를 만들지 않았습니다. 아래 「다른 폴더가 맡는 것」 의 fdsd 두 절이 지금의 자리입니다 |
+| `registry/` | 아티팩트·이미지 레지스트리 운영 | 개념 편 하나 (복제·프록시 캐시) |
 
 개념 편은 `{장}-{절}.{제목}.md` 로 번호를 받습니다. 장 번호는 주제 묶음입니다. 1장은 빌드, 2장은 JDK 이미지, 3장은 OCI 이미지입니다.
 
@@ -64,8 +65,17 @@ JDK 를 담은 이미지가 왜 제각각인지, JDK 배포판이 왜 여럿인�
 | 문서 | 산출물 | 언제 |
 |------|--------|------|
 | [03-01 이미지 구조와 digest](container/03-01.%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EA%B5%AC%EC%A1%B0%EC%99%80%20digest.md) | 컨테이너 이미지 | 같은 이미지인데 머신마다 이미지 ID 가 다르거나, 레지스트리를 옮긴 뒤 digest 가 달라져 같은 이미지인지 가려야 할 때 |
-| [03-02 레지스트리 통신과 오프라인 반입](container/03-02.%EB%A0%88%EC%A7%80%EC%8A%A4%ED%8A%B8%EB%A6%AC%20%ED%86%B5%EC%8B%A0%EA%B3%BC%20%EC%98%A4%ED%94%84%EB%9D%BC%EC%9D%B8%20%EB%B0%98%EC%9E%85.md) | 컨테이너 이미지 | HTTP 사내 레지스트리에서 이미지를 받아 폐쇄망으로 옮겨 올리는데 로그인·pull·push 가 막힐 때 |
-| [03-03 layer 변경분과 whiteout](container/03-03.layer%20%EB%B3%80%EA%B2%BD%EB%B6%84%EA%B3%BC%20whiteout.md) | 컨테이너 이미지 | Dockerfile 뒤 단계에서 지운 파일 때문에 이미지 크기가 줄지 않거나, 지운 줄 알았던 파일이 tar 에서 꺼내질 때 |
+| [03-02 layer 변경분과 whiteout](container/03-02.layer%20%EB%B3%80%EA%B2%BD%EB%B6%84%EA%B3%BC%20whiteout.md) | 컨테이너 이미지 | Dockerfile 뒤 단계에서 지운 파일 때문에 이미지 크기가 줄지 않거나, 지운 줄 알았던 파일이 tar 에서 꺼내질 때 |
+| [03-03 레지스트리 통신과 오프라인 반입](container/03-03.%EB%A0%88%EC%A7%80%EC%8A%A4%ED%8A%B8%EB%A6%AC%20%ED%86%B5%EC%8B%A0%EA%B3%BC%20%EC%98%A4%ED%94%84%EB%9D%BC%EC%9D%B8%20%EB%B0%98%EC%9E%85.md) | 컨테이너 이미지 | HTTP 사내 레지스트리에서 이미지를 받아 폐쇄망으로 옮겨 올리는데 로그인·pull·push 가 막힐 때 |
+| `03-04.번들과 컨테이너 생애 주기.md` (작성 중) | 번들·런타임 | runtime-spec 번들 구조(config.json + rootfs)와 컨테이너 생애 주기(created·running·stopped)를 파악할 때 |
+
+### 레지스트리 운영
+
+산출물을 보관하는 레지스트리의 복제·프록시 캐시·접근 제어와 선택 기준을 다룹니다.
+
+| 문서 | 대상 | 언제 |
+|------|------|------|
+| [레지스트리 복제와 프록시 캐시](registry/%EB%A0%88%EC%A7%80%EC%8A%A4%ED%8A%B8%EB%A6%AC%20%EB%B3%B5%EC%A0%9C%C2%B7%ED%94%84%EB%A1%9D%EC%8B%9C%20%EC%BA%90%EC%8B%9C.md) | 아티팩트·이미지 레지스트리 | Harbor Replication(Push·Pull) 과 Proxy Cache 중 무엇을 골라야 할 때 |
 
 
 
@@ -89,11 +99,11 @@ OCI(Open Container Initiative)는 컨테이너 이미지 형식과 실행 규격
 
 | 명세 | 정하는 것 | 원문 | 먼저 읽을 파일 | 지금 닿아 있는 문서 |
 |------|-----------|------|----------------|---------------------|
-| image-spec | 이미지를 이루는 파일(index·manifest·config·layer)의 형식과 digest | [v1.1.1 (2025-03-03)](https://github.com/opencontainers/image-spec/tree/v1.1.1) | `spec.md` 에서 시작해 `manifest.md`·`image-index.md`·`descriptor.md`·`config.md`·`layer.md`·`image-layout.md` | [03-01 이미지 구조와 digest](container/03-01.%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EA%B5%AC%EC%A1%B0%EC%99%80%20digest.md), [03-03 layer 변경분과 whiteout](container/03-03.layer%20%EB%B3%80%EA%B2%BD%EB%B6%84%EA%B3%BC%20whiteout.md) |
-| distribution-spec | 레지스트리와 이미지를 주고받는 HTTP API | [v1.1.1 (2025-01-29)](https://github.com/opencontainers/distribution-spec/blob/v1.1.1/spec.md) | `spec.md` 한 편. 「Workflow Categories」 의 Pull·Push·Content Discovery·Content Management 네 갈래와 「Endpoints」·「Error Codes」 | [03-02 레지스트리 통신과 오프라인 반입](container/03-02.%EB%A0%88%EC%A7%80%EC%8A%A4%ED%8A%B8%EB%A6%AC%20%ED%86%B5%EC%8B%A0%EA%B3%BC%20%EC%98%A4%ED%94%84%EB%9D%BC%EC%9D%B8%20%EB%B0%98%EC%9E%85.md) |
-| runtime-spec | 풀어 놓은 이미지를 컨테이너로 실행하는 설정과 생명주기 | [v1.3.0 (2025-11-04)](https://github.com/opencontainers/runtime-spec/tree/v1.3.0) | `spec.md` 에서 시작해 `bundle.md`·`runtime.md`·`config.md`·`config-linux.md` | 이 폴더에는 없음. 가장 가까운 문서는 [컨테이너 런타임 인터페이스·crictl](../../../08_cloud/docs/kubernetes/architecture/%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EB%9F%B0%ED%83%80%EC%9E%84%20%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4%C2%B7crictl.md) |
+| image-spec | 이미지를 이루는 파일(index·manifest·config·layer)의 형식과 digest | [v1.1.1 (2025-03-03)](https://github.com/opencontainers/image-spec/tree/v1.1.1) | `spec.md` 에서 시작해 `manifest.md`·`image-index.md`·`descriptor.md`·`config.md`·`layer.md`·`image-layout.md` | [03-01 이미지 구조와 digest](container/03-01.%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EA%B5%AC%EC%A1%B0%EC%99%80%20digest.md), [03-02 layer 변경분과 whiteout](container/03-02.layer%20%EB%B3%80%EA%B2%BD%EB%B6%84%EA%B3%BC%20whiteout.md) |
+| distribution-spec | 레지스트리와 이미지를 주고받는 HTTP API | [v1.1.1 (2025-01-29)](https://github.com/opencontainers/distribution-spec/blob/v1.1.1/spec.md) | `spec.md` 한 편. 「Workflow Categories」 의 Pull·Push·Content Discovery·Content Management 네 갈래와 「Endpoints」·「Error Codes」 | [03-03 레지스트리 통신과 오프라인 반입](container/03-03.%EB%A0%88%EC%A7%80%EC%8A%A4%ED%8A%B8%EB%A6%AC%20%ED%86%B5%EC%8B%A0%EA%B3%BC%20%EC%98%A4%ED%94%84%EB%9D%BC%EC%9D%B8%20%EB%B0%98%EC%9E%85.md) |
+| runtime-spec | 풀어 놓은 이미지를 컨테이너로 실행하는 설정과 생명주기 | [v1.3.0 (2025-11-04)](https://github.com/opencontainers/runtime-spec/tree/v1.3.0) | `spec.md` 에서 시작해 `bundle.md`·`runtime.md`·`config.md`·`config-linux.md` | `container/03-04.번들과 컨테이너 생애 주기.md` (작성 중). 가장 가까운 문서는 [컨테이너 런타임 인터페이스·crictl](../../../08_cloud/docs/kubernetes/architecture/%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EB%9F%B0%ED%83%80%EC%9E%84%20%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4%C2%B7crictl.md) |
 
-runtime-spec 은 빌드 산출물이 아니라 실행 영역이므로, 후보가 나오면 다른 폴더에 두고 어느 폴더인지는 그때 정합니다. 원문 링크를 `main` 브랜치 대신 릴리스 태그로 건 까닭은 판마다 문장이 바뀌어 인용이 어긋나기 때문입니다.
+사용자 결정(2026-11-27): OCI 세 명세를 한 흐름으로 읽도록 `container/03-04` 에 둔다. 원문 링크를 `main` 브랜치 대신 릴리스 태그로 건 까닭은 판마다 문장이 바뀌어 인용이 어긋나기 때문입니다.
 
 1. 가장 새 릴리스 태그를 확인하고 원문을 그 태그로 받습니다.
 2. 명세 파일마다 사실을 한 줄씩 뽑습니다. 사실은 독자가 알면 판단이 달라지는 규칙·구조·값입니다. 거버넌스·릴리스 절차·Go 타입 정의는 뽑지 않습니다.
@@ -113,7 +123,7 @@ runtime-spec 은 빌드 산출물이 아니라 실행 영역이므로, 후보가
 - Go 빌드: [Go 바이너리의 빌드 정보와 GOOS·GOARCH](../../../01_language/book/lgo_learning-go/11-04.Go%20%EB%B0%94%EC%9D%B4%EB%84%88%EB%A6%AC%EB%8A%94%20%EB%B9%8C%EB%93%9C%20%EC%A0%95%EB%B3%B4%EB%A5%BC%20%ED%92%88%EA%B3%A0%20GOOS%C2%B7GOARCH%20%EC%99%80%20%EB%B9%8C%EB%93%9C%20%ED%83%9C%EA%B7%B8%EB%A1%9C%20%EB%8C%80%EC%83%81%EC%9D%84%20%EA%B0%80%EB%A6%BD%EB%8B%88%EB%8B%A4.md)
 - VM 이미지: [Server Templating Tools](../../book/fdsd_fundamentals-devops/02-01.How%20to%20Manage%20Your%20Infrastructure%20as%20Code.md#28-server-templating-tools)(Packer 로 굽는 이미지)와 [VM 오케스트레이션](../../book/fdsd_fundamentals-devops/03-01.How%20to%20Manage%20Your%20Apps.md#34-vm-오케스트레이션-vm-orchestration)
 - 이미지 보안(베이스 이미지 고르기, 공급망): `08_cloud/book/` 의 cks-study-guide 06-01, container-security 06-01·06-02
-- 산출물이 저장되는 곳: 레지스트리 문서는 artifact 아래에 두지 않고 `07_devops/docs/harbor/`·`07_devops/docs/nexus/` 에 둘 예정입니다. 지금은 [03_Nexus](../../03_Nexus/) 에 있습니다
+- 산출물이 저장되는 곳: 레지스트리 복제·프록시 캐시 등 운영 개념은 [registry](registry/%EB%A0%88%EC%A7%80%EC%8A%A4%ED%8A%B8%EB%A6%AC%20%EB%B3%B5%EC%A0%9C%C2%B7%ED%94%84%EB%A1%9D%EC%8B%9C%20%EC%BA%90%EC%8B%9C.md) 에서 다루며, Nexus 설치·기존 문서는 [03_Nexus](../../03_Nexus/) 에 있습니다
 
 
 

@@ -44,6 +44,7 @@ Jenkins 파이프라인 그루비 작성법은 여기로 배치합니다. 반면
   - [`argocd-up-and-running/`](book/argocd-up-and-running/README.md) — 《Argo CD: Up and Running》 정독 노트 16편 (5단계 GitOps)
 - [`docs/`](docs/) — 공식 문서 기반 노트
   - [`jenkins/`](docs/jenkins/README.md) — Jenkins 구조·엔진·Pipeline·Groovy 확장·보안·운영·REST API 를 원리 중심으로 다룬 20편
+  - [`artifact/`](docs/artifact/README.md) — 빌드 산출물·OCI 명세(`container/`)와 레지스트리 복제·프록시 캐시(`registry/`) 운영 개념
   - [`sonarqube/`](docs/sonarqube/) — 정적 분석, Quality Gate, CI 연계, Web API (2026.1 LTA 기준 19편)
   - [`iac/`](docs/iac/README.md) — IaC 개념 폴더. Helm 다섯 편(차트 작성·values와 렌더 검증·릴리스 운영·Hook·의존성과 저장소), Kustomize (4단계 패키징·7단계 인프라를 코드로)
   - [`gitops/`](docs/gitops/README.md) — GitOps·Argo Rollouts 배포 전략·검증·롤백 정책 시리즈 네 편

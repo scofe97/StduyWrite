@@ -79,7 +79,9 @@ updated: 2026-11-24
 
 ## 다음 레슨 후보 + 고른 이유
 - `03-01` 막힌 3축 게이트 재확인 — 태그 포인터·daemon 아키텍처·`config` 트레이드오프를 먼저 잡는다.
-- 게이트 통과 후 `03-02` — 내부 구조와 digest 를 잡아야 통신·반입이 이어진다.
+- 게이트 통과 후 `03-02` — 내부 구조와 digest 를 잡아야 layer 변경분이 이어진다.
+- `03-03` — 이미지 형식을 완성한 뒤 레지스트리 통신과 오프라인 반입으로 나아간다.
+- `03-04.번들과 컨테이너 생애 주기.md` (작성 중) — runtime-spec 번들과 컨테이너 실행 생애 주기
 
 
 
@@ -92,7 +94,8 @@ updated: 2026-11-24
 ## 볼 자료 (셋 이내)
 - [OCI Image Spec v1.1.0](https://github.com/opencontainers/image-spec/tree/v1.1.0) — 1차 · 지금: index·manifest·config·descriptor 정본
 - [Docker Docs — containerd image store](https://docs.docker.com/engine/storage/containerd/) — 1차 · 지금: containerd store 와 classic store 차이
-- `03-01.이미지 구조와 digest.md` · `03-02.레지스트리 통신과 오프라인 반입.md` — 2차(직접 측정 포함) · 지금: 학습 대상 노트
+- `03-01.이미지 구조와 digest.md` · `03-02.layer 변경분과 whiteout.md` · `03-03.레지스트리 통신과 오프라인 반입.md` — 2차(직접 측정 포함) · 지금: 학습 대상 노트
+- `03-04.번들과 컨테이너 생애 주기.md` — 작성 중
 
 
 

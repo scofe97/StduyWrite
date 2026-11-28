@@ -1,5 +1,5 @@
 # 타입 스펙: type-layers
-# 03-03 layer 변경분 tar 와 whiteout 가림 구조 (lab-0303/leak:v1 실측값)
+# 03-02 layer 변경분 tar 와 whiteout 가림 구조 (lab-0303/leak:v1 실측값)
 import pathlib
 import sys
 
@@ -11,7 +11,7 @@ W, H = 960, 528
 d = D(
     W,
     H,
-    "DEVOPS · CONTAINER · 03-03",
+    "DEVOPS · CONTAINER · 03-02",
     "layer 변경분 tar 와 whiteout 가림 구조",
     "아래에서 위로 쌓이는 세 layer 의 실제 tar 엔트리와 컨테이너 /opt 에서 보이거나 가려지는 결과",
     lead="alpine:3.20(layer 0) 위에 예제 layer 세 장이 쌓인 결과 — 이름·크기는 lab-0303/leak:v1 실측값",
@@ -109,6 +109,6 @@ d.legend(
     ],
 )
 
-out_path = sys.argv[1] if len(sys.argv) > 1 else str(pathlib.Path(__file__).resolve().parent.parent / "03-03.layer-changeset-whiteout.svg")
+out_path = sys.argv[1] if len(sys.argv) > 1 else str(pathlib.Path(__file__).resolve().parent.parent / "03-02.layer-changeset-whiteout.svg")
 d.save(out_path)
-print("ok gen-03-03.layer-changeset-whiteout")
+print("ok gen-03-02.layer-changeset-whiteout")

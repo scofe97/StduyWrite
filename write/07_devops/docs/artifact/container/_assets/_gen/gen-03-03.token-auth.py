@@ -1,6 +1,9 @@
 # 타입 스펙: type-sequence
-# 03-02 docker login 의 토큰 인증 흐름 (Docker Hub 공개 값)
-import sys; sys.path.insert(0, ".")
+# 03-03 docker login 의 토큰 인증 흐름 (Docker Hub 공개 값)
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
 from dd import Seq, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
 W, H = 960, 688
@@ -18,7 +21,7 @@ class TSeq(Seq):
             s.t(mx, y + 17, sub, 11, MUTED, MONO)
 
 
-d = TSeq(W, H, "DEVOPS · CONTAINER · 03-02",
+d = TSeq(W, H, "DEVOPS · CONTAINER · 03-03",
          "docker login 의 토큰 인증 흐름",
          "GET /v2/ 가 401 로 돌아오는 데서 시작해 Bearer 토큰을 받고 config.json 에 계정을 저장하는 순서",
          lead="Docker Hub 에서 잰 값. 토큰은 저장하지 않고 pull·push 때마다 범위를 달아 다시 받습니다")
@@ -50,5 +53,6 @@ d.legend(H - 56, [
     ("성공과 저장", OK),
 ])
 
-d.save("03-02.token-auth.svg")
-print("ok gen-03-02.token-auth")
+out_path = sys.argv[1] if len(sys.argv) > 1 else str(pathlib.Path(__file__).resolve().parent.parent / "03-03.token-auth.svg")
+d.save(out_path)
+print("ok gen-03-03.token-auth")
