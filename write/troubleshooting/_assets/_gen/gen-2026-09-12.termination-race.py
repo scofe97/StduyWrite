@@ -28,11 +28,11 @@ d.msg("kubelet", "셸 PID 1", "SIGTERM", Y, ACC, sub="PID 1 에게만 보냅니�
 d.msg("컨트롤 플레인", "kubelet", "Pod 제거 평가", Y, SOFT, dash="4 4",
       sub="같은 시각에 시작됩니다")
 
-d.state("셸 PID 1", "셸 종료", Y + 70, BAD)
+d.state("셸 PID 1", "trap 후 먼저 종료", Y + 70, BAD)
 d.t(d.LX["셸 PID 1"] + 92, Y + 74, "자식에게 전달하지 않습니다", 12, MUTED, KR, "start")
 
-d.msg("셸 PID 1", "앱", "SIGKILL", Y + 130, BAD, sub="PID 1 이 죽으면 커널이 정리합니다")
-d.state("앱", "즉사", Y + 186, BAD)
+d.msg("셸 PID 1", "앱", "SIGKILL", Y + 130, BAD, sub="PID 1 셸이 먼저 끝나 커널이 정리합니다")
+d.state("앱", "SIGKILL 종료", Y + 186, BAD)
 d.t(d.LX["앱"] - 102, Y + 190, "graceful 코드는 호출되지 않습니다", 12, MUTED, KR, "end")
 
 d.t(d.LX["컨트롤 플레인"], Y + 186, "전파는 아직 진행 중", 12, SOFT, KR, "middle")
