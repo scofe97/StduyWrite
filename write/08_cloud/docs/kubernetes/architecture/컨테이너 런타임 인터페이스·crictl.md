@@ -71,6 +71,8 @@ kubelet 이 명령을 내리거나 crictl 로 상태를 조회할 때 대상 소
 
 위 도식은 호출이 내려가는 세 계층을 보여 줍니다. kubelet 데몬과 crictl CLI 는 동일한 gRPC 유닉스 소켓으로 런타임에 연결됩니다. 런타임은 OCI 명세에 따라 저수준 런타임인 **runc** 를 호출합니다. runc 는 커널 네임스페이스와 cgroup 을 구성해 프로세스를 실행합니다.[^dockershim]
 
+runc 가 실행하는 OCI 번들의 구조와 생애 주기는 [번들과 컨테이너 생애 주기](../../../../07_devops/docs/artifact/container/03-04.%EB%B2%88%EB%93%A4%EA%B3%BC%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EC%83%9D%EC%95%A0%20%EC%A3%BC%EA%B8%B0.md)에서 다룹니다.
+
 ### gRPC 인터페이스와 두 가지 서비스
 
 CRI 규약은 크게 두 개의 독립된 gRPC 서비스로 구성됩니다.[^cri]
@@ -168,7 +170,7 @@ crictl 을 처음 사용하는 운영자가 의아해하는 지점은 **pause** 
 
 CRI 데이터 모델의 구조적 차이 때문입니다. CRI 프로토콜에서 Pod 샌드박스와 애플리케이션 컨테이너는 서로 다른 엔티티로 정의됩니다.
 
-kubelet 은 파드를 띄울 때 먼저 `RunPodSandbox` RPC 를 부릅니다. 이 호출로 네트워크 네임스페이스와 IP 를 묶어둘 샌드박스를 만듭니다. 이 샌드박스의 앵커 역할을 하는 프로세스가 pause 컨테이너입니다.[^runtimes] 이후 `CreateContainer` 와 `StartContainer` RPC 로 애플리케이션 컨테이너를 띄웁니다.
+kubelet 은 파드를 띄울 때 먼저 `RunPodSandbox` RPC 를 부릅니다. 이 호출로 런타임이 네트워크 네임스페이스와 IP 를 준비하고 샌드박스를 만듭니다. 이때 띄우는 pause 컨테이너가 `ipc`·`uts`(켜면 `pid`) 네임스페이스의 기준점이자 샌드박스의 신원이 됩니다.[^runtimes] 이후 `CreateContainer` 와 `StartContainer` RPC 로 애플리케이션 컨테이너를 띄웁니다.
 
 `crictl pods` 명령은 런타임의 `ListPodSandbox` RPC 를 호출하여 샌드박스 단위의 상태를 보여 줍니다. `crictl ps` 명령은 `ListContainers` RPC 를 호출합니다. 샌드박스는 CRI 의 컨테이너 목록에 들어 있지 않으므로 이 응답에는 애플리케이션 컨테이너만 담깁니다. 따라서 pause 컨테이너는 컨테이너 목록에 섞이지 않고 Pod 샌드박스 정보로 집약됩니다. 앞 절의 kind 실측에서 `ctr -n k8s.io` 가 샌드박스까지 20개를 센 것과 대조됩니다. 샌드박스 수명주기는 [Service 5유형](../../../book/networking-and-kubernetes/05-02.Service%205유형%20—%20ClusterIP에서%20LoadBalancer까지.md)의 pause 절이 다룹니다.
 

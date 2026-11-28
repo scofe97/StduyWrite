@@ -13,11 +13,11 @@ updated: 2026-11-15
 
 ---
 
-> k8s.io 공식문서를 1차 자료로 삼아 궁금한 주제만 한 편씩 파고드는 자리입니다. 전체 개념을 순서대로 훑는 일은 [book/](../../book/)의 정독 노트와 [kubernetes/](../../../_archive/08_cloud/kubernetes/README.md)의 주제별 노트가 맡습니다.
+> k8s 공통 개념의 정본입니다. 책 노트는 흐름과 심화 근거로 링크합니다.
 
 ## 폴더 규칙
 
-> 문서는 묶음 폴더 넷(`architecture/`·`scheduling/`·`operations/`·`api/`) 중 하나에 두고, 파일명에는 번호를 붙이지 않습니다.
+> 문서는 묶음 폴더 여덟 개 중 하나에 두고, 파일명에는 번호를 붙이지 않습니다. 여덟 개는 지금 있는 넷(`architecture/`·`scheduling/`·`operations/`·`api/`)과 예약 넷(`workloads/`·`networking/`·`storage/`·`security/`)입니다.
 
 이 폴더의 문서는 처음부터 차례로 읽는 연재가 아닙니다. 궁금한 주제를 한 편씩 골라 읽으므로 파일명은 한글 문서 이름만으로 짓습니다. 이름은 명사구 하나로 쓰고, 다루는 대상이 둘 이상이면 `와/과` 대신 `·` 로 잇습니다(예: `노드 추가·제거.md`, `이미지 pull·폐쇄망 반입.md`). 제목에 ` — ` 로 붙은 부제는 파일명에서 뺍니다. 그래서 파일명과 H1 제목은 다를 수 있습니다(파일 `노드·클러스터 소속.md`, 제목 「노드와 클러스터의 소속 — …」). 사례 편은 어느 사례인지 가려야 해서 부제까지 둡니다(`OOMKilled 사례 — Endowus Rebalance 서비스.md`).
 
@@ -27,6 +27,12 @@ updated: 2026-11-15
 | `scheduling/` | 스케줄링·축출 | 파드를 어디에 놓고 언제 내보낼지 |
 | `operations/` | 클러스터 운영 | 관측·로깅·etcd·업그레이드·노드 추가처럼 클러스터를 굴리고 손대는 일 |
 | `api/` | API | 헬스 엔드포인트·인증서·kubeconfig·조회 문법처럼 API 서버와 대화하는 규칙 |
+| `workloads/` | 워크로드 | Pod 같은 워크로드와 ConfigMap·Downward API·env (예약 — 첫 편을 쓸 때 폴더를 만듭니다) |
+| `networking/` | 네트워킹 | Service·Ingress·Gateway API·NetworkPolicy·CNI (예약 — 첫 편을 쓸 때 폴더를 만듭니다) |
+| `storage/` | 스토리지 | 볼륨·PV·StorageClass·CSI (예약 — 첫 편을 쓸 때 폴더를 만듭니다) |
+| `security/` | 보안 | RBAC·SecurityContext·PSA·Secret 암호화·정책 (예약 — 첫 편을 쓸 때 폴더를 만듭니다) |
+
+두 묶음에 걸치면 문서가 답할 가장 중요한 질문 하나로 묶음을 고르고 나머지는 `related` 로 잇습니다. 출처는 `writing-method` 스킬의 `references/file-placement.md` 입니다.
 
 새 문서는 묶음 하나를 골라 그 폴더에 두고 아래 「문서 목록」 의 그 묶음 표에 한 줄을 더합니다. 어느 묶음에도 들지 않으면 폴더와 표를 하나씩 더합니다. 묶음 폴더 이름은 번호 없는 영어 kebab 입니다(`02_os/docs/cmd/shell/` 과 같은 방식). 도식과 생성기는 문서가 있는 묶음 폴더의 `_assets/` 에 `{문서 이름}.{주제}.svg` 로 두고, 생성기는 `_assets/_gen/` 에서 그 폴더의 `_assets/dd.py` 를 씁니다. 도식 센서(`dd-verify-all.sh`)가 문서 옆의 `_assets/` 만 보기 때문입니다.
 
@@ -47,6 +53,7 @@ updated: 2026-11-15
 | [노드와 클러스터의 소속 — 겹쳐 보이는 클러스터는 어느 층에서 겹치는가](architecture/%EB%85%B8%EB%93%9C%C2%B7%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%86%8C%EC%86%8D.md) | 노드가 클러스터에 소속되는 경로를 kubelet 자가등록으로 따라가고, 여러 클러스터가 노드를 겹쳐 쓴다는 말이 어느 층의 이야기인지 가릅니다. |
 | [컨테이너 런타임 인터페이스·crictl](architecture/%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EB%9F%B0%ED%83%80%EC%9E%84%20%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4%C2%B7crictl.md) | kubelet 이 CRI 소켓으로 containerd 를 부르는 경로를 따라가고, `crictl`·`ctr`·`nerdctl` 이 각각 무엇을 보는지와 cgroup 드라이버를 맞춰야 하는 이유를 봅니다. |
 | [이미지 pull과 폐쇄망 반입 — 노드는 이미지를 어디서 누구의 자격으로 받는가](architecture/%EC%9D%B4%EB%AF%B8%EC%A7%80%20pull%C2%B7%ED%8F%90%EC%87%84%EB%A7%9D%20%EB%B0%98%EC%9E%85.md) | kubelet 에서 레지스트리까지의 pull 경로와 `imagePullPolicy`, `imagePullSecrets` 와 노드 containerd 설정이라는 자격 두 자리를 가르고, 사설 CA·미러와 폐쇄망 반입, 이벤트 메시지별 진단 순서를 봅니다. |
+| [pause 컨테이너·Pod 샌드박스](architecture/pause%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%C2%B7Pod%20%EC%83%8C%EB%93%9C%EB%B0%95%EC%8A%A4.md) | `RunPodSandbox` 로 netns 와 `pause` 가 먼저 서고 앱이 합류하는 과정과 `shareProcessNamespace: true` 일 때 좀비 회수는 맡고 `SIGTERM` 은 넘기지 않는 경계를 kind 실측으로 봅니다. |
 
 ### 스케줄링·축출 (`scheduling/`)
 
@@ -74,6 +81,23 @@ updated: 2026-11-15
 | [JSONPath와 kubectl 고급 조회](api/JSONPath%C2%B7kubectl%20%EA%B3%A0%EA%B8%89%20%EC%A1%B0%ED%9A%8C.md) | kubectl JSONPath 표현식과 필터 문법, 실무 조회 예시를 정리합니다. |
 | [kubeconfig·여러 클러스터 접근](api/kubeconfig%C2%B7%EC%97%AC%EB%9F%AC%20%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%A0%91%EA%B7%BC.md) | cluster·user·context 세 블록의 참조 구조와 `--kubeconfig` → `KUBECONFIG` → `~/.kube/config` 우선순위, 여러 파일을 합칠 때 먼저 나온 값이 이기는 규칙, kubectx·kubens 가 직전 값을 남기는 자리를 실측으로 봅니다. |
 | [kubectl 출력 형식 — 표는 서버가 그리고 객체는 kubectl 이 가공한다](api/kubectl%20%EC%B6%9C%EB%A0%A5%20%ED%98%95%EC%8B%9D.md) | 기본 출력과 `-o wide` 는 서버가 만든 Table 을 열 우선순위로 거른 것이고, `yaml`·`json`·`name`·`custom-columns`·`jsonpath` 는 객체를 받아 kubectl 이 가공한다는 차이를 Accept 헤더 실측으로 봅니다. |
+| [Pod STATUS 열 계산 — phase 를 reason 이 덮어쓰는 순서](api/Pod%20STATUS%20%EC%97%B4%20%EA%B3%84%EC%82%B0.md) | kubectl 의 STATUS 열이 phase 와 reason 중 무엇을 보여 주는지, 계산 순서를 `printers.go` 소스로 따라갑니다. |
+
+
+
+## 확장 인터페이스 — CRD·Operator·CNI·CSI·CRI 는 어디서 다루나
+
+> 쿠버네티스를 확장하는 다섯 주제의 정본 자리를 정해 둔 표입니다. 정본은 이 폴더(docs)에 두고, 책 정독 노트는 근거와 심화 링크로 내립니다.
+
+「docs 정본 자리」 가 파일 이름만 있는 줄은 아직 쓰지 않은 편이고, 링크가 걸린 줄은 이미 있습니다.
+
+| 주제 | docs 정본 자리 | 근거·심화 (책 노트) | 비고 |
+|------|---------------|--------------------|------|
+| CRD | `api/커스텀 리소스·CRD.md` (아직 없음) | [Operator — CRD로 도메인 지식을 자동화하기](../../book/kubernetes-patterns/28-01.Operator%20%E2%80%94%20CRD%EB%A1%9C%20%EB%8F%84%EB%A9%94%EC%9D%B8%20%EC%A7%80%EC%8B%9D%EC%9D%84%20%EC%9E%90%EB%8F%99%ED%99%94%ED%95%98%EA%B8%B0.md) · [Extending Kubernetes — 어드미션·커스텀 리소스](../../book/kubernetes-up-and-running/17-01.Extending%20Kubernetes%20%E2%80%94%20%EC%96%B4%EB%93%9C%EB%AF%B8%EC%85%98%C2%B7%EC%BB%A4%EC%8A%A4%ED%85%80%20%EB%A6%AC%EC%86%8C%EC%8A%A4%EC%99%80%20%EC%9D%B8%EC%A6%9D%EC%84%9C%20%EC%97%86%EB%8A%94%20%EA%B2%80%EC%A6%9D%20%EB%9E%A9.md) | 책 노트가 정면으로 다룹니다. |
+| Operator | `architecture/Operator 패턴.md` (아직 없음) | [Operator — CRD로 도메인 지식을 자동화하기](../../book/kubernetes-patterns/28-01.Operator%20%E2%80%94%20CRD%EB%A1%9C%20%EB%8F%84%EB%A9%94%EC%9D%B8%20%EC%A7%80%EC%8B%9D%EC%9D%84%20%EC%9E%90%EB%8F%99%ED%99%94%ED%95%98%EA%B8%B0.md) · [StatefulSet 업데이트와 Operator](../../book/kubernetes-in-action/16-03.StatefulSet%20%EC%97%85%EB%8D%B0%EC%9D%B4%ED%8A%B8%EC%99%80%20Operator%20%E2%80%94%20partition%C2%B7OnDelete%C2%B7CRD.md) | 책 노트가 정면으로 다룹니다. |
+| CNI | `networking/네트워크 플러그인·CNI.md` (아직 없음) | [CNI와 kube-proxy — Pod 네트워크의 배선공과 로드밸런서](../../book/networking-and-kubernetes/04-02.CNI%EC%99%80%20kube-proxy%20%E2%80%94%20Pod%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%EC%9D%98%20%EB%B0%B0%EC%84%A0%EA%B3%B5%EA%B3%BC%20%EB%A1%9C%EB%93%9C%EB%B0%B8%EB%9F%B0%EC%84%9C.md) · [쿠버네티스 CNI 깊게 공부하는 순서](../../../99_ETC/2026-11-24_%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4%20CNI%20%EA%B9%8A%EA%B2%8C%20%EA%B3%B5%EB%B6%80%ED%95%98%EB%8A%94%20%EC%88%9C%EC%84%9C.md) | 책 노트가 정면으로 다룹니다. |
+| CSI | `storage/볼륨 플러그인·CSI.md` (아직 없음, 폴더도 첫 편에서 만듭니다) | [StorageClass와 CSI 드라이버](../../book/kubernetes-in-action/10-01.PV%C2%B7PVC%C2%B7StorageClass%EC%99%80%20%EB%8F%99%EC%A0%81%20%ED%94%84%EB%A1%9C%EB%B9%84%EC%A0%80%EB%8B%9D.md#7-storageclass와-csi-드라이버) | 규격 자체는 아직 없음, 아래 「아직 안 쓴 주제 > 스토리지」 자리입니다. |
+| CRI | [컨테이너 런타임 인터페이스·crictl](architecture/%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EB%9F%B0%ED%83%80%EC%9E%84%20%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4%C2%B7crictl.md) | [Container Runtime — OCI 명세·CRI 통신과 런타임 선택](../../book/production-kubernetes/03-01.Container%20Runtime%20%E2%80%94%20OCI%20%EB%AA%85%EC%84%B8%C2%B7CRI%20%ED%86%B5%EC%8B%A0%EA%B3%BC%20%EB%9F%B0%ED%83%80%EC%9E%84%20%EC%84%A0%ED%83%9D.md) | 이 폴더에 정본이 있습니다. |
 
 
 
@@ -91,6 +115,8 @@ updated: 2026-11-15
 - `Garbage Collection`
 - `Kubernetes Self-Healing`
 - `Cloud Controller Manager`
+- `Operator pattern` — `architecture/Operator 패턴.md`, https://kubernetes.io/docs/concepts/extend-kubernetes/operator/
+- `Network Plugins` — `networking/네트워크 플러그인·CNI.md`, https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/
 
 ### 스케줄링·축출
 
@@ -118,6 +144,7 @@ updated: 2026-11-15
 스토리지 묶음 폴더는 아직 없습니다. 첫 편을 쓸 때 `storage/` 폴더와 「문서 목록」 표를 함께 만듭니다.
 
 - `Container Storage Interface (CSI)` — 외부 스토리지 드라이버가 kubelet 에 붙는 규격
+- `Volumes` 의 csi 절과 kubernetes-csi 문서 — `storage/볼륨 플러그인·CSI.md`, https://kubernetes.io/docs/concepts/storage/volumes/#csi, https://kubernetes-csi.github.io/docs/
 - `csi-driver-nfs` (kubernetes-csi/csi-driver-nfs) — NFS 서버를 StorageClass 로 동적 프로비저닝하는 드라이버
 
 ### API
@@ -126,6 +153,7 @@ updated: 2026-11-15
 - `Server-Side Apply`
 - `Client Libraries`
 - `Kubernetes Deprecation Policy`
+- `Custom Resources` — `api/커스텀 리소스·CRD.md`, https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/
 
 
 

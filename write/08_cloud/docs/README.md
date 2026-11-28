@@ -31,7 +31,7 @@ Helm·Kustomize 와 Argo Rollouts 는 쿠버네티스 위에서 쓰지만 플랫
 
 [`cmd/`](cmd/README.md) 는 제품 폴더가 아니라 컨테이너·쿠버네티스 명령어 시트 자리입니다. 지금은 docker 이미지 반입 시트 한 편이 있고, 나머지는 분류와 후보 명령만 정해 두었습니다.
 
-제품 안의 하위 폴더 규칙은 그 폴더의 README 가 정합니다. `kubernetes/` 는 파일명에 번호를 붙이지 않고 문서를 묶음 폴더 넷(`architecture/`·`scheduling/`·`operations/`·`api/`)에 나눠 둡니다. 새 제품을 다루게 되면 그 제품 폴더를 만들고 이 표에 한 줄을 더합니다.
+제품 안의 하위 폴더 규칙은 그 폴더의 README 가 정합니다. `kubernetes/` 는 파일명에 번호를 붙이지 않고 문서를 묶음 폴더 여덟 개에 나눠 둡니다. 지금 있는 넷은 `architecture/`·`scheduling/`·`operations/`·`api/` 이고, 예약 넷은 `workloads/`·`networking/`·`storage/`·`security/` 입니다. 새 제품을 다루게 되면 그 제품 폴더를 만들고 이 표에 한 줄을 더합니다.
 
 
 
@@ -44,6 +44,7 @@ Helm·Kustomize 와 Argo Rollouts 는 쿠버네티스 위에서 쓰지만 플랫
 | kubernetes | architecture | 아키텍처 | [노드·클러스터 소속](kubernetes/architecture/%EB%85%B8%EB%93%9C%C2%B7%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%86%8C%EC%86%8D.md) |
 | kubernetes | architecture | 아키텍처 | [컨테이너 런타임 인터페이스·crictl](kubernetes/architecture/%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EB%9F%B0%ED%83%80%EC%9E%84%20%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4%C2%B7crictl.md) |
 | kubernetes | architecture | 아키텍처 | [이미지 pull·폐쇄망 반입](kubernetes/architecture/%EC%9D%B4%EB%AF%B8%EC%A7%80%20pull%C2%B7%ED%8F%90%EC%87%84%EB%A7%9D%20%EB%B0%98%EC%9E%85.md) |
+| kubernetes | architecture | 아키텍처 | [pause 컨테이너·Pod 샌드박스](kubernetes/architecture/pause%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%C2%B7Pod%20%EC%83%8C%EB%93%9C%EB%B0%95%EC%8A%A4.md) |
 | kubernetes | scheduling | 스케줄링·축출 | [노드 압박 축출·디스크 관리](kubernetes/scheduling/%EB%85%B8%EB%93%9C%20%EC%95%95%EB%B0%95%20%EC%B6%95%EC%B6%9C%C2%B7%EB%94%94%EC%8A%A4%ED%81%AC%20%EA%B4%80%EB%A6%AC.md) |
 | kubernetes | operations | 클러스터 운영 | [자원 모니터링 파이프라인](kubernetes/operations/%EC%9E%90%EC%9B%90%20%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81%20%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8.md) |
 | kubernetes | operations | 클러스터 운영 | [etcd 헬스·유지보수](kubernetes/operations/etcd%20%ED%97%AC%EC%8A%A4%C2%B7%EC%9C%A0%EC%A7%80%EB%B3%B4%EC%88%98.md) |
@@ -55,6 +56,8 @@ Helm·Kustomize 와 Argo Rollouts 는 쿠버네티스 위에서 쓰지만 플랫
 | kubernetes | api | API | [TLS·API 접근 보안](kubernetes/api/TLS%C2%B7API%20%EC%A0%91%EA%B7%BC%20%EB%B3%B4%EC%95%88.md) |
 | kubernetes | api | API | [JSONPath·kubectl 고급 조회](kubernetes/api/JSONPath%C2%B7kubectl%20%EA%B3%A0%EA%B8%89%20%EC%A1%B0%ED%9A%8C.md) |
 | kubernetes | api | API | [kubeconfig·여러 클러스터 접근](kubernetes/api/kubeconfig%C2%B7%EC%97%AC%EB%9F%AC%20%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%A0%91%EA%B7%BC.md) |
+| kubernetes | api | API | [kubectl 출력 형식](kubernetes/api/kubectl%20%EC%B6%9C%EB%A0%A5%20%ED%98%95%EC%8B%9D.md) |
+| kubernetes | api | API | [Pod STATUS 열 계산](kubernetes/api/Pod%20STATUS%20%EC%97%B4%20%EA%B3%84%EC%82%B0.md) |
 | cncf-certification | (바로 아래) | 01-01 | [CKA 대비와 문제 풀이 전략](cncf-certification/01-01.CKA%20%EB%8C%80%EB%B9%84%EC%99%80%20%EB%AC%B8%EC%A0%9C%20%ED%92%80%EC%9D%B4%20%EC%A0%84%EB%9E%B5.md) |
 | istio | (바로 아래) | — | [Ambient 모드·ztunnel·waypoint](istio/Ambient%20%EB%AA%A8%EB%93%9C%C2%B7ztunnel%C2%B7waypoint.md) |
 
