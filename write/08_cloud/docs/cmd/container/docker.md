@@ -12,6 +12,7 @@ source:
   - "https://docs.docker.com/engine/release-notes/29/"
 related:
   - ../README.md
+  - ./docker%20컨테이너%20실행과%20조회.md
   - ../../kubernetes/architecture/%EC%9D%B4%EB%AF%B8%EC%A7%80%20pull%C2%B7%ED%8F%90%EC%87%84%EB%A7%9D%20%EB%B0%98%EC%9E%85.md
   - ../../../../02_os/docs/cmd/isolate/nerdctl.md
 updated: "2026-11-21"
@@ -658,6 +659,7 @@ Deleted: sha256:9e2bbca079387d7965c3a9cee6d0c53f4f4e63ff7637877a83c4c05f2a666112
 > 이 시트와 이어지는 문서입니다.
 
 - [클라우드 명령어 시트](../README.md) — 컨테이너와 쿠버네티스 도구의 시트 모음
+- [docker 컨테이너 실행과 조회](./docker%20컨테이너%20실행과%20조회.md) — 반입한 이미지로 컨테이너를 띄우고 `ps`·`logs`·`exec`·`stop` 으로 다루는 시트
 - [이미지 pull과 폐쇄망 반입 — 노드는 이미지를 어디서 누구의 자격으로 받는가](../../kubernetes/architecture/이미지%20pull·폐쇄망%20반입.md) — ctr images import 와 nerdctl load, k8s.io 네임스페이스 반입 절차
 - [nerdctl 참조 시트](../../../../02_os/docs/cmd/isolate/nerdctl.md) — containerd 환경에서 이미지 반입과 저장소 push 를 다루는 시트
 
