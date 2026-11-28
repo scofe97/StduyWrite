@@ -44,7 +44,7 @@ updated: 2026-11-14
 - 커널 모듈(LKM) 개발, 커널 소스 빌드, 메모리 할당 API, 스케줄러·동기화 내부는 `linux-kernel-programming/` 에 둡니다.
 - 컨테이너 이미지 포맷·OCI 표준 같은 빌드 측면은 `07_devops/`에 둡니다. 런타임 측면이 아니므로 본 카테고리가 아닙니다.
 - 컨테이너 보안(격리 메커니즘을 보안 관점에서 보기, 이미지·공급망·런타임 위협)은 `container-security/` 에 둡니다. namespace 메커니즘 자체는 그 책의 04-01·04-02 가 정본이고, cgroup v2 깊이·마운트 propagation 은 `docs/kernel/` 을 교차참조합니다.
-- DNS 는 방향으로 가릅니다. 질의를 *보내는* 쪽(`/etc/resolv.conf`·ndots·search domain·glibc resolver)은 네트워크 로드맵 1단계가 SSOT 입니다(본문은 N&K 04-03 §5). 질의를 *받는* 쪽(Corefile·플러그인·존 데이터)은 `learning-coredns/` 가 맡습니다.
+- DNS 는 방향으로 가릅니다. 질의를 *보내는* 쪽(`/etc/resolv.conf`·ndots·search domain·glibc resolver)은 네트워크 개발 키워드 3단계 · 관측이 SSOT 입니다(본문은 N&K 04-03 §5). 질의를 *받는* 쪽(Corefile·플러그인·존 데이터)은 `learning-coredns/` 가 맡습니다.
 - 증상에서 출발해 원인을 역추적하는 진단 문서는 최상위 [`troubleshooting/`](../troubleshooting/README.md)에 둡니다. 메커니즘을 설명하는 쪽은 N&K 정독본·`docs/kernel/`이 SSOT 이고, 진단 사례가 그것을 교차참조합니다.
 - 패킷을 떠서 읽는 일(캡처 필터·디스플레이 필터, 프로토콜 해독, tcpdump·tshark)은 `paw_packet-analysis-wireshark/` 에 둡니다. N&K 정독본이 커널의 패킷 전달을 맡고, 이쪽은 패킷 분석을 맡습니다. 애플리케이션 메트릭·로그·트레이스는 `06_observability/` 소관입니다.
 - 시스템 성능 분석(방법론·병목 진단, CPU·메모리·디스크·네트워크 성능, perf·Ftrace·BPF 추적)은 `systems-performance/` 에 둡니다. 커널 메커니즘 자체는 `linux-kernel-programming/`·`docs/kernel/`이 SSOT 이고, 앱·인프라 관측 운영은 `06_observability/` 소관입니다.
@@ -100,7 +100,7 @@ updated: 2026-11-14
 | [tlpi_the-linux-programming-interface/](./book/tlpi_the-linux-programming-interface/README.md) | 명령 아래의 시스템 콜 층 — 파일 I/O·파일 속성·ACL·시그널·세션·자원 제한·데몬·IPC·소켓을 시스템 콜과 glibc 함수로. `learning-modern-linux/` 가 명령, `linux-kernel-programming/` 이 커널 구현을 맡는다 (책 기반) |
 | [linux-kernel-programming/](./book/linux-kernel-programming/README.md) | 커널 개발자 관점의 리눅스 내부 — LKM 모듈 개발, 커널 빌드, 메모리 관리, CPU 스케줄러, 동기화 (책 기반) |
 | [container-security/](../08_cloud/book/container-security/README.md) | 보안 관점의 컨테이너 — 커널 기초(namespace·cgroup·root 변경) 위의 이미지·공급망·런타임·통신 보안 (책 기반) |
-| [learning-coredns/](../08_cloud/book/learning-coredns/README.md) | 이름 해석의 *서버* 편 — Corefile·플러그인 체인·존 데이터·쿠버네티스 연동. resolver 클라이언트 측(네트워크 로드맵 1단계·N&K 04-03 §5)과 편을 나눠 가진다 (책 기반) |
+| [learning-coredns/](../08_cloud/book/learning-coredns/README.md) | 이름 해석의 *서버* 편 — Corefile·플러그인 체인·존 데이터·쿠버네티스 연동. resolver 클라이언트 측(네트워크 개발 키워드 3단계 · 관측 · N&K 04-03 §5)과 편을 나눠 가진다 (책 기반) |
 | [systems-performance/](./book/systems-performance/README.md) | 성능 분석가 관점의 시스템 성능 — 방법론·CPU·메모리·디스크·네트워크·클라우드·고급 추적(perf·Ftrace·BPF) (책 기반) |
 | [learning-ebpf/](./book/learning-ebpf/README.md) | eBPF 프로그램 자체의 구조 — 맵·헬퍼·`bpf()` 시스템 콜·verifier·BTF·CO-RE·부착 유형과 네트워킹·보안 활용. `systems-performance/` 가 도구로 쓰는 BCC·bpftrace 의 아래층 (책 기반) |
 | [paw_packet-analysis-wireshark/](./book/paw_packet-analysis-wireshark/README.md) | 선 위의 프레임을 떠서 프로토콜별로 읽는 법 — Wireshark 캡처·필터·TCP·TLS·응용 프로토콜·WLAN·보안 분석 (책 기반) |
