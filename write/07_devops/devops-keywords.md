@@ -116,6 +116,7 @@ updated: 2026-11-03
 | 환경 승격 파이프라인 — 저장소 분리 · staging→prod 승격 | 필수 |  | Learning Continuous Integration with Jenkins 10·11장 |
 | CI-CD 파이프라인 통합 — values 갱신 · ArgoCD 헬스체크 게이트 | 추천 | [푸시 배포의 한계와 ArgoCD](../07_devops/book/aic_ai-infra-claude/03-01.%ED%91%B8%EC%8B%9C%20%EB%B0%B0%ED%8F%AC%EC%9D%98%20%ED%95%9C%EA%B3%84%EC%99%80%20ArgoCD%20GitOps%20%E2%80%94%20%EC%84%A4%EC%B9%98%C2%B7%EC%97%B0%EA%B2%B0%C2%B7%EB%A1%A4%EB%A7%81%C2%B7%EB%A1%A4%EB%B0%B1.md) | Learning Continuous Integration with Jenkins 11장 |
 | Image Updater — 컨테이너 레지스트리 새 이미지 감지와 Git 자동 커밋 | 추천 | [Image Updater 설정과 write-back](book/argocd-up-and-running/14-01.GitOps%20%EB%8B%A4%EC%9D%8C%20%EA%B1%B8%EC%9D%8C%20%E2%80%94%20%EC%A0%80%EC%9E%A5%EC%86%8C%20%EA%B5%AC%EC%A1%B0%C2%B7Rendered%20Manifests%C2%B7%EC%8A%B9%EA%B2%A9.md#image-updater-%EC%84%A4%EC%A0%95%EA%B3%BC-write-back) |  |
+| 폐쇄망(air-gapped) 배포 — 미러 레지스트리 · 차트·플러그인 버전 고정 · 업데이트 채널 차단 | 추천 | | |
 
 
 
